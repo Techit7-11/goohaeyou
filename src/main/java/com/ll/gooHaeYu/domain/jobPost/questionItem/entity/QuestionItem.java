@@ -1,4 +1,8 @@
 package com.ll.gooHaeYu.domain.jobPost.questionItem.entity;
 
-public class QuestionItem {
+import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
+import jakarta.persistence.Entity;
+
+@Entity
+public class QuestionItem extends BaseTimeEntity {
 }

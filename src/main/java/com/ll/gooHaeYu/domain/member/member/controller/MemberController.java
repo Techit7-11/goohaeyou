@@ -1,5 +1,7 @@
 package com.ll.gooHaeYu.domain.member.member.controller;
 
-public class MemberController
-{
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class MemberController {
 }
