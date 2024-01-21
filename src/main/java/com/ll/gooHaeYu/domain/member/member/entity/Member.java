@@ -1,9 +1,9 @@
 package com.ll.gooHaeYu.domain.member.member.entity;
 
 import com.ll.gooHaeYu.domain.member.location.entity.Location;
+import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
-import com.nimbusds.openid.connect.sdk.claims.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
