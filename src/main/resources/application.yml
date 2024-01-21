@@ -28,7 +28,6 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
-    jwt:
-      header: Authorization
-      secret: 6raB6riI7ZWcIOqygywg662U6rCA66W8IO2VmOqzoCDsi7bquLDripQg7ZWc642wIOutmCDtlbTslbzrkKAg7KeAIOuqqOulvCDrlYwsIOuqqOultOuKlCDrgrTsmqksIOyVoOunpO2VnCDrgrTsmqksIOqxtOydmOyCrO2VrSDrk7HsnZgg66y47J2Y
-      accessTokenValidityInSeconds: 3600
+
+jwt:
+  secret: TEKIT-7 11team gooHaeyu project
