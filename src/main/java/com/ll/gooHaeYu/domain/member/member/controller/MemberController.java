@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.member.member.controller;
 
-import com.ll.gooHaeYu.domain.member.member.dto.AddUserRequest;
+import com.ll.gooHaeYu.domain.member.member.dto.AddMemberRequest;
+import com.ll.gooHaeYu.domain.member.member.dto.LoginMemberRequest;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +17,16 @@ public class MemberController {
 
     private final MemberService memberService;
     @PostMapping("/join")
-    public ResponseEntity<String> join(@RequestBody AddUserRequest dto) {
-        memberService.join(dto.getUsername(), dto.getPassword());
+    public ResponseEntity<String> join(@RequestBody AddMemberRequest request) {
+        memberService.join(request);
         return  ResponseEntity.ok()
                 .body("회원가입이 성공 했습니다.");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login() {
+    public ResponseEntity<String> login(@RequestBody LoginMemberRequest request) {
+        String token = memberService.login(request);
         return ResponseEntity.ok()
-                .body(memberService.login("",""));
+                .body(token);
     }
 }

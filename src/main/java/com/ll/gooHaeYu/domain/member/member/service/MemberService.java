@@ -1,5 +1,7 @@
 package com.ll.gooHaeYu.domain.member.member.service;
 
+import com.ll.gooHaeYu.domain.member.member.dto.AddMemberRequest;
+import com.ll.gooHaeYu.domain.member.member.dto.LoginMemberRequest;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
@@ -7,6 +9,7 @@ import com.ll.gooHaeYu.global.exception.ErrorCode;
 import com.ll.gooHaeYu.standard.base.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,29 +19,35 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public String join(String username, String password) {
-        memberRepository.findByUsername(username)
+    @Value("${jwt.secret}")
+    private String secretKey;
+    private Long expiredMs = 1000 * 60 * 60l;
+
+    public String join(AddMemberRequest dto) {
+        memberRepository.findByUsername(dto.getUsername())
                 .ifPresent(member -> {
                     throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
                 });
 
-        Member member = Member.builder()
-                .username(username)
-                .password(password)
-                .build();
-        memberRepository.save(member);
+        memberRepository.save(Member.builder()
+                .username(dto.getUsername())
+                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
+                .build());
 
         return "SUCCESS";
     }
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+    public String login(LoginMemberRequest dto) {
+        Member member = memberRepository.findByUsername(dto.getUsername())
+                .orElseThrow(() ->
+                    new CustomException(ErrorCode.LOGIN_FAIL));
 
-    private Long expiredMs = 1000 * 60 * 60l;
+        if (!bCryptPasswordEncoder.matches(dto.getPassword(), member.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
 
-    public String login(String username, String password) {
-        // todo : 인증과정
-        return JwtUtil.createJwt(username, secretKey, expiredMs);
+        return JwtUtil.createJwt(member.getUsername(), secretKey, expiredMs);
     }
 }

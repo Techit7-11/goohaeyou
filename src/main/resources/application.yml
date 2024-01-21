@@ -30,4 +30,4 @@ logging:
     org.springframework.transaction.interceptor: TRACE
 
 jwt:
-  secret: TEKIT-7 11team gooHaeyu project
+  secret: TEKIT711teamgooHaeyuprojectTEKIT711teamgooHaeyuproject
