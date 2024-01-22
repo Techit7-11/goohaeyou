@@ -9,14 +9,16 @@ public class User {
     private String gender;
 
     @RestController
-    public class MyPageController {
+    public class UserController {
 
         @GetMapping("/mypage")
         public User myPage() {
-            // 현재 로그인된 사용자 정보를 가져오는 로직
-            User user = getUserInfo(); // 사용자 정보를 가져오는 메서드를 구현해야 합니다.
+            User user = new User();
+            user.Name("홍길동");
+            user.BirthDate("2000-01-01");
+            user.Gender("남성");
 
             return user;
         }
+
     }
-}
