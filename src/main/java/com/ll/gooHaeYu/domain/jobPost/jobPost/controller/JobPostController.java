@@ -38,4 +38,12 @@ public class JobPostController {
         return ResponseEntity.ok()
                 .body(post+"번 공고가 수정 되었습니다.");
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deletePost(Authentication authentication,@PathVariable Long id){
+        String post = jobPostService.deletePost(authentication.getName(),id);
+
+        return ResponseEntity.ok()
+                .body(post+"번 공고가 삭제 되었습니다.");
+    }
 }

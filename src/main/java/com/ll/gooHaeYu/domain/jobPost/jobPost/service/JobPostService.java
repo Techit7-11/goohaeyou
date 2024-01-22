@@ -52,6 +52,15 @@ public class JobPostService {
         return post.getId().toString();
     }
 
+    @Transactional
+    public String deletePost(String username, Long id) {
+        JobPost post = findById(id);
+        if (!canEditPost(username,post.getMember().getUsername())) throw  new CustomException(ErrorCode.NOT_EDITABLE);
+
+        jobPostRepository.deleteById(id);
+        return id.toString();
+    }
+
     public boolean canEditPost(String username, String author){
         return username.equals(author)? true : false;
     }
