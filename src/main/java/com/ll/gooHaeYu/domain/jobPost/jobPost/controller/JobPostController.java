@@ -1,8 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.EditPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.WriteJobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
-import com.ll.gooHaeYu.domain.member.member.dto.LoginMemberRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,10 +26,10 @@ public class JobPostController {
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<String> editPost(Authentication authentication, @Valid @RequestBody EditPost request){
+    public ResponseEntity<String> writePost(Authentication authentication, @Valid @RequestBody WriteJobPost request){
 
-        String newPost = jobPostService.editPost(authentication.getName(),request);
+        String post = jobPostService.writePost(authentication.getName(),request);
         return ResponseEntity.ok()
-                .body(newPost + "번 공고가 작성 되었습니다.");
+                .body(post + "번 공고가 작성 되었습니다.");
     }
 }

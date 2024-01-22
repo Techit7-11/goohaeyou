@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.EditPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.WriteJobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
@@ -20,7 +20,7 @@ public class JobPostService {
     private String secretKey;
     private Long expiredMs = 1000 * 60 * 60L;
 
-    public String editPost(String username, EditPost dto) {
+    public String writePost(String username, WriteJobPost dto) {
 
         // 글 작성 로직
         JobPost newJobPost = jobPostRepository.save(JobPost.builder()
