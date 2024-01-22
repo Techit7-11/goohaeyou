@@ -28,4 +28,7 @@ public class Application extends BaseTimeEntity {
 
     private Boolean status;
 
+    @Column(nullable = false)
+    private boolean approve = false;
+
 }
