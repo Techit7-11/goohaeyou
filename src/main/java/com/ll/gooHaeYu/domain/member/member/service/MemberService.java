@@ -51,4 +51,11 @@ public class MemberService {
 
         return JwtUtil.createJwt(member.getUsername(), secretKey, expiredMs);
     }
+
+    public Member getMember(String username){
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(()->
+                        new CustomException(ErrorCode.LOGIN_FAIL));
+        return member;
+    }
 }

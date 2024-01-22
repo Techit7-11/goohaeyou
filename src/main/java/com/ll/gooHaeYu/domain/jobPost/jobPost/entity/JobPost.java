@@ -28,6 +28,8 @@ public class JobPost extends BaseTimeEntity {
 
     private String title;
 
+    private String body;
+
     @Column(nullable = false)
     private boolean isClosed = false;
 
