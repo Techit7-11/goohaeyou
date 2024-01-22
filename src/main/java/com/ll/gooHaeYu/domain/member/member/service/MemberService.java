@@ -55,7 +55,7 @@ public class MemberService {
     public Member getMember(String username){
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(()->
-                        new CustomException(ErrorCode.LOGIN_FAIL));
+                        new CustomException(ErrorCode.NO_SUCH_USER_EXISTS));
         return member;
     }
 }
