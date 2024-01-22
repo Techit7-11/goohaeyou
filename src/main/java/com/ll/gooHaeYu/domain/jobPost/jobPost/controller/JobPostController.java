@@ -31,7 +31,7 @@ public class JobPostController {
                 .body(post + "번 공고가 작성 되었습니다.");
     }
 
-    @PostMapping("/modify/{id}")
+    @PutMapping("/modify/{id}")
     public ResponseEntity<String> modifyPost(Authentication authentication,@PathVariable Long id, @RequestBody WriteJobPost request){
         String post = jobPostService.modifyPost(authentication.getName(),id,request);
 
