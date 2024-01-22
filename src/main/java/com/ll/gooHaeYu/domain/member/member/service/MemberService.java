@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.member.member.service;
 
-import com.ll.gooHaeYu.domain.member.member.dto.AddMemberRequest;
+import com.ll.gooHaeYu.domain.member.member.dto.AddMemberForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginMemberRequest;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
@@ -25,18 +25,19 @@ public class MemberService {
     private String secretKey;
     private Long expiredMs = 1000 * 60 * 60l;
 
-    public String join(AddMemberRequest dto) {
+    @Transactional
+    public String join(AddMemberForm dto) {
         memberRepository.findByUsername(dto.getUsername())
                 .ifPresent(member -> {
                     throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
                 });
 
-        memberRepository.save(Member.builder()
+        Member newMember = memberRepository.save(Member.builder()
                 .username(dto.getUsername())
                 .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                 .build());
 
-        return "SUCCESS";
+        return newMember.getUsername();
     }
 
     public String login(LoginMemberRequest dto) {

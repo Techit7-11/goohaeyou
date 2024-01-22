@@ -57,6 +57,9 @@ dependencies {
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	// Valid
+	implementation 'javax.validation:validation-api:2.0.1.Final'
 }
 
 tasks.named('test') {
