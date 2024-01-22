@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+</head>
+<body>
+<h1>마이페이지</h1>
+<p>이름: <span th:text="${user.name}"></span></p>
+<p>생년월일: <span th:text="${user.birthDate}"></span></p>
+<p>성별: <span th:text="${user.gender}"></span></p>
+</body>
+</html>
