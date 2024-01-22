@@ -31,7 +31,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         logger.info("authorization = " + authorization);
 
-        if(authorization == null || !authorization.startsWith("Bearer ")){
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
             logger.error("authorization이 없습니다.");
             filterChain.doFilter(request, response);
             return;
@@ -41,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = authorization.split(" ")[1];
 
         // Token Expired 되었는지 여부
-        if(JwtUtil.isExpired(token, secretKey)){
+        if (JwtUtil.isExpired(token, secretKey)) {
             logger.error("Token 이 만료되었습니다.");
             filterChain.doFilter(request, response);
             return;

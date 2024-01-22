@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+
     @PostMapping("/join")
     public ResponseEntity<String> join(@RequestBody AddMemberRequest request) {
         memberService.join(request);
-        return  ResponseEntity.ok()
+        return ResponseEntity.ok()
                 .body("회원가입이 성공 했습니다.");
     }
 

@@ -42,7 +42,7 @@ public class MemberService {
     public String login(LoginMemberRequest dto) {
         Member member = memberRepository.findByUsername(dto.getUsername())
                 .orElseThrow(() ->
-                    new CustomException(ErrorCode.LOGIN_FAIL));
+                        new CustomException(ErrorCode.LOGIN_FAIL));
 
         if (!bCryptPasswordEncoder.matches(dto.getPassword(), member.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);

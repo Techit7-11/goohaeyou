@@ -6,6 +6,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginMemberRequest {
+
     private String username;
     private String password;
+
 }
