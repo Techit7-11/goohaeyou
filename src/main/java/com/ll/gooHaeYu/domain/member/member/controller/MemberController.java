@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -20,14 +21,14 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public ResponseEntity<String> join(@Valid @RequestBody AddMemberForm request) {
+    public ResponseEntity<String> join(@RequestBody @Valid AddMemberForm request) {
         String newMember = memberService.join(request);
         return ResponseEntity.ok()
                 .body(newMember + "님이 회원가입이 성공 했습니다.");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginMemberRequest request) {
+    public ResponseEntity<String> login(@RequestBody @Valid LoginMemberRequest request) {
         String token = memberService.login(request);
         return ResponseEntity.ok()
                 .body(token);
