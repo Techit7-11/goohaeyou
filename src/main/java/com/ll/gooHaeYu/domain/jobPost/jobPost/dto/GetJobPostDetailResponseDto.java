@@ -2,20 +2,20 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.category.entity.Category;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class GetPostDetailResponseDto {
+public class GetJobPostDetailResponseDto {
+
     private Long id;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
 
-    private Member member;
+    private String member;
 
     private Category category;
 
@@ -25,11 +25,11 @@ public class GetPostDetailResponseDto {
 
     private boolean isClosed;
 
-    public GetPostDetailResponseDto(JobPost entity) {
+    public GetJobPostDetailResponseDto(JobPost entity) {
         this.id = entity.getId();
         this.createdAt = entity.getCreatedAt();
         this.modifiedAt = entity.getModifiedAt();
-        this.member = entity.getMember();
+        this.member = entity.getMember().getUsername();
         this.category = entity.getCategory();
         this.title = entity.getTitle();
         this.body = entity.getBody();

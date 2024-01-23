@@ -1,8 +1,8 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.GetJobPostResponse;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.GetPostDetailResponseDto;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.WriteJobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.GetJobPostResponseDto;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.GetJobPostDetailResponseDto;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.WriteJobPostRequestDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +21,15 @@ public class JobPostController {
     private final JobPostService jobPostService;
 
     @PostMapping("/write")
-    public ResponseEntity<String> writePost(Authentication authentication, @Valid @RequestBody WriteJobPost request) {
-
+    public ResponseEntity<String> writePost(Authentication authentication, @Valid @RequestBody WriteJobPostRequestDto request) {
         String post = jobPostService.writePost(authentication.getName(), request);
+
         return ResponseEntity.ok()
                 .body(post + "번 공고가 작성 되었습니다.");
     }
 
     @PutMapping("/modify/{id}")
-    public ResponseEntity<String> modifyPost(Authentication authentication, @PathVariable Long id, @RequestBody WriteJobPost request) {
+    public ResponseEntity<String> modifyPost(Authentication authentication, @PathVariable(name = "id") Long id, @RequestBody WriteJobPostRequestDto request) {
         String post = jobPostService.modifyPost(authentication.getName(), id, request);
 
         return ResponseEntity.ok()
@@ -37,7 +37,7 @@ public class JobPostController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deletePost(Authentication authentication, @PathVariable Long id) {
+    public ResponseEntity<String> deletePost(Authentication authentication, @PathVariable(name = "id") Long id) {
         String post = jobPostService.deletePost(authentication.getName(), id);
 
         return ResponseEntity.ok()
@@ -45,20 +45,21 @@ public class JobPostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetJobPostResponse>> findAllJobPost() {
-        List<GetJobPostResponse> jobPosts = jobPostService.findAll()
+    public ResponseEntity<List<GetJobPostResponseDto>> findAllPost() {
+        List<GetJobPostResponseDto> posts = jobPostService.findAll()
                 .stream()
-                .map(GetJobPostResponse::new)
+                .map(GetJobPostResponseDto::new)
                 .toList();
+
         return ResponseEntity.ok()
-                .body(jobPosts);
+                .body(posts);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetPostDetailResponseDto> showDetail(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<GetJobPostDetailResponseDto> showDetailPost(@PathVariable(name = "id") Long id) {
         JobPost post = jobPostService.findById(id);
 
         return ResponseEntity.ok()
-                .body(new GetPostDetailResponseDto(post));
+                .body(new GetJobPostDetailResponseDto(post));
     }
 }

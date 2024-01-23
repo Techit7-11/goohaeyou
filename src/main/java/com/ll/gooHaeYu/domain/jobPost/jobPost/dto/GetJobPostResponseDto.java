@@ -2,21 +2,19 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.category.entity.Category;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class GetJobPostResponse {
+public class GetJobPostResponseDto {
 
+    // TODO 안쓰는 필드 삭제
     private Long id;
 
     private LocalDateTime createdAt;
 
-    private LocalDateTime modifiedAt;
-
-    private Member member;
+    private String member;
 
     private Category category;
 
@@ -26,11 +24,10 @@ public class GetJobPostResponse {
 
     private boolean isClosed;
 
-    public GetJobPostResponse(JobPost entity) {
+    public GetJobPostResponseDto(JobPost entity) {
         this.id = entity.getId();
         this.createdAt = entity.getCreatedAt();
-        this.modifiedAt = entity.getModifiedAt();
-        this.member = entity.getMember();
+        this.member = entity.getMember().getUsername();
         this.category = entity.getCategory();
         this.title = entity.getTitle();
         this.body = entity.getBody();
