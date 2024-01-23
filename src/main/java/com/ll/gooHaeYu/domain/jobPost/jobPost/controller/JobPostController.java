@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.GetJobPostResponse;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.WriteJobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -9,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,5 +47,15 @@ public class JobPostController {
 
         return ResponseEntity.ok()
                 .body(post+"번 공고가 삭제 되었습니다.");
+    }
+
+    @GetMapping
+    public ResponseEntity<List<GetJobPostResponse>> findAllJobPost() {
+        List<GetJobPostResponse> jobPosts = jobPostService.findAll()
+                .stream()
+                .map(GetJobPostResponse::new)
+                .toList();
+        return ResponseEntity.ok()
+                .body(jobPosts);
     }
 }

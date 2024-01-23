@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -40,6 +42,10 @@ public class JobPostService {
                 .orElseThrow(()->
                         new CustomException(ErrorCode.POST_NOT_EXIST));
         return post;
+    }
+
+    public List<JobPost> findAll() {
+        return jobPostRepository.findAll();
     }
 
     @Transactional
