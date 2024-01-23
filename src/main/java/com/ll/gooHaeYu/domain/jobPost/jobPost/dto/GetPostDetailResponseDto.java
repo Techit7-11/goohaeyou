@@ -3,9 +3,6 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 import com.ll.gooHaeYu.domain.category.entity.Category;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -26,7 +23,7 @@ public class GetPostDetailResponseDto {
 
     private String body;
 
-    private boolean isClosed ;
+    private boolean isClosed;
 
     public GetPostDetailResponseDto(JobPost entity) {
         this.id = entity.getId();

@@ -41,9 +41,7 @@ public class MemberService {
     }
 
     public String login(LoginMemberRequest dto) {
-        Member member = memberRepository.findByUsername(dto.getUsername())
-                .orElseThrow(() ->
-                        new CustomException(ErrorCode.LOGIN_FAIL));
+        Member member = getMember(dto.getUsername());
 
         if (!bCryptPasswordEncoder.matches(dto.getPassword(), member.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
@@ -55,7 +53,7 @@ public class MemberService {
     public Member getMember(String username){
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(()->
-                        new CustomException(ErrorCode.NO_SUCH_USER_EXISTS));
+                        new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         return member;
     }
 }

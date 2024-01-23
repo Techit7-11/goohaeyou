@@ -20,29 +20,28 @@ public class JobPostController {
 
     private final JobPostService jobPostService;
 
-
     @PostMapping("/write")
-    public ResponseEntity<String> writePost(Authentication authentication, @Valid @RequestBody WriteJobPost request){
+    public ResponseEntity<String> writePost(Authentication authentication, @Valid @RequestBody WriteJobPost request) {
 
-        String post = jobPostService.writePost(authentication.getName(),request);
+        String post = jobPostService.writePost(authentication.getName(), request);
         return ResponseEntity.ok()
                 .body(post + "번 공고가 작성 되었습니다.");
     }
 
     @PutMapping("/modify/{id}")
-    public ResponseEntity<String> modifyPost(Authentication authentication,@PathVariable Long id, @RequestBody WriteJobPost request){
-        String post = jobPostService.modifyPost(authentication.getName(),id,request);
+    public ResponseEntity<String> modifyPost(Authentication authentication, @PathVariable Long id, @RequestBody WriteJobPost request) {
+        String post = jobPostService.modifyPost(authentication.getName(), id, request);
 
         return ResponseEntity.ok()
-                .body(post+"번 공고가 수정 되었습니다.");
+                .body(post + "번 공고가 수정 되었습니다.");
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deletePost(Authentication authentication,@PathVariable Long id){
-        String post = jobPostService.deletePost(authentication.getName(),id);
+    public ResponseEntity<String> deletePost(Authentication authentication, @PathVariable Long id) {
+        String post = jobPostService.deletePost(authentication.getName(), id);
 
         return ResponseEntity.ok()
-                .body(post+"번 공고가 삭제 되었습니다.");
+                .body(post + "번 공고가 삭제 되었습니다.");
     }
 
     @GetMapping
@@ -56,7 +55,7 @@ public class JobPostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetPostDetailResponseDto> showDetail (@PathVariable(name = "id") Long id){
+    public ResponseEntity<GetPostDetailResponseDto> showDetail(@PathVariable(name = "id") Long id) {
         JobPost post = jobPostService.findById(id);
 
         return ResponseEntity.ok()
