@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.GetJobPostResponse;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.GetPostDetailResponseDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.WriteJobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -19,11 +20,6 @@ public class JobPostController {
 
     private final JobPostService jobPostService;
 
-    @PostMapping
-    public ResponseEntity<String> jopPost(Authentication authentication) {
-        return ResponseEntity.ok()
-                .body(authentication.getName() + " 글이 작성되었습니다.");
-    }
 
     @PostMapping("/write")
     public ResponseEntity<String> writePost(Authentication authentication, @Valid @RequestBody WriteJobPost request){
@@ -57,5 +53,13 @@ public class JobPostController {
                 .toList();
         return ResponseEntity.ok()
                 .body(jobPosts);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetPostDetailResponseDto> showDetail (@PathVariable(name = "id") Long id){
+        JobPost post = jobPostService.findById(id);
+
+        return ResponseEntity.ok()
+                .body(new GetPostDetailResponseDto(post));
     }
 }

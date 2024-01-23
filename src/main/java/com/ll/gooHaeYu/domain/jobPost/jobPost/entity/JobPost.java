@@ -18,7 +18,7 @@ public class JobPost extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
@@ -33,7 +33,7 @@ public class JobPost extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean isClosed = false;
 
-    public void upData(String title, String body, boolean isClosed){
+    public void upData(String title, String body, boolean isClosed) {
         this.title = title;
         this.body = body;
         this.isClosed = isClosed;
