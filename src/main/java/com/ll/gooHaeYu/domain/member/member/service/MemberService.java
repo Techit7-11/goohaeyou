@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.member.member.service;
 
-import com.ll.gooHaeYu.domain.member.member.dto.AddMemberRequest;
+import com.ll.gooHaeYu.domain.member.member.dto.AddMemberForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginMemberRequest;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
@@ -25,29 +25,35 @@ public class MemberService {
     private String secretKey;
     private Long expiredMs = 1000 * 60 * 60l;
 
-    public String join(AddMemberRequest dto) {
+    @Transactional
+    public Long join(AddMemberForm dto) {
         memberRepository.findByUsername(dto.getUsername())
                 .ifPresent(member -> {
                     throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
                 });
 
-        memberRepository.save(Member.builder()
+        Member newMember = memberRepository.save(Member.builder()
                 .username(dto.getUsername())
                 .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                 .build());
 
-        return "SUCCESS";
+        return newMember.getId();
     }
 
     public String login(LoginMemberRequest dto) {
-        Member member = memberRepository.findByUsername(dto.getUsername())
-                .orElseThrow(() ->
-                        new CustomException(ErrorCode.LOGIN_FAIL));
+        Member member = getMember(dto.getUsername());
 
         if (!bCryptPasswordEncoder.matches(dto.getPassword(), member.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 
         return JwtUtil.createJwt(member.getUsername(), secretKey, expiredMs);
+    }
+
+    public Member getMember(String username){
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(()->
+                        new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        return member;
     }
 }
