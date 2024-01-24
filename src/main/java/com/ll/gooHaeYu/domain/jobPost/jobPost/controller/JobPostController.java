@@ -45,17 +45,11 @@ public class JobPostController {
 
     @GetMapping
     public ResponseEntity<List<JobPostDto>> findAllPost() {
-        List<JobPostDto> jobPostDtos = jobPostService.findAll();
-
-        return ResponseEntity.ok()
-                .body(jobPostDtos);
+        return ResponseEntity.ok(jobPostService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id) {
-        JobPostDto jobPostDto = jobPostService.findById(id);
-
-        return ResponseEntity.ok()
-                .body(jobPostDto);
+        return  ResponseEntity.ok(jobPostService.findById(id));
     }
 }
