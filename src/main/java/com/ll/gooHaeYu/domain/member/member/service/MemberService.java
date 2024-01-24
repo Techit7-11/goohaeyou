@@ -26,7 +26,7 @@ public class MemberService {
     private Long expiredMs = 1000 * 60 * 60l;
 
     @Transactional
-    public String join(AddMemberForm dto) {
+    public Long join(AddMemberForm dto) {
         memberRepository.findByUsername(dto.getUsername())
                 .ifPresent(member -> {
                     throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
@@ -37,7 +37,7 @@ public class MemberService {
                 .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                 .build());
 
-        return newMember.getUsername();
+        return newMember.getId();
     }
 
     public String login(LoginMemberRequest dto) {

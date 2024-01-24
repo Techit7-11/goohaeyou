@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.GetJobPostResponseDto;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.GetJobPostDetailResponseDto;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostResponseDto;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailResponseDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.WriteJobPostRequestDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -30,25 +30,23 @@ public class JobPostController {
 
     @PutMapping("/modify/{id}")
     public ResponseEntity<String> modifyPost(Authentication authentication, @PathVariable(name = "id") Long id, @Valid @RequestBody WriteJobPostRequestDto request) {
-        String post = jobPostService.modifyPost(authentication.getName(), id, request);
+        jobPostService.modifyPost(authentication.getName(), id, request);
 
-        return ResponseEntity.ok()
-                .body(post + "번 공고가 수정 되었습니다.");
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletePost(Authentication authentication, @PathVariable(name = "id") Long id) {
-        String post = jobPostService.deletePost(authentication.getName(), id);
+        jobPostService.deletePost(authentication.getName(), id);
 
-        return ResponseEntity.ok()
-                .body(post + "번 공고가 삭제 되었습니다.");
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<GetJobPostResponseDto>> findAllPost() {
-        List<GetJobPostResponseDto> posts = jobPostService.findAll()
+    public ResponseEntity<List<JobPostResponseDto>> findAllPost() {
+        List<JobPostResponseDto> posts = jobPostService.findAll()
                 .stream()
-                .map(GetJobPostResponseDto::new)
+                .map(JobPostResponseDto::new)
                 .toList();
 
         return ResponseEntity.ok()
@@ -56,10 +54,10 @@ public class JobPostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetJobPostDetailResponseDto> showDetailPost(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<JobPostDetailResponseDto> showDetailPost(@PathVariable(name = "id") Long id) {
         JobPost post = jobPostService.findById(id);
 
         return ResponseEntity.ok()
-                .body(new GetJobPostDetailResponseDto(post));
+                .body(new JobPostDetailResponseDto(post));
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
+import java.net.URI;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -22,9 +24,8 @@ public class MemberController {
 
     @PostMapping("/join")
     public ResponseEntity<String> join(@RequestBody @Valid AddMemberForm request) {
-        String newMember = memberService.join(request);
-        return ResponseEntity.ok()
-                .body(newMember + "님이 회원가입이 성공 했습니다.");
+        Long userId = memberService.join(request);
+        return ResponseEntity.created(URI.create("/api/member/join" + userId)).build();
     }
 
     @PostMapping("/login")

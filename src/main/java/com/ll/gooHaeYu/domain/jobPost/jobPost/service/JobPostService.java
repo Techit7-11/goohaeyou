@@ -42,22 +42,19 @@ public class JobPostService {
     }
 
     @Transactional
-    public String modifyPost(String username, Long id, WriteJobPostRequestDto request) {
+    public void modifyPost(String username, Long id, WriteJobPostRequestDto request) {
         JobPost post = findById(id);
         if (!canEditPost(username, post.getMember().getUsername())) throw new CustomException(ErrorCode.NOT_EDITABLE);
 
-        post.upData(request.getTitle(), request.getBody(), request.isClosed());
-
-        return post.getId().toString();
+        post.update(request.getTitle(), request.getBody(), request.getQuestionItems());
     }
 
     @Transactional
-    public String deletePost(String username, Long id) {
+    public void deletePost(String username, Long id) {
         JobPost post = findById(id);
         if (!canEditPost(username, post.getMember().getUsername())) throw new CustomException(ErrorCode.NOT_EDITABLE);
 
         jobPostRepository.deleteById(id);
-        return id.toString();
     }
 
     public boolean canEditPost(String username, String author) {

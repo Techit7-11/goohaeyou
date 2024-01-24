@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,5 +18,5 @@ public class WriteJobPostRequestDto {
     @NotBlank(message = "내용은 필수 입력 항목입니다.")
     private String body;
 
-    private boolean isClosed;
+    private List questionItems;
 }

@@ -7,12 +7,13 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class GetJobPostResponseDto {
+public class JobPostDetailResponseDto {
 
-    // TODO 안쓰는 필드 삭제
     private Long id;
 
     private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
 
     private String member;
 
@@ -24,9 +25,10 @@ public class GetJobPostResponseDto {
 
     private boolean isClosed;
 
-    public GetJobPostResponseDto(JobPost entity) {
+    public JobPostDetailResponseDto(JobPost entity) {
         this.id = entity.getId();
         this.createdAt = entity.getCreatedAt();
+        this.modifiedAt = entity.getModifiedAt();
         this.member = entity.getMember().getUsername();
         this.category = entity.getCategory();
         this.title = entity.getTitle();
