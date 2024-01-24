@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.WriteJobPostRequestDto;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
@@ -19,7 +19,7 @@ public class JobPostService {
     private final JobPostRepository jobPostRepository;
     private final MemberService memberService;
 
-    public String writePost(String username, WriteJobPostRequestDto dto) {
+    public String writePost(String username, JobPostForm.Register dto) {
 
         JobPost newPost = jobPostRepository.save(JobPost.builder()
                 .member(memberService.getMember(username))
@@ -42,11 +42,11 @@ public class JobPostService {
     }
 
     @Transactional
-    public void modifyPost(String username, Long id, WriteJobPostRequestDto request) {
+    public void modifyPost(String username, Long id, JobPostForm.Modify request) {
         JobPost post = findById(id);
         if (!canEditPost(username, post.getMember().getUsername())) throw new CustomException(ErrorCode.NOT_EDITABLE);
 
-        post.update(request.getTitle(), request.getBody(), request.getQuestionItems());
+        post.update(request.getTitle(), request.getBody(), request.isClosed(), request.getQuestionItems());
     }
 
     @Transactional

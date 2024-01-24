@@ -1,8 +1,8 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostResponseDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailResponseDto;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.WriteJobPostRequestDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class JobPostController {
     private final JobPostService jobPostService;
 
     @PostMapping("/write")
-    public ResponseEntity<String> writePost(Authentication authentication, @Valid @RequestBody WriteJobPostRequestDto request) {
+    public ResponseEntity<String> writePost(Authentication authentication, @Valid @RequestBody JobPostForm.Register request) {
         String post = jobPostService.writePost(authentication.getName(), request);
 
         return ResponseEntity.ok()
@@ -29,7 +29,7 @@ public class JobPostController {
     }
 
     @PutMapping("/modify/{id}")
-    public ResponseEntity<String> modifyPost(Authentication authentication, @PathVariable(name = "id") Long id, @Valid @RequestBody WriteJobPostRequestDto request) {
+    public ResponseEntity<String> modifyPost(Authentication authentication, @PathVariable(name = "id") Long id, @Valid @RequestBody JobPostForm.Modify request) {
         jobPostService.modifyPost(authentication.getName(), id, request);
 
         return ResponseEntity.noContent().build();

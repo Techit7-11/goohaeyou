@@ -41,9 +41,14 @@ public class JobPost extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean isClosed = false;
 
-    public void update(String title, String body, List questionItems) {
-        this.title = title;
-        this.body = body;
+    public void update(String title, String body, boolean isClosed, List<QuestionItem> questionItems) {
+        if (!title.isBlank()) {
+            this.title = title;
+        }
+        if (!body.isBlank()) {
+            this.body = body;
+        }
+        this.isClosed = isClosed;
         this.questionItems = questionItems;
     }
 }
