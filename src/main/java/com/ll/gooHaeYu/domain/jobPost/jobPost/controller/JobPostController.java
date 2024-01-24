@@ -15,12 +15,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/jobPost")
+@RequestMapping("/api/job-posts")
 public class JobPostController {
 
     private final JobPostService jobPostService;
 
-    @PostMapping("/write")
+    @PostMapping
     public ResponseEntity<String> writePost(Authentication authentication, @Valid @RequestBody JobPostForm.Register request) {
         String post = jobPostService.writePost(authentication.getName(), request);
 
@@ -28,14 +28,14 @@ public class JobPostController {
                 .body(post + "번 공고가 작성 되었습니다.");
     }
 
-    @PutMapping("/modify/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<String> modifyPost(Authentication authentication, @PathVariable(name = "id") Long id, @Valid @RequestBody JobPostForm.Modify request) {
         jobPostService.modifyPost(authentication.getName(), id, request);
 
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(Authentication authentication, @PathVariable(name = "id") Long id) {
         jobPostService.deletePost(authentication.getName(), id);
 
