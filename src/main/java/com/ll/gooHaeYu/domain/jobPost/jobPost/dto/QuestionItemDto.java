@@ -1,13 +1,12 @@
-package com.ll.gooHaeYu.domain.jobPost.questionItem.dto;
+package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
-import com.ll.gooHaeYu.domain.jobPost.questionItem.entity.QuestionItem;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.QuestionItem;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
 public class QuestionItemDto {
-
     private Long id;
     private Long jobPostId;
     private String content;

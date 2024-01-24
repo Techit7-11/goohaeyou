@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.domain.jobPost.questionItem.entity;
+package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
@@ -21,10 +21,5 @@ public class QuestionItem extends BaseTimeEntity {
     @JoinColumn(name = "job_post_id", nullable = false)
     private JobPost jobPost;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id", nullable = false)
-//    private Member member;
-
     private String content;
-
 }
