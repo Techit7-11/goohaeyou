@@ -1,7 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.jobPost.questionItem.dto.QuestionItemDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -22,17 +21,12 @@ public class JobPostDto {
     private LocalDateTime createdAt;
 
     public static JobPostDto fromEntity(JobPost jobPost) {
-        List<QuestionItemDto> itemDtos = jobPost.getQuestionItems().stream()
-                .map(QuestionItemDto::fromEntity)
-                .toList();
-
         return JobPostDto.builder()
                 .JobPostId(jobPost.getId())
                 .author(jobPost.getMember().getUsername())
                 .categoryName(jobPost.getCategory().getName())
                 .title(jobPost.getTitle())
                 .body(jobPost.getBody())
-                .questionItems(itemDtos)
                 .isClosed(jobPost.isClosed())
                 .createdAt(jobPost.getCreatedAt())
                 .build();

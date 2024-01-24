@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.QuestionItem;
@@ -40,19 +41,19 @@ public class JobPostService {
         return newPost.getId();
     }
 
-    public JobPost findById(Long id) {
-        JobPost post = jobPostRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
-        return post;
+    public JobPostDto findById(Long id) {
+        JobPost post = findByIdAndValidate(id);
+
+        return JobPostDto.fromEntity(post);
     }
 
-    public List<JobPost> findAll() {
-        return jobPostRepository.findAll();
+    public List<JobPostDto> findAll() {
+        return JobPostDto.toDtoList(jobPostRepository.findAll());
     }
 
     @Transactional
     public void modifyPost(String username, Long id, JobPostForm.Modify form) {
-        JobPost post = findById(id);
+        JobPost post = findByIdAndValidate(id);
 
         if (!canEditPost(username, post.getMember().getUsername()))
             throw new CustomException(ErrorCode.NOT_EDITABLE);
@@ -62,7 +63,7 @@ public class JobPostService {
 
     @Transactional
     public void deletePost(String username, Long id) {
-        JobPost post = findById(id);
+        JobPost post = findByIdAndValidate(id);
 
         if (!canEditPost(username, post.getMember().getUsername()))
             throw new CustomException(ErrorCode.NOT_EDITABLE);
@@ -72,5 +73,10 @@ public class JobPostService {
 
     public boolean canEditPost(String username, String author) {
         return username.equals(author);
+    }
+
+    private JobPost findByIdAndValidate(Long id) {
+        return jobPostRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
     }
 }

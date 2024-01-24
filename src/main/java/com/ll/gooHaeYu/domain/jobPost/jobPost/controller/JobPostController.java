@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.*;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,21 +44,18 @@ public class JobPostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<JobPostResponseDto>> findAllPost() {
-        List<JobPostResponseDto> posts = jobPostService.findAll()
-                .stream()
-                .map(JobPostResponseDto::new)
-                .toList();
+    public ResponseEntity<List<JobPostDto>> findAllPost() {
+        List<JobPostDto> jobPostDtos = jobPostService.findAll();
 
         return ResponseEntity.ok()
-                .body(posts);
+                .body(jobPostDtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<JobPostDetailResponseDto> showDetailPost(@PathVariable(name = "id") Long id) {
-        JobPost post = jobPostService.findById(id);
+    public ResponseEntity<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id) {
+        JobPostDto jobPostDto = jobPostService.findById(id);
 
         return ResponseEntity.ok()
-                .body(new JobPostDetailResponseDto(post));
+                .body(jobPostDto);
     }
 }
