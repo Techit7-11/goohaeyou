@@ -1,7 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.questionItem.entity;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,9 +21,9 @@ public class QuestionItem extends BaseTimeEntity {
     @JoinColumn(name = "job_post_id", nullable = false)
     private JobPost jobPost;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "member_id", nullable = false)
+//    private Member member;
 
     private String content;
 
