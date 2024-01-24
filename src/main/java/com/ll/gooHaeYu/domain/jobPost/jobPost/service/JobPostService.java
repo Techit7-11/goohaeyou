@@ -19,15 +19,18 @@ public class JobPostService {
     private final JobPostRepository jobPostRepository;
     private final MemberService memberService;
 
-    public String writePost(String username, JobPostForm.Register dto) {
-
-        JobPost newPost = jobPostRepository.save(JobPost.builder()
+    @Transactional
+    public Long writePost(String username, JobPostForm.Register form) {
+        JobPost newPost = JobPost.builder()
                 .member(memberService.getMember(username))
-                .title(dto.getTitle())
-                .body(dto.getBody())
-                .build());
+                .title(form.getTitle())
+                .body(form.getBody())
+                .questionItems(form.getQuestionItems())
+                .build();
 
-        return newPost.getId().toString();
+        jobPostRepository.save(newPost);
+
+        return newPost.getId();
     }
 
     public JobPost findById(Long id) {
