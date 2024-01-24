@@ -71,6 +71,6 @@ public class JobPostService {
     }
 
     public boolean canEditPost(String username, String author) {
-        return username.equals(author) ? true : false;
+        return username.equals(author);
     }
 }
