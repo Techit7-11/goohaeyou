@@ -1,7 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
 import com.ll.gooHaeYu.domain.category.entity.Category;
-import com.ll.gooHaeYu.domain.jobPost.questionItem.entity.QuestionItem;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -39,16 +38,17 @@ public class JobPost extends BaseTimeEntity {
     private String body;
 
     @Column(nullable = false)
-    private boolean isClosed = false;
+    private boolean closed = false;
 
-    public void update(String title, String body, boolean isClosed, List<QuestionItem> questionItems) {
-        if (!title.isBlank()) {
+    public void update(String title, String body, Boolean closed) {
+        if (title != null && !title.isBlank()) {
             this.title = title;
         }
-        if (!body.isBlank()) {
+        if (body != null && !body.isBlank()) {
             this.body = body;
         }
-        this.isClosed = isClosed;
-        this.questionItems = questionItems;
+        if (closed != null) {
+            this.closed = closed;
+        }
     }
 }
