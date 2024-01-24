@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 public class JobPostDto {
 
-    private Long JobPostId;
+    private Long id;
     private String author;
     private String categoryName;
     private String title;
@@ -22,7 +22,7 @@ public class JobPostDto {
 
     public static JobPostDto fromEntity(JobPost jobPost) {
         return JobPostDto.builder()
-                .JobPostId(jobPost.getId())
+                .id(jobPost.getId())
                 .author(jobPost.getMember().getUsername())
                 .categoryName(jobPost.getCategory().getName())
                 .title(jobPost.getTitle())
