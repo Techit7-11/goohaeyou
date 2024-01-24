@@ -1,8 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailResponseDto;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostResponseDto;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.*;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import jakarta.validation.Valid;
@@ -18,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/job-posts")
 public class JobPostController {
-
     private final JobPostService jobPostService;
 
     @PostMapping
@@ -26,21 +23,21 @@ public class JobPostController {
                                             @Valid @RequestBody JobPostForm.Register form) {
         Long jobPostId = jobPostService.writePost(authentication.getName(), form);
 
-        return ResponseEntity.created(URI.create("/api/job-posts" + jobPostId)).build();
+        return ResponseEntity.created(URI.create("/api/job-posts/" + jobPostId)).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> modifyPost(Authentication authentication,
+    public ResponseEntity<Void> modifyPost(Authentication authentication,
                                              @PathVariable(name = "id") Long id,
-                                             @Valid @RequestBody JobPostForm.Modify request) {
-        jobPostService.modifyPost(authentication.getName(), id, request);
+                                             @Valid @RequestBody JobPostForm.Modify form) {
+        jobPostService.modifyPost(authentication.getName(), id, form);
 
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePost(Authentication authentication,
-                                             @PathVariable(name = "id") Long id) {
+    public ResponseEntity<Void> deletePost(Authentication authentication,
+                                            @PathVariable(name = "id") Long id) {
         jobPostService.deletePost(authentication.getName(), id);
 
         return ResponseEntity.noContent().build();

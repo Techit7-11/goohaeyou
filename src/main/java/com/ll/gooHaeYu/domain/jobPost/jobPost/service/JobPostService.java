@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.QuestionItem;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
@@ -18,6 +19,7 @@ import java.util.List;
 public class JobPostService {
     private final JobPostRepository jobPostRepository;
     private final MemberService memberService;
+    private final QuestionItemService questionItemService;
 
     @Transactional
     public Long writePost(String username, JobPostForm.Register form) {
@@ -25,18 +27,22 @@ public class JobPostService {
                 .member(memberService.getMember(username))
                 .title(form.getTitle())
                 .body(form.getBody())
-                .questionItems(form.getQuestionItems())
                 .build();
 
         jobPostRepository.save(newPost);
+
+        List<QuestionItem> questionItems = form.getQuestionItemForms().stream()
+                .map(formItem -> questionItemService.createQuestionItem(formItem, newPost))
+                .toList();
+
+        questionItemService.saveQuestionItems(questionItems);
 
         return newPost.getId();
     }
 
     public JobPost findById(Long id) {
         JobPost post = jobPostRepository.findById(id)
-                .orElseThrow(() ->
-                        new CustomException(ErrorCode.POST_NOT_EXIST));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
         return post;
     }
 
@@ -45,17 +51,21 @@ public class JobPostService {
     }
 
     @Transactional
-    public void modifyPost(String username, Long id, JobPostForm.Modify request) {
+    public void modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPost post = findById(id);
-        if (!canEditPost(username, post.getMember().getUsername())) throw new CustomException(ErrorCode.NOT_EDITABLE);
 
-        post.update(request.getTitle(), request.getBody(), request.isClosed(), request.getQuestionItems());
+        if (!canEditPost(username, post.getMember().getUsername()))
+            throw new CustomException(ErrorCode.NOT_EDITABLE);
+
+        post.update(form.getTitle(), form.getBody(), form.getClosed());
     }
 
     @Transactional
     public void deletePost(String username, Long id) {
         JobPost post = findById(id);
-        if (!canEditPost(username, post.getMember().getUsername())) throw new CustomException(ErrorCode.NOT_EDITABLE);
+
+        if (!canEditPost(username, post.getMember().getUsername()))
+            throw new CustomException(ErrorCode.NOT_EDITABLE);
 
         jobPostRepository.deleteById(id);
     }
