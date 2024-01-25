@@ -1,8 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.comment.dto;
 
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 
