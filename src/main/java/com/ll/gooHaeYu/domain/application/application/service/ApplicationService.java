@@ -63,4 +63,14 @@ public class ApplicationService {
     public boolean canEditApplication(String username, String author) {
         return username.equals(author);
     }
+
+    @Transactional
+    public void deleteApplication(String username, Long id) {
+        Application application = findByIdAndValidate(id);
+
+        if (!canEditApplication(username, application.getMember().getUsername()))
+            throw new CustomException(ErrorCode.NOT_EDITABLE);
+
+        applicationRepository.deleteById(id);
+    }
 }

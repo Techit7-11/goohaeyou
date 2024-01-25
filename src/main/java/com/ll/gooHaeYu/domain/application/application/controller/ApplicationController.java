@@ -39,4 +39,12 @@ public class ApplicationController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteApplication(Authentication authentication,
+                                           @PathVariable(name = "id") Long id) {
+        applicationService.deleteApplication(authentication.getName(), id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
