@@ -23,6 +23,7 @@ public class CommentController {
 
     @GetMapping("/{postId}")
     public ResponseEntity<List<CommentDto>> findByPostId(@PathVariable Long postId) {
+
         return ResponseEntity.ok(commentService.findByPostId(postId));
     }
 

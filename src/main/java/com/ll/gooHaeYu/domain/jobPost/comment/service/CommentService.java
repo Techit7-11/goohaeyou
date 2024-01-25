@@ -45,7 +45,6 @@ public class CommentService {
 
         if (!canEditeComment(username, comment, post)) throw new CustomException(ErrorCode.NOT_EDITABLE);
 
-
         comment.update(form.getContent());
     }
 
@@ -58,11 +57,12 @@ public class CommentService {
 
         post.decreaseCommentsCount();
         post.getComments().remove(comment);
-
-        System.out.println("삭제");
     }
 
     public List<CommentDto> findByPostId(Long postId) {
+        jobPostService.findByIdAndValidate(postId);
+        // 공고 유효성 체크를 위해 추가
+
         return CommentDto.toDtoList(commentRepository.findAllByJobPostId(postId));
     }
 
