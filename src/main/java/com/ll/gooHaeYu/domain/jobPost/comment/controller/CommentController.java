@@ -17,17 +17,17 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/post-comment")
+@RequestMapping("/api/post-comment/{postId}")
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping("/{postId}")
+    @GetMapping
     public ResponseEntity<List<CommentDto>> findByPostId(@PathVariable Long postId) {
 
         return ResponseEntity.ok(commentService.findByPostId(postId));
     }
 
-    @PostMapping("/{postId}/comment")
+    @PostMapping("/comment")
     public ResponseEntity<String> write (Authentication authentication,
                                          @PathVariable Long postId,
                                          @Valid @RequestBody CommentForm.Register form){
@@ -36,7 +36,7 @@ public class CommentController {
         return ResponseEntity.created(URI.create("/api/job-posts/" + jobPostId)).build();
     }
 
-    @PutMapping("/{postId}/{commentId}")
+    @PutMapping("/comment/{commentId}")
     public ResponseEntity<Void> modify (Authentication authentication,
                                           @PathVariable Long postId,
                                           @PathVariable Long commentId,
@@ -46,7 +46,7 @@ public class CommentController {
     return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{postId}/{commentId}")
+    @DeleteMapping("/comment/{commentId}")
     public ResponseEntity delete (Authentication authentication,
                                   @PathVariable Long postId,
                                   @PathVariable Long commentId) {
