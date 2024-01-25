@@ -1,8 +1,6 @@
-package com.ll.gooHaeYu.domain.application.responseItem.entity;
+package com.ll.gooHaeYu.domain.application.application.entity;
 
-import com.ll.gooHaeYu.domain.application.application.entity.Application;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.member.member.entity.Member;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.QuestionItem;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,13 +21,8 @@ public class ResponseItem {
     private Application application;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_post_id", nullable = false)
-    private JobPost jobPost;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @JoinColumn(name = "question_item_id", nullable = false)
+    private QuestionItem questionItem;
 
     private String content;
-
 }

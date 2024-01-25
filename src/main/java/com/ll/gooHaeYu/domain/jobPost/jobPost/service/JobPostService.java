@@ -1,7 +1,9 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.QuestionItem;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
@@ -18,46 +20,63 @@ import java.util.List;
 public class JobPostService {
     private final JobPostRepository jobPostRepository;
     private final MemberService memberService;
+    private final QuestionItemService questionItemService;
 
-    public String writePost(String username, JobPostForm.Register dto) {
-
-        JobPost newPost = jobPostRepository.save(JobPost.builder()
+    @Transactional
+    public Long writePost(String username, JobPostForm.Register form) {
+        JobPost newPost = JobPost.builder()
                 .member(memberService.getMember(username))
-                .title(dto.getTitle())
-                .body(dto.getBody())
-                .build());
+                .title(form.getTitle())
+                .body(form.getBody())
+                .build();
 
-        return newPost.getId().toString();
+        jobPostRepository.save(newPost);
+
+        List<QuestionItem> questionItems = form.getQuestionItemForms().stream()
+                .map(formItem -> questionItemService.createQuestionItem(formItem, newPost))
+                .toList();
+
+        questionItemService.saveQuestionItems(questionItems);
+
+        return newPost.getId();
     }
 
-    public JobPost findById(Long id) {
-        JobPost post = jobPostRepository.findById(id)
-                .orElseThrow(() ->
-                        new CustomException(ErrorCode.POST_NOT_EXIST));
-        return post;
+    public JobPostDto findById(Long id) {
+        JobPost post = findByIdAndValidate(id);
+
+        return JobPostDto.fromEntity(post);
     }
 
-    public List<JobPost> findAll() {
-        return jobPostRepository.findAll();
+    public List<JobPostDto> findAll() {
+        return JobPostDto.toDtoList(jobPostRepository.findAll());
     }
 
     @Transactional
-    public void modifyPost(String username, Long id, JobPostForm.Modify request) {
-        JobPost post = findById(id);
-        if (!canEditPost(username, post.getMember().getUsername())) throw new CustomException(ErrorCode.NOT_EDITABLE);
+    public void modifyPost(String username, Long id, JobPostForm.Modify form) {
+        JobPost post = findByIdAndValidate(id);
 
-        post.update(request.getTitle(), request.getBody(), request.isClosed(), request.getQuestionItems());
+        if (!canEditPost(username, post.getMember().getUsername()))
+            throw new CustomException(ErrorCode.NOT_EDITABLE);
+
+        post.update(form.getTitle(), form.getBody(), form.getClosed());
     }
 
     @Transactional
     public void deletePost(String username, Long id) {
-        JobPost post = findById(id);
-        if (!canEditPost(username, post.getMember().getUsername())) throw new CustomException(ErrorCode.NOT_EDITABLE);
+        JobPost post = findByIdAndValidate(id);
+
+        if (!canEditPost(username, post.getMember().getUsername()))
+            throw new CustomException(ErrorCode.NOT_EDITABLE);
 
         jobPostRepository.deleteById(id);
     }
 
     public boolean canEditPost(String username, String author) {
-        return username.equals(author) ? true : false;
+        return username.equals(author);
+    }
+
+    private JobPost findByIdAndValidate(Long id) {
+        return jobPostRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
     }
 }

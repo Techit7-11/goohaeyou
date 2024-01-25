@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.domain.application.responseItem.service;
+package com.ll.gooHaeYu.domain.application.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
