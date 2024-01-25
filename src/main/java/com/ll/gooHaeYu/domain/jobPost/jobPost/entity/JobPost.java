@@ -67,4 +67,8 @@ public class JobPost extends BaseTimeEntity {
     public void increaseCommentsCount() {
         commentsCount++;
     }
+
+    public void decreaseCommentsCount() {
+        commentsCount--;
+    }
 }

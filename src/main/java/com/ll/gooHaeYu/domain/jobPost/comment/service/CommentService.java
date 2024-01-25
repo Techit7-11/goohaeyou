@@ -47,6 +47,18 @@ public class CommentService {
         comment.update(form.getContent());
     }
 
+    @Transactional
+    public void deleteComment(String username, Long postId, Long commentId) {
+        JobPost post = jobPostService.findByIdAndValidate(postId);
+        Comment comment = findByIdAndValidate(commentId);
+
+        if (!canEditeComment(username, comment, post)) throw new CustomException(ErrorCode.NOT_EDITABLE);
+
+        post.decreaseCommentsCount();
+        post.getComments().remove(comment);
+
+        System.out.println("삭제");
+    }
     public Comment findByIdAndValidate(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_EXIST));
@@ -59,4 +71,6 @@ public class CommentService {
 
         return username.equals(comment.getMember().getUsername());
     }
+
+
 }
