@@ -29,8 +29,6 @@ public class Application extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    private Boolean status;
-
     @Column(nullable = false)
     private boolean approve = false;
 
