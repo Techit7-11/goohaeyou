@@ -17,7 +17,7 @@ public class QuestionItem extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_post_id", nullable = false)
+    @JoinColumn(name = "job_post_id")
     private JobPost jobPost;
 
     private String content;
