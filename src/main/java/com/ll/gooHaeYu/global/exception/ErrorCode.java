@@ -15,6 +15,8 @@ public enum ErrorCode {
 
     POST_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 공고는 존재하지 않습니다."),
 
+    COMMENT_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 댓글은 존재하지 않습니다."),
+
     NOT_EDITABLE(HttpStatus.FORBIDDEN,"수정 권한이 없습니다.");
 
     private final HttpStatus status;

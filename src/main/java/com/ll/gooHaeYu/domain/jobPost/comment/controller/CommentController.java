@@ -28,4 +28,13 @@ public class CommentController {
         return ResponseEntity.created(URI.create("/api/job-posts/" + jobPostId)).build();
     }
 
+    @PutMapping("/{postId}/{commentId}")
+    public ResponseEntity<Void> modify (Authentication authentication,
+                                          @PathVariable Long postId,
+                                          @PathVariable Long commentId,
+                                          @Valid @RequestBody CommentForm.Register form) {
+        commentService.modifyComment(authentication.getName(), postId, commentId, form);
+
+    return ResponseEntity.noContent().build();
+    }
 }
