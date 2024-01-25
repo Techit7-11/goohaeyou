@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
 import com.ll.gooHaeYu.domain.category.entity.Category;
+import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -9,9 +10,12 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
+import static lombok.AccessLevel.PROTECTED;
+
 @Entity
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
 @Builder
 @Getter
 @Table(name = "job_post")
@@ -29,9 +33,17 @@ public class JobPost extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = ALL)
     @JoinColumn(name = "job_post_id")
     private List<QuestionItem> questionItems = new ArrayList<>();
+
+    @OneToMany(mappedBy = "jobPost", cascade = ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @Builder.Default
+    @OrderBy("id DESC")
+    private List<Comment> comments = new ArrayList<>();
+    @Setter(PROTECTED)
+    private long commentsCount;
 
     private String title;
 
@@ -50,5 +62,9 @@ public class JobPost extends BaseTimeEntity {
         if (closed != null) {
             this.closed = closed;
         }
+    }
+
+    public void increaseCommentsCount() {
+        commentsCount++;
     }
 }
