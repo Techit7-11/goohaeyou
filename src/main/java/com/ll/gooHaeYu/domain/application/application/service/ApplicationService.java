@@ -49,4 +49,18 @@ public class ApplicationService {
         return applicationRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
     }
+
+    @Transactional
+    public void modifyApplication(String username, Long id, ApplicationForm.Modify form) {
+        Application application = findByIdAndValidate(id);
+
+        if (!canEditApplication(username, application.getMember().getUsername()))
+            throw new CustomException(ErrorCode.NOT_EDITABLE);
+
+        application.update(form.getBody());
+    }
+
+    public boolean canEditApplication(String username, String author) {
+        return username.equals(author);
+    }
 }

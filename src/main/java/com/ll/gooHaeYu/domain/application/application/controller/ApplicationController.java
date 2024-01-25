@@ -30,4 +30,13 @@ public class ApplicationController {
     public ResponseEntity<ApplicationDto> detailApplication(@PathVariable(name = "id") Long id) {
         return  ResponseEntity.ok(applicationService.findById(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> modifyApplication(Authentication authentication,
+                                           @PathVariable(name = "id") Long id,
+                                           @Valid @RequestBody ApplicationForm.Modify form) {
+        applicationService.modifyApplication(authentication.getName(), id, form);
+
+        return ResponseEntity.noContent().build();
+    }
 }

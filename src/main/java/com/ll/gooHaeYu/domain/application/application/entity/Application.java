@@ -37,4 +37,10 @@ public class Application extends BaseTimeEntity {
     private List<ResponseItem> responseItems = new ArrayList<>();
 
     private String body;
+
+    public void update(String body) {
+        if (body != null && !body.isBlank()) {
+            this.body = body;
+        }
+    }
 }
