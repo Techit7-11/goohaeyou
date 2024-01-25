@@ -1,6 +1,5 @@
 package com.ll.gooHaeYu.domain.member.member.entity;
 
-import com.ll.gooHaeYu.domain.member.location.entity.Location;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
@@ -30,9 +29,7 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id")
-    private Location location;
+    private String location;
 
     private LocalDate birth;
 

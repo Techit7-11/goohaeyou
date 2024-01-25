@@ -79,4 +79,10 @@ public class JobPostService {
         return jobPostRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
     }
+
+    public JobPost postAndApplication(Long id) {
+        JobPost post = findByIdAndValidate(id);
+
+        return post;
+    }
 }
