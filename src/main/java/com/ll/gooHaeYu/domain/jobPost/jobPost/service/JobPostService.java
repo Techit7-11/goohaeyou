@@ -75,7 +75,7 @@ public class JobPostService {
         return username.equals(author);
     }
 
-    private JobPost findByIdAndValidate(Long id) {
+    public JobPost findByIdAndValidate(Long id) {
         return jobPostRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
     }
