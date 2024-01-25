@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.application.application.service;
 
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
+import com.ll.gooHaeYu.domain.application.application.dto.ApplicationForm;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.application.application.repository.ApplicationRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
@@ -22,7 +23,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
 
     @Transactional
-    public Long writeApplication(String username, Long id) {
+    public Long writeApplication(String username, Long id, ApplicationForm.Register form) {
         JobPost post = jobPostService.postAndApplication(id);
 
         Member member = memberService.getMember(username);
@@ -30,6 +31,7 @@ public class ApplicationService {
         Application newApplication = Application.builder()
                 .member(member)
                 .jobPost(post)
+                .body(form.getBody())
                 .build();
 
         applicationRepository.save(newApplication);
