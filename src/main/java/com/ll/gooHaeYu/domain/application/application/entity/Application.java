@@ -35,4 +35,6 @@ public class Application extends BaseTimeEntity {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "application_id")
     private List<ResponseItem> responseItems = new ArrayList<>();
+
+    private String body;
 }

@@ -1,13 +1,11 @@
 package com.ll.gooHaeYu.domain.application.application.controller;
 
+import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -22,5 +20,10 @@ public class ApplicationController {
         Long ApplicationId = applicationService.writeApplication(authentication.getName(), id);
 
         return ResponseEntity.created(URI.create("/api/application/" + ApplicationId)).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApplicationDto> detailApplication(@PathVariable(name = "id") Long id) {
+        return  ResponseEntity.ok(applicationService.findById(id));
     }
 }

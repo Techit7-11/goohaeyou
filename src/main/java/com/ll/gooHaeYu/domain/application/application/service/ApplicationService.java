@@ -1,11 +1,14 @@
 package com.ll.gooHaeYu.domain.application.application.service;
 
+import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.application.application.repository.ApplicationRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,5 +35,16 @@ public class ApplicationService {
         applicationRepository.save(newApplication);
 
         return newApplication.getId();
+    }
+
+    public ApplicationDto findById(Long id) {
+        Application application = findByIdAndValidate(id);
+
+        return ApplicationDto.fromEntity(application);
+    }
+
+    private Application findByIdAndValidate(Long id) {
+        return applicationRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
     }
 }
