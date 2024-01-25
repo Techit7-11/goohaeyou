@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.comment.controller;
 
+import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentDto;
 import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentForm;
 import com.ll.gooHaeYu.domain.jobPost.comment.service.CommentService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
@@ -12,12 +13,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/post-comment")
 public class CommentController {
     private final CommentService commentService;
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<List<CommentDto>> findByPostId(@PathVariable Long postId) {
+        return ResponseEntity.ok(commentService.findByPostId(postId));
+    }
 
     @PostMapping("/{postId}/comment")
     public ResponseEntity<String> write (Authentication authentication,

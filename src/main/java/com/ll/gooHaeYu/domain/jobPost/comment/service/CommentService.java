@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.comment.service;
 
+import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentDto;
 import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentForm;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.comment.repository.CommentRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +61,11 @@ public class CommentService {
 
         System.out.println("삭제");
     }
+
+    public List<CommentDto> findByPostId(Long postId) {
+        return CommentDto.toDtoList(commentRepository.findAllByJobPostId(postId));
+    }
+
     public Comment findByIdAndValidate(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_EXIST));

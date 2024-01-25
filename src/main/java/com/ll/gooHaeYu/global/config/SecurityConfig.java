@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> {
                     requests.requestMatchers("/api/member/login", "/api/member/join").permitAll();
-                    requests.requestMatchers(HttpMethod.GET, "/api/job-posts/{id:\\d+}", "/api/job-posts").permitAll();
+                    requests.requestMatchers(HttpMethod.GET,"/api/post-comment/{id:\\d+}", "/api/job-posts/{id:\\d+}", "/api/job-posts").permitAll();
                     requests.anyRequest().authenticated();
                 })
                 .sessionManagement(
