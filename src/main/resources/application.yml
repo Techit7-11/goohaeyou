@@ -4,6 +4,9 @@ spring:
   profiles:
     active: dev
     include: secret
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
   threads:
     virtual:
       enabled: true
