@@ -1,0 +1,33 @@
+server:
+  port: 8080
+  shutdown: graceful   # 스프링이 꺼질 때 이 전의 요청들을 모두 끝내고 꺼진다
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  datasource:
+    url: NEED_TO_INPUT
+    username: NEED_TO_INPUT
+    password: NEED_TO_INPUT
+    driver-class-name: org.h2.Driver # NEED_TO_CHANGE
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:    # 운영모드에서는 sql문이 필요없으니 모두 끈다
+        format_sql: false
+        highlight_sql: false
+        use_sql_comments: false
+logging:
+  level:
+    com.ll.rsv: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.orm.jdbc.bind: INFO
+    org.hibernate.orm.jdbc.extract: INFO
+    org.springframework.transaction.interceptor: INFO
+custom:
+  site:
+    cookieDomain: NEED_TO_INPUT
+    frontUrl: NEED_TO_INPUT
+    backUrl: NEED_TO_INPUT
