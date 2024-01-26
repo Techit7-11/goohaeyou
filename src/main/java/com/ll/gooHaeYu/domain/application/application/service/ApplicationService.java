@@ -24,7 +24,7 @@ public class ApplicationService {
 
     @Transactional
     public Long writeApplication(String username, Long id, ApplicationForm.Register form) {
-        JobPost post = jobPostService.postAndApplication(id);
+        JobPost post = jobPostService.findByIdAndValidate(id);
 
         Member member = memberService.getMember(username);
 

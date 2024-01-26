@@ -13,7 +13,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/application")
+@RequestMapping("/api/applications")
 public class ApplicationController {
     private final ApplicationService applicationService;
 
