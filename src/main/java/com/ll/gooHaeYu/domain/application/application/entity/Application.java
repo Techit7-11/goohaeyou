@@ -29,12 +29,18 @@ public class Application extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    private Boolean status;
-
     @Column(nullable = false)
     private boolean approve = false;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "application_id")
     private List<ResponseItem> responseItems = new ArrayList<>();
+
+    private String body;
+
+    public void update(String body) {
+        if (body != null && !body.isBlank()) {
+            this.body = body;
+        }
+    }
 }
