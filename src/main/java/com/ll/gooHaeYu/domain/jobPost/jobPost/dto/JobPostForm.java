@@ -4,9 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class JobPostForm {
 
     @Getter
@@ -17,8 +14,6 @@ public class JobPostForm {
 
         @NotBlank(message = "내용은 필수 입력 항목입니다.")
         private String body;
-
-        private List<QuestionItemForm> questionItemForms = new ArrayList<>();
     }
 
     @Getter

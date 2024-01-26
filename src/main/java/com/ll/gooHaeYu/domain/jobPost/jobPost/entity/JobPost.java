@@ -33,10 +33,6 @@ public class JobPost extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(cascade = ALL)
-    @JoinColumn(name = "job_post_id")
-    private List<QuestionItem> questionItems = new ArrayList<>();
-
     @OneToMany(mappedBy = "jobPost", cascade = ALL, orphanRemoval = true)
     @ToString.Exclude
     @Builder.Default
