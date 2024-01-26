@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.domain.member.member.controller;
 
-import com.ll.gooHaeYu.domain.member.member.dto.AddMemberForm;
-import com.ll.gooHaeYu.domain.member.member.dto.LoginMemberRequest;
+import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
+import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,15 +25,15 @@ public class MemberController {
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
-    public ResponseEntity<String> join(@RequestBody @Valid AddMemberForm request) {
-        Long userId = memberService.join(request);
+    public ResponseEntity<String> join(@RequestBody @Valid JoinForm form) {
+        Long userId = memberService.join(form);
         return ResponseEntity.created(URI.create("/api/member/join" + userId)).build();
     }
 
     @PostMapping("/login")
     @Operation(summary = "로그인")
-    public ResponseEntity<String> login(@RequestBody @Valid LoginMemberRequest request) {
-        String token = memberService.login(request);
+    public ResponseEntity<String> login(@RequestBody @Valid LoginForm form) {
+        String token = memberService.login(form);
         return ResponseEntity.ok(token);
     }
 }
