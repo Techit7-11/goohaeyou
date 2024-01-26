@@ -15,7 +15,7 @@ public class ApplicationDto {
     private Long postId;
     private String body;
     private LocalDateTime createdAt;
-    private boolean approve;
+    private Boolean approve;
 
     public static ApplicationDto fromEntity(Application application) {
         return ApplicationDto.builder()
@@ -24,7 +24,7 @@ public class ApplicationDto {
                 .postId(application.getJobPost().getId())
                 .body(application.getBody())
                 .createdAt(application.getCreatedAt())
-                .approve(application.isApprove())
+                .approve(application.getApprove())
                 .build();
     }
 }

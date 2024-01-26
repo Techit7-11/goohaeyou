@@ -29,8 +29,8 @@ public class Application extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(nullable = false)
-    private boolean approve = false;
+    @Column
+    private Boolean approve = null;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "application_id")
