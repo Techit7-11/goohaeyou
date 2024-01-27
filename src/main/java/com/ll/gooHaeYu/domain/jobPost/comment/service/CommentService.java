@@ -5,7 +5,11 @@ import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentForm;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.comment.repository.CommentRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
+import com.ll.gooHaeYu.domain.member.member.entity.Member;
+import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
+import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
@@ -23,8 +27,12 @@ public class CommentService {
     private final MemberService memberService;
     private final CommentRepository commentRepository;
 
+    private final JobPostRepository jobPostRepository;
+
+    private final MemberRepository memberRepository;
+
     @Transactional
-    public Long writeComment (Long postId, String username, CommentForm.Register form) {
+    public Long writeComment(Long postId, String username, CommentForm.Register form) {
         JobPost post = jobPostService.findByIdAndValidate(postId);
         Comment comment = Comment.builder()
                 .jobPost(jobPostService.findByIdAndValidate(postId))
@@ -38,7 +46,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void modifyComment(String username, Long postId, Long commentId, CommentForm.Register form){
+    public void modifyComment(String username, Long postId, Long commentId, CommentForm.Register form) {
         JobPost post = jobPostService.findByIdAndValidate(postId);
         Comment comment = findByIdAndValidate(commentId);
 
@@ -51,12 +59,17 @@ public class CommentService {
     public void deleteComment(String username, Long postId, Long commentId) {
         JobPost post = jobPostService.findByIdAndValidate(postId);
         Comment comment = findByIdAndValidate(commentId);
+        Member member = findUserByUserNameValidate(username);
 
-        if (!canEditeComment(username, comment, post)) throw new CustomException(ErrorCode.NOT_EDITABLE);
+        if (!isAdminOrNot(comment, member)) {
+            throw new CustomException(ErrorCode.NOT_EDITABLE);
+        }
+        commentRepository.deleteById(commentId);
 
         post.decreaseCommentsCount();
         post.getComments().remove(comment);
     }
+
 
     public List<CommentDto> findByPostId(Long postId) {
         jobPostService.findByIdAndValidate(postId);
@@ -70,12 +83,21 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_EXIST));
     }
 
-    private boolean canEditeComment (String username, Comment comment, JobPost post) {
+    private boolean canEditeComment(String username, Comment comment, JobPost post) {
         if (!post.getComments().contains(comment)) {
             throw new CustomException(ErrorCode.COMMENT_NOT_EXIST);
         }
 
         return username.equals(comment.getMember().getUsername());
+    }
+
+    private Member findUserByUserNameValidate(String username) {
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    private boolean isAdminOrNot(Comment comment, Member member) {
+        return member.getRole() == Role.ADMIN || comment.getMember().equals(member);
     }
 
 
