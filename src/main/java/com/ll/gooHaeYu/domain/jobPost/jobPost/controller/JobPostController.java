@@ -33,18 +33,9 @@ public class JobPostController {
     @PutMapping("/{id}")
     @Operation(summary = "구인공고 수정")
     public ResponseEntity<Void> modifyPost(Authentication authentication,
-                                             @PathVariable(name = "id") Long id,
-                                             @Valid @RequestBody JobPostForm.Modify form) {
+                                           @PathVariable(name = "id") Long id,
+                                           @Valid @RequestBody JobPostForm.Modify form) {
         jobPostService.modifyPost(authentication.getName(), id, form);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{id}")
-    @Operation(summary = "구인공고 삭제")
-    public ResponseEntity<Void> deletePost(Authentication authentication,
-                                            @PathVariable(name = "id") Long id) {
-        jobPostService.deletePost(authentication.getName(), id);
 
         return ResponseEntity.noContent().build();
     }
@@ -59,5 +50,14 @@ public class JobPostController {
     @Operation(summary = "구인공고 단건 조회")
     public ResponseEntity<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id) {
         return  ResponseEntity.ok(jobPostService.findById(id));
+    }
+
+    @DeleteMapping("/{id}/delete")
+    @Operation(summary = "구인공고 삭제")
+    public ResponseEntity<Void> deleteJobPost(Authentication authentication,
+                                              @PathVariable(name = "id") Long id) {
+        jobPostService.deleteJobPost(authentication.getName(), id);
+
+        return ResponseEntity.noContent().build();
     }
 }

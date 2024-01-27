@@ -5,6 +5,9 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.QuestionItem;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
+import com.ll.gooHaeYu.domain.member.member.entity.Member;
+import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
+import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
@@ -20,6 +23,8 @@ import java.util.List;
 public class JobPostService {
     private final JobPostRepository jobPostRepository;
     private final MemberService memberService;
+
+    private final MemberRepository memberRepository;
     private final QuestionItemService questionItemService;
 
     @Transactional
@@ -62,14 +67,22 @@ public class JobPostService {
     }
 
     @Transactional
-    public void deletePost(String username, Long id) {
-        JobPost post = findByIdAndValidate(id);
+    public void deleteJobPost(String username, Long postId) {
+        JobPost post = findByIdAndValidate(postId);
 
-        if (!canEditPost(username, post.getMember().getUsername()))
+        Member member = findUserByUserNameValidate(username);
+        if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
+            jobPostRepository.deleteById(postId);
+        } else {
             throw new CustomException(ErrorCode.NOT_EDITABLE);
-
-        jobPostRepository.deleteById(id);
+        }
     }
+
+    private Member findUserByUserNameValidate(String username) {
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
 
     public boolean canEditPost(String username, String author) {
         return username.equals(author);
