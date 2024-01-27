@@ -66,16 +66,6 @@ public class JobPostService {
     }
 
     @Transactional
-    public void deletePost(String username, Long id) {
-        JobPost post = findByIdAndValidate(id);
-
-        if (!canEditPost(username, post.getMember().getUsername()))
-            throw new CustomException(ErrorCode.NOT_EDITABLE);
-
-        jobPostRepository.deleteById(id);
-    }
-
-    @Transactional
     public void deleteJobPost(String username, Long postId) {
         JobPost post = findByIdAndValidate(postId);
         Member member = memberService.findUserByUserNameValidate(username);
