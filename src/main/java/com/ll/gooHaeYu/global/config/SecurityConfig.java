@@ -43,7 +43,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> {
                     requests
                             .requestMatchers("/api/member/login", "/api/member/join").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/job-posts/{id:\\d+}", "/api/job-posts").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/api/job-posts/{id:\\d+}", "/api/job-posts",
+                                    "/api/post-comment/{postId}").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                             .anyRequest().authenticated();
                 })
