@@ -27,9 +27,6 @@ public class CommentService {
     private final MemberService memberService;
     private final CommentRepository commentRepository;
 
-    private final JobPostRepository jobPostRepository;
-
-    private final MemberRepository memberRepository;
 
     @Transactional
     public Long writeComment(Long postId, String username, CommentForm.Register form) {
@@ -59,9 +56,9 @@ public class CommentService {
     public void deleteComment(String username, Long postId, Long commentId) {
         JobPost post = jobPostService.findByIdAndValidate(postId);
         Comment comment = findByIdAndValidate(commentId);
-        Member member = findUserByUserNameValidate(username);
+        Member member = memberService.findUserByUserNameValidate(username);
 
-        if (!isAdminOrNot(comment, member)) {
+        if (!isAdminOrCommentWriter(comment, member)) {
             throw new CustomException(ErrorCode.NOT_EDITABLE);
         }
         commentRepository.deleteById(commentId);
@@ -91,12 +88,7 @@ public class CommentService {
         return username.equals(comment.getMember().getUsername());
     }
 
-    private Member findUserByUserNameValidate(String username) {
-        return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-    }
-
-    private boolean isAdminOrNot(Comment comment, Member member) {
+    private boolean isAdminOrCommentWriter(Comment comment, Member member) {
         return member.getRole() == Role.ADMIN || comment.getMember().equals(member);
     }
 

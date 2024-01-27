@@ -52,7 +52,7 @@ public class JobPostController {
         return  ResponseEntity.ok(jobPostService.findById(id));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     @Operation(summary = "구인공고 삭제")
     public ResponseEntity<Void> deleteJobPost(Authentication authentication,
                                               @PathVariable(name = "id") Long id) {

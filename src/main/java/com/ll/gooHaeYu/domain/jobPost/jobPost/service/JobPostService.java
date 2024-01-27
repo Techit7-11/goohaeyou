@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +24,6 @@ import java.util.List;
 public class JobPostService {
     private final JobPostRepository jobPostRepository;
     private final MemberService memberService;
-
-    private final MemberRepository memberRepository;
     private final QuestionItemService questionItemService;
 
     @Transactional
@@ -39,7 +38,7 @@ public class JobPostService {
 
         List<QuestionItem> questionItems = form.getQuestionItemForms().stream()
                 .map(formItem -> questionItemService.createQuestionItem(formItem, newPost))
-                .toList();
+                .collect(Collectors.toList());
 
         questionItemService.saveQuestionItems(questionItems);
 
@@ -67,20 +66,30 @@ public class JobPostService {
     }
 
     @Transactional
-    public void deleteJobPost(String username, Long postId) {
-        JobPost post = findByIdAndValidate(postId);
+    public void deletePost(String username, Long id) {
+        JobPost post = findByIdAndValidate(id);
 
-        Member member = findUserByUserNameValidate(username);
-        if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
-            jobPostRepository.deleteById(postId);
-        } else {
+        if (!canEditPost(username, post.getMember().getUsername()))
             throw new CustomException(ErrorCode.NOT_EDITABLE);
-        }
+
+        jobPostRepository.deleteById(id);
     }
 
-    private Member findUserByUserNameValidate(String username) {
-        return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    @Transactional
+    public void deleteJobPost(String username, Long postId) {
+        JobPost post = findByIdAndValidate(postId);
+        Member member = memberService.findUserByUserNameValidate(username);
+
+        if (!isAdminOrPostWriter(post, member)) {
+            throw new CustomException(ErrorCode.NOT_EDITABLE);
+        }
+
+        jobPostRepository.deleteById(postId);
+
+    }
+
+    private boolean isAdminOrPostWriter(JobPost post, Member member) {
+        return member.getRole() == Role.ADMIN || post.getMember().equals(member);
     }
 
 

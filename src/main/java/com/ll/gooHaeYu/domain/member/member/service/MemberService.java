@@ -56,4 +56,10 @@ public class MemberService {
                         new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         return member;
     }
+
+    public Member findUserByUserNameValidate(String username) {
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
 }
