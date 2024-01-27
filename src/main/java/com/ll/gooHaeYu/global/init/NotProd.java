@@ -28,7 +28,7 @@ public class NotProd {
     private final MemberRepository memberRepository;
 
     @Value("${app.init-run}")
-    private boolean initRun;   // application-dev.yml 에서 app: init-run: true 로 설정 하면, 샘플 데이터 생성
+    private boolean initRun;   // application-dev.yml 에서 app: init-run: true 로 설정 하면 샘플 데이터 생성 (기본값: false)
 
     @Bean
     public ApplicationRunner initNotProd() {
