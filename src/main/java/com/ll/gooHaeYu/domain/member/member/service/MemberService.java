@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.domain.member.member.service;
 
-import com.ll.gooHaeYu.domain.member.member.dto.AddMemberForm;
-import com.ll.gooHaeYu.domain.member.member.dto.LoginMemberRequest;
+import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
+import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
@@ -26,24 +26,24 @@ public class MemberService {
     private Long expiredMs = 1000 * 60 * 60l;
 
     @Transactional
-    public Long join(AddMemberForm dto) {
-        memberRepository.findByUsername(dto.getUsername())
+    public Long join(JoinForm form) {
+        memberRepository.findByUsername(form.getUsername())
                 .ifPresent(member -> {
                     throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
                 });
 
         Member newMember = memberRepository.save(Member.builder()
-                .username(dto.getUsername())
-                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
+                .username(form.getUsername())
+                .password(bCryptPasswordEncoder.encode(form.getPassword()))
                 .build());
 
         return newMember.getId();
     }
 
-    public String login(LoginMemberRequest dto) {
-        Member member = getMember(dto.getUsername());
+    public String login(LoginForm form) {
+        Member member = getMember(form.getUsername());
 
-        if (!bCryptPasswordEncoder.matches(dto.getPassword(), member.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(form.getPassword(), member.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 

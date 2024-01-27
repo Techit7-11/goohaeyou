@@ -1,11 +1,13 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 public class JobPostForm {
 
+    @Builder
     @Getter
     @Setter
     public static class Register {
@@ -16,6 +18,7 @@ public class JobPostForm {
         private String body;
     }
 
+    @Builder
     @Getter
     @Setter
     public static class Modify {
