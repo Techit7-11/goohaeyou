@@ -13,7 +13,7 @@ public class JobPostDto {
 
     private Long id;
     private String author;
-    private String categoryName;
+    //private String categoryName;
     private String title;
     private String body;
     private boolean isClosed;
@@ -23,7 +23,7 @@ public class JobPostDto {
         return JobPostDto.builder()
                 .id(jobPost.getId())
                 .author(jobPost.getMember().getUsername())
-                .categoryName(jobPost.getCategory().getName())
+                //.categoryName(jobPost.getCategory().getName())
                 .title(jobPost.getTitle())
                 .body(jobPost.getBody())
                 .isClosed(jobPost.isClosed())
