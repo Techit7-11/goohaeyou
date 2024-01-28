@@ -3,6 +3,8 @@ package com.ll.gooHaeYu.domain.application.application.controller;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationForm;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+@Tag(name = "Application", description = "지원서 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/applications")
@@ -18,6 +21,7 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @PostMapping("/{id}")
+    @Operation(summary = "지원서 작성")
     public ResponseEntity<String> writeApplication(Authentication authentication,
                                                    @PathVariable(name = "id") Long id,
                                                    @Valid @RequestBody ApplicationForm.Register form) {
@@ -27,11 +31,13 @@ public class ApplicationController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "지원서 상세 내용")
     public ResponseEntity<ApplicationDto> detailApplication(@PathVariable(name = "id") Long id) {
         return  ResponseEntity.ok(applicationService.findById(id));
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "지원서 수정")
     public ResponseEntity<Void> modifyApplication(Authentication authentication,
                                            @PathVariable(name = "id") Long id,
                                            @Valid @RequestBody ApplicationForm.Modify form) {
@@ -41,6 +47,7 @@ public class ApplicationController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "지원서 삭제")
     public ResponseEntity<Void> deleteApplication(Authentication authentication,
                                            @PathVariable(name = "id") Long id) {
         applicationService.deleteApplication(authentication.getName(), id);

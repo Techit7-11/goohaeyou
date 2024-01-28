@@ -16,7 +16,6 @@ public class JobPostDto {
     private String categoryName;
     private String title;
     private String body;
-    private List<QuestionItemDto> questionItems;
     private boolean isClosed;
     private LocalDateTime createdAt;
 

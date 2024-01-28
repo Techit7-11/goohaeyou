@@ -3,7 +3,6 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.QuestionItem;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 public class JobPostService {
     private final JobPostRepository jobPostRepository;
     private final MemberService memberService;
-    private final QuestionItemService questionItemService;
 
     @Transactional
     public Long writePost(String username, JobPostForm.Register form) {
@@ -35,12 +33,6 @@ public class JobPostService {
                 .build();
 
         jobPostRepository.save(newPost);
-
-        List<QuestionItem> questionItems = form.getQuestionItemForms().stream()
-                .map(formItem -> questionItemService.createQuestionItem(formItem, newPost))
-                .collect(Collectors.toList());
-
-        questionItemService.saveQuestionItems(questionItems);
 
         return newPost.getId();
     }
@@ -92,9 +84,9 @@ public class JobPostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
     }
 
-    public JobPost postAndApplication(Long id) {
+    /*public JobPost postAndApplication(Long id) {
         JobPost post = findByIdAndValidate(id);
 
         return post;
-    }
+    }*/
 }

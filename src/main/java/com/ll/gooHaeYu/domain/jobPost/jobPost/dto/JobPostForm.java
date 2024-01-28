@@ -1,14 +1,13 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class JobPostForm {
 
+    @Builder
     @Getter
     @Setter
     public static class Register {
@@ -17,10 +16,9 @@ public class JobPostForm {
 
         @NotBlank(message = "내용은 필수 입력 항목입니다.")
         private String body;
-
-        private List<QuestionItemForm> questionItemForms = new ArrayList<>();
     }
 
+    @Builder
     @Getter
     @Setter
     public static class Modify {
