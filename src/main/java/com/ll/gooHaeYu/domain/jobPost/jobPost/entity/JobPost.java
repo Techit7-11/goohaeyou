@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
+import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.category.entity.Category;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
