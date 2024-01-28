@@ -2,16 +2,16 @@ package com.ll.gooHaeYu.domain.member.member.controller;
 
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
+import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
+import com.ll.gooHaeYu.domain.member.member.dto.MemberForm;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -35,5 +35,20 @@ public class MemberController {
     public ResponseEntity<String> login(@RequestBody @Valid LoginForm form) {
         String token = memberService.login(form);
         return ResponseEntity.ok(token);
+    }
+
+    @GetMapping
+    @Operation(summary = "내 정보 조회")
+    public ResponseEntity<MemberDto> detailMember(Authentication authentication) {
+        return  ResponseEntity.ok(memberService.findByUsername(authentication.getName()));
+    }
+
+    @PutMapping
+    @Operation(summary = "내 정보 수정")
+    public ResponseEntity<Void> modifyMember(Authentication authentication,
+                                                  @Valid @RequestBody MemberForm.Modify form) {
+        memberService.modifyMember(authentication.getName(), form);
+
+        return ResponseEntity.noContent().build();
     }
 }
