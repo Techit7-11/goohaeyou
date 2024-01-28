@@ -2,8 +2,10 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Interest;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
+import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
@@ -76,5 +78,34 @@ public class JobPostService {
         JobPost post = findByIdAndValidate(id);
 
         return post;
+    }
+
+    @Transactional
+    public void Interest(String username, Long postId){
+        JobPost post = findByIdAndValidate(postId);
+        Member member = memberService.getMember(username);
+
+        if (hasInterest(post,member)) throw new CustomException(ErrorCode.NOT_ABLE);
+
+        post.getInterests().add(Interest.builder()
+                .jobPost(post)
+                .member(member)
+                .build());
+        post.increaseInterestCount();
+    }
+
+    @Transactional
+    public void disinterest(String username, Long postId){
+        JobPost post = findByIdAndValidate(postId);
+        Member member = memberService.getMember(username);
+
+        if (!hasInterest(post,member)) throw new CustomException(ErrorCode.NOT_ABLE);
+
+        post.getInterests().removeIf(interest -> interest.getMember().equals(member));
+        post.decreaseInterestCount();
+    }
+
+    public boolean hasInterest(JobPost post, Member member) {
+        return post.getInterests().stream().anyMatch(interest -> interest.getMember().equals(member));
     }
 }

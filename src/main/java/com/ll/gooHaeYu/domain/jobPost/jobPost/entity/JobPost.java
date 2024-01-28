@@ -49,6 +49,13 @@ public class JobPost extends BaseTimeEntity {
     @Setter(PROTECTED)
     private long applicationCount;
 
+    @OneToMany(mappedBy = "jobPost",cascade = ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @Builder.Default
+    private List<Interest> interests = new ArrayList<>();
+    @Setter(PROTECTED)
+    private long interestsCount;
+
     private String title;
 
     private String body;
@@ -82,5 +89,13 @@ public class JobPost extends BaseTimeEntity {
 
     public void decreaseApplicationsCount() {
         applicationCount--;
+    }
+
+    public void increaseInterestCount() {
+        interestsCount++;
+    }
+
+    public void decreaseInterestCount() {
+        interestsCount--;
     }
 }
