@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +21,14 @@ public class EmployController {
     public ResponseEntity<List<ApplicationDto>> getList(Authentication authentication,
                                                         @PathVariable Long postId) {
         return ResponseEntity.ok(employService.getList(authentication.getName(), postId));
+    }
+
+    @PostMapping("/{applicationId}")
+    public ResponseEntity<Void> approve(Authentication authentication,
+                        @PathVariable Long postId,
+                        @PathVariable Long applicationId) {
+        employService.approve(authentication.getName(),postId,applicationId);
+
+        return ResponseEntity.noContent().build();
     }
 }

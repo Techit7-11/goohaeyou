@@ -46,7 +46,7 @@ public class ApplicationService {
         return ApplicationDto.fromEntity(application);
     }
 
-    private Application findByIdAndValidate(Long id) {
+    public Application findByIdAndValidate(Long id) {
         return applicationRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
     }
