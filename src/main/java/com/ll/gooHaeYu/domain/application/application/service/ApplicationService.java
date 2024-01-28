@@ -32,6 +32,7 @@ public class ApplicationService {
                 .member(member)
                 .jobPost(post)
                 .body(form.getBody())
+                .approve(null)
                 .build();
 
         applicationRepository.save(newApplication);

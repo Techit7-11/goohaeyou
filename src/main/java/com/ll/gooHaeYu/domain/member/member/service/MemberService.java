@@ -2,6 +2,8 @@ package com.ll.gooHaeYu.domain.member.member.service;
 
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
+import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
+import com.ll.gooHaeYu.domain.member.member.dto.MemberForm;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
@@ -55,5 +57,18 @@ public class MemberService {
                 .orElseThrow(()->
                         new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         return member;
+    }
+
+    public MemberDto findByUsername(String username) {
+        Member member = getMember(username);
+
+        return MemberDto.fromEntity(member);
+    }
+
+    @Transactional
+    public void modifyMember(String username, MemberForm.Modify form) {
+        Member member = getMember(username);
+
+        member.update(form.getLocation(), form.getBirth());
     }
 }
