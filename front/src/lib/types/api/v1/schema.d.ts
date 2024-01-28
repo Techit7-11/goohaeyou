@@ -119,8 +119,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     RsDataJobPostDto: {
       resultCode?: string;
@@ -128,8 +128,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     ApplicationDto: {
       /** Format: int64 */
