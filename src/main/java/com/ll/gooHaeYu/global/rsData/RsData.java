@@ -21,8 +21,8 @@ public class RsData<T> {
     @NonNull
     T data;
 
-    public <T> RsData<T> of(T data) {
-        return of(this.resultCode, this.msg, data);
+    public static <T> RsData<T> of(T data) {
+        return of("200", "OK", data);
     }
 
     public static <T> RsData<T> of(String resultCode, String msg) {

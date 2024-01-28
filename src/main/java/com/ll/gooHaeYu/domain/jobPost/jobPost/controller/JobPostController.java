@@ -53,12 +53,12 @@ public class JobPostController {
     @GetMapping
     @Operation(summary = "구인공고 글 목록 가져오기")
     public RsData<List<JobPostDto>> findAllPost() {
-        return RsData.of("200", "OK", jobPostService.findAll());
+        return RsData.of(jobPostService.findAll());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
     public RsData<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id) {
-        return RsData.of("200", "OK", jobPostService.findById(id));
+        return RsData.of(jobPostService.findById(id));
     }
 }
