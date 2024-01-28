@@ -33,7 +33,8 @@ public class ApplicationService {
                 .jobPost(post)
                 .body(form.getBody())
                 .build();
-
+        post.getApplications().add(newApplication);
+        post.increaseApplicationsCount();
         applicationRepository.save(newApplication);
 
         return newApplication.getId();
@@ -55,7 +56,7 @@ public class ApplicationService {
         Application application = findByIdAndValidate(id);
 
         if (!canEditApplication(username, application.getMember().getUsername()))
-            throw new CustomException(ErrorCode.NOT_EDITABLE);
+            throw new CustomException(ErrorCode.NOT_ABLE);
 
         application.update(form.getBody());
     }
@@ -69,8 +70,9 @@ public class ApplicationService {
         Application application = findByIdAndValidate(id);
 
         if (!canEditApplication(username, application.getMember().getUsername()))
-            throw new CustomException(ErrorCode.NOT_EDITABLE);
+            throw new CustomException(ErrorCode.NOT_ABLE);
 
+        application.getJobPost().decreaseApplicationsCount();
         applicationRepository.deleteById(id);
     }
 }

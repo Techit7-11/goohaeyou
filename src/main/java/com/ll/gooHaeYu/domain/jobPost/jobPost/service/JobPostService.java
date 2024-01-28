@@ -48,7 +48,7 @@ public class JobPostService {
         JobPost post = findByIdAndValidate(id);
 
         if (!canEditPost(username, post.getMember().getUsername()))
-            throw new CustomException(ErrorCode.NOT_EDITABLE);
+            throw new CustomException(ErrorCode.NOT_ABLE);
 
         post.update(form.getTitle(), form.getBody(), form.getClosed());
     }
@@ -58,7 +58,7 @@ public class JobPostService {
         JobPost post = findByIdAndValidate(id);
 
         if (!canEditPost(username, post.getMember().getUsername()))
-            throw new CustomException(ErrorCode.NOT_EDITABLE);
+            throw new CustomException(ErrorCode.NOT_ABLE);
 
         jobPostRepository.deleteById(id);
     }

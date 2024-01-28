@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
+import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.category.entity.Category;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
@@ -41,6 +42,13 @@ public class JobPost extends BaseTimeEntity {
     @Setter(PROTECTED)
     private long commentsCount;
 
+    @OneToMany(mappedBy = "jobPost", cascade = ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @Builder.Default
+    private List<Application> applications = new ArrayList<>();
+    @Setter(PROTECTED)
+    private long applicationCount;
+
     private String title;
 
     private String body;
@@ -66,5 +74,13 @@ public class JobPost extends BaseTimeEntity {
 
     public void decreaseCommentsCount() {
         commentsCount--;
+    }
+
+    public void increaseApplicationsCount() {
+        applicationCount++;
+    }
+
+    public void decreaseApplicationsCount() {
+        applicationCount--;
     }
 }

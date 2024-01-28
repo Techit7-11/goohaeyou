@@ -42,7 +42,7 @@ public class CommentService {
         JobPost post = jobPostService.findByIdAndValidate(postId);
         Comment comment = findByIdAndValidate(commentId);
 
-        if (!canEditeComment(username, comment, post)) throw new CustomException(ErrorCode.NOT_EDITABLE);
+        if (!canEditeComment(username, comment, post)) throw new CustomException(ErrorCode.NOT_ABLE);
 
         comment.update(form.getContent());
     }
@@ -52,7 +52,7 @@ public class CommentService {
         JobPost post = jobPostService.findByIdAndValidate(postId);
         Comment comment = findByIdAndValidate(commentId);
 
-        if (!canEditeComment(username, comment, post)) throw new CustomException(ErrorCode.NOT_EDITABLE);
+        if (!canEditeComment(username, comment, post)) throw new CustomException(ErrorCode.NOT_ABLE);
 
         post.decreaseCommentsCount();
         post.getComments().remove(comment);
