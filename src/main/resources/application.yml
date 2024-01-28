@@ -31,6 +31,19 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
-
+custom:
+  dev:
+    cookieDomain: localhost
+    frontUrl: "http://${custom.dev.cookieDomain}:5173"
+    backUrl: "http://${custom.dev.cookieDomain}:${server.port}"
+  prod:
+    cookieDomain: NEED_TO_INPUT
+    frontUrl: "https://${custom.production.cookieDomain}"
+    backUrl: "https://api.${custom.production.cookieDomain}"
+  site:
+    cookieDomain: "${custom.dev.cookieDomain}"
+    frontUrl: "${custom.dev.frontUrl}"
+    backUrl: "${custom.dev.backUrl}"
+    name: NEED_TO_INPUT
 jwt:
   secret: TEKIT711teamgooHaeyuprojectTEKIT711teamgooHaeyuproject

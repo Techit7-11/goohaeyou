@@ -1,8 +1,7 @@
 package com.ll.gooHaeYu.global.config;
 
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.standard.base.utils.JwtUtil;
-import jakarta.servlet.Filter;
+import com.ll.gooHaeYu.standard.base.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

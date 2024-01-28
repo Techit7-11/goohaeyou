@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.standard.base.utils;
+package com.ll.gooHaeYu.standard.base.util;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
