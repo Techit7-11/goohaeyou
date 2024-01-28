@@ -28,13 +28,17 @@ public class EmployService {
     }
 
     @Transactional
-    public void approve(String username, Long postId, Long applicationId) {
+    public void approve(String username, Long postId, List<Long> applicationIds) {
         JobPost post = jobPostService.findByIdAndValidate(postId);
-        Application application = applicationService.findByIdAndValidate(applicationId);
-
         checkPermissions(username,post.getMember().getUsername());
 
-        application.approve();
+        for (Application application : post.getApplications()) {
+            if(applicationIds.contains(application.getId())) {
+                application.approve();
+            }else {
+                application.reject();
+            }
+        }
     }
 
     public void checkPermissions (String username, String author){

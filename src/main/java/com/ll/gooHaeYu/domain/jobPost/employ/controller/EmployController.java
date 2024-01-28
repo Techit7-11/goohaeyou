@@ -23,11 +23,11 @@ public class EmployController {
         return ResponseEntity.ok(employService.getList(authentication.getName(), postId));
     }
 
-    @PostMapping("/{applicationId}")
+    @PostMapping("/{applicationIds}")
     public ResponseEntity<Void> approve(Authentication authentication,
                         @PathVariable Long postId,
-                        @PathVariable Long applicationId) {
-        employService.approve(authentication.getName(),postId,applicationId);
+                        @PathVariable List<Long> applicationIds) {
+        employService.approve(authentication.getName(), postId, applicationIds);
 
         return ResponseEntity.noContent().build();
     }

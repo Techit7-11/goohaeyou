@@ -40,4 +40,8 @@ public class Application extends BaseTimeEntity {
     public void approve(){
         this.approve = true;
     }
+
+    public void reject() {
+        this.approve = false;
+    }
 }
