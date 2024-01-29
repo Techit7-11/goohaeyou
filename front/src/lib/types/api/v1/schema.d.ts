@@ -11,6 +11,12 @@ export interface paths {
     /** 댓글 삭제 */
     delete: operations["delete"];
   };
+  "/api/member": {
+    /** 내 정보 조회 */
+    get: operations["detailMember"];
+    /** 내 정보 수정 */
+    put: operations["modifyMember"];
+  };
   "/api/job-posts/{id}": {
     /** 구인공고 단건 조회 */
     get: operations["showDetailPost"];
@@ -61,9 +67,11 @@ export interface components {
       content: string;
     };
     Modify: {
-      title?: string;
-      body?: string;
-      closed?: boolean;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE";
+      location?: string;
+      /** Format: date */
+      birth?: string;
     };
     LoginForm: {
       username: string;
@@ -85,13 +93,23 @@ export interface components {
       /** Format: date-time */
       modifyAt?: string;
     };
+    MemberDto: {
+      /** Format: int64 */
+      id?: number;
+      username?: string;
+      password?: string;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE";
+      location?: string;
+      /** Format: date */
+      birth?: string;
+    };
     JobPostDto: {
       /** Format: int64 */
       id: number;
       author: string;
       title: string;
       body: string;
-      /** Format: date-time */
       createdAt?: string;
       closed?: boolean;
     };
@@ -101,8 +119,17 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
+    };
+    RsDataJobPostDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JobPostDto"];
+      fail?: boolean;
+      success?: boolean;
     };
     ApplicationDto: {
       /** Format: int64 */
@@ -166,6 +193,31 @@ export interface operations {
       };
     };
   };
+  /** 내 정보 조회 */
+  detailMember: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["MemberDto"];
+        };
+      };
+    };
+  };
+  /** 내 정보 수정 */
+  modifyMember: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Modify"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
+  };
   /** 구인공고 단건 조회 */
   showDetailPost: {
     parameters: {
@@ -177,7 +229,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["JobPostDto"];
+          "*/*": components["schemas"]["RsDataJobPostDto"];
         };
       };
     };
