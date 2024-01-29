@@ -35,7 +35,7 @@ public class Member extends BaseTimeEntity {
 
     private LocalDate birth;
 
-    public void update(Gender gender, String location, LocalDate birth) {
+    public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {
             this.location = location;
         }
@@ -44,6 +44,9 @@ public class Member extends BaseTimeEntity {
         }
         if (gender != null) {
             this.gender = gender;
+        }
+        if (password != null && !password.isBlank()) {
+            this.password =password;
         }
     }
 }
