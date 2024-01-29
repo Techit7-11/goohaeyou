@@ -1,20 +1,21 @@
 package com.ll.gooHaeYu.domain.member.member.controller;
 
-import com.ll.gooHaeYu.domain.member.member.dto.AddMemberForm;
-import com.ll.gooHaeYu.domain.member.member.dto.LoginMemberRequest;
+import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
+import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
+import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
+import com.ll.gooHaeYu.domain.member.member.dto.MemberForm;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
-
+@Tag(name = "Member", description = "회원 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
@@ -23,14 +24,31 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public ResponseEntity<String> join(@RequestBody @Valid AddMemberForm request) {
-        Long userId = memberService.join(request);
+    @Operation(summary = "회원가입")
+    public ResponseEntity<String> join(@RequestBody @Valid JoinForm form) {
+        Long userId = memberService.join(form);
         return ResponseEntity.created(URI.create("/api/member/join" + userId)).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid LoginMemberRequest request) {
-        String token = memberService.login(request);
+    @Operation(summary = "로그인")
+    public ResponseEntity<String> login(@RequestBody @Valid LoginForm form) {
+        String token = memberService.login(form);
         return ResponseEntity.ok(token);
+    }
+
+    @GetMapping
+    @Operation(summary = "내 정보 조회")
+    public ResponseEntity<MemberDto> detailMember(Authentication authentication) {
+        return  ResponseEntity.ok(memberService.findByUsername(authentication.getName()));
+    }
+
+    @PutMapping
+    @Operation(summary = "내 정보 수정")
+    public ResponseEntity<Void> modifyMember(Authentication authentication,
+                                                  @Valid @RequestBody MemberForm.Modify form) {
+        memberService.modifyMember(authentication.getName(), form);
+
+        return ResponseEntity.noContent().build();
     }
 }

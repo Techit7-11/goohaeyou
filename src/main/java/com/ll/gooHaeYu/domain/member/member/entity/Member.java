@@ -1,6 +1,5 @@
 package com.ll.gooHaeYu.domain.member.member.entity;
 
-import com.ll.gooHaeYu.domain.member.location.entity.Location;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
@@ -21,7 +20,9 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String username;
+
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -34,4 +35,18 @@ public class Member extends BaseTimeEntity {
 
     private LocalDate birth;
 
+    public void update(String password, Gender gender, String location, LocalDate birth) {
+        if (location != null && !location.isBlank()) {
+            this.location = location;
+        }
+        if (birth != null) {
+            this.birth = birth;
+        }
+        if (gender != null) {
+            this.gender = gender;
+        }
+        if (password != null && !password.isBlank()) {
+            this.password =password;
+        }
+    }
 }

@@ -6,9 +6,6 @@ import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,12 +26,14 @@ public class Application extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    private Boolean status;
+    @Column
+    private Boolean approve = null;
 
-    @Column(nullable = false)
-    private boolean approve = false;
+    private String body;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "application_id")
-    private List<ResponseItem> responseItems = new ArrayList<>();
+    public void update(String body) {
+        if (body != null && !body.isBlank()) {
+            this.body = body;
+        }
+    }
 }
