@@ -3,6 +3,7 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
+import com.ll.gooHaeYu.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -51,13 +52,13 @@ public class JobPostController {
 
     @GetMapping
     @Operation(summary = "구인공고 글 목록 가져오기")
-    public ResponseEntity<List<JobPostDto>> findAllPost() {
-        return ResponseEntity.ok(jobPostService.findAll());
+    public RsData<List<JobPostDto>> findAllPost() {
+        return RsData.of(jobPostService.findAll());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
-    public ResponseEntity<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id) {
-        return  ResponseEntity.ok(jobPostService.findById(id));
+    public RsData<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id) {
+        return RsData.of(jobPostService.findById(id));
     }
 }

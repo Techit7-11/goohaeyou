@@ -39,14 +39,14 @@ public class SecurityConfig {
         return httpSecurity
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> {
                     requests
                             .requestMatchers("/api/member/login", "/api/member/join").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/job-posts/{id:\\d+}", "/api/job-posts",
                                     "/api/post-comment/{postId}").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                            .anyRequest().authenticated();
+                            .anyRequest()
+                            .authenticated();
                 })
                 .sessionManagement(
                         sessionManagement ->
