@@ -69,6 +69,6 @@ public class MemberService {
     public void modifyMember(String username, MemberForm.Modify form) {
         Member member = getMember(username);
 
-        member.update(form.getLocation(), form.getBirth());
+        member.update(form.getGender(), form.getLocation(), form.getBirth());
     }
 }
