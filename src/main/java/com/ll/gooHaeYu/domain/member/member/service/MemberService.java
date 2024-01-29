@@ -69,6 +69,10 @@ public class MemberService {
     public void modifyMember(String username, MemberForm.Modify form) {
         Member member = getMember(username);
 
-        member.update(form.getLocation(), form.getBirth());
+        String password = (form.getPassword() != null && !form.getPassword().isBlank())
+                ? bCryptPasswordEncoder.encode(form.getPassword())
+                : null;
+
+        member.update(password, form.getGender(), form.getLocation(), form.getBirth());
     }
 }

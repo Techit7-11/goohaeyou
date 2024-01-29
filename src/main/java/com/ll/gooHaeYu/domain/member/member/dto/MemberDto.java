@@ -22,6 +22,7 @@ public class MemberDto {
     @NonNull
     private String location;
     @NonNull
+
     private LocalDate birth;
 
     public static MemberDto fromEntity(Member member) {
