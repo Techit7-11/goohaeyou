@@ -41,14 +41,6 @@ public class JobPost extends BaseTimeEntity {
     @Setter(PROTECTED)
     private long commentsCount;
 
-    @OneToMany(mappedBy = "jobPost", cascade = ALL, orphanRemoval = true)
-    @ToString.Exclude
-    @Builder.Default
-    @OrderBy("id DESC")
-    private List<Comment> comments = new ArrayList<>();
-    @Setter(PROTECTED)
-    private long commentsCount;
-
     private String title;
 
     private String body;
