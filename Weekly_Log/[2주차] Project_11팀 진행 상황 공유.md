@@ -61,4 +61,4 @@ Github Repository URL: https://github.com/Techit7-11/gooHaeYu
 
 - 집합 캡쳐
 
-![img5.png](..%2F..%2F..%2FUsers%2Fcreate%2FPictures%2Fimg5.png)
+<img src="img/1.png">
