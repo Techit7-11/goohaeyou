@@ -68,6 +68,7 @@ public class MemberController {
         return  ResponseEntity.ok(jobPostService.findByUsername(authentication.getName()));
     }
 
+
     @GetMapping("/myapplications")
     @Operation(summary = "내 지원서 조회")
     public ResponseEntity<List<ApplicationDto>> detailMyApplications(Authentication authentication) {
