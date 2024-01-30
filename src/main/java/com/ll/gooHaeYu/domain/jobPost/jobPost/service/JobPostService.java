@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Interest;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
@@ -52,7 +53,7 @@ public class JobPostService {
         JobPost post = findByIdAndValidate(id);
 
         if (!canEditPost(username, post.getMember().getUsername()))
-            throw new CustomException(ErrorCode.NOT_EDITABLE);
+            throw new CustomException(ErrorCode.NOT_ABLE);
 
         post.update(form.getTitle(), form.getBody(), form.getClosed());
     }
@@ -62,7 +63,7 @@ public class JobPostService {
         JobPost post = findByIdAndValidate(id);
 
         if (!canEditPost(username, post.getMember().getUsername()))
-            throw new CustomException(ErrorCode.NOT_EDITABLE);
+            throw new CustomException(ErrorCode.NOT_ABLE);
 
         jobPostRepository.deleteById(id);
     }
@@ -94,9 +95,40 @@ public class JobPostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
     }
 
-    /*public JobPost postAndApplication(Long id) {
+    @Transactional
+    public void Interest(String username, Long postId){
+        JobPost post = findByIdAndValidate(postId);
+        Member member = memberService.getMember(username);
+
+        if (hasInterest(post,member)) throw new CustomException(ErrorCode.NOT_ABLE);
+
+        post.getInterests().add(Interest.builder()
+                .jobPost(post)
+                .member(member)
+                .build());
+        post.increaseInterestCount();
+    }
+
+    @Transactional
+    public void disinterest(String username, Long postId){
+        JobPost post = findByIdAndValidate(postId);
+        Member member = memberService.getMember(username);
+
+        if (!hasInterest(post,member)) throw new CustomException(ErrorCode.NOT_ABLE);
+
+        post.getInterests().removeIf(interest -> interest.getMember().equals(member));
+        post.decreaseInterestCount();
+    }
+
+    public boolean hasInterest(JobPost post, Member member) {
+        return post.getInterests().stream().anyMatch(interest -> interest.getMember().equals(member));
+    }
+
+    /*
+    public JobPost postAndApplication(Long id) {
         JobPost post = findByIdAndValidate(id);
 
         return post;
-    }*/
+    }
+    */
 }

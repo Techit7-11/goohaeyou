@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Getter
@@ -26,5 +27,11 @@ public class ApplicationDto {
                 .createdAt(application.getCreatedAt())
                 .approve(application.getApprove())
                 .build();
+    }
+
+    public static List<ApplicationDto> toDtoList(List<Application> applications) {
+        return applications.stream()
+                .map(ApplicationDto::fromEntity)
+                .toList();
     }
 }
