@@ -66,6 +66,8 @@ public class JobPostController {
     public ResponseEntity<Void> disinterest(Authentication authentication,
                                          @PathVariable(name = "id") Long id) {
         jobPostService.disinterest(authentication.getName(),id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

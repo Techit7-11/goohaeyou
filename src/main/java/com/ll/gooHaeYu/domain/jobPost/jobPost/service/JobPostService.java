@@ -76,7 +76,7 @@ public class JobPostService {
         if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
             jobPostRepository.deleteById(postId);
         } else {
-            throw new CustomException(ErrorCode.NOT_EDITABLE);
+            throw new CustomException(ErrorCode.NOT_ABLE);
         }
     }
 

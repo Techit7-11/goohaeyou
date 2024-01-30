@@ -62,7 +62,7 @@ public class CommentService {
         Member member = findUserByUserNameValidate(username);
 
         if (!isAdminOrNot(comment, member)) {
-            throw new CustomException(ErrorCode.NOT_EDITABLE);
+            throw new CustomException(ErrorCode.NOT_ABLE);
         }
         commentRepository.deleteById(commentId);
 
