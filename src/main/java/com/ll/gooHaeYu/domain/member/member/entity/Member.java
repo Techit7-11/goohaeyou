@@ -26,7 +26,7 @@ public class Member extends BaseTimeEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.GUEST;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -46,7 +46,11 @@ public class Member extends BaseTimeEntity {
             this.gender = gender;
         }
         if (password != null && !password.isBlank()) {
-            this.password =password;
+            this.password = password;
         }
+    }
+
+    public void updateRole(Role role) {
+        this.role = role;
     }
 }
