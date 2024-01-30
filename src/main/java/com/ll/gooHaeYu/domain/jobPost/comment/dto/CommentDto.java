@@ -21,7 +21,7 @@ public class CommentDto {
     public static CommentDto formEntity(Comment comment) {
         return CommentDto.builder()
                 .id(comment.getId())
-                .jobPostId(comment.getJobPost().getId())
+                .jobPostId(comment.getJobPostDetail().getJobPost().getId())
                 .author(comment.getMember().getUsername())
                 .content(comment.getContent())
                 .createAt(comment.getCreatedAt())

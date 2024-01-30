@@ -23,8 +23,8 @@ public class Interest {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "job_post_id")
-    private JobPost jobPost;
+    @JoinColumn(name = "job_post_detail_id")
+    private JobPostDetail jobPostDetail;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")

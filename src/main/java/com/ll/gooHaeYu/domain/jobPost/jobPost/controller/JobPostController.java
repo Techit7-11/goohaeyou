@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -48,7 +49,7 @@ public class JobPostController {
 
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
-    public ResponseEntity<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<JobPostDetailDto> showDetailPost(@PathVariable(name = "id") Long id) {
         return  ResponseEntity.ok(jobPostService.findById(id));
     }
 

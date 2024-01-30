@@ -2,8 +2,7 @@ package com.ll.gooHaeYu.domain.jobPost.employ.service;
 
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
-import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
@@ -18,21 +17,20 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class EmployService {
     private final JobPostService jobPostService;
-    private final ApplicationService applicationService;
 
     public List<ApplicationDto> getList(String username, Long postId) {
-        JobPost post = jobPostService.findByIdAndValidate(postId);
-        checkPermissions(username,post.getMember().getUsername());
+        JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
+        checkPermissions(username,postDetail.getAuthor());
 
-        return ApplicationDto.toDtoList(post.getApplications());
+        return ApplicationDto.toDtoList(postDetail.getApplications());
     }
 
     @Transactional
     public void approve(String username, Long postId, List<Long> applicationIds) {
-        JobPost post = jobPostService.findByIdAndValidate(postId);
-        checkPermissions(username,post.getMember().getUsername());
+        JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
+        checkPermissions(username,postDetail.getAuthor());
 
-        for (Application application : post.getApplications()) {
+        for (Application application : postDetail.getApplications()) {
             if(applicationIds.contains(application.getId())) {
                 application.approve();
             }else {

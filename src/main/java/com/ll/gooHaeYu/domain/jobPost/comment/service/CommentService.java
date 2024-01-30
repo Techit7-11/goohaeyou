@@ -5,6 +5,7 @@ import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentForm;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.comment.repository.CommentRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
@@ -33,31 +34,31 @@ public class CommentService {
 
     @Transactional
     public Long writeComment(Long postId, String username, CommentForm.Register form) {
-        JobPost post = jobPostService.findByIdAndValidate(postId);
+        JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
         Comment comment = Comment.builder()
-                .jobPost(jobPostService.findByIdAndValidate(postId))
+                .jobPostDetail(postDetail)
                 .member(memberService.getMember(username))
                 .content(form.getContent())
                 .build();
-        post.getComments().add(comment);
-        post.increaseCommentsCount();
+        postDetail.getComments().add(comment);
+        postDetail.getJobPost().increaseCommentsCount();
 
         return postId;
     }
 
     @Transactional
     public void modifyComment(String username, Long postId, Long commentId, CommentForm.Register form) {
-        JobPost post = jobPostService.findByIdAndValidate(postId);
+        JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
         Comment comment = findByIdAndValidate(commentId);
 
-        if (!canEditeComment(username, comment, post)) throw new CustomException(ErrorCode.NOT_ABLE);
+        if (!canEditeComment(username, comment, postDetail)) throw new CustomException(ErrorCode.NOT_ABLE);
 
         comment.update(form.getContent());
     }
 
     @Transactional
     public void deleteComment(String username, Long postId, Long commentId) {
-        JobPost post = jobPostService.findByIdAndValidate(postId);
+        JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
         Comment comment = findByIdAndValidate(commentId);
         Member member = findUserByUserNameValidate(username);
 
@@ -66,15 +67,15 @@ public class CommentService {
         }
         commentRepository.deleteById(commentId);
 
-        post.decreaseCommentsCount();
-        post.getComments().remove(comment);
+        postDetail.getJobPost().decreaseCommentsCount();
+        postDetail.getComments().remove(comment);
     }
 
     public List<CommentDto> findByPostId(Long postId) {
         jobPostService.findByIdAndValidate(postId);
         // 공고 유효성 체크를 위해 추가
 
-        return CommentDto.toDtoList(commentRepository.findAllByJobPostId(postId));
+        return CommentDto.toDtoList(commentRepository.findAllByJobPostDetailId(postId));
     }
 
     public Comment findByIdAndValidate(Long id) {
@@ -82,7 +83,7 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_EXIST));
     }
 
-    private boolean canEditeComment(String username, Comment comment, JobPost post) {
+    private boolean canEditeComment(String username, Comment comment, JobPostDetail post) {
         if (!post.getComments().contains(comment)) {
             throw new CustomException(ErrorCode.COMMENT_NOT_EXIST);
         }
