@@ -2,6 +2,8 @@ package com.ll.gooHaeYu.domain.member.member.controller;
 
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
+import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentDto;
+import com.ll.gooHaeYu.domain.jobPost.comment.service.CommentService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
@@ -29,6 +31,7 @@ public class MemberController {
     private final MemberService memberService;
     private final JobPostService jobPostService;
     private final ApplicationService applicationService;
+    private final CommentService commentService;
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
@@ -69,5 +72,11 @@ public class MemberController {
     @Operation(summary = "내 지원서 조회")
     public ResponseEntity<List<ApplicationDto>> detailMyApplication(Authentication authentication) {
         return  ResponseEntity.ok(applicationService.findByUsername(authentication.getName()));
+    }
+
+    @GetMapping("/mycomment")
+    @Operation(summary = "내 댓글 조회")
+    public ResponseEntity<List<CommentDto>> detailMyComment(Authentication authentication) {
+        return  ResponseEntity.ok(commentService.findByUsername(authentication.getName()));
     }
 }
