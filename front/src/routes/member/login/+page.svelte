@@ -14,7 +14,7 @@
         if (response.data?.statusCode === 200) {
             rq.msgAndRedirect({ msg: '로그인 성공' }, undefined, 'http://localhost:5173/');   // 메인페이지로 먼저 이동 후에 로그인 상태로 바꾼다
             rq.setLogined({ id: Number(response.data) });   
-        } else if (response.data?.statusCode === 400 && response.data?.msg === 'CUSTOM_EXCEPTION') {
+        } else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
                 // CustomException 오류 메시지 처리
                 const customErrorMessage = response.data?.data?.message;
                 rq.msgError(customErrorMessage ?? '알 수 없는 오류가 발생했습니다.');
