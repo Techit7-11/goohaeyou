@@ -64,19 +64,19 @@ public class MemberController {
 
     @GetMapping("/mypost")
     @Operation(summary = "내 공고 조회")
-    public ResponseEntity<List<JobPostDto>> detailMyPost(Authentication authentication) {
+    public ResponseEntity<List<JobPostDto>> detailMyPosts(Authentication authentication) {
         return  ResponseEntity.ok(jobPostService.findByUsername(authentication.getName()));
     }
 
     @GetMapping("/myapplication")
     @Operation(summary = "내 지원서 조회")
-    public ResponseEntity<List<ApplicationDto>> detailMyApplication(Authentication authentication) {
+    public ResponseEntity<List<ApplicationDto>> detailMyApplications(Authentication authentication) {
         return  ResponseEntity.ok(applicationService.findByUsername(authentication.getName()));
     }
 
     @GetMapping("/mycomment")
     @Operation(summary = "내 댓글 조회")
-    public ResponseEntity<List<CommentDto>> detailMyComment(Authentication authentication) {
+    public ResponseEntity<List<CommentDto>> detailMyComments(Authentication authentication) {
         return  ResponseEntity.ok(commentService.findByUsername(authentication.getName()));
     }
 }
