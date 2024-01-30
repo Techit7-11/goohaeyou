@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.global.init;
+package com.ll.gooHaeYu.global.initData;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -14,6 +14,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.IntStream;
@@ -31,6 +32,7 @@ public class NotProd {
     private boolean initRun;   // application-dev.yml 에서 app: init-run: true 로 설정 하면 샘플 데이터 생성 (기본값: false)
 
     @Bean
+    @Order(3)
     public ApplicationRunner initNotProd() {
         return new ApplicationRunner() {
 

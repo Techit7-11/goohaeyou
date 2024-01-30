@@ -31,7 +31,7 @@ public class CommentController {
     @PostMapping("/comment")
     @Operation(summary = "댓글 작성")
     public ResponseEntity<String> write (Authentication authentication,
-                                         @PathVariable Long postId,
+                                         @PathVariable("postId") Long postId,
                                          @Valid @RequestBody CommentForm.Register form){
         Long jobPostId = commentService.writeComment(postId,authentication.getName(),form);
 
@@ -41,19 +41,19 @@ public class CommentController {
     @PutMapping("/comment/{commentId}")
     @Operation(summary = "댓글 수정")
     public ResponseEntity<Void> modify (Authentication authentication,
-                                          @PathVariable Long postId,
-                                          @PathVariable Long commentId,
-                                          @Valid @RequestBody CommentForm.Register form) {
+                                        @PathVariable Long postId,
+                                        @PathVariable Long commentId,
+                                        @Valid @RequestBody CommentForm.Register form) {
         commentService.modifyComment(authentication.getName(), postId, commentId, form);
 
-    return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/comment/{commentId}")
     @Operation(summary = "댓글 삭제")
     public ResponseEntity delete (Authentication authentication,
-                                  @PathVariable Long postId,
-                                  @PathVariable Long commentId) {
+                                  @PathVariable("postId") Long postId,
+                                  @PathVariable("commentId") Long commentId) {
         commentService.deleteComment(authentication.getName(), postId, commentId);
 
         return ResponseEntity.noContent().build();

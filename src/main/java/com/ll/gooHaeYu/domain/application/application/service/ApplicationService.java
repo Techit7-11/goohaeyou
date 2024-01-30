@@ -32,6 +32,7 @@ public class ApplicationService {
                 .member(member)
                 .jobPost(post)
                 .body(form.getBody())
+                .approve(null)
                 .build();
         post.getApplications().add(newApplication);
         post.increaseApplicationsCount();
