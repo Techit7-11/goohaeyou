@@ -20,6 +20,43 @@ class Rq {
 		goto(url, { replaceState: true });
 	}
 
+	// 인증
+	// member 의 값이 바뀌면, member 를 사용하는 모든 곳에서 자동으로 즉각 반영된다.
+	public makeReactivityMember() {
+		let id = $state(0); // 로그아웃 상태
+		let username = $state('');
+		let gender = $state('UNDEFINED');
+		let location = $state('');
+		let birth = $state('');
+
+		return {
+			get id() {
+				return id;
+			},
+			set id(value: number) {
+				id = value;
+			},
+			get username() {
+				return username;
+			},
+			set gender(value) {
+				gender = value;
+			},
+			get location() {
+				return location;
+			},
+			set location(value: string) {
+				location = value;
+			},
+			get birth() {
+				return birth;
+			},
+			set birth(value: string) {
+				birth = value;
+			}
+		};
+	}
+
 	// API END POINTS
 	public apiEndPoints() {
 		return createClient<paths>({
@@ -51,49 +88,6 @@ class Rq {
 		window.alert(msg);
 	}
 
-	// 인증
-	// member 의 값이 바뀌면, member 를 사용하는 모든 곳에서 자동으로 즉각 반영된다.
-	public makeReactivityMember() {
-		let id = $state(0); // 로그아웃 상태
-		let username = $state('');
-		let createDate = $state('');
-		let modifyDate = $state('');
-		let authorities: string[] = $state([]);
-
-		return {
-			get id() {
-				return id;
-			},
-			set id(value: number) {
-				id = value;
-			},
-			get createDate() {
-				return createDate;
-			},
-			set createDate(value: string) {
-				createDate = value;
-			},
-			get modifyDate() {
-				return modifyDate;
-			},
-			set modifyDate(value: string) {
-				modifyDate = value;
-			},
-			get username() {
-				return username;
-			},
-			set username(value: string) {
-				username = value;
-			},
-			get authorities() {
-				return authorities;
-			},
-			set authorities(value: string[]) {
-				authorities = value;
-			}
-		};
-	}
-
 	public setLogined(member: components['schemas']['MemberDto']) {
 		Object.assign(this.member, member);
 	}
@@ -101,6 +95,9 @@ class Rq {
 	public setLogout() {
 		this.member.id = 0;
 		this.member.username = '';
+		this.member.gender = 'UNDEFINED';
+		this.member.location = '';
+		this.member.birth = '';
 	}
 
 	public isLogin() {
@@ -111,13 +108,13 @@ class Rq {
 		return !this.isLogin();
 	}
 
-	// public async initAuth() {
-	// 	const { data } = await this.apiEndPoints().GET('/api/');
+	public async initAuth() {
+		const { data } = await this.apiEndPoints().GET('/api/member/me');
 
-	// 	if (data) {
-	// 		this.setLogined(data.data.item);
-	// 	}
-	// }
+		if (data) {
+			this.setLogined(data.data); // MemberDto 넘기기
+		}
+	}
 
 	public async logoutAndRedirect(url: string) {
 		//await this.apiEndPoints().POST('/api/member/logout');
