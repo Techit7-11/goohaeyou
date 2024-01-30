@@ -4,6 +4,7 @@ import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationForm;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.application.application.repository.ApplicationRepository;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
@@ -13,6 +14,8 @@ import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -75,5 +78,12 @@ public class ApplicationService {
 
         application.getJobPost().decreaseApplicationsCount();
         applicationRepository.deleteById(id);
+    }
+
+    public List<ApplicationDto> findByUsername(String username) {
+
+        Member member = memberService.getMember(username);
+
+        return ApplicationDto.toDtoList(applicationRepository.findByMemberId(member.getId()));
     }
 }
