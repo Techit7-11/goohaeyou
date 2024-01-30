@@ -18,7 +18,6 @@
 </script>
 
 <style>
-    /* 스타일링을 위한 CSS 코드 */
     .job-post-container {
         background-color: #fff; /* 화이트 톤 배경색 설정 */
         border: 1px solid #000; /* 블랙 톤 테두리 설정 */

@@ -16,8 +16,6 @@ public class MemberDto {
     @NonNull
     private String username;
     @NonNull
-    private String password;
-    @NonNull
     private Gender gender;
     @NonNull
     private String location;
@@ -29,7 +27,6 @@ public class MemberDto {
         return MemberDto.builder()
                 .id(member.getId())
                 .username(member.getUsername())
-                .password(member.getPassword())
                 .gender(member.getGender())
                 .location(member.getLocation())
                 .birth(member.getBirth())

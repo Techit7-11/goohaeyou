@@ -4,38 +4,28 @@
     async function submitLoginForm(this: HTMLFormElement) {
         const form: HTMLFormElement = this;
 
-        try {
-            const response = await rq.apiEndPoints().POST('/api/member/login', {
-                body: {
-                    username: form.username.value.trim(),
-                    password: form.password.value.trim()
-                }
-            });
+        const response = await rq.apiEndPoints().POST('/api/member/login', {
+            body: {
+                username: form.username.value.trim(),
+                password: form.password.value.trim()
+            }
+        });
 
-            // 성공 응답을 올바르게 처리하는 로직
-            if (response.response.ok) {
-                rq.setLogined({ id: Number(response.data) });
-                rq.msgAndRedirect({ msg: '로그인 성공' }, undefined, 'http://localhost:5173/');
-            } else {
-                // 서버가 올바른 데이터를 반환하지 않았을 때의 처리
-                throw new Error('로그인 실패: 서버에서 유효한 응답을 반환하지 않음');
+        if (response.data?.statusCode === 200) {
+            rq.msgAndRedirect({ msg: '로그인 성공' }, undefined, 'http://localhost:5173/');   // 메인페이지로 먼저 이동 후에 로그인 상태로 바꾼다
+            rq.setLogined({ id: Number(response.data) });   
+        } else if (response.data?.statusCode === 400 && response.data?.msg === 'CUSTOM_EXCEPTION') {
+                // CustomException 오류 메시지 처리
+                const customErrorMessage = response.data?.data?.message;
+                rq.msgError(customErrorMessage ?? '알 수 없는 오류가 발생했습니다.');
+        } else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
+            if (Array.isArray(response.data.data)) {
+                response.data.data.forEach(msg => rq.msgError(msg));
             }
-        } catch (error) {
-            const err = error as any;
-            if (err.response.status >= 400 && err.response.status < 500) {
-                const errorData = err.response.data;
-                if (errorData.errorCode && errorData.message) {
-                    rq.msgError(`${errorData.message} (오류 코드: ${errorData.errorCode})`);
-                } else if (Array.isArray(errorData)) {
-                    errorData.forEach(msg => rq.msgError(msg));
-                } else {
-                    rq.msgError('로그인 중 오류가 발생했습니다.');
-                }
-            } else {
-                rq.msgError('서버와의 통신 중 오류가 발생했습니다.');
-            }
+        } else {
+            rq.msgError('로그인 중 오류가 발생했습니다.');
+        }
     }
-}
 </script>
 
 <style>

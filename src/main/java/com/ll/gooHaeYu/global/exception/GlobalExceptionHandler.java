@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.global.exception;
 
+import com.ll.gooHaeYu.global.rsData.RsData;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,19 +14,21 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<String>> handleValidException(MethodArgumentNotValidException e) {
+    public RsData<List<String>> handleValidException(MethodArgumentNotValidException e) {
 
         List<String> errorMessages = e.getBindingResult().getAllErrors().stream()
                 .map(ObjectError::getDefaultMessage)
                 .toList();
 
-        return ResponseEntity
-                .badRequest()
-                .body(errorMessages);
+        return RsData.of(
+                "400",
+                "VALIDATION_EXCEPTION",
+                errorMessages
+        );
     }
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
+    public RsData<ErrorResponse> handleCustomException(CustomException e) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorCode(e.getErrorCode())
                 .message(e.getMessage())
@@ -34,8 +36,10 @@ public class GlobalExceptionHandler {
 
         log.error(e.getMessage(), e);
 
-        return ResponseEntity
-                .status(errorResponse.getErrorCode().getStatus())
-                .body(errorResponse);
+        return RsData.of(
+                "400",
+                "CUSTOM_EXCEPTION",
+                errorResponse
+        );
     }
 }

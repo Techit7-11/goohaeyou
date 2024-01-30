@@ -16,8 +16,6 @@ public class JobPostDto {
     private Long id;
     @NotNull
     private String author;
-    //@NotNull
-    //private String categoryName;
     @NotNull
     private String title;
     @NotNull
@@ -32,7 +30,6 @@ public class JobPostDto {
         return JobPostDto.builder()
                 .id(jobPost.getId())
                 .author(jobPost.getMember().getUsername())
-                //.categoryName(jobPost.getCategory().getName())
                 .title(jobPost.getTitle())
                 .body(jobPost.getBody())
                 .isClosed(jobPost.isClosed())

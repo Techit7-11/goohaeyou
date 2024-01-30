@@ -9,7 +9,6 @@
 </script>
 
 <style>
-    /* 리스트 아이템 스타일링 */
     ul {
         list-style-type: none; /* 목록 스타일 제거 */
         padding: 0;
