@@ -4,8 +4,7 @@ import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationForm;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.application.application.repository.ApplicationRepository;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
@@ -27,18 +26,18 @@ public class ApplicationService {
 
     @Transactional
     public Long writeApplication(String username, Long id, ApplicationForm.Register form) {
-        JobPost post = jobPostService.findByIdAndValidate(id);
+        JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(id);
 
         Member member = memberService.getMember(username);
 
         Application newApplication = Application.builder()
                 .member(member)
-                .jobPost(post)
+                .jobPostDetail(postDetail)
                 .body(form.getBody())
                 .approve(null)
                 .build();
-        post.getApplications().add(newApplication);
-        post.increaseApplicationsCount();
+        postDetail.getApplications().add(newApplication);
+        postDetail.getJobPost().increaseApplicationsCount();
         applicationRepository.save(newApplication);
 
         return newApplication.getId();
@@ -76,7 +75,7 @@ public class ApplicationService {
         if (!canEditApplication(username, application.getMember().getUsername()))
             throw new CustomException(ErrorCode.NOT_ABLE);
 
-        application.getJobPost().decreaseApplicationsCount();
+        application.getJobPostDetail().getJobPost().decreaseApplicationsCount();
         applicationRepository.deleteById(id);
     }
 

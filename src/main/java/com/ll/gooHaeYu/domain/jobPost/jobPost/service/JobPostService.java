@@ -1,9 +1,12 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Interest;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostDetailRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
@@ -22,6 +25,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class JobPostService {
     private final JobPostRepository jobPostRepository;
+    private final JobPostDetailRepository jobPostdetailRepository;
     private final MemberService memberService;
     private final MemberRepository memberRepository;
 
@@ -30,18 +34,23 @@ public class JobPostService {
         JobPost newPost = JobPost.builder()
                 .member(memberService.getMember(username))
                 .title(form.getTitle())
+                .build();
+
+        JobPostDetail postDetail = JobPostDetail.builder()
+                .jobPost(newPost)
+                .author(username)
                 .body(form.getBody())
                 .build();
 
         jobPostRepository.save(newPost);
+        jobPostdetailRepository.save(postDetail);
 
         return newPost.getId();
     }
 
-    public JobPostDto findById(Long id) {
-        JobPost post = findByIdAndValidate(id);
-
-        return JobPostDto.fromEntity(post);
+    public JobPostDetailDto findById(Long id) {
+        JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+        return JobPostDetailDto.fromEntity(postDetail.getJobPost(),postDetail);
     }
 
     public List<JobPostDto> findAll() {
@@ -50,12 +59,12 @@ public class JobPostService {
 
     @Transactional
     public void modifyPost(String username, Long id, JobPostForm.Modify form) {
-        JobPost post = findByIdAndValidate(id);
-
-        if (!canEditPost(username, post.getMember().getUsername()))
+        JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+        if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(ErrorCode.NOT_ABLE);
 
-        post.update(form.getTitle(), form.getBody(), form.getClosed());
+        postDetail.getJobPost().update(form.getTitle(), form.getClosed());
+        postDetail.update(form.getBody());
     }
 
     @Transactional
@@ -95,32 +104,39 @@ public class JobPostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
     }
 
+    public JobPostDetail findByJobPostAndNameAndValidate(Long postId) {
+        JobPost post = findByIdAndValidate(postId);
+        return jobPostdetailRepository.findByJobPostAndAuthor(post,post.getMember().getUsername())
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
+    }
+
     @Transactional
     public void Interest(String username, Long postId){
-        JobPost post = findByIdAndValidate(postId);
+        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
-        if (hasInterest(post,member)) throw new CustomException(ErrorCode.NOT_ABLE);
+        if (hasInterest(postDetail,member)) throw new CustomException(ErrorCode.NOT_ABLE);
 
-        post.getInterests().add(Interest.builder()
-                .jobPost(post)
+        postDetail.getInterests().add(Interest.builder()
+                .jobPostDetail(postDetail)
                 .member(member)
                 .build());
-        post.increaseInterestCount();
+
+        postDetail.getJobPost().increaseInterestCount();
     }
 
     @Transactional
     public void disinterest(String username, Long postId){
-        JobPost post = findByIdAndValidate(postId);
+        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
-        if (!hasInterest(post,member)) throw new CustomException(ErrorCode.NOT_ABLE);
+        if (!hasInterest(postDetail,member)) throw new CustomException(ErrorCode.NOT_ABLE);
 
-        post.getInterests().removeIf(interest -> interest.getMember().equals(member));
-        post.decreaseInterestCount();
+        postDetail.getInterests().removeIf(interest -> interest.getMember().equals(member));
+        postDetail.getJobPost().decreaseInterestCount();
     }
 
-    public boolean hasInterest(JobPost post, Member member) {
+    public boolean hasInterest(JobPostDetail post, Member member) {
         return post.getInterests().stream().anyMatch(interest -> interest.getMember().equals(member));
     }
 
@@ -130,5 +146,4 @@ public class JobPostService {
 
         return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
     }
-
 }

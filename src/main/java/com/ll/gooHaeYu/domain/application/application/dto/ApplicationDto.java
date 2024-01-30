@@ -22,7 +22,7 @@ public class ApplicationDto {
         return ApplicationDto.builder()
                 .id(application.getId())
                 .author(application.getMember().getUsername())
-                .postId(application.getJobPost().getId())
+                .postId(application.getJobPostDetail().getJobPost().getId())
                 .body(application.getBody())
                 .createdAt(application.getCreatedAt())
                 .approve(application.getApprove())
