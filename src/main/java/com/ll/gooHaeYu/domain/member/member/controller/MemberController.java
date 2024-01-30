@@ -1,5 +1,11 @@
 package com.ll.gooHaeYu.domain.member.member.controller;
 
+import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
+import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
+import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentDto;
+import com.ll.gooHaeYu.domain.jobPost.comment.service.CommentService;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
 import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
@@ -14,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @Tag(name = "Member", description = "회원 관련 API")
 @RestController
@@ -22,6 +29,9 @@ import java.net.URI;
 public class MemberController {
 
     private final MemberService memberService;
+    private final JobPostService jobPostService;
+    private final ApplicationService applicationService;
+    private final CommentService commentService;
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
@@ -50,5 +60,23 @@ public class MemberController {
         memberService.modifyMember(authentication.getName(), form);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/mypost")
+    @Operation(summary = "내 공고 조회")
+    public ResponseEntity<List<JobPostDto>> detailMyPosts(Authentication authentication) {
+        return  ResponseEntity.ok(jobPostService.findByUsername(authentication.getName()));
+    }
+
+    @GetMapping("/myapplication")
+    @Operation(summary = "내 지원서 조회")
+    public ResponseEntity<List<ApplicationDto>> detailMyApplications(Authentication authentication) {
+        return  ResponseEntity.ok(applicationService.findByUsername(authentication.getName()));
+    }
+
+    @GetMapping("/mycomment")
+    @Operation(summary = "내 댓글 조회")
+    public ResponseEntity<List<CommentDto>> detailMyComments(Authentication authentication) {
+        return  ResponseEntity.ok(commentService.findByUsername(authentication.getName()));
     }
 }

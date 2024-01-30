@@ -99,4 +99,10 @@ public class CommentService {
         return member.getRole() == Role.ADMIN || comment.getMember().equals(member);
     }
 
+    public List<CommentDto> findByUsername(String username) {
+
+        Member member = memberService.getMember(username);
+
+        return CommentDto.toDtoList(commentRepository.findByMemberId(member.getId()));
+    }
 }

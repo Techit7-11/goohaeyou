@@ -124,11 +124,11 @@ public class JobPostService {
         return post.getInterests().stream().anyMatch(interest -> interest.getMember().equals(member));
     }
 
-    /*
-    public JobPost postAndApplication(Long id) {
-        JobPost post = findByIdAndValidate(id);
+    public List<JobPostDto> findByUsername(String username) {
 
-        return post;
+        Member member = memberService.getMember(username);
+
+        return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
     }
-    */
+
 }
