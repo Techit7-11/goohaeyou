@@ -1,5 +1,7 @@
 package com.ll.gooHaeYu.domain.member.member.controller;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
 import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
@@ -14,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @Tag(name = "Member", description = "회원 관련 API")
 @RestController
@@ -22,6 +25,7 @@ import java.net.URI;
 public class MemberController {
 
     private final MemberService memberService;
+    private final JobPostService jobPostService;
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
@@ -50,5 +54,11 @@ public class MemberController {
         memberService.modifyMember(authentication.getName(), form);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/mypost")
+    @Operation(summary = "내 공고 조회")
+    public ResponseEntity<List<JobPostDto>> detailMyPost(Authentication authentication) {
+        return  ResponseEntity.ok(jobPostService.findByUsername(authentication.getName()));
     }
 }
