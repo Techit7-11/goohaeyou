@@ -52,7 +52,23 @@ public class JobPostController {
         return  ResponseEntity.ok(jobPostService.findById(id));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @PostMapping("/{id}/interest")
+    @Operation(summary = "구인공고 관심 등록")
+    public ResponseEntity<Void> increase(Authentication authentication,
+                                         @PathVariable(name = "id") Long id) {
+        jobPostService.Interest(authentication.getName(),id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}/interest")
+    @Operation(summary = "구인공고 관심 제거")
+    public ResponseEntity<Void> disinterest(Authentication authentication,
+                                         @PathVariable(name = "id") Long id) {
+        jobPostService.disinterest(authentication.getName(),id);
+    }
+
+    @DeleteMapping("/{id}")
     @Operation(summary = "구인공고 삭제")
     public ResponseEntity<Void> deleteJobPost(Authentication authentication,
                                               @PathVariable(name = "id") Long id) {

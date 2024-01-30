@@ -36,4 +36,12 @@ public class Application extends BaseTimeEntity {
             this.body = body;
         }
     }
+
+    public void approve(){
+        this.approve = true;
+    }
+
+    public void reject() {
+        this.approve = false;
+    }
 }
