@@ -4,12 +4,14 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
+import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -24,9 +26,9 @@ public class JobPostController {
 
     @PostMapping
     @Operation(summary = "구인공고 작성")
-    public ResponseEntity<String> writePost(Authentication authentication,
+    public ResponseEntity<String> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
                                             @Valid @RequestBody JobPostForm.Register form) {
-        Long jobPostId = jobPostService.writePost(authentication.getName(), form);
+        Long jobPostId = jobPostService.writePost(memberDetails.getUsername(), form);
 
         return ResponseEntity.created(URI.create("/api/job-posts/" + jobPostId)).build();
     }

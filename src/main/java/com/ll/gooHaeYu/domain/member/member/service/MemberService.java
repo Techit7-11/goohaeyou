@@ -5,12 +5,12 @@ import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
 import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
 import com.ll.gooHaeYu.domain.member.member.dto.MemberForm;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
+import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
-import com.ll.gooHaeYu.standard.base.util.JwtUtil;
+import com.ll.gooHaeYu.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +22,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Value("${jwt.secret}")
-    private String secretKey;
-    private Long expiredMs = 1000 * 60 * 60l;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public Long join(JoinForm form) {
@@ -34,9 +31,12 @@ public class MemberService {
                     throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
                 });
 
+        Role role = form.getUsername().equals("admin") ? Role.ADMIN : Role.USER;
+
         Member newMember = memberRepository.save(Member.builder()
                 .username(form.getUsername())
                 .password(bCryptPasswordEncoder.encode(form.getPassword()))
+                .role(role)
                 .build());
 
         return newMember.getId();
@@ -49,7 +49,7 @@ public class MemberService {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 
-        return JwtUtil.createJwt(member.getUsername(), secretKey, expiredMs);
+        return jwtTokenProvider.createJwt(member.getUsername());
     }
 
     public Member getMember(String username){
@@ -74,5 +74,13 @@ public class MemberService {
                 : null;
 
         member.update(password, form.getGender(), form.getLocation(), form.getBirth());
+    }
+
+    public String findUsernameById(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() ->
+                        new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        return member.getUsername();
     }
 }

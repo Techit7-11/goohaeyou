@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage(), e);
 
         return RsData.of(
-                "400",
+                Integer.toString(e.getErrorCode().getStatus().value()),
                 "CUSTOM_EXCEPTION",
                 errorResponse
         );
