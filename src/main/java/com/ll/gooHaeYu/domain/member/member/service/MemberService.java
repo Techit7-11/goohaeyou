@@ -36,6 +36,12 @@ public class MemberService {
         Member newMember = memberRepository.save(Member.builder()
                 .username(form.getUsername())
                 .password(bCryptPasswordEncoder.encode(form.getPassword()))
+                .name(form.getName())
+                .email(form.getEmail())
+                .phoneNumber(form.getPhoneNumber())
+                .gender(form.getGender())
+                .location(form.getLocation())
+                .birth(form.getBirth())
                 .role(role)
                 .build());
 
