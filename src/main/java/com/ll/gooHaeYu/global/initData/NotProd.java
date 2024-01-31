@@ -4,6 +4,7 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
+import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.stream.IntStream;
 
 @Configuration
@@ -42,12 +44,30 @@ public class NotProd {
                 if (!initRun) return;
                 if (memberRepository.findById(1L).isPresent()) return;
 
-                JoinForm joinForm = JoinForm.builder()
+                JoinForm joinForm1 = JoinForm.builder()
                         .username("testUser1")
                         .password("11112222")
+                        .birth(LocalDate.parse("2000-01-01"))
+                        .email("test1@example.com")
+                        .gender(Gender.MALE)
+                        .name("테스트")
+                        .location("경기도 수원시 영통구 이의동 263-1")
+                        .phoneNumber("010-1111-2222")
                         .build();
 
-                memberService.join(joinForm);
+                JoinForm joinForm2 = JoinForm.builder()
+                        .username("admin")
+                        .password("12345678")
+                        .birth(LocalDate.parse("1995-01-01"))
+                        .email("admin@example.com")
+                        .gender(Gender.UNDEFINED)
+                        .name("관리자")
+                        .location("서울특별시 중구 세종대로 110")
+                        .phoneNumber("010-3333-4444")
+                        .build();
+
+                memberService.join(joinForm1);
+                memberService.join(joinForm2);
 
                 LoginForm loginForm = LoginForm.builder()
                         .username("testUser1")
@@ -58,8 +78,8 @@ public class NotProd {
 
                 IntStream.rangeClosed(1, 50).forEach(i -> {
                     JobPostForm.Register postRegister = JobPostForm.Register.builder()
-                            .title("제목" + i)
-                            .body("내용" + i)
+                            .title("구인공고 제목" + i)
+                            .body("구인공고 내용" + i)
                             .build();
 
                     jobPostService.writePost("testUser1", postRegister);

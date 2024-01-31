@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,10 +34,10 @@ public class JobPostController {
 
     @PutMapping("/{id}")
     @Operation(summary = "구인공고 수정")
-    public ResponseEntity<Void> modifyPost(Authentication authentication,
+    public ResponseEntity<Void> modifyPost(@AuthenticationPrincipal MemberDetails memberDetails,
                                            @PathVariable(name = "id") Long id,
                                            @Valid @RequestBody JobPostForm.Modify form) {
-        jobPostService.modifyPost(authentication.getName(), id, form);
+        jobPostService.modifyPost(memberDetails.getUsername(), id, form);
 
         return ResponseEntity.noContent().build();
     }
@@ -57,27 +56,27 @@ public class JobPostController {
 
     @PostMapping("/{id}/interest")
     @Operation(summary = "구인공고 관심 등록")
-    public ResponseEntity<Void> increase(Authentication authentication,
+    public ResponseEntity<Void> increase(@AuthenticationPrincipal MemberDetails memberDetails,
                                          @PathVariable(name = "id") Long id) {
-        jobPostService.Interest(authentication.getName(),id);
+        jobPostService.Interest(memberDetails.getUsername(),id);
 
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/interest")
     @Operation(summary = "구인공고 관심 제거")
-    public ResponseEntity<Void> disinterest(Authentication authentication,
+    public ResponseEntity<Void> disinterest(@AuthenticationPrincipal MemberDetails memberDetails,
                                          @PathVariable(name = "id") Long id) {
-        jobPostService.disinterest(authentication.getName(),id);
+        jobPostService.disinterest(memberDetails.getUsername(),id);
 
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "구인공고 삭제")
-    public ResponseEntity<Void> deleteJobPost(Authentication authentication,
+    public ResponseEntity<Void> deleteJobPost(@AuthenticationPrincipal MemberDetails memberDetails,
                                               @PathVariable(name = "id") Long id) {
-        jobPostService.deleteJobPost(authentication.getName(), id);
+        jobPostService.deleteJobPost(memberDetails.getUsername(), id);
 
         return ResponseEntity.noContent().build();
     }

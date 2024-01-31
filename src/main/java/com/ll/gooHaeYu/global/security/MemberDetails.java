@@ -46,6 +46,18 @@ public class MemberDetails implements UserDetails {
         return member.getBirth();
     }
 
+    public String getName() {
+        return member.getName();
+    }
+
+    public String getEmail() {
+        return member.getEmail();
+    }
+
+    public String getPhoneNumber() {
+        return member.getPhoneNumber();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(() -> member.getRole().name());
