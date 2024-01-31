@@ -151,6 +151,7 @@ public class JobPostService {
         return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
     }
 
+    /*
     public Page<JobPostDto> findAllSort(int page, String sortBy, String sortOrder) {
         Sort.Direction direction = sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         Pageable pageable = PageRequest.of(page, 10, Sort.by(direction, sortBy));
@@ -159,4 +160,11 @@ public class JobPostService {
 
         return JobPostDto.toDtoPage(jobPosts);
     }
+     */
+    public Page<JobPostDto> findAllSort(int page, Sort sort) {
+        Pageable pageable = PageRequest.of(page, 10, sort);
+        Page<JobPost> jobPosts = jobPostRepository.findAll(pageable);
+        return JobPostDto.toDtoPage(jobPosts);
+    }
+
 }

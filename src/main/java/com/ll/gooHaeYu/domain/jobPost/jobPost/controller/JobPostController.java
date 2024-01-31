@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -89,7 +90,14 @@ public class JobPostController {
             @RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy,
             @RequestParam(name = "sortOrder", defaultValue = "desc") String sortOrder
     ) {
-        Page<JobPostDto> jobPosts = jobPostService.findAllSort(page, sortBy, sortOrder);
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        Sort sort = Sort.by(
+                new Sort.Order(direction, sortBy),
+                Sort.Order.asc("createdAt") // Add more as needed
+        );
+
+        Page<JobPostDto> jobPosts = jobPostService.findAllSort(page, sort);
         return ResponseEntity.ok(jobPosts);
     }
 }
