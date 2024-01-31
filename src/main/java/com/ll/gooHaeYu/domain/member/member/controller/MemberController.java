@@ -5,6 +5,7 @@ import com.ll.gooHaeYu.domain.application.application.service.ApplicationService
 import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentDto;
 import com.ll.gooHaeYu.domain.jobPost.comment.service.CommentService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Interest;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
@@ -57,7 +58,7 @@ public class MemberController {
     @PutMapping
     @Operation(summary = "내 정보 수정")
     public ResponseEntity<Void> modifyMember(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                  @Valid @RequestBody MemberForm.Modify form) {
+                                             @Valid @RequestBody MemberForm.Modify form) {
         memberService.modifyMember(memberDetails.getUsername(), form);
 
         return ResponseEntity.noContent().build();
@@ -80,5 +81,11 @@ public class MemberController {
     @Operation(summary = "내 댓글 조회")
     public ResponseEntity<List<CommentDto>> detailMyComments(@AuthenticationPrincipal MemberDetails memberDetails) {
         return  ResponseEntity.ok(commentService.findByUsername(memberDetails.getUsername()));
+    }
+
+    @GetMapping("/myinterest")
+    @Operation(summary = "내 관심 공고 조회")
+    public ResponseEntity<List<JobPostDto>> detailMyInterestingPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity.ok(jobPostService.findByInterestAndUsername(memberDetails.getId()));
     }
 }

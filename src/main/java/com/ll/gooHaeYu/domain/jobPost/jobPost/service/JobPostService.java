@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -145,5 +146,13 @@ public class JobPostService {
         Member member = memberService.getMember(username);
 
         return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
+    }
+
+    public List<JobPostDto> findByInterestAndUsername(Long memberId) {
+        return jobPostdetailRepository.findByInterestsMemberId(memberId)
+                .stream()
+                .map(JobPostDetail::getJobPost)
+                .map(JobPostDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }
