@@ -13,7 +13,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    private  final  JwtProperties jwtProperties;
+    private final JwtProperties jwtProperties;
 
     static final long EXPIRED_MS = 1000 * 60 * 60;
 

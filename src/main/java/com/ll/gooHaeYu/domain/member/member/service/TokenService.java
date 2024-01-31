@@ -19,7 +19,7 @@ public class TokenService {
 
     public String createNewAccessToken(String refreshToken) {
         // 토큰 유효성 검사에 실패하면 예외 발생
-        if(!jwtTokenProvider.isExpired(refreshToken)) {
+        if (!jwtTokenProvider.isExpired(refreshToken)) {
             throw new CustomException(ErrorCode.TOKEN_NOT_FOUND);
         }
 
