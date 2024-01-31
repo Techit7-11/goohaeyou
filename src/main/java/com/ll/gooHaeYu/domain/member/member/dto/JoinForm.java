@@ -44,7 +44,7 @@ public class JoinForm {
     @NotBlank(message = "지역을 입력해주세요.")
     private String location;
 
-    @NotBlank(message = "생년월일은 필수 입력 항목입니다.")
+    @NotNull(message = "생년월일은 필수 입력 항목입니다.")
     @Past(message = "생년월일은 현재보다 앞선 날짜여야 합니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birth;

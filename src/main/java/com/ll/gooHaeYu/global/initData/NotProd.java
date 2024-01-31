@@ -52,7 +52,7 @@ public class NotProd {
                         .gender(Gender.MALE)
                         .name("테스트")
                         .location("경기도 수원시 영통구 이의동 263-1")
-                        .phoneNumber("010-1111-2222")
+                        .phoneNumber("01011112222")
                         .build();
 
                 JoinForm joinForm2 = JoinForm.builder()
@@ -63,7 +63,7 @@ public class NotProd {
                         .gender(Gender.UNDEFINED)
                         .name("관리자")
                         .location("서울특별시 중구 세종대로 110")
-                        .phoneNumber("010-3333-4444")
+                        .phoneNumber("01033334444")
                         .build();
 
                 memberService.join(joinForm1);
