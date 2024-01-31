@@ -12,8 +12,9 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-    @Value("${jwt.secret}")
-    private String secretKey = "secretKey";
+
+    private  final  JwtProperties jwtProperties;
+
     static final long EXPIRED_MS = 1000 * 60 * 60;
 
     public String createJwt(String username) {
@@ -21,7 +22,7 @@ public class JwtTokenProvider {
                 .claim("username", username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRED_MS))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
 
@@ -38,7 +39,7 @@ public class JwtTokenProvider {
 
     private Claims parseClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(secretKey)
+                .setSigningKey(jwtProperties.getSecretKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

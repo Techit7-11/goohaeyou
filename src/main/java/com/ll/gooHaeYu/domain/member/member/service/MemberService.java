@@ -83,4 +83,10 @@ public class MemberService {
 
         return member.getUsername();
     }
+
+    public Member findById(Long userId) {
+        return memberRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
 }
