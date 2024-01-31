@@ -15,6 +15,10 @@ import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -145,5 +149,14 @@ public class JobPostService {
         Member member = memberService.getMember(username);
 
         return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
+    }
+
+    public Page<JobPostDto> findAllSort(int page, String sortBy, String sortOrder) {
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(direction, sortBy));
+
+        Page<JobPost> jobPosts = jobPostRepository.findAll(pageable);
+
+        return JobPostDto.toDtoPage(jobPosts);
     }
 }

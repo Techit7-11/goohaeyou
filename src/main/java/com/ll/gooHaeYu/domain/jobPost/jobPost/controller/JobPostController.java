@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -79,5 +80,16 @@ public class JobPostController {
         jobPostService.deleteJobPost(memberDetails.getUsername(), id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/sort")
+    @Operation(summary = "구인공고 글 목록 정렬")
+    public ResponseEntity<Page<JobPostDto>> findAllPostSort(
+            @RequestParam(value="page", defaultValue="0") int page,
+            @RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = "desc") String sortOrder
+    ) {
+        Page<JobPostDto> jobPosts = jobPostService.findAllSort(page, sortBy, sortOrder);
+        return ResponseEntity.ok(jobPosts);
     }
 }
