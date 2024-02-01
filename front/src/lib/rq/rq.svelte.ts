@@ -23,11 +23,13 @@ class Rq {
 	// 인증
 	// member 의 값이 바뀌면, member 를 사용하는 모든 곳에서 자동으로 즉각 반영된다.
 	public makeReactivityMember() {
-		let id = $state(0); // 로그아웃 상태
-		let username = $state('');
-		let gender = $state('UNDEFINED');
-		let location = $state('');
-		let birth = $state('');
+		let id = $state<number>(0); // 로그아웃 상태
+		let username = $state<string>('');
+		let gender = $state<'UNDEFINED' | 'MALE' | 'FEMALE' | undefined>('UNDEFINED');
+		let location = $state<string>('');
+		let birth = $state<string>('');
+		let name = $state<string>('');
+		let phoneNumber = $state<string>('');
 
 		return {
 			get id() {
@@ -39,7 +41,25 @@ class Rq {
 			get username() {
 				return username;
 			},
-			set gender(value) {
+			set username(value: string) {
+				username = value;
+			},
+			get name() {
+				return name;
+			},
+			set name(value: string) {
+				name = value;
+			},
+			get phoneNumber() {
+				return phoneNumber;
+			},
+			set phoneNumber(value: string) {
+				phoneNumber = value;
+			},
+			get gender() {
+				return gender;
+			},
+			set gender(value: 'UNDEFINED' | 'MALE' | 'FEMALE' | undefined) {
 				gender = value;
 			},
 			get location() {
@@ -98,6 +118,8 @@ class Rq {
 		this.member.gender = 'UNDEFINED';
 		this.member.location = '';
 		this.member.birth = '';
+		this.member.name = '';
+		this.member.phoneNumber = '';
 	}
 
 	public isLogin() {
@@ -109,10 +131,10 @@ class Rq {
 	}
 
 	public async initAuth() {
-		const { data } = await this.apiEndPoints().GET('/api/member/me');
+		const { data } = await this.apiEndPoints().GET('/api/member');
 
 		if (data) {
-			this.setLogined(data.data); // MemberDto 넘기기
+			this.setLogined(data); // MemberDto 넘기기
 		}
 	}
 
