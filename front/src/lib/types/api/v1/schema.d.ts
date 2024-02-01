@@ -40,7 +40,7 @@ export interface paths {
     post: operations["write"];
   };
   "/api/member/login": {
-    /** 로그인 */
+    /** 로그인, accessToken 쿠키 생성됨 */
     post: operations["login"];
   };
   "/api/member/join": {
@@ -106,6 +106,32 @@ export interface components {
       username: string;
       password: string;
     };
+    AuthAndMakeTokensResponse: {
+      memberDto?: components["schemas"]["MemberDto"];
+      accessToken?: string;
+      refreshToken?: string;
+    };
+    MemberDto: {
+      /** Format: int64 */
+      id?: number;
+      username?: string;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location?: string;
+      /** Format: date */
+      birth?: string;
+      name?: string;
+      phoneNumber?: string;
+    };
+    RsDataAuthAndMakeTokensResponse: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["AuthAndMakeTokensResponse"];
+      fail?: boolean;
+      success?: boolean;
+    };
     JoinForm: {
       username: string;
       password: string;
@@ -128,18 +154,6 @@ export interface components {
       createAt?: string;
       /** Format: date-time */
       modifyAt?: string;
-    };
-    MemberDto: {
-      /** Format: int64 */
-      id?: number;
-      username?: string;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location?: string;
-      /** Format: date */
-      birth?: string;
-      name?: string;
-      phoneNumber?: string;
     };
     JobPostDto: {
       /** Format: int64 */
@@ -388,7 +402,7 @@ export interface operations {
       };
     };
   };
-  /** 로그인 */
+  /** 로그인, accessToken 쿠키 생성됨 */
   login: {
     requestBody: {
       content: {
@@ -399,7 +413,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["RsDataAuthAndMakeTokensResponse"];
         };
       };
     };
