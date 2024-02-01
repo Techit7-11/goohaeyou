@@ -5,8 +5,7 @@ import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
@@ -32,6 +31,9 @@ public class JobPostDetail {
 
     @Column(columnDefinition = "TEXT")
     private String body;
+
+    @OneToOne(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
+    private Essential essential;
 
     @OneToMany(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     @ToString.Exclude

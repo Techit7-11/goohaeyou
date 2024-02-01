@@ -19,6 +19,10 @@ public class JobPostForm {
 
         @NotBlank(message = "지역 설정은 필수입니다.")
         private String location;
+
+        private Integer minAge;
+
+        private Integer gender;
     }
 
     @Builder
@@ -27,6 +31,8 @@ public class JobPostForm {
     public static class Modify {
         private String title;
         private String body;
+        private Integer minAge;
+        private Integer gender;
         private Boolean closed;
     }
 }
