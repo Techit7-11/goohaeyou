@@ -24,8 +24,6 @@ public class MemberDto {
     @NonNull
     private String name;
     @NonNull
-    private String email;
-    @NonNull
     private String phoneNumber;
 
     public static MemberDto fromEntity(Member member) {
@@ -36,7 +34,6 @@ public class MemberDto {
                 .location(member.getLocation())
                 .birth(member.getBirth())
                 .name(member.getName())
-                .email(member.getEmail())
                 .phoneNumber(member.getPhoneNumber())
                 .build();
     }
