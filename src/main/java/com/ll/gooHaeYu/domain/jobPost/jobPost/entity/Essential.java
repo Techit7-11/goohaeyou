@@ -29,4 +29,10 @@ public class Essential {
     @JoinColumn(name = "job_post_detail_id", nullable = false)
     private JobPostDetail jobPostDetail;
 
+    public void update(int minAge, Gender gender) {
+        this.minAge = minAge;
+        if (gender!=null) {
+            this.gender = gender;
+        }
+    }
 }
