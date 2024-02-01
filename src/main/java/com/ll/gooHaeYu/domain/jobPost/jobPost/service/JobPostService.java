@@ -48,8 +48,8 @@ public class JobPostService {
                 .build();
 
         Essential essential = Essential.builder()
-                .minAge(form.getMinAge()!=null ? form.getMinAge() : 0)
-                .gender(getGender(form.getGender()))
+                .minAge(form.getMinAge())
+                .gender(form.getGender())
                 .jobPostDetail(postDetail)
                 .build();
 
@@ -77,6 +77,7 @@ public class JobPostService {
 
         postDetail.getJobPost().update(form.getTitle(), form.getClosed());
         postDetail.update(form.getBody());
+        postDetail.getEssential().update(form.getMinAge(), form.getGender());
     }
 
     @Transactional
@@ -165,13 +166,5 @@ public class JobPostService {
                 .map(JobPostDetail::getJobPost)
                 .map(JobPostDto::fromEntity)
                 .collect(Collectors.toList());
-    }
-
-    private Gender getGender (int gender) {
-        switch (gender) {
-            case 1 : return Gender.MALE;
-            case 2 : return Gender.FEMALE;
-            default: return Gender.UNDEFINED;
-        }
     }
 }
