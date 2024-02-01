@@ -11,7 +11,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @Builder
-@Table(name = "requirement")
+@Table(name = "essential")
 public class Essential {
 
     @Id

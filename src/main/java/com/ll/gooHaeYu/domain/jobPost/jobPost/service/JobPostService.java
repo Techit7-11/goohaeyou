@@ -62,7 +62,7 @@ public class JobPostService {
 
     public JobPostDetailDto findById(Long id) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
-        return JobPostDetailDto.fromEntity(postDetail.getJobPost(),postDetail);
+        return JobPostDetailDto.fromEntity(postDetail.getJobPost(),postDetail,postDetail.getEssential());
     }
 
     public List<JobPostDto> findAll() {
