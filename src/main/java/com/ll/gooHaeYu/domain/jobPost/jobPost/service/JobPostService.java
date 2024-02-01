@@ -3,12 +3,15 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Essential;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Interest;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.EssentialRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostDetailRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
+import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
@@ -29,6 +32,7 @@ public class JobPostService {
     private final JobPostDetailRepository jobPostdetailRepository;
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+    private final EssentialRepository essentialRepository;
 
     @Transactional
     public Long writePost(String username, JobPostForm.Register form) {
@@ -43,8 +47,15 @@ public class JobPostService {
                 .body(form.getBody())
                 .build();
 
+        Essential essential = Essential.builder()
+                .minAge(form.getMinAge()!=null ? form.getMinAge() : 0)
+                .gender(getGender(form.getGender()))
+                .jobPostDetail(postDetail)
+                .build();
+
         jobPostRepository.save(newPost);
         jobPostdetailRepository.save(postDetail);
+        essentialRepository.save(essential);
 
         return newPost.getId();
     }
@@ -154,5 +165,13 @@ public class JobPostService {
                 .map(JobPostDetail::getJobPost)
                 .map(JobPostDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    private Gender getGender (int gender) {
+        switch (gender) {
+            case 1 : return Gender.MALE;
+            case 2 : return Gender.FEMALE;
+            default: return Gender.UNDEFINED;
+        }
     }
 }

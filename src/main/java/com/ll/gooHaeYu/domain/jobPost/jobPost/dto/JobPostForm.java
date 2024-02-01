@@ -16,6 +16,10 @@ public class JobPostForm {
 
         @NotBlank(message = "내용은 필수 입력 항목입니다.")
         private String body;
+
+        private Integer minAge;
+
+        private Integer gender;
     }
 
     @Builder
@@ -24,6 +28,8 @@ public class JobPostForm {
     public static class Modify {
         private String title;
         private String body;
+        private Integer minAge;
+        private Integer gender;
         private Boolean closed;
     }
 }
