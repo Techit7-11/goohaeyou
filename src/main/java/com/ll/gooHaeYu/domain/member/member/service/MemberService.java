@@ -37,7 +37,6 @@ public class MemberService {
                 .username(form.getUsername())
                 .password(bCryptPasswordEncoder.encode(form.getPassword()))
                 .name(form.getName())
-                .email(form.getEmail())
                 .phoneNumber(form.getPhoneNumber())
                 .gender(form.getGender())
                 .location(form.getLocation())

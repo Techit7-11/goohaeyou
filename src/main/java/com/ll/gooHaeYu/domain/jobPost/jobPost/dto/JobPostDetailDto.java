@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Builder
 @Getter
@@ -21,6 +20,8 @@ public class JobPostDetailDto {
     private String title;
     @NotNull
     private String body;
+    @NotNull
+    private String location;
     private boolean isClosed = false; // 기본값 설정
     @NonNull
     private String createdAt;

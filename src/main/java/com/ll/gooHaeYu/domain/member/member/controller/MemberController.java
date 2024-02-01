@@ -5,7 +5,6 @@ import com.ll.gooHaeYu.domain.application.application.service.ApplicationService
 import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentDto;
 import com.ll.gooHaeYu.domain.jobPost.comment.service.CommentService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Interest;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;

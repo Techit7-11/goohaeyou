@@ -34,6 +34,8 @@ public class JobPost extends BaseTimeEntity {
 
     private String title;
 
+    private String location;
+
     @Column(nullable = false)
     private boolean closed = false;
 

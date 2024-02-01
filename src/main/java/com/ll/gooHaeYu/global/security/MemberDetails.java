@@ -50,10 +50,6 @@ public class MemberDetails implements UserDetails {
         return member.getName();
     }
 
-    public String getEmail() {
-        return member.getEmail();
-    }
-
     public String getPhoneNumber() {
         return member.getPhoneNumber();
     }

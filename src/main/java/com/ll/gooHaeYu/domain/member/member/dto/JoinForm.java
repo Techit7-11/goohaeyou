@@ -30,10 +30,6 @@ public class JoinForm {
     @Pattern(regexp = "^[가-힣a-zA-Z]+$", message = "이름은 한글 또는 영문만 가능합니다.")
     private String name;
 
-    @NotBlank(message = "이메일은 필수 항목입니다.")
-    @Email(message = "올바른 이메일 형식이 아닙니다.")
-    private String email;
-
     @NotBlank(message = "휴대폰 번호는 필수 항목입니다.")
     @Pattern(regexp = "^\\d{10,11}$", message = "휴대폰 번호는 숫자만 10자리 또는 11자리여야 합니다.")
     private String phoneNumber;
