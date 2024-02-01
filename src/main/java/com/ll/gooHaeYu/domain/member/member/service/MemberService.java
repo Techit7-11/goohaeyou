@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -49,14 +51,12 @@ public class MemberService {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 
-        return jwtTokenProvider.createJwt(member.getUsername());
+        return jwtTokenProvider.generateToken(member, Duration.ofHours(1));
     }
 
-    public Member getMember(String username){
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(()->
-                        new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        return member;
+    public Member getMember(String username) {
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     public MemberDto findByUsername(String username) {

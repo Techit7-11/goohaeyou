@@ -26,6 +26,6 @@ public class TokenService {
         Long memberId = refreshTokenService.findByRefreshToken(refreshToken).getMemberId();
         Member member = memberService.findById(memberId);
 
-        return jwtTokenProvider.createJwt(member.getUsername());
+        return jwtTokenProvider.generateToken(member, Duration.ofHours(1));
     }
 }
