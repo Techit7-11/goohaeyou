@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Essential;
@@ -62,9 +63,9 @@ public class JobPostService {
         return newPost.getId();
     }
 
-    public JobPostDto findById(Long id) {
-        JobPost jobPost = findByIdAndValidate(id);
-        return JobPostDto.fromEntity(jobPost);
+    public JobPostDetailDto findById(Long id) {
+        JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+        return JobPostDetailDto.fromEntity(postDetail.getJobPost(),postDetail,postDetail.getEssential());
     }
 
     public List<JobPostDto> findAll() {
