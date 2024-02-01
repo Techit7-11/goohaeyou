@@ -4,6 +4,7 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
+import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,8 +45,8 @@ public class JobPostController {
 
     @GetMapping
     @Operation(summary = "구인공고 글 목록 가져오기")
-    public ResponseEntity<List<JobPostDto>> findAllPost() {
-        return ResponseEntity.ok(jobPostService.findAll());
+    public RsData<List<JobPostDto>> findAllPost() {
+        return RsData.of(jobPostService.findAll());
     }
 
     @GetMapping("/{id}")

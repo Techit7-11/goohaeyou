@@ -129,8 +129,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["AuthAndMakeTokensResponse"];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     JoinForm: {
       username: string;
@@ -161,6 +161,12 @@ export interface components {
       author: string;
       title: string;
       location: string;
+      /** Format: int64 */
+      commentsCount: number;
+      /** Format: int64 */
+      applicationCount: number;
+      /** Format: int64 */
+      interestsCount: number;
       createdAt?: string;
       closed?: boolean;
     };
@@ -174,6 +180,15 @@ export interface components {
       /** Format: date-time */
       createdAt?: string;
       approve?: boolean;
+    };
+    RsDataListJobPostDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JobPostDto"][];
+      success?: boolean;
+      fail?: boolean;
     };
     JobPostDetailDto: {
       /** Format: int64 */
@@ -440,7 +455,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["JobPostDto"][];
+          "*/*": components["schemas"]["RsDataListJobPostDto"];
         };
       };
     };
