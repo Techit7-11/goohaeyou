@@ -50,7 +50,7 @@ public class MemberService {
         return newMember.getId();
     }
 
-    public AuthAndMakeTokensResponse login(LoginForm form) {
+    public String  login(LoginForm form) {
         Member member = getMember(form.getUsername());
 
         if (!bCryptPasswordEncoder.matches(form.getPassword(), member.getPassword())) {

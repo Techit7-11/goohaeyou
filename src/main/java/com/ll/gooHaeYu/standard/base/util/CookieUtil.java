@@ -19,8 +19,18 @@ public class CookieUtil {
     // 쿠키의 이름을 입력받아 쿠키 삭제
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
         Cookie[] cookies = request.getCookies();
+
         if (cookies == null) {
             return;
+        }
+
+        for (Cookie cookie : cookies) {
+            if (name.equals(cookie.getName())) {
+                cookie.setValue("");
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.global.config;
 
 import com.ll.gooHaeYu.domain.member.member.repository.RefreshTokenRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.global.security.CustomLogoutSuccessHandler;
 import com.ll.gooHaeYu.global.security.CustomUserDetailsService;
 import com.ll.gooHaeYu.global.security.JwtFilter;
 import com.ll.gooHaeYu.global.security.JwtTokenProvider;
@@ -76,7 +77,8 @@ public class SecurityConfig {
                 })
                 .logout(logout -> {
                     logout
-                            .logoutSuccessUrl("/login");
+                            .logoutSuccessUrl("/login")
+                            .logoutSuccessHandler(new CustomLogoutSuccessHandler());
                 })
                 .exceptionHandling(exceptionHandling -> {
                     exceptionHandling

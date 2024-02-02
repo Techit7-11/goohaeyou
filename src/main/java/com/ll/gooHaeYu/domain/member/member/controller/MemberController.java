@@ -41,7 +41,7 @@ public class MemberController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인, accessToken 쿠키 생성됨")
-    public RsData<AuthAndMakeTokensResponse> login(@RequestBody @Valid LoginForm form) {
+    public RsData<String> login(@RequestBody @Valid LoginForm form) {
         return RsData.of(memberService.login(form));
     }
 
