@@ -80,4 +80,13 @@ public class JobPostController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/deadline")
+    @Operation(summary = "공고 마감")
+    public ResponseEntity<Void> deadline(@AuthenticationPrincipal MemberDetails memberDetails,
+                                         @PathVariable(name = "id") Long id) {
+        jobPostService.deadline(memberDetails.getUsername(), id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
