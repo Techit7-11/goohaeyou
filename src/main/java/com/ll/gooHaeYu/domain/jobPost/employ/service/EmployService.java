@@ -5,12 +5,13 @@ import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.global.exception.CustomException;
-import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,6 @@ public class EmployService {
     }
 
     public void checkPermissions (String username, String author){
-        if (!username.equals(author)) throw new CustomException(ErrorCode.NOT_ABLE);
+        if (!username.equals(author)) throw new CustomException(NOT_ABLE);
     }
 }

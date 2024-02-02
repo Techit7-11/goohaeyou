@@ -9,12 +9,14 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
-import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +53,7 @@ public class ApplicationService {
 
     public Application findByIdAndValidate(Long id) {
         return applicationRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
+                .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
     }
 
     @Transactional
@@ -59,7 +61,7 @@ public class ApplicationService {
         Application application = findByIdAndValidate(id);
 
         if (!canEditApplication(username, application.getMember().getUsername()))
-            throw new CustomException(ErrorCode.NOT_ABLE);
+            throw new CustomException(NOT_ABLE);
 
         application.update(form.getBody());
     }
@@ -73,7 +75,7 @@ public class ApplicationService {
         Application application = findByIdAndValidate(id);
 
         if (!canEditApplication(username, application.getMember().getUsername()))
-            throw new CustomException(ErrorCode.NOT_ABLE);
+            throw new CustomException(NOT_ABLE);
 
         application.getJobPostDetail().getJobPost().decreaseApplicationsCount();
         applicationRepository.deleteById(id);
