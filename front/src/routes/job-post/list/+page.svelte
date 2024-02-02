@@ -4,7 +4,7 @@
     async function load() {
         const { data } = await rq.apiEndPoints().GET('/api/job-posts', {});
         
-        return data!;
+        return data;
     }
 </script>
 

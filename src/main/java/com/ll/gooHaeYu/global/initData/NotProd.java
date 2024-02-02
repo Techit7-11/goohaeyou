@@ -78,6 +78,7 @@ public class NotProd {
                     JobPostForm.Register postRegister = JobPostForm.Register.builder()
                             .title("구인공고 제목" + i)
                             .body("구인공고 내용" + i)
+                            .location("서울특별시 광진구 천호대로124길")
                             .build();
 
                     jobPostService.writePost("testUser1", postRegister);
