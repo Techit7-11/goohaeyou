@@ -2,6 +2,8 @@ package com.ll.gooHaeYu.domain.member.member.dto;
 
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,19 +13,19 @@ import java.time.LocalDate;
 @Builder
 @Getter
 public class MemberDto {
-    @NonNull
+    @NotNull
     private Long id;
-    @NonNull
+    @NotBlank
     private String username;
     @NonNull
     private Gender gender;
-    @NonNull
+    @NotBlank
     private String location;
-    @NonNull
+    @NotNull
     private LocalDate birth;
-    @NonNull
+    @NotBlank
     private String name;
-    @NonNull
+    @NotBlank
     private String phoneNumber;
 
     public static MemberDto fromEntity(Member member) {

@@ -38,6 +38,7 @@ public class ApplicationService {
                 .body(form.getBody())
                 .approve(null)
                 .build();
+
         postDetail.getApplications().add(newApplication);
         postDetail.getJobPost().increaseApplicationsCount();
         applicationRepository.save(newApplication);
