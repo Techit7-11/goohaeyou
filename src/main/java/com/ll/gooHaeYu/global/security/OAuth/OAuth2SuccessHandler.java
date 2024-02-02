@@ -24,7 +24,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
-    public static final String REDIRECT_PATH = "/api/jop-Posts";
+    public static final String REDIRECT_PATH = "/api/job-posts";
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -48,10 +48,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    private void saveRefreshToken(Long memberId, String newRefreshToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(memberId)
+    private void saveRefreshToken(Long userId, String newRefreshToken) {
+        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
                 .map(entity -> entity.update(newRefreshToken))
-                .orElse(new RefreshToken(memberId, newRefreshToken));
+                .orElse(new RefreshToken(userId, newRefreshToken));
 
         refreshTokenRepository.save(refreshToken);
     }

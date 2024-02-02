@@ -29,12 +29,15 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
     // TODO username(=id)를 업데이트 하고 있지만, 추후 업데이트할 내용 변경 필요
     private Member saveOrUpdate(OAuth2User oAuth2User) {
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        String username = (String) attributes.get("username");
-        Member member = memberRepository.findByUsername(username)
-                .map(entity -> entity.OauthUpdate(username))
-                .orElse(Member.builder()
-                        .username(username)
+        String email = (String) attributes.get("email");
+        Member member = memberRepository.findByUsername(email)
+                .map(entity -> {
+                    return entity.OauthUpdate(email);
+                })
+                .orElseGet(() -> Member.builder()
+                        .username(email)
                         .build());
         return memberRepository.save(member);
     }
+
 }

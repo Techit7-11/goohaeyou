@@ -23,7 +23,7 @@ public class TokenService {
             throw new CustomException(ErrorCode.TOKEN_NOT_FOUND);
         }
 
-        Long memberId = refreshTokenService.findByRefreshToken(refreshToken).getMemberId();
+        Long memberId = refreshTokenService.findByRefreshToken(refreshToken).getUserId();
         Member member = memberService.findById(memberId);
 
         return jwtTokenProvider.generateToken(member, Duration.ofHours(1));
