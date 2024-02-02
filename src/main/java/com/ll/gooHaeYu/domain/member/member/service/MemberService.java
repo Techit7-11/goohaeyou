@@ -1,15 +1,15 @@
 package com.ll.gooHaeYu.domain.member.member.service;
 
-import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
-import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
-import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
-import com.ll.gooHaeYu.domain.member.member.dto.MemberForm;
+import com.ll.gooHaeYu.domain.member.member.dto.*;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
+import com.ll.gooHaeYu.global.config.AppConfig;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
 import com.ll.gooHaeYu.global.security.JwtTokenProvider;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +23,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final HttpServletResponse response;
 
     @Transactional
     public Long join(JoinForm form) {
@@ -47,14 +48,25 @@ public class MemberService {
         return newMember.getId();
     }
 
-    public String login(LoginForm form) {
+    public AuthAndMakeTokensResponse login(LoginForm form) {
         Member member = getMember(form.getUsername());
 
         if (!bCryptPasswordEncoder.matches(form.getPassword(), member.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 
-        return jwtTokenProvider.createJwt(member.getUsername());
+        String accessToken = jwtTokenProvider.createJwt(member.getUsername());
+        Cookie cookie = new Cookie("accessToken", accessToken);
+        cookie.setPath("/");
+        cookie.setDomain(AppConfig.getSiteCookieDomain());
+        //cookie.setMaxAge();
+        response.addCookie(cookie);
+
+        return AuthAndMakeTokensResponse.builder()
+                .memberDto(MemberDto.fromEntity(member))
+                .accessToken(accessToken)
+                .refreshToken(null)
+                .build();
     }
 
     public Member getMember(String username){

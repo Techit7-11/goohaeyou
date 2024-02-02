@@ -77,6 +77,10 @@ class Rq {
 		};
 	}
 
+	public setLogined(member: components['schemas']['MemberDto']) {
+		Object.assign(this.member, member);
+	}
+
 	// API END POINTS
 	public apiEndPoints() {
 		return createClient<paths>({
@@ -106,10 +110,6 @@ class Rq {
 
 	public msgError(msg: string) {
 		window.alert(msg);
-	}
-
-	public setLogined(member: components['schemas']['MemberDto']) {
-		Object.assign(this.member, member);
 	}
 
 	public setLogout() {

@@ -6,11 +6,9 @@ import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentDto;
 import com.ll.gooHaeYu.domain.jobPost.comment.service.CommentService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
-import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
-import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
-import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
-import com.ll.gooHaeYu.domain.member.member.dto.MemberForm;
+import com.ll.gooHaeYu.domain.member.member.dto.*;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,10 +40,9 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    @Operation(summary = "로그인")
-    public ResponseEntity<String> login(@RequestBody @Valid LoginForm form) {
-        String token = memberService.login(form);
-        return ResponseEntity.ok(token);
+    @Operation(summary = "로그인, accessToken 쿠키 생성됨")
+    public RsData<AuthAndMakeTokensResponse> login(@RequestBody @Valid LoginForm form) {
+        return RsData.of(memberService.login(form));
     }
 
     @GetMapping

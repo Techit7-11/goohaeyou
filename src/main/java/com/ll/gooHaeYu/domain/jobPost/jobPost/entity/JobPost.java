@@ -24,13 +24,13 @@ public class JobPost extends BaseTimeEntity {
     private Member member;
 
     @Setter(PROTECTED)
-    private long commentsCount;
+    private long commentsCount = 0;
 
     @Setter(PROTECTED)
-    private long applicationCount;
+    private long applicationCount = 0;
 
     @Setter(PROTECTED)
-    private long interestsCount;
+    private long interestsCount = 0;
 
     private String title;
 
