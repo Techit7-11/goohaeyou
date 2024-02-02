@@ -3,6 +3,7 @@ package com.ll.gooHaeYu.domain.application.application.controller;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationForm;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
+import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,18 +24,18 @@ public class ApplicationController {
 
     @PostMapping("/{id}")
     @Operation(summary = "지원서 작성")
-    public ResponseEntity<String> writeApplication(@AuthenticationPrincipal MemberDetails memberDetails,
+    public RsData<URI> writeApplication(@AuthenticationPrincipal MemberDetails memberDetails,
                                                    @PathVariable(name = "id") Long id,
                                                    @Valid @RequestBody ApplicationForm.Register form) {
         Long ApplicationId = applicationService.writeApplication(memberDetails.getUsername(), id, form);
 
-        return ResponseEntity.created(URI.create("/api/application/" + ApplicationId)).build();
+        return RsData.of("201", "CREATE", URI.create("/api/application/" + ApplicationId));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "지원서 상세 내용")
-    public ResponseEntity<ApplicationDto> detailApplication(@PathVariable(name = "id") Long id) {
-        return  ResponseEntity.ok(applicationService.findById(id));
+    public RsData<ApplicationDto> detailApplication(@PathVariable(name = "id") Long id) {
+        return  RsData.of(applicationService.findById(id));
     }
 
     @PutMapping("/{id}")
