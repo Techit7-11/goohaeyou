@@ -1,5 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
+import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.application.application.repository.ApplicationRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
@@ -11,7 +13,6 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.EssentialRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostDetailRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
-import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
@@ -176,5 +177,23 @@ public class JobPostService {
         JobPost jobPost = jobPostRepository.findById(jobPostId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
         jobPost.increaseViewCount();
+    }
+
+    @Transactional
+    public void deadline(String username, Long postId) {
+        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
+        if (!canEditPost(username,postDetail.getAuthor())) {
+            throw new CustomException(ErrorCode.NOT_ABLE);
+        }
+
+        List<Application> applicationList = postDetail.getApplications().stream()
+                .filter(application -> application.getApprove() != null && !application.getApprove())
+                .collect(Collectors.toList());
+
+        for (Application application : applicationList) {
+            postDetail.getApplications().remove(application);
+        }
+//        applicationRepository.deleteAll(applicationList);
+        postDetail.getJobPost().close();
     }
 }
