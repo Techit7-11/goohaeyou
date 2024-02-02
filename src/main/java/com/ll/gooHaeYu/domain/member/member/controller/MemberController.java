@@ -34,9 +34,9 @@ public class MemberController {
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
-    public ResponseEntity<String> join(@RequestBody @Valid JoinForm form) {
+    public RsData<URI> join(@RequestBody @Valid JoinForm form) {
         Long userId = memberService.join(form);
-        return ResponseEntity.created(URI.create("/api/member/join" + userId)).build();
+        return RsData.of("201", "CREATE", URI.create("/api/member/join" + userId));
     }
 
     @PostMapping("/login")
@@ -47,8 +47,8 @@ public class MemberController {
 
     @GetMapping
     @Operation(summary = "내 정보 조회")
-    public ResponseEntity<MemberDto> detailMember(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return  ResponseEntity.ok(memberService.findByUsername(memberDetails.getUsername()));
+    public RsData<MemberDto> detailMember(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return  RsData.of(memberService.findByUsername(memberDetails.getUsername()));
     }
 
     @PutMapping
@@ -62,26 +62,26 @@ public class MemberController {
 
     @GetMapping("/myposts")
     @Operation(summary = "내 공고 조회")
-    public ResponseEntity<List<JobPostDto>> detailMyPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return  ResponseEntity.ok(jobPostService.findByUsername(memberDetails.getUsername()));
+    public RsData<List<JobPostDto>> detailMyPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return  RsData.of(jobPostService.findByUsername(memberDetails.getUsername()));
     }
 
 
     @GetMapping("/myapplications")
     @Operation(summary = "내 지원서 조회")
-    public ResponseEntity<List<ApplicationDto>> detailMyApplications(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return  ResponseEntity.ok(applicationService.findByUsername(memberDetails.getUsername()));
+    public RsData<List<ApplicationDto>> detailMyApplications(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return  RsData.of(applicationService.findByUsername(memberDetails.getUsername()));
     }
 
     @GetMapping("/mycomments")
     @Operation(summary = "내 댓글 조회")
-    public ResponseEntity<List<CommentDto>> detailMyComments(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return  ResponseEntity.ok(commentService.findByUsername(memberDetails.getUsername()));
+    public RsData<List<CommentDto>> detailMyComments(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return  RsData.of(commentService.findByUsername(memberDetails.getUsername()));
     }
 
     @GetMapping("/myinterest")
     @Operation(summary = "내 관심 공고 조회")
-    public ResponseEntity<List<JobPostDto>> detailMyInterestingPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return ResponseEntity.ok(jobPostService.findByInterestAndUsername(memberDetails.getId()));
+    public RsData<List<JobPostDto>> detailMyInterestingPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return RsData.of(jobPostService.findByInterestAndUsername(memberDetails.getId()));
     }
 }

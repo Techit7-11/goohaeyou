@@ -25,11 +25,11 @@ public class JobPostController {
 
     @PostMapping
     @Operation(summary = "구인공고 작성")
-    public ResponseEntity<String> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
+    public RsData<URI> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
                                             @Valid @RequestBody JobPostForm.Register form) {
         Long jobPostId = jobPostService.writePost(memberDetails.getUsername(), form);
 
-        return ResponseEntity.created(URI.create("/api/job-posts/" + jobPostId)).build();
+        return RsData.of("201", "CREATE", URI.create("/api/job-posts/" + jobPostId));
     }
 
     @PutMapping("/{id}")

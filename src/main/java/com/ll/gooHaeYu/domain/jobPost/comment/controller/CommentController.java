@@ -3,6 +3,7 @@ package com.ll.gooHaeYu.domain.jobPost.comment.controller;
 import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentDto;
 import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentForm;
 import com.ll.gooHaeYu.domain.jobPost.comment.service.CommentService;
+import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,19 +25,19 @@ public class CommentController {
 
     @GetMapping
     @Operation(summary = "해당 공고에 달린 댓글 목록")
-    public ResponseEntity<List<CommentDto>> findByPostId(@PathVariable Long postId) {
+    public RsData<List<CommentDto>> findByPostId(@PathVariable Long postId) {
 
-        return ResponseEntity.ok(commentService.findByPostId(postId));
+        return RsData.of(commentService.findByPostId(postId));
     }
 
     @PostMapping("/comment")
     @Operation(summary = "댓글 작성")
-    public ResponseEntity<String> write (@AuthenticationPrincipal MemberDetails memberDetails,
+    public RsData<URI> write (@AuthenticationPrincipal MemberDetails memberDetails,
                                          @PathVariable("postId") Long postId,
                                          @Valid @RequestBody CommentForm.Register form){
         Long jobPostId = commentService.writeComment(postId,memberDetails.getUsername(),form);
 
-        return ResponseEntity.created(URI.create("/api/job-posts/" + jobPostId)).build();
+        return RsData.of("201", "CREATE", URI.create("/api/job-posts/" + jobPostId));
     }
 
     @PutMapping("/comment/{commentId}")
@@ -52,7 +53,7 @@ public class CommentController {
 
     @DeleteMapping("/comment/{commentId}")
     @Operation(summary = "댓글 삭제")
-    public ResponseEntity delete (@AuthenticationPrincipal MemberDetails memberDetails,
+    public ResponseEntity<Void> delete (@AuthenticationPrincipal MemberDetails memberDetails,
                                   @PathVariable("postId") Long postId,
                                   @PathVariable("commentId") Long commentId) {
         commentService.deleteComment(memberDetails.getUsername(), postId, commentId);
