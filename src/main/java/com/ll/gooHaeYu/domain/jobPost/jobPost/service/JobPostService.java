@@ -1,6 +1,5 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Interest;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +34,7 @@ public class JobPostService {
         JobPost newPost = JobPost.builder()
                 .member(memberService.getMember(username))
                 .title(form.getTitle())
+                .location(form.getLocation())
                 .build();
 
         JobPostDetail postDetail = JobPostDetail.builder()
@@ -48,9 +49,9 @@ public class JobPostService {
         return newPost.getId();
     }
 
-    public JobPostDetailDto findById(Long id) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
-        return JobPostDetailDto.fromEntity(postDetail.getJobPost(),postDetail);
+    public JobPostDto findById(Long id) {
+        JobPost jobPost = findByIdAndValidate(id);
+        return JobPostDto.fromEntity(jobPost);
     }
 
     public List<JobPostDto> findAll() {
@@ -145,5 +146,13 @@ public class JobPostService {
         Member member = memberService.getMember(username);
 
         return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
+    }
+
+    public List<JobPostDto> findByInterestAndUsername(Long memberId) {
+        return jobPostdetailRepository.findByInterestsMemberId(memberId)
+                .stream()
+                .map(JobPostDetail::getJobPost)
+                .map(JobPostDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }

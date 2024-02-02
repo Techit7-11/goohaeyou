@@ -25,15 +25,19 @@ public class Member extends BaseTimeEntity {
 
     private String password;
 
+    private String name;
+
+    private String phoneNumber;   // 01012341234
+
     @Enumerated(EnumType.STRING)
     private Role role = Role.GUEST;
 
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private Gender gender = Gender.UNDEFINED;
 
     private String location;
 
-    private LocalDate birth;
+    private LocalDate birth;  // yyyy-MM-dd
 
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {

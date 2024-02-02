@@ -18,6 +18,15 @@ public class JobPostDto {
     private String author;
     @NotNull
     private String title;
+    @NotNull
+    private String location;
+    @NotNull
+    private long commentsCount;
+    @NotNull
+    private long applicationCount;
+    @NotNull
+    private long interestsCount;
+
     private boolean isClosed = false; // 기본값 설정
     @NonNull
     private String createdAt;
@@ -29,6 +38,10 @@ public class JobPostDto {
                 .id(jobPost.getId())
                 .author(jobPost.getMember().getUsername())
                 .title(jobPost.getTitle())
+                .location(jobPost.getLocation())
+                .commentsCount(jobPost.getCommentsCount())
+                .applicationCount(jobPost.getApplicationCount())
+                .interestsCount(jobPost.getInterestsCount())
                 .isClosed(jobPost.isClosed())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .build();

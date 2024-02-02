@@ -20,8 +20,11 @@ public class MemberDto {
     @NonNull
     private String location;
     @NonNull
-
     private LocalDate birth;
+    @NonNull
+    private String name;
+    @NonNull
+    private String phoneNumber;
 
     public static MemberDto fromEntity(Member member) {
         return MemberDto.builder()
@@ -30,6 +33,8 @@ public class MemberDto {
                 .gender(member.getGender())
                 .location(member.getLocation())
                 .birth(member.getBirth())
+                .name(member.getName())
+                .phoneNumber(member.getPhoneNumber())
                 .build();
     }
 }

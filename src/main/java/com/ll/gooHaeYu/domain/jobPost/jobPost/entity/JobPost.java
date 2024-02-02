@@ -1,7 +1,5 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
-import com.ll.gooHaeYu.domain.application.application.entity.Application;
-import com.ll.gooHaeYu.domain.category.entity.Category;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -25,20 +23,18 @@ public class JobPost extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @Setter(PROTECTED)
+    private long commentsCount = 0;
 
     @Setter(PROTECTED)
-    private long commentsCount;
+    private long applicationCount = 0;
 
     @Setter(PROTECTED)
-    private long applicationCount;
-
-    @Setter(PROTECTED)
-    private long interestsCount;
+    private long interestsCount = 0;
 
     private String title;
+
+    private String location;
 
     @Column(nullable = false)
     private boolean closed = false;
