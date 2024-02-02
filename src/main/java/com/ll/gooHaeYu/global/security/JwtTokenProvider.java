@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.global.security;
 
+import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,21 +8,28 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-    @Value("${jwt.secret}")
-    private String secretKey = "secretKey";
-    static final long EXPIRED_MS = 1000 * 60 * 60;
 
-    public String createJwt(String username) {
+    private final JwtProperties jwtProperties;
+
+    public String generateToken(Member member, Duration expiredAt) {
+        Date now = new Date();
+        return createJwt(member, new Date(now.getTime() + expiredAt.toMillis()));
+    }
+
+
+    public String createJwt(Member member, Date expiry) {
+        Date now = new Date();
         return Jwts.builder()
-                .claim("username", username)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRED_MS))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .claim("username", member.getUsername())
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
 
@@ -38,7 +46,7 @@ public class JwtTokenProvider {
 
     private Claims parseClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(secretKey)
+                .setSigningKey(jwtProperties.getSecretKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

@@ -45,5 +45,3 @@ custom:
     frontUrl: "${custom.dev.frontUrl}"
     backUrl: "${custom.dev.backUrl}"
     name: NEED_TO_INPUT
-jwt:
-  secret: TEKIT711teamgooHaeyuprojectTEKIT711teamgooHaeyuproject

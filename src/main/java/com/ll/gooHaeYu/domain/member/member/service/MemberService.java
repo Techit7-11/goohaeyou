@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -48,32 +50,19 @@ public class MemberService {
         return newMember.getId();
     }
 
-    public AuthAndMakeTokensResponse login(LoginForm form) {
+    public String  login(LoginForm form) {
         Member member = getMember(form.getUsername());
 
         if (!bCryptPasswordEncoder.matches(form.getPassword(), member.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 
-        String accessToken = jwtTokenProvider.createJwt(member.getUsername());
-        Cookie cookie = new Cookie("accessToken", accessToken);
-        cookie.setPath("/");
-        cookie.setDomain(AppConfig.getSiteCookieDomain());
-        //cookie.setMaxAge();
-        response.addCookie(cookie);
-
-        return AuthAndMakeTokensResponse.builder()
-                .memberDto(MemberDto.fromEntity(member))
-                .accessToken(accessToken)
-                .refreshToken(null)
-                .build();
+        return jwtTokenProvider.generateToken(member, Duration.ofHours(1));
     }
 
-    public Member getMember(String username){
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(()->
-                        new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        return member;
+    public Member getMember(String username) {
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     public MemberDto findByUsername(String username) {
@@ -100,4 +89,10 @@ public class MemberService {
 
         return member.getUsername();
     }
+
+    public Member findById(Long userId) {
+        return memberRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
 }
