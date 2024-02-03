@@ -3,6 +3,7 @@ package com.ll.gooHaeYu.global.exception;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 @Getter
 @RequiredArgsConstructor
@@ -22,7 +23,9 @@ public enum ErrorCode {
 
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "찾을 수 없는 token 입니다."),
 
-    INVALID_LOGIN_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 로그인 요청입니다.");
+    INVALID_LOGIN_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 로그인 요청입니다."),
+
+    CANNOT_DUPLICATE_SUBMISSION(HttpStatus.CONFLICT,"중복 지원은 불가능 합니다.");
 
     private final HttpStatus status;
     private final String message;

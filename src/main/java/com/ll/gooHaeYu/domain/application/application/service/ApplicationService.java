@@ -9,6 +9,7 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,10 @@ public class ApplicationService {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(id);
 
         Member member = memberService.getMember(username);
+
+        if(doubleCheck(postDetail,member)) {
+            throw new CustomException(ErrorCode.CANNOT_DUPLICATE_SUBMISSION);
+        }
 
         Application newApplication = Application.builder()
                 .member(member)
@@ -87,5 +92,14 @@ public class ApplicationService {
         Member member = memberService.getMember(username);
 
         return ApplicationDto.toDtoList(applicationRepository.findByMemberId(member.getId()));
+    }
+
+    private boolean doubleCheck(JobPostDetail postDetail, Member member) {
+        for (Application application : postDetail.getApplications()) {
+            if (application.getMember().equals(member)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
