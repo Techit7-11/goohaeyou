@@ -25,7 +25,7 @@ public enum ErrorCode {
 
     INVALID_LOGIN_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 로그인 요청입니다."),
 
-    CANNOT_DUPLICATE_SUBMISSION(HttpStatus.CONFLICT,"중복 지원은 불가능 합니다.");
+    CANNOT_SUBMISSION(HttpStatus.CONFLICT,"지원 불가능 합니다.");
 
     private final HttpStatus status;
     private final String message;
