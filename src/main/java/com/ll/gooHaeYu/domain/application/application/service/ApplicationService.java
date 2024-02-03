@@ -30,6 +30,10 @@ public class ApplicationService {
 
         Member member = memberService.getMember(username);
 
+        if(doubleCheck(postDetail,member)) {
+            throw new CustomException(ErrorCode.CANNOT_DUPLICATE_SUBMISSION);
+        }
+
         Application newApplication = Application.builder()
                 .member(member)
                 .jobPostDetail(postDetail)
@@ -84,5 +88,14 @@ public class ApplicationService {
         Member member = memberService.getMember(username);
 
         return ApplicationDto.toDtoList(applicationRepository.findByMemberId(member.getId()));
+    }
+
+    private boolean doubleCheck(JobPostDetail postDetail, Member member) {
+        for (Application application : postDetail.getApplications()) {
+            if (application.getMember().equals(member)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

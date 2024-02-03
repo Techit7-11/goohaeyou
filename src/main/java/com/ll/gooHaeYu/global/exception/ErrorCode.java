@@ -18,7 +18,9 @@ public enum ErrorCode {
     COMMENT_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 댓글은 존재하지 않습니다."),
 
     // NOT_EDITABLE -> NOT_ABLE 더 넓은 범위에 사용하기 위해 변경
-    NOT_ABLE(HttpStatus.FORBIDDEN,"권한이 없습니다.");
+    NOT_ABLE(HttpStatus.FORBIDDEN,"권한이 없습니다."),
+
+    CANNOT_DUPLICATE_SUBMISSION(HttpStatus.CONFLICT,"중복 지원은 불가능 합니다.");
 
     private final HttpStatus status;
     private final String message;
