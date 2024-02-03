@@ -30,9 +30,7 @@ public class ApplicationService {
 
         Member member = memberService.getMember(username);
 
-        if(doubleCheck(postDetail,member)) {
-            throw new CustomException(ErrorCode.CANNOT_DUPLICATE_SUBMISSION);
-        }
+        canWrite(postDetail, member);
 
         Application newApplication = Application.builder()
                 .member(member)
@@ -90,12 +88,16 @@ public class ApplicationService {
         return ApplicationDto.toDtoList(applicationRepository.findByMemberId(member.getId()));
     }
 
-    private boolean doubleCheck(JobPostDetail postDetail, Member member) {
-        for (Application application : postDetail.getApplications()) {
+    private void canWrite(JobPostDetail postDetail, Member member) {
+        if (postDetail.getAuthor().equals(member.getUsername())) { // 자신의 공고에 지원 불가능
+            throw new CustomException(ErrorCode.CANNOT_SUBMISSION);
+        }
+        for (Application application : postDetail.getApplications()) { // 지원서 중복 불가능
             if (application.getMember().equals(member)) {
-                return true;
+                throw new CustomException(ErrorCode.CANNOT_SUBMISSION);
             }
         }
-        return false;
+
+
     }
 }
