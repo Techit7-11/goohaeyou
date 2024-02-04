@@ -7,9 +7,11 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -47,5 +49,13 @@ public class JobPostDto {
                 .map(JobPostDto::fromEntity)
                 .toList();
         return new PageImpl<>(jobPostDtos, jobPosts.getPageable(), jobPosts.getTotalElements());
+    }
+
+    public static Page<JobPostDto> toDtoListPage(Page<JobPost> jobPosts) {
+        List<JobPostDto> jobPostDtos = jobPosts.stream()
+                .map(JobPostDto::fromEntity)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(jobPostDtos, PageRequest.of(jobPosts.getNumber(), jobPosts.getSize()), jobPosts.getTotalElements());
     }
 }

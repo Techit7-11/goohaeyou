@@ -3,19 +3,24 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
+import com.ll.gooHaeYu.global.config.AppConfig;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "JobPost", description = "구인공고 API")
@@ -86,18 +91,24 @@ public class JobPostController {
     @GetMapping("/sort")
     @Operation(summary = "구인공고 글 목록 정렬")
     public ResponseEntity<Page<JobPostDto>> findAllPostSort(
-            @RequestParam(value="page", defaultValue="0") int page,
-            @RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy,
-            @RequestParam(name = "sortOrder", defaultValue = "desc") String sortOrder
+            @RequestParam(value="page", defaultValue="1") int page,
+            @RequestParam(name = "sortBy", defaultValue = "createdAt") List<String> sortBys,
+            @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders
     ) {
-        Sort.Direction direction = sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        List<Sort.Order> sorts = new ArrayList<>();
 
-        Sort sort = Sort.by(
-                new Sort.Order(direction, sortBy),
-                Sort.Order.asc("createdAt") // Add more as needed
-        );
+        for (int i = 0; i < sortBys.size(); i++) {
+            String sortBy = sortBys.get(i);
+            String sortOrder = i < sortOrders.size() ? sortOrders.get(i) : "desc"; // 기본값은 desc
+            sorts.add(new Sort.Order(Sort.Direction.fromString(sortOrder), sortBy));
+        }
 
-        Page<JobPostDto> jobPosts = jobPostService.findAllSort(page, sort);
-        return ResponseEntity.ok(jobPosts);
+        Pageable pageable = PageRequest.of(page - 1, AppConfig.getBasePageSize(), Sort.by(sorts));
+        System.out.println(sortOrders);
+
+        Page<JobPost> itemPage = jobPostService.findBySort(pageable);
+        Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
+
+        return ResponseEntity.ok(_itemPage);
     }
 }

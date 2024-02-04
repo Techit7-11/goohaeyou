@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface JobPostRepository extends JpaRepository<JobPost, Long> {
+public interface JobPostRepository extends JpaRepository<JobPost, Long>, JobPostRepositoryCustom {
     List<JobPost> findByMemberId(Long id);
     Page<JobPost> findAll(Pageable pageable);
 }
