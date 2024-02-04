@@ -4,6 +4,7 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.RefreshToken;
 import com.ll.gooHaeYu.domain.member.member.repository.RefreshTokenRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.global.config.AppConfig;
 import com.ll.gooHaeYu.global.security.JwtTokenProvider;
 import com.ll.gooHaeYu.standard.base.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,8 +24,8 @@ import java.time.Duration;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(1);
-    public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(1);
-    public static final String REDIRECT_PATH = "/api/job-posts";
+    public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(10);  // 임시로 10시간으로 설정 (나중에 1시간으로 돌리기)
+    public static final String REDIRECT_PATH = AppConfig.getSiteFrontUrl();
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -34,7 +35,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        Member member = memberService.getMember((String) oAuth2User.getAttributes().get("username"));
+        Member member = memberService.getMember((String) oAuth2User.getAttributes().get("email"));
 
         String refreshToken = jwtTokenProvider.generateToken(member, REFRESH_TOKEN_DURATION);
         saveRefreshToken(member.getId(), refreshToken);
@@ -44,7 +45,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String targetUrl = getTargetUrl(accessToken);
 
         clearAuthenticationAttributes(request, response);
-
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
@@ -70,7 +70,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private String getTargetUrl(String token) {
         return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
-                .queryParam("token", token)
+                .queryParam("access_token", token)
                 .build()
                 .toUriString();
     }

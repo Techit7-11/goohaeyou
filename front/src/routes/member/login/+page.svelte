@@ -81,6 +81,16 @@
     .login-button:hover {
         background-color: #444; /* 호버 시 배경색 변경 */
     }
+
+    .button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }   
+
+    .google-login {
+        margin-right: 40px; /* 구글 로그인 버튼과 로그인 버튼 사이 간격 조절 */
+    }
 </style>
 
 <div class="login-container">
@@ -94,6 +104,11 @@
             <label for="password">비밀번호</label>
             <input type="password" id="password" name="password" placeholder="비밀번호" required />
         </div>
-        <button class="login-button" type="submit">로그인</button>
+        <div class="button-group">
+            <button class="login-button" type="submit">로그인</button>
+            <a href={rq.getGoogleLoginUrl()} class="google-login">
+                <img src="/google.png" alt="구글 로그인"/>
+            </a>
+        </div>
     </form>
 </div>

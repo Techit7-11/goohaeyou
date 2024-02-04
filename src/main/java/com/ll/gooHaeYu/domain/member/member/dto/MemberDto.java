@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 
 import java.time.LocalDate;
 
@@ -17,15 +16,10 @@ public class MemberDto {
     private Long id;
     @NotBlank
     private String username;
-    @NonNull
     private Gender gender;
-    @NotBlank
     private String location;
-    @NotNull
     private LocalDate birth;
-    @NotBlank
     private String name;
-    @NotBlank
     private String phoneNumber;
 
     public static MemberDto fromEntity(Member member) {
