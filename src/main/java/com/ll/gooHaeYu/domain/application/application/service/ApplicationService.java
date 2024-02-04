@@ -14,10 +14,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
+
+import static com.ll.gooHaeYu.domain.member.member.entity.type.Gender.UNDEFINED;
 
 @Service
 @RequiredArgsConstructor
@@ -93,9 +96,20 @@ public class ApplicationService {
     }
 
     private void canWrite(JobPostDetail postDetail, Member member) {
+        if (postDetail.getEssential().getMinAge()>LocalDateTime.now().plusYears(1).getYear()-member.getBirth().getYear()){
+            throw new CustomException(ErrorCode.CANNOT_SUBMISSION);
+        }
+
+        if (postDetail.getEssential().getGender()!=UNDEFINED){
+            if (!postDetail.getEssential().getGender().equals(member.getGender())){
+                throw new CustomException(ErrorCode.CANNOT_SUBMISSION);
+            }
+        }
+
         if (postDetail.getAuthor().equals(member.getUsername())) { // 자신의 공고에 지원 불가능
             throw new CustomException(ErrorCode.CANNOT_SUBMISSION);
         }
+
         for (Application application : postDetail.getApplications()) { // 지원서 중복 불가능
             if (application.getMember().equals(member)) {
                 throw new CustomException(ErrorCode.CANNOT_SUBMISSION);
