@@ -17,6 +17,10 @@ export interface paths {
     /** 내 정보 수정 */
     put: operations["modifyMember"];
   };
+  "/api/member/social": {
+    /** 최초 소셜로그인 - 필수 회원정보 입력 */
+    put: operations["updateSocialMember"];
+  };
   "/api/job-posts/{id}": {
     /** 구인공고 단건 조회 */
     get: operations["showDetailPost"];
@@ -35,12 +39,15 @@ export interface paths {
     /** 지원서 삭제 */
     delete: operations["deleteApplication"];
   };
+  "/api/token": {
+    post: operations["createNewAccessToken"];
+  };
   "/api/post-comment/{postId}/comment": {
     /** 댓글 작성 */
     post: operations["write"];
   };
   "/api/member/login": {
-    /** 로그인 */
+    /** 로그인, accessToken 쿠키 생성됨 */
     post: operations["login"];
   };
   "/api/member/join": {
@@ -61,6 +68,10 @@ export interface paths {
   };
   "/api/employ/{postId}/{applicationIds}": {
     post: operations["approve"];
+  };
+  "/member/socialLogin/{providerTypeCode}": {
+    /** 소셜 로그인 */
+    get: operations["socialLogin"];
   };
   "/api/post-comment/{postId}": {
     /** 해당 공고에 달린 댓글 목록 */
@@ -102,9 +113,73 @@ export interface components {
       birth?: string;
       password?: string;
     };
+    SocialProfileForm: {
+      name: string;
+      phoneNumber: string;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location: string;
+      /** Format: date */
+      birth: string;
+    };
+    MemberDto: {
+      /** Format: int64 */
+      id: number;
+      username: string;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location?: string;
+      /** Format: date */
+      birth?: string;
+      name?: string;
+      phoneNumber?: string;
+    };
+    RsDataMemberDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["MemberDto"];
+      success?: boolean;
+      fail?: boolean;
+    };
+    CreateAccessTokenRequest: {
+      refreshToken?: string;
+    };
+    CreateAccessTokenResponse: {
+      accessToken?: string;
+    };
+    RsDataCreateAccessTokenResponse: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["CreateAccessTokenResponse"];
+      success?: boolean;
+      fail?: boolean;
+    };
+    RsDataURI: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      /** Format: uri */
+      data?: string;
+      success?: boolean;
+      fail?: boolean;
+    };
     LoginForm: {
       username: string;
       password: string;
+    };
+    RsDataString: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: string;
+      success?: boolean;
+      fail?: boolean;
     };
     JoinForm: {
       username: string;
@@ -119,27 +194,24 @@ export interface components {
     };
     CommentDto: {
       /** Format: int64 */
-      id?: number;
+      id: number;
       /** Format: int64 */
-      jobPostId?: number;
-      author?: string;
-      content?: string;
+      jobPostId: number;
+      author: string;
+      content: string;
       /** Format: date-time */
-      createAt?: string;
+      createAt: string;
       /** Format: date-time */
-      modifyAt?: string;
+      modifyAt: string;
     };
-    MemberDto: {
-      /** Format: int64 */
-      id?: number;
-      username?: string;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location?: string;
-      /** Format: date */
-      birth?: string;
-      name?: string;
-      phoneNumber?: string;
+    RsDataListCommentDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["CommentDto"][];
+      success?: boolean;
+      fail?: boolean;
     };
     JobPostDto: {
       /** Format: int64 */
@@ -147,8 +219,23 @@ export interface components {
       author: string;
       title: string;
       location: string;
+      /** Format: int64 */
+      commentsCount: number;
+      /** Format: int64 */
+      applicationCount: number;
+      /** Format: int64 */
+      interestsCount: number;
       createdAt?: string;
       closed?: boolean;
+    };
+    RsDataListJobPostDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JobPostDto"][];
+      success?: boolean;
+      fail?: boolean;
     };
     ApplicationDto: {
       /** Format: int64 */
@@ -161,16 +248,32 @@ export interface components {
       createdAt?: string;
       approve?: boolean;
     };
-    JobPostDetailDto: {
-      /** Format: int64 */
-      id: number;
-      author: string;
-      title: string;
-      body: string;
-      location: string;
-      createdAt?: string;
-      modifyAt?: string;
-      closed?: boolean;
+    RsDataListApplicationDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["ApplicationDto"][];
+      success?: boolean;
+      fail?: boolean;
+    };
+    RsDataJobPostDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JobPostDto"];
+      success?: boolean;
+      fail?: boolean;
+    };
+    RsDataApplicationDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["ApplicationDto"];
+      success?: boolean;
+      fail?: boolean;
     };
   };
   responses: never;
@@ -217,9 +320,7 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: {
-          "*/*": string;
-        };
+        content: never;
       };
     };
   };
@@ -229,7 +330,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["MemberDto"];
+          "*/*": components["schemas"]["RsDataMemberDto"];
         };
       };
     };
@@ -248,6 +349,22 @@ export interface operations {
       };
     };
   };
+  /** 최초 소셜로그인 - 필수 회원정보 입력 */
+  updateSocialMember: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SocialProfileForm"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataMemberDto"];
+        };
+      };
+    };
+  };
   /** 구인공고 단건 조회 */
   showDetailPost: {
     parameters: {
@@ -259,7 +376,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["JobPostDetailDto"];
+          "*/*": components["schemas"]["RsDataJobPostDto"];
         };
       };
     };
@@ -308,7 +425,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["ApplicationDto"];
+          "*/*": components["schemas"]["RsDataApplicationDto"];
         };
       };
     };
@@ -348,7 +465,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["RsDataURI"];
         };
       };
     };
@@ -364,6 +481,21 @@ export interface operations {
       /** @description OK */
       200: {
         content: never;
+      };
+    };
+  };
+  createNewAccessToken: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateAccessTokenRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataCreateAccessTokenResponse"];
+        };
       };
     };
   };
@@ -383,12 +515,12 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["RsDataURI"];
         };
       };
     };
   };
-  /** 로그인 */
+  /** 로그인, accessToken 쿠키 생성됨 */
   login: {
     requestBody: {
       content: {
@@ -399,7 +531,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["RsDataString"];
         };
       };
     };
@@ -415,7 +547,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["RsDataURI"];
         };
       };
     };
@@ -426,7 +558,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["JobPostDto"][];
+          "*/*": components["schemas"]["RsDataListJobPostDto"];
         };
       };
     };
@@ -442,7 +574,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["RsDataURI"];
         };
       };
     };
@@ -489,6 +621,25 @@ export interface operations {
       };
     };
   };
+  /** 소셜 로그인 */
+  socialLogin: {
+    parameters: {
+      query: {
+        redirectUrl: string;
+      };
+      path: {
+        providerTypeCode: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
   /** 해당 공고에 달린 댓글 목록 */
   findByPostId: {
     parameters: {
@@ -500,7 +651,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["CommentDto"][];
+          "*/*": components["schemas"]["RsDataListCommentDto"];
         };
       };
     };
@@ -511,7 +662,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["JobPostDto"][];
+          "*/*": components["schemas"]["RsDataListJobPostDto"];
         };
       };
     };
@@ -522,7 +673,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["JobPostDto"][];
+          "*/*": components["schemas"]["RsDataListJobPostDto"];
         };
       };
     };
@@ -533,7 +684,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["CommentDto"][];
+          "*/*": components["schemas"]["RsDataListCommentDto"];
         };
       };
     };
@@ -544,7 +695,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["ApplicationDto"][];
+          "*/*": components["schemas"]["RsDataListApplicationDto"];
         };
       };
     };
@@ -559,7 +710,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["ApplicationDto"][];
+          "*/*": components["schemas"]["RsDataListApplicationDto"];
         };
       };
     };
