@@ -5,6 +5,9 @@ import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -41,6 +44,10 @@ public class JobPost extends BaseTimeEntity {
 
     @Column(nullable = false)
     private boolean closed = false;
+
+    @Column(nullable = false)
+    private LocalDate deadline;
+//    private LocalDateTime deadline;
 
     @OneToOne(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private JobPostDetail jobPostDetail;
