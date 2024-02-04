@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class JobPostForm {
 
     @Builder
@@ -21,6 +24,9 @@ public class JobPostForm {
         private int minAge;
 
         private Gender gender;
+
+        private LocalDate deadLine;
+//        private LocalDateTime deadLine;
     }
 
     @Builder
@@ -32,5 +38,7 @@ public class JobPostForm {
         private int minAge;
         private Gender gender;
         private Boolean closed;
+        private LocalDate deadLine;
+//        private LocalDateTime deadLine;
     }
 }

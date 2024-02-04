@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,6 +44,7 @@ public class JobPostService {
         JobPost newPost = JobPost.builder()
                 .member(memberService.getMember(username))
                 .title(form.getTitle())
+                .deadline(form.getDeadLine())
                 .build();
 
         JobPostDetail postDetail = JobPostDetail.builder()
@@ -200,5 +202,22 @@ public class JobPostService {
 //        applicationRepository.deleteAll(applicationList);
 
         postDetail.getJobPost().close();
+    }
+
+
+    public List<JobPost> findExpiredJobPosts(LocalDate currentDate) { //    ver.  LocalDate
+        return jobPostRepository.findByClosedFalseAndDeadlineBefore(currentDate);
+    }
+
+
+//    public List<JobPost> findExpiredJobPosts(LocalDateTime currentDateTime) { //    ver. LocalDateTime
+//        return jobPostRepository.findByClosedFalseAndDeadlineBefore(currentDateTime);
+//    }
+
+    @Transactional
+    public void closeJobPost(JobPost jobPost) {
+        jobPost.close();
+        jobPostRepository.save(jobPost);
+        System.out.println("실행");
     }
 }
