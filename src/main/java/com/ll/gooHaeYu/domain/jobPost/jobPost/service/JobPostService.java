@@ -22,6 +22,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,6 +82,17 @@ public class JobPostService {
         postDetail.getJobPost().update(form.getTitle(), form.getClosed());
         postDetail.update(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
+
+        // TODO : 삭제 후 알림 날리기
+        List<Application> applicationsToRemove = new ArrayList<>();
+        Iterator<Application> iterator = postDetail.getApplications().iterator();
+       while (iterator.hasNext()) {
+           Application application = iterator.next();
+           if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - application.getMember().getBirth().getYear()){
+               applicationsToRemove.add(application);
+           }
+       }
+       postDetail.getApplications().removeAll(applicationsToRemove);
     }
 
     @Transactional
