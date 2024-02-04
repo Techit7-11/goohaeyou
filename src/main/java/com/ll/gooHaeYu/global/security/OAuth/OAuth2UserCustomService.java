@@ -32,7 +32,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
         String email = (String) attributes.get("email");
         Member member = memberRepository.findByUsername(email)
                 .map(entity -> {
-                    return entity.OauthUpdate(email);
+                    return entity.oauthUpdate(email);
                 })
                 .orElseGet(() -> Member.builder()
                         .username(email)
