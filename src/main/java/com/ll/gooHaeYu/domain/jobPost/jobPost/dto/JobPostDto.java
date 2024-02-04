@@ -44,12 +44,6 @@ public class JobPostDto {
                 .toList();
     }
 
-    public static Page<JobPostDto> toDtoPage(Page<JobPost> jobPosts) {
-        List<JobPostDto> jobPostDtos = jobPosts.getContent().stream()
-                .map(JobPostDto::fromEntity)
-                .toList();
-        return new PageImpl<>(jobPostDtos, jobPosts.getPageable(), jobPosts.getTotalElements());
-    }
 
     public static Page<JobPostDto> toDtoListPage(Page<JobPost> jobPosts) {
         List<JobPostDto> jobPostDtos = jobPosts.stream()
