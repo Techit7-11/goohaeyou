@@ -1,9 +1,6 @@
 package com.ll.gooHaeYu.domain.member.member.service;
 
-import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
-import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
-import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
-import com.ll.gooHaeYu.domain.member.member.dto.MemberForm;
+import com.ll.gooHaeYu.domain.member.member.dto.*;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
@@ -95,4 +92,12 @@ public class MemberService {
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
+    @Transactional
+    public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form) {
+        Member member = getMember(username);
+
+        Member updatedMember = member.oauthDetailUpdate(form);
+
+        return MemberDto.fromEntity(updatedMember);
+    }
 }

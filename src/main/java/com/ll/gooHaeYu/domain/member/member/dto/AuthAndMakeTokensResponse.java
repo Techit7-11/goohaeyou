@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.member.member.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -9,8 +10,8 @@ import lombok.NonNull;
 public class AuthAndMakeTokensResponse {
     @NonNull
     MemberDto memberDto;
-    @NonNull
+    @NotNull
     String accessToken;
-
+    @NotNull
     String refreshToken;
 }
