@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class JobPostDto {
     private String author;
     @NotNull
     private String title;
+    private LocalDate deadLine;
     private boolean isClosed = false; // 기본값 설정
     @NonNull
     private String createdAt;
@@ -29,6 +31,7 @@ public class JobPostDto {
                 .id(jobPost.getId())
                 .author(jobPost.getMember().getUsername())
                 .title(jobPost.getTitle())
+                .deadLine(jobPost.getDeadline())
                 .isClosed(jobPost.isClosed())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .build();

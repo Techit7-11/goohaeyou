@@ -37,7 +37,6 @@ public class JobPostForm {
         private String body;
         private int minAge;
         private Gender gender;
-        private Boolean closed;
         private LocalDate deadLine;
 //        private LocalDateTime deadLine;
     }

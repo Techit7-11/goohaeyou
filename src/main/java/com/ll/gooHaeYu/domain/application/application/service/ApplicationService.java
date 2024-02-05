@@ -92,11 +92,15 @@ public class ApplicationService {
     }
 
     private void canWrite(JobPostDetail postDetail, Member member) {
-        if (postDetail.getEssential().getMinAge()>LocalDateTime.now().plusYears(1).getYear()-member.getBirth().getYear()){
+        if (postDetail.getJobPost().isClosed()){ // 공고 지원 마감
             throw new CustomException(ErrorCode.CANNOT_SUBMISSION);
         }
 
-        if (postDetail.getEssential().getGender()!=UNDEFINED){
+        if (postDetail.getEssential().getMinAge()>LocalDateTime.now().plusYears(1).getYear()-member.getBirth().getYear()){ // 최소나이 조건 여부
+            throw new CustomException(ErrorCode.CANNOT_SUBMISSION);
+        }
+
+        if (postDetail.getEssential().getGender()!=UNDEFINED){ // 성별 조건 여부
             if (!postDetail.getEssential().getGender().equals(member.getGender())){
                 throw new CustomException(ErrorCode.CANNOT_SUBMISSION);
             }
