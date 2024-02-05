@@ -1,8 +1,11 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
+import com.ll.gooHaeYu.global.config.AppConfig;
 import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import com.ll.gooHaeYu.standard.base.util.CookieUtil;
@@ -13,11 +16,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Tag(name = "JobPost", description = "구인공고 API")
@@ -54,7 +63,7 @@ public class JobPostController {
 
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
-    public RsData<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id,  HttpServletRequest request, HttpServletResponse response) {
+    public RsData<JobPostDetailDto> showDetailPost(@PathVariable(name = "id") Long id, HttpServletRequest request, HttpServletResponse response) {
         final String VIEWED_JOB_POSTS_COOKIE = "viewedJobPosts";
         boolean isJobPostAlreadyVisited = checkJobPostVisited(request, id, VIEWED_JOB_POSTS_COOKIE);
 
@@ -113,7 +122,6 @@ public class JobPostController {
         return ResponseEntity.noContent().build();
     }
 
-
     @GetMapping("/search")
     @Operation(summary = "게시물 검색")
     public ResponseEntity<List<JobPostDto>> searchJobPostsByTitleAndBody(
@@ -124,5 +132,37 @@ public class JobPostController {
         return ResponseEntity.ok(jobPostService.searchJobPostsByTitleAndBody(titleOrBody, title, body));
     }
 
+    @GetMapping("/sort")
+    @Operation(summary = "구인공고 글 목록 정렬")
+    public RsData<Page<JobPostDto>> findAllPostSort(
+            @RequestParam(value="page", defaultValue="1") int page,
+            @RequestParam(name = "sortBy", defaultValue = "createdAt") List<String> sortBys,
+            @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders
+    ) {
+        List<Sort.Order> sorts = new ArrayList<>();
+
+        for (int i = 0; i < sortBys.size(); i++) {
+            String sortBy = sortBys.get(i);
+            String sortOrder = i < sortOrders.size() ? sortOrders.get(i) : "desc"; // 기본값은 desc
+            sorts.add(new Sort.Order(Sort.Direction.fromString(sortOrder), sortBy));
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, AppConfig.getBasePageSize(), Sort.by(sorts));
+        System.out.println(sortOrders);
+
+        Page<JobPost> itemPage = jobPostService.findBySort(pageable);
+        Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
+
+        return RsData.of(_itemPage);
+    }
+  
+    @DeleteMapping("/{id}/deadline")
+    @Operation(summary = "공고 마감")
+    public ResponseEntity<Void> deadline(@AuthenticationPrincipal MemberDetails memberDetails,
+                                         @PathVariable(name = "id") Long id) {
+        jobPostService.deadline(memberDetails.getUsername(), id);
+
+        return ResponseEntity.noContent().build();
+    }
 
 }
