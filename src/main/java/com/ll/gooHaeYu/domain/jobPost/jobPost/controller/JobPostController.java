@@ -135,7 +135,7 @@ public class JobPostController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}/deadline")
+    @DeleteMapping("/{id}/deadline")
     @Operation(summary = "공고 마감")
     public ResponseEntity<Void> deadline(@AuthenticationPrincipal MemberDetails memberDetails,
                                          @PathVariable(name = "id") Long id) {

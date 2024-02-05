@@ -33,6 +33,7 @@ public class EmployService {
 
         for (Application application : postDetail.getApplications()) {
             if(applicationIds.contains(application.getId())) {
+                // TODO : 승인 후 알림
                 application.approve();
             }else {
                 application.reject();

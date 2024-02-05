@@ -52,13 +52,11 @@ public class JobPost extends BaseTimeEntity {
     @OneToOne(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private JobPostDetail jobPostDetail;
 
-    public void update(String title, Boolean closed) {
+    public void update(String title,LocalDate deadline) {
         if (title != null && !title.isBlank()) {
             this.title = title;
         }
-        if (closed != null) {
-            this.closed = closed;
-        }
+        this.deadline = deadline;
     }
 
     public void close() {

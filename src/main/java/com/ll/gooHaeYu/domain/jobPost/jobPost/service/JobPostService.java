@@ -1,7 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
-import com.ll.gooHaeYu.domain.application.application.repository.ApplicationRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
@@ -84,7 +83,7 @@ public class JobPostService {
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
-        postDetail.getJobPost().update(form.getTitle(), form.getClosed());
+        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine());
         postDetail.update(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
 
@@ -209,8 +208,6 @@ public class JobPostService {
         for (Application application : applicationList) {
             postDetail.getApplications().remove(application);
         }
-//        applicationRepository.deleteAll(applicationList);
-        postDetail.getJobPost().close();
     }
 
 
