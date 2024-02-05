@@ -1,4 +1,5 @@
-<script>
+
+
     import { onMount } from 'svelte';
     import rq from '$lib/rq/rq.svelte';
   
