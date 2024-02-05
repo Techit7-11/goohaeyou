@@ -11,6 +11,7 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.EssentialRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostDetailRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostSpecifications;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
@@ -18,6 +19,7 @@ import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -200,6 +202,41 @@ public class JobPostService {
         jobPost.increaseViewCount();
     }
 
+    public List<JobPostDto> searchJobPostsByTitleAndBody(String titleAndBody, String titleOnly, String bodyOnly) {
+        Specification<JobPost> spec = Specification.where(null);
+
+        spec = applyTitleAndBodySearch(spec, titleAndBody);
+        spec = applyTitleOnlySearch(spec, titleOnly);
+        spec = applyBodyOnlySearch(spec, bodyOnly);
+
+        return jobPostRepository.findAll(spec)
+                .stream()
+                .map(JobPostDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    private Specification<JobPost> applyTitleAndBodySearch(Specification<JobPost> spec, String titleAndBody) {
+        if (titleAndBody != null) {
+            return spec.and(JobPostSpecifications.titleContains(titleAndBody))
+                    .or(JobPostSpecifications.bodyContains(titleAndBody));
+        }
+        return spec;
+    }
+
+    private Specification<JobPost> applyTitleOnlySearch(Specification<JobPost> spec, String titleOnly) {
+        if (titleOnly != null) {
+            return spec.and(JobPostSpecifications.titleContains(titleOnly));
+        }
+        return spec;
+    }
+
+    private Specification<JobPost> applyBodyOnlySearch(Specification<JobPost> spec, String bodyOnly) {
+        if (bodyOnly != null) {
+            return spec.and(JobPostSpecifications.bodyContains(bodyOnly));
+        }
+        return spec;
+    }
+
     @Transactional
     public void deadline(String username, Long postId) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
@@ -231,4 +268,5 @@ public class JobPostService {
         jobPost.close();
         jobPostRepository.save(jobPost);
     }
+
 }
