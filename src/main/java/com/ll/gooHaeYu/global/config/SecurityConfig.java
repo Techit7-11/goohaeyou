@@ -54,7 +54,7 @@ public class SecurityConfig {
                     requests
                             .requestMatchers("/api/member/socialLogin/**").permitAll()
                             .requestMatchers("/oauth2/authorization/**").permitAll() // OAuth 2.0 인증 엔드포인트에 대한 접근 허용
-                            .requestMatchers("/login", "/api/member/join", "api/token").permitAll()
+                            .requestMatchers("/login", "/api/member/login", "/api/member/join", "api/token").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/job-posts/{id:\\d+}", "/api/job-posts",
                                     "/api/post-comment/{postId}").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
