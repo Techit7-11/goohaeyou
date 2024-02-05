@@ -156,4 +156,10 @@ public class JobPostService {
                 .map(JobPostDto::fromEntity)
                 .collect(Collectors.toList());
     }
+    @Transactional
+    public void increaseViewCount(Long jobPostId) {
+        JobPost jobPost = jobPostRepository.findById(jobPostId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
+        jobPost.increaseViewCount();
+    }
 }
