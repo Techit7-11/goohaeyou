@@ -48,16 +48,4 @@ public class CookieUtil {
                 )
         );
     }
-
-    public static boolean checkJobPostVisited(HttpServletRequest request, Long jobPostId) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("articleVisited_" + jobPostId)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 }

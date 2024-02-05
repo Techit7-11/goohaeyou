@@ -5,6 +5,7 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
+import com.ll.gooHaeYu.standard.base.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
@@ -54,37 +55,35 @@ public class JobPostController {
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
     public RsData<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id,  HttpServletRequest request, HttpServletResponse response) {
-        viewCountUp(id, request, response);
+        final String VIEWED_JOB_POSTS_COOKIE = "viewedJobPosts";
+        boolean isJobPostAlreadyVisited = checkJobPostVisited(request, id, VIEWED_JOB_POSTS_COOKIE);
+
+        // 쿠키 없으면 조회수 증가하고 쿠키 생성
+        if (!isJobPostAlreadyVisited) {
+            jobPostService.increaseViewCount(id);
+            addOrUpdateViewedJobPostsCookie(response, id, VIEWED_JOB_POSTS_COOKIE);
+        }
+
         return  RsData.of(jobPostService.findById(id));
     }
-    private void viewCountUp(Long id, HttpServletRequest request, HttpServletResponse response) {
 
-        Cookie oldCookie = null;
-
+    // 방문 여부 확인 (쿠키를 활용)
+    private boolean checkJobPostVisited(HttpServletRequest request, Long jobId, String cookieName) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("jobPost")) {
-                    oldCookie = cookie;
+                if (cookie.getName().equals(cookieName) && cookie.getValue().contains("[" + jobId + "]")) {
+                    return true;
                 }
             }
         }
+        return false;
+    }
 
-        if (oldCookie != null) {
-            if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
-                jobPostService.increaseViewCount(id);
-                oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
-                oldCookie.setPath("/");
-                oldCookie.setMaxAge(60 * 60 * 24);
-                response.addCookie(oldCookie);
-            }
-        } else {
-            jobPostService.increaseViewCount(id);
-            Cookie newCookie = new Cookie("jobPost","[" + id + "]");
-            newCookie.setPath("/");
-            newCookie.setMaxAge(60 * 60 * 24);
-            response.addCookie(newCookie);
-        }
+    // 쿠키 추가
+    private void addOrUpdateViewedJobPostsCookie(HttpServletResponse response, Long jobId, String cookieName) {
+        String cookieValue = "[" + jobId + "]";
+        CookieUtil.addCookie(response, cookieName, cookieValue, 24 * 60 * 60);
     }
 
     @PostMapping("/{id}/interest")
