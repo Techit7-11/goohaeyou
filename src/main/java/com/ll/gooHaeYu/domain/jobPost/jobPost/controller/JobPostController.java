@@ -18,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 @Tag(name = "JobPost", description = "구인공고 API")
@@ -31,7 +30,7 @@ public class JobPostController {
     @PostMapping
     @Operation(summary = "구인공고 작성")
     public RsData<URI> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
-                                            @Valid @RequestBody JobPostForm.Register form) {
+                                 @Valid @RequestBody JobPostForm.Register form) {
         Long jobPostId = jobPostService.writePost(memberDetails.getUsername(), form);
 
         return RsData.of("201", "CREATE", URI.create("/api/job-posts/" + jobPostId));
@@ -62,7 +61,7 @@ public class JobPostController {
         // 쿠키 없으면 조회수 증가하고 쿠키 생성
         if (!isJobPostAlreadyVisited) {
             jobPostService.increaseViewCount(id);
-            addOrUpdateViewedJobPostsCookie(request, response, id, VIEWED_JOB_POSTS_COOKIE);
+            addOrUpdateViewedJobPostsCookie(response, id, VIEWED_JOB_POSTS_COOKIE);
         }
 
         return  RsData.of(jobPostService.findById(id));
@@ -82,29 +81,9 @@ public class JobPostController {
     }
 
     // 쿠키 추가
-    private void addOrUpdateViewedJobPostsCookie(HttpServletRequest request, HttpServletResponse response, Long jobId, String cookieName) {
-        // 쿠키에서 방문한 게시물 ID 목록 가져옴
-        Cookie viewCookie = Arrays.stream(request.getCookies() != null ? request.getCookies() : new Cookie[0])
-                .filter(cookie -> cookie.getName().equals(cookieName))
-                .findFirst()
-                .orElse(null);
-
-        // 가져온 목록에 현재 게시물 ID 추가
-        String newCookieValue;
-        if (viewCookie != null) {
-            String existingValue = viewCookie.getValue();
-            if (!existingValue.contains("[" + jobId + "]")) {
-                newCookieValue = existingValue + "[" + jobId + "]";
-            } else {
-                // 이미 방문한 게시물이면 쿠키 값 변경 x
-                return;
-            }
-        } else {
-            newCookieValue = "[" + jobId + "]";
-        }
-
-        // 새로운 쿠키 값 설정 or 기존 쿠키 업데이트
-        CookieUtil.addCookie(response, cookieName, newCookieValue, 24 * 60 * 60);
+    private void addOrUpdateViewedJobPostsCookie(HttpServletResponse response, Long jobId, String cookieName) {
+        String cookieValue = "[" + jobId + "]";
+        CookieUtil.addCookie(response, cookieName, cookieValue, 24 * 60 * 60);
     }
 
     @PostMapping("/{id}/interest")
@@ -119,7 +98,7 @@ public class JobPostController {
     @DeleteMapping("/{id}/interest")
     @Operation(summary = "구인공고 관심 제거")
     public ResponseEntity<Void> disinterest(@AuthenticationPrincipal MemberDetails memberDetails,
-                                         @PathVariable(name = "id") Long id) {
+                                            @PathVariable(name = "id") Long id) {
         jobPostService.disinterest(memberDetails.getUsername(),id);
 
         return ResponseEntity.noContent().build();
@@ -133,4 +112,17 @@ public class JobPostController {
 
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping("/search")
+    @Operation(summary = "게시물 검색")
+    public ResponseEntity<List<JobPostDto>> searchJobPostsByTitleAndBody(
+            @RequestParam(required = false, name = "titleOrBody") String titleOrBody,
+            @RequestParam(required = false, name = "title") String title,
+            @RequestParam(required = false, name = "body") String body) {
+
+        return ResponseEntity.ok(jobPostService.searchJobPostsByTitleAndBody(titleOrBody, title, body));
+    }
+
+
 }
