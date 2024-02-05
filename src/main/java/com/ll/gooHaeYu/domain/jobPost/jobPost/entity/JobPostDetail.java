@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
+import com.nimbusds.jose.Requirement;
 import jakarta.persistence.*;
 import lombok.*;
 
