@@ -32,6 +32,13 @@ public class Ut {
         public static void run(String cmd) {
             try {
                 ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", cmd);
+                // 운영 체제 확인
+                String os = System.getProperty("os.name").toLowerCase();
+                if (os.contains("win")) {
+                    // Windows
+                    processBuilder = new ProcessBuilder("cmd", "/c", cmd);
+                }
+
                 Process process = processBuilder.start();
                 process.waitFor();
             } catch (Exception e) {

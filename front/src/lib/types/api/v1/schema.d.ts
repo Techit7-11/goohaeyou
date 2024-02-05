@@ -93,6 +93,10 @@ export interface paths {
     /** 내 지원서 조회 */
     get: operations["detailMyApplications"];
   };
+  "/api/job-posts/sort": {
+    /** 구인공고 글 목록 정렬 */
+    get: operations["findAllPostSort"];
+  };
   "/api/employ/{postId}": {
     get: operations["getList"];
   };
@@ -265,6 +269,49 @@ export interface components {
       data?: components["schemas"]["JobPostDto"];
       success?: boolean;
       fail?: boolean;
+    };
+    PageJobPostDto: {
+      /** Format: int32 */
+      totalPages?: number;
+      /** Format: int64 */
+      totalElements?: number;
+      first?: boolean;
+      last?: boolean;
+      /** Format: int32 */
+      size?: number;
+      content?: components["schemas"]["JobPostDto"][];
+      /** Format: int32 */
+      number?: number;
+      sort?: components["schemas"]["SortObject"];
+      /** Format: int32 */
+      numberOfElements?: number;
+      pageable?: components["schemas"]["PageableObject"];
+      empty?: boolean;
+    };
+    PageableObject: {
+      /** Format: int64 */
+      offset?: number;
+      sort?: components["schemas"]["SortObject"];
+      /** Format: int32 */
+      pageSize?: number;
+      /** Format: int32 */
+      pageNumber?: number;
+      paged?: boolean;
+      unpaged?: boolean;
+    };
+    RsDataPageJobPostDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["PageJobPostDto"];
+      success?: boolean;
+      fail?: boolean;
+    };
+    SortObject: {
+      empty?: boolean;
+      sorted?: boolean;
+      unsorted?: boolean;
     };
     RsDataApplicationDto: {
       resultCode?: string;
@@ -696,6 +743,24 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListApplicationDto"];
+        };
+      };
+    };
+  };
+  /** 구인공고 글 목록 정렬 */
+  findAllPostSort: {
+    parameters: {
+      query?: {
+        page?: number;
+        sortBy?: string[];
+        sortOrder?: string[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataPageJobPostDto"];
         };
       };
     };

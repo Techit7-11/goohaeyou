@@ -18,6 +18,8 @@ import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -177,6 +179,10 @@ public class JobPostService {
         Member member = memberService.getMember(username);
 
         return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
+    }
+
+    public Page<JobPost> findBySort(Pageable pageable) {
+        return jobPostRepository.findBySort(pageable);
     }
 
     public List<JobPostDto> findByInterestAndUsername(Long memberId) {

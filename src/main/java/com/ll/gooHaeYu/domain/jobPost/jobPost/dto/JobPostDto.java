@@ -5,10 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -53,5 +57,14 @@ public class JobPostDto {
         return jobPosts.stream()
                 .map(JobPostDto::fromEntity)
                 .toList();
+    }
+
+
+    public static Page<JobPostDto> toDtoListPage(Page<JobPost> jobPosts) {
+        List<JobPostDto> jobPostDtos = jobPosts.stream()
+                .map(JobPostDto::fromEntity)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(jobPostDtos, PageRequest.of(jobPosts.getNumber(), jobPosts.getSize()), jobPosts.getTotalElements());
     }
 }
