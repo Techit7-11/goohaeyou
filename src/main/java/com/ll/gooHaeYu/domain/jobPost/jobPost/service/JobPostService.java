@@ -13,6 +13,10 @@ import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
+import com.ll.gooHaeYu.standard.base.util.CookieUtil;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,5 +158,11 @@ public class JobPostService {
                 .map(JobPostDetail::getJobPost)
                 .map(JobPostDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+    @Transactional
+    public void increaseViewCount(Long jobPostId) {
+        JobPost jobPost = jobPostRepository.findById(jobPostId)
+                .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id: " + jobPostId));
+        jobPost.increaseViewCount();
     }
 }

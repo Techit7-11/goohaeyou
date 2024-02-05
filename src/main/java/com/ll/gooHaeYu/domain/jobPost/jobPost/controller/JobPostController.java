@@ -7,6 +7,9 @@ import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -50,8 +53,38 @@ public class JobPostController {
 
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
-    public RsData<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id) {
+    public RsData<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id,  HttpServletRequest request, HttpServletResponse response) {
+        viewCountUp(id, request, response);
         return  RsData.of(jobPostService.findById(id));
+    }
+    private void viewCountUp(Long id, HttpServletRequest request, HttpServletResponse response) {
+
+        Cookie oldCookie = null;
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("jobPost")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+
+        if (oldCookie != null) {
+            if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
+                jobPostService.increaseViewCount(id);
+                oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24);
+                response.addCookie(oldCookie);
+            }
+        } else {
+            jobPostService.increaseViewCount(id);
+            Cookie newCookie = new Cookie("jobPost","[" + id + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24);
+            response.addCookie(newCookie);
+        }
     }
 
     @PostMapping("/{id}/interest")

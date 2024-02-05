@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.global.initData;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
@@ -28,7 +29,7 @@ import java.util.stream.IntStream;
 public class NotProd {
     private final MemberService memberService;
     private final JobPostService jobPostService;
-    private final MemberRepository memberRepository;
+    private final JobPostRepository jobPostRepository;
 
     @Value("${app.init-run}")
     private boolean initRun;   // application-dev.yml 에서 app: init-run: true 로 설정 하면 샘플 데이터 생성 (기본값: false)
@@ -42,7 +43,7 @@ public class NotProd {
             @Override
             public void run(ApplicationArguments args) {
                 if (!initRun) return;
-                if (memberRepository.findById(1L).isPresent()) return;
+                if (jobPostRepository.findById(1L).isPresent()) return;
 
                 JoinForm joinForm1 = JoinForm.builder()
                         .username("testUser1")
@@ -58,7 +59,7 @@ public class NotProd {
                         .username("admin")
                         .password("12345678")
                         .birth(LocalDate.parse("1995-01-01"))
-                        .gender(Gender.UNDEFINED)
+                        .gender(Gender.FEMALE)
                         .name("관리자")
                         .location("서울특별시 중구 세종대로 110")
                         .phoneNumber("01033334444")

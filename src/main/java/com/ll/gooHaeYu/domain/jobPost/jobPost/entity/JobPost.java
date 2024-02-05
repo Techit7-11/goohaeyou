@@ -32,6 +32,9 @@ public class JobPost extends BaseTimeEntity {
     @Setter(PROTECTED)
     private long interestsCount = 0;
 
+    @Setter(PROTECTED)
+    private long incrementViewCount = 0;
+
     private String title;
 
     private String location;
@@ -73,5 +76,9 @@ public class JobPost extends BaseTimeEntity {
 
     public void decreaseInterestCount() {
         interestsCount--;
+    }
+
+    public void increaseViewCount() {
+        this.incrementViewCount++;
     }
 }
