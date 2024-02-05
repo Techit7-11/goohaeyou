@@ -60,7 +60,7 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/social")   // 구현 예정
+    @PutMapping("/social")
     @Operation(summary = "최초 소셜로그인 - 필수 회원정보 입력")
     public RsData<MemberDto> updateSocialMember(@AuthenticationPrincipal MemberDetails memberDetails,
                                              @Valid @RequestBody SocialProfileForm form) {
