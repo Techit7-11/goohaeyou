@@ -143,7 +143,7 @@ public class JobPostController {
 
     @GetMapping("/sort")
     @Operation(summary = "구인공고 글 목록 정렬")
-    public ResponseEntity<Page<JobPostDto>> findAllPostSort(
+    public RsData<Page<JobPostDto>> findAllPostSort(
             @RequestParam(value="page", defaultValue="1") int page,
             @RequestParam(name = "sortBy", defaultValue = "createdAt") List<String> sortBys,
             @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders
@@ -162,6 +162,6 @@ public class JobPostController {
         Page<JobPost> itemPage = jobPostService.findBySort(pageable);
         Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
 
-        return ResponseEntity.ok(_itemPage);
+        return RsData.of(_itemPage);
     }
 }
