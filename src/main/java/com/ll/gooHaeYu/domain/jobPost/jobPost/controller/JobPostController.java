@@ -1,11 +1,11 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.global.config.AppConfig;
+import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,11 +32,11 @@ public class JobPostController {
 
     @PostMapping
     @Operation(summary = "구인공고 작성")
-    public ResponseEntity<String> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
+    public RsData<URI> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
                                             @Valid @RequestBody JobPostForm.Register form) {
         Long jobPostId = jobPostService.writePost(memberDetails.getUsername(), form);
 
-        return ResponseEntity.created(URI.create("/api/job-posts/" + jobPostId)).build();
+        return RsData.of("201", "CREATE", URI.create("/api/job-posts/" + jobPostId));
     }
 
     @PutMapping("/{id}")
@@ -51,14 +51,14 @@ public class JobPostController {
 
     @GetMapping
     @Operation(summary = "구인공고 글 목록 가져오기")
-    public ResponseEntity<List<JobPostDto>> findAllPost() {
-        return ResponseEntity.ok(jobPostService.findAll());
+    public RsData<List<JobPostDto>> findAllPost() {
+        return RsData.of(jobPostService.findAll());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
-    public ResponseEntity<JobPostDetailDto> showDetailPost(@PathVariable(name = "id") Long id) {
-        return  ResponseEntity.ok(jobPostService.findById(id));
+    public RsData<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id) {
+        return  RsData.of(jobPostService.findById(id));
     }
 
     @PostMapping("/{id}/interest")

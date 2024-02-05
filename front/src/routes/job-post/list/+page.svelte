@@ -1,10 +1,14 @@
 <script lang="ts">
     import rq from '$lib/rq/rq.svelte';
 
+    if (rq.member.name === null) {
+        rq.goTo('http://localhost:5173/member/social/modify');
+    }
+
     async function load() {
         const { data } = await rq.apiEndPoints().GET('/api/job-posts', {});
         
-        return data!;
+        return data;
     }
 </script>
 
@@ -52,7 +56,6 @@
         margin-left: 1em; /* closed 와의 간격 조정 */
     }
 
-    /* 푸터 스타일링 */
     footer {
         clear: both; /* float 요소 뒤에 오는 요소에 영향을 주지 않도록 설정 */
         text-align: center; /* 텍스트 가운데 정렬 */
@@ -65,7 +68,7 @@
 
 {#await load()}
     <p>loading...</p>
-{:then { data: jobPostDtoList } }
+{:then { data : jobPostDtoList } }
     <ul>
         {#each jobPostDtoList ?? [] as jobPostDto, index}
             <li>

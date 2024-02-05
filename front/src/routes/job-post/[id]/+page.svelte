@@ -92,5 +92,9 @@
                 <span class="status-box">구인중</span>
             {/if}
         </p>
+        <div class="location-box">{jobPostDto?.location}</div>
+        <div class="location-box">{jobPostDto?.commentsCount}</div>
+        <div class="location-box">{jobPostDto?.applicationCount}</div>
+        <div class="location-box">{jobPostDto?.interestsCount}</div>
     </div>
 {/await }

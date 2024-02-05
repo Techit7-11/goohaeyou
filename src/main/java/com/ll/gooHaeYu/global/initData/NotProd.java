@@ -1,11 +1,11 @@
 package com.ll.gooHaeYu.global.initData;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
-import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.stream.IntStream;
 public class NotProd {
     private final MemberService memberService;
     private final JobPostService jobPostService;
-    private final MemberRepository memberRepository;
+    private final JobPostRepository jobPostRepository;
 
     @Value("${app.init-run}")
     private boolean initRun;   // application-dev.yml 에서 app: init-run: true 로 설정 하면 샘플 데이터 생성 (기본값: false)
@@ -42,13 +42,12 @@ public class NotProd {
             @Override
             public void run(ApplicationArguments args) {
                 if (!initRun) return;
-                if (memberRepository.findById(1L).isPresent()) return;
+                if (jobPostRepository.findById(1L).isPresent()) return;
 
                 JoinForm joinForm1 = JoinForm.builder()
                         .username("testUser1")
                         .password("11112222")
                         .birth(LocalDate.parse("2000-01-01"))
-                        .email("test1@example.com")
                         .gender(Gender.MALE)
                         .name("테스트")
                         .location("경기도 수원시 영통구 이의동 263-1")
@@ -59,8 +58,7 @@ public class NotProd {
                         .username("admin")
                         .password("12345678")
                         .birth(LocalDate.parse("1995-01-01"))
-                        .email("admin@example.com")
-                        .gender(Gender.UNDEFINED)
+                        .gender(Gender.FEMALE)
                         .name("관리자")
                         .location("서울특별시 중구 세종대로 110")
                         .phoneNumber("01033334444")
@@ -80,6 +78,7 @@ public class NotProd {
                     JobPostForm.Register postRegister = JobPostForm.Register.builder()
                             .title("구인공고 제목" + i)
                             .body("구인공고 내용" + i)
+                            .location("서울특별시 광진구 천호대로124길")
                             .build();
 
                     jobPostService.writePost("testUser1", postRegister);

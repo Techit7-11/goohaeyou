@@ -2,30 +2,24 @@ package com.ll.gooHaeYu.domain.member.member.dto;
 
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 
 import java.time.LocalDate;
 
 @Builder
 @Getter
 public class MemberDto {
-    @NonNull
+    @NotNull
     private Long id;
-    @NonNull
+    @NotBlank
     private String username;
-    @NonNull
     private Gender gender;
-    @NonNull
     private String location;
-    @NonNull
     private LocalDate birth;
-    @NonNull
     private String name;
-    @NonNull
-    private String email;
-    @NonNull
     private String phoneNumber;
 
     public static MemberDto fromEntity(Member member) {
@@ -36,7 +30,6 @@ public class MemberDto {
                 .location(member.getLocation())
                 .birth(member.getBirth())
                 .name(member.getName())
-                .email(member.getEmail())
                 .phoneNumber(member.getPhoneNumber())
                 .build();
     }

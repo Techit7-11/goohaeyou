@@ -16,6 +16,9 @@ public class JobPostForm {
 
         @NotBlank(message = "내용은 필수 입력 항목입니다.")
         private String body;
+
+        @NotBlank(message = "지역 설정은 필수입니다.")
+        private String location;
     }
 
     @Builder

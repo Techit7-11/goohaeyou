@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.member.member.entity;
 
+import com.ll.gooHaeYu.domain.member.member.dto.SocialProfileForm;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
@@ -26,8 +27,6 @@ public class Member extends BaseTimeEntity {
     private String password;
 
     private String name;
-
-    private String email;
 
     private String phoneNumber;   // 01012341234
 
@@ -58,5 +57,20 @@ public class Member extends BaseTimeEntity {
 
     public void updateRole(Role role) {
         this.role = role;
+    }
+
+    public Member oauthUpdate(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public Member oauthDetailUpdate(SocialProfileForm form) {
+        this.name = form.getName();
+        this.phoneNumber = form.getPhoneNumber();
+        this.gender = form.getGender();
+        this.location = form.getLocation();
+        this.birth = form.getBirth();
+
+        return this;
     }
 }

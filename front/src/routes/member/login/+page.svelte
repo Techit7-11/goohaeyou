@@ -3,7 +3,8 @@
 
     async function submitLoginForm(this: HTMLFormElement) {
         const form: HTMLFormElement = this;
-
+        
+        // 로그인 요청 (이 때 쿠키에 저장)
         const response = await rq.apiEndPoints().POST('/api/member/login', {
             body: {
                 username: form.username.value.trim(),
@@ -11,9 +12,9 @@
             }
         });
 
-        if (response.data?.statusCode === 200) {
+        if (response.data?.statusCode === 200) {            
             rq.msgAndRedirect({ msg: '로그인 성공' }, undefined, 'http://localhost:5173/');   // 메인페이지로 먼저 이동 후에 로그인 상태로 바꾼다
-            rq.setLogined({ id: Number(response.data) });   
+            rq.setLogined(response.data.data?.memberDto);   // 로그인 상태로 바꾼다
         } else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
                 // CustomException 오류 메시지 처리
                 const customErrorMessage = response.data?.data?.message;
@@ -80,6 +81,16 @@
     .login-button:hover {
         background-color: #444; /* 호버 시 배경색 변경 */
     }
+
+    .button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }   
+
+    .google-login {
+        margin-right: 40px; /* 구글 로그인 버튼과 로그인 버튼 사이 간격 조절 */
+    }
 </style>
 
 <div class="login-container">
@@ -93,6 +104,11 @@
             <label for="password">비밀번호</label>
             <input type="password" id="password" name="password" placeholder="비밀번호" required />
         </div>
-        <button class="login-button" type="submit">로그인</button>
+        <div class="button-group">
+            <button class="login-button" type="submit">로그인</button>
+            <a href={rq.getGoogleLoginUrl()} class="google-login">
+                <img src="/google.png" alt="구글 로그인"/>
+            </a>
+        </div>
     </form>
 </div>
