@@ -96,6 +96,5 @@
         <div class="location-box">{jobPostDto?.commentsCount}</div>
         <div class="location-box">{jobPostDto?.applicationCount}</div>
         <div class="location-box">{jobPostDto?.interestsCount}</div>
-        <div class="location-box">{jobPostDto?.location}</div>
     </div>
 {/await }

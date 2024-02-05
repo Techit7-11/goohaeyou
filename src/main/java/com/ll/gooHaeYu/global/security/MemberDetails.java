@@ -6,13 +6,15 @@ import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 @RequiredArgsConstructor
-public class MemberDetails implements UserDetails {
+public class MemberDetails implements OAuth2User, UserDetails {
 
     private final Member member;
 
@@ -52,6 +54,12 @@ public class MemberDetails implements UserDetails {
 
     public String getPhoneNumber() {
         return member.getPhoneNumber();
+    }
+
+    // OAuth2User Override
+    @Override
+    public Map<String, Object> getAttributes() {
+        return getAttributes();
     }
 
     @Override

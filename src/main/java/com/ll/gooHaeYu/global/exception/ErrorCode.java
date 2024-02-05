@@ -20,7 +20,9 @@ public enum ErrorCode {
     // NOT_EDITABLE -> NOT_ABLE 더 넓은 범위에 사용하기 위해 변경
     NOT_ABLE(HttpStatus.FORBIDDEN,"권한이 없습니다."),
 
-    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "찾을 수 없는 token 입니다.");
+    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "찾을 수 없는 token 입니다."),
+
+    INVALID_LOGIN_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 로그인 요청입니다.");
 
     private final HttpStatus status;
     private final String message;

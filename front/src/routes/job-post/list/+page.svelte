@@ -1,6 +1,10 @@
 <script lang="ts">
     import rq from '$lib/rq/rq.svelte';
 
+    if (rq.member.name === null) {
+        rq.goTo('http://localhost:5173/member/social/modify');
+    }
+
     async function load() {
         const { data } = await rq.apiEndPoints().GET('/api/job-posts', {});
         

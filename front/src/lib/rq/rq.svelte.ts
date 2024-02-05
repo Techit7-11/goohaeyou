@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation';
-
+import { get } from 'svelte/store'; // Import 'get' from Svelte store to access reactive variables.
 import type { paths } from '$lib/types/api/v1/schema';
 import createClient from 'openapi-fetch';
 import type { components } from '$lib/types/api/v1/schema';
@@ -9,6 +9,8 @@ class Rq {
 
 	constructor() {
 		this.member = this.makeReactivityMember();
+		// this.accessToken = localStorage.getItem('access_token'); // Declare accessToken as a class property.
+		this.loadAccessToken(); // Load access token when the class is instantiated.
 	}
 
 	// URL
@@ -85,8 +87,23 @@ class Rq {
 	public apiEndPoints() {
 		return createClient<paths>({
 			baseUrl: import.meta.env.VITE_CORE_API_BASE_URL,
-			credentials: 'include'
+			credentials: 'include',
+			headers: {
+				Authorization: `Bearer ${this.getAccessToken()}`,
+				'Content-Type': 'application/json'
+			}
 		});
+	}
+
+	public getAccessToken() {
+		// 만료시간이 안지났으면 리턴
+		if (true) {
+			return localStorage.getItem('access_token');
+		} else {
+			// 만료시간이 지났다면 리프레시토큰을 통해 액세스토큰 발급하고 리턴
+			// TO-DO
+			// POST /api/token 요청
+		}
 	}
 
 	// MSG, REDIRECT
@@ -134,15 +151,44 @@ class Rq {
 		const { data } = await this.apiEndPoints().GET('/api/member');
 
 		if (data) {
-			this.setLogined(data); // MemberDto 넘기기
+			this.setLogined(data.data); // MemberDto 넘기기
 		}
 	}
 
 	public async logoutAndRedirect(url: string) {
-		//await this.apiEndPoints().POST('/api/member/logout');
+		//await this.apiEndPoints().POST('/api/member/logout');  TO-DO
 
 		this.setLogout();
 		this.replace(url);
+	}
+
+	public getGoogleLoginUrl() {
+		return `${
+			import.meta.env.VITE_CORE_API_BASE_URL
+		}/member/socialLogin/google?redirectUrl=${encodeURIComponent(
+			import.meta.env.VITE_CORE_FRONT_BASE_URL
+		)}/member/socialLoginCallback?provierTypeCode=google`;
+	}
+
+	private loadAccessToken() {
+		// 브라우저에서만 동작
+		if (typeof window !== 'undefined') {
+			const urlSearchParams = new URLSearchParams(window.location.search);
+			const params = Object.fromEntries(urlSearchParams.entries());
+
+			if (params.access_token) {
+				// 매개변수로 access_token이 넘어왔다면
+				const accessToken = params.access_token;
+
+				// LocalStorage에 access_token 저장
+				localStorage.setItem('access_token', accessToken);
+
+				// 저장 후에는, 매개변수로 넘어온 access_token을 제거한다. (보안)
+				urlSearchParams.delete('access_token');
+				const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
+				window.history.replaceState({}, document.title, newUrl);
+			}
+		}
 	}
 }
 

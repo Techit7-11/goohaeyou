@@ -60,6 +60,15 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/social")
+    @Operation(summary = "최초 소셜로그인 - 필수 회원정보 입력")
+    public RsData<MemberDto> updateSocialMember(@AuthenticationPrincipal MemberDetails memberDetails,
+                                             @Valid @RequestBody SocialProfileForm form) {
+        MemberDto updatedMember = memberService.updateSocialMemberProfile(memberDetails.getUsername(), form);
+
+        return RsData.of(updatedMember);
+    }
+
     @GetMapping("/myposts")
     @Operation(summary = "내 공고 조회")
     public RsData<List<JobPostDto>> detailMyPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
