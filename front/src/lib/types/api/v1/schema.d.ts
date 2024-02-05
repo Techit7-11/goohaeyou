@@ -218,6 +218,7 @@ export interface components {
       id: number;
       author: string;
       title: string;
+      body: string;
       location: string;
       /** Format: int64 */
       commentsCount: number;

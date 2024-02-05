@@ -72,13 +72,31 @@
         justify-content: space-between; /* 요소 사이의 간격을 최대로 설정 */
         margin-top: 10px; /* 위로 조금 띄움 */
     }
+
+    .info-box {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2열 그리드 설정 */
+        gap: 10px; /* 그리드 아이템 간격 설정 */
+        margin-top: 20px;
+    }
+
+    .info-item {
+        background: linear-gradient(145deg, #e6e6e6, #ffffff);
+        box-shadow: 5px 5px 10px #d1d1d1,
+                    -5px -5px 10px #ffffff;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        color: #333;
+        font-weight: 500;
+    }
 </style>
 
 {#await load()}
-    <div>loading...</div>
-{:then { data: jobPostDto } }
+    <div>Loading...</div>
+{:then { data: jobPostDto }}
     <div class="job-post-container">
-        <div class="id-box">no.{jobPostDto?.id}</div>
+        <div class="id-box">No.{jobPostDto?.id}</div>
         <div class="title-box">{jobPostDto?.title}</div>
         <div class="author-createdAt">
             <p>{jobPostDto?.author}</p>
@@ -92,9 +110,11 @@
                 <span class="status-box">구인중</span>
             {/if}
         </p>
-        <div class="location-box">{jobPostDto?.location}</div>
-        <div class="location-box">{jobPostDto?.commentsCount}</div>
-        <div class="location-box">{jobPostDto?.applicationCount}</div>
-        <div class="location-box">{jobPostDto?.interestsCount}</div>
+        <div class="info-box">
+            <div>위치: {jobPostDto?.location}</div>
+            <div>댓글 수: {jobPostDto?.commentsCount}</div>
+            <div>지원자 수: {jobPostDto?.applicationCount}</div>
+            <div>관심등록 수: {jobPostDto?.interestsCount}</div>
+        </div>
     </div>
-{/await }
+{/await}

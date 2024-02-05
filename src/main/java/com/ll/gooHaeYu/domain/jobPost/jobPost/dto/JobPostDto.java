@@ -19,6 +19,8 @@ public class JobPostDto {
     @NotNull
     private String title;
     @NotNull
+    private String body;
+    @NotNull
     private String location;
     @NotNull
     private long commentsCount;
@@ -38,6 +40,7 @@ public class JobPostDto {
                 .id(jobPost.getId())
                 .author(jobPost.getMember().getUsername())
                 .title(jobPost.getTitle())
+                .body(jobPost.getJobPostDetail().getBody())
                 .location(jobPost.getLocation())
                 .commentsCount(jobPost.getCommentsCount())
                 .applicationCount(jobPost.getApplicationCount())
