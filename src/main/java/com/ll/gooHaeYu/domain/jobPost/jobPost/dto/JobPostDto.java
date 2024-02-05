@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class JobPostDto {
     private long applicationCount;
     @NotNull
     private long interestsCount;
-
+    private LocalDate deadLine;
     private boolean isClosed = false; // 기본값 설정
     @NonNull
     private String createdAt;
@@ -46,6 +47,7 @@ public class JobPostDto {
                 .commentsCount(jobPost.getCommentsCount())
                 .applicationCount(jobPost.getApplicationCount())
                 .interestsCount(jobPost.getInterestsCount())
+                .deadLine(jobPost.getDeadline())
                 .isClosed(jobPost.isClosed())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .build();

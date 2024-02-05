@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.controller;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
@@ -62,7 +63,7 @@ public class JobPostController {
 
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
-    public RsData<JobPostDto> showDetailPost(@PathVariable(name = "id") Long id,  HttpServletRequest request, HttpServletResponse response) {
+    public RsData<JobPostDetailDto> showDetailPost(@PathVariable(name = "id") Long id, HttpServletRequest request, HttpServletResponse response) {
         final String VIEWED_JOB_POSTS_COOKIE = "viewedJobPosts";
         boolean isJobPostAlreadyVisited = checkJobPostVisited(request, id, VIEWED_JOB_POSTS_COOKIE);
 
@@ -163,5 +164,14 @@ public class JobPostController {
         Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
 
         return RsData.of(_itemPage);
+    }
+  
+    @DeleteMapping("/{id}/deadline")
+    @Operation(summary = "공고 마감")
+    public ResponseEntity<Void> deadline(@AuthenticationPrincipal MemberDetails memberDetails,
+                                         @PathVariable(name = "id") Long id) {
+        jobPostService.deadline(memberDetails.getUsername(), id);
+
+        return ResponseEntity.noContent().build();
     }
 }
