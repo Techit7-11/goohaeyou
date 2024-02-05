@@ -162,7 +162,7 @@ public class JobPostService {
     @Transactional
     public void increaseViewCount(Long jobPostId) {
         JobPost jobPost = jobPostRepository.findById(jobPostId)
-                .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id: " + jobPostId));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
         jobPost.increaseViewCount();
     }
 }
