@@ -1,57 +1,29 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Builder
+@SuperBuilder
 @Getter
-public class JobPostDto {
-    @NotNull
-    private Long id;
-    @NotNull
-    private String author;
-    @NotNull
-    private String title;
-    @NotNull
-    private String body;
-    @NotNull
-    private String location;
-    @NotNull
-    private long commentsCount;
-    @NotNull
-    private long applicationCount;
-    @NotNull
-    private long interestsCount;
-    private LocalDate deadLine;
-    private boolean isClosed = false; // 기본값 설정
-    @NonNull
-    private String createdAt;
+public class JobPostDto extends AbstractJobPostDto{
 
     public static JobPostDto fromEntity(JobPost jobPost) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
-
         return JobPostDto.builder()
                 .id(jobPost.getId())
                 .author(jobPost.getMember().getUsername())
                 .title(jobPost.getTitle())
-                .body(jobPost.getJobPostDetail().getBody())
                 .location(jobPost.getLocation())
                 .commentsCount(jobPost.getCommentsCount())
-                .applicationCount(jobPost.getApplicationCount())
-                .interestsCount(jobPost.getInterestsCount())
+                .incrementViewCount(jobPost.getIncrementViewCount())
                 .deadLine(jobPost.getDeadline())
-                .isClosed(jobPost.isClosed())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .build();
     }
@@ -64,9 +36,9 @@ public class JobPostDto {
 
 
     public static Page<JobPostDto> toDtoListPage(Page<JobPost> jobPosts) {
-        List<JobPostDto> jobPostDtos = jobPosts.stream()
+        List<JobPostDto> jobPostDtos = jobPosts
                 .map(JobPostDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
 
         return new PageImpl<>(jobPostDtos, PageRequest.of(jobPosts.getNumber(), jobPosts.getSize()), jobPosts.getTotalElements());
     }
