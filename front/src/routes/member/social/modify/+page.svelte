@@ -58,21 +58,6 @@
         margin: 0 auto;
     }
 
-    .label {
-        color: #333333;
-        font-size: 16px;
-        margin-bottom: 4px;
-    }
-
-    .input {
-        width: 100%;
-        padding: 5px;
-        border: 1px solid #dddddd;
-        border-radius: 4px;
-        font-size: 16px;
-        margin-bottom: 12px;
-    }
-
     .select {
         width: 25%;
         padding: 7px;
@@ -107,29 +92,33 @@
     }
 </style>
 
-<div class="container">
+<div class="flex items-center justify-center min-h-screen bg-base-100">
+  <div class="container mx-auto px-4">
+    <h2 class="text-2xl font-bold text-center my-3">필수 회원 정보 입력</h2>
+    <div class="max-w-sm mx-auto">
+<div>
     <label class="label" for="name">이름</label>
-    <input class="input" type="text" id="name" bind:value={updatedMemberData.name} />
-
+    <input class="input input-bordered w-full" placeholder="이름을 입력해주세요." type="text" id="name" bind:value={updatedMemberData.name}  />
     <label class="label" for="phoneNumber">휴대폰 번호</label>
-    <input class="input" type="text" id="phoneNumber" bind:value={updatedMemberData.phoneNumber} />
-
+    <input class="input input-bordered w-full" placeholder="휴대폰 번호를 입력해주세요." type="text" id="phoneNumber" bind:value={updatedMemberData.phoneNumber} />
     <label class="label" for="gender">성별</label>
-    <select class="select" id="gender" bind:value={updatedMemberData.gender}>
+    <select class="input input-bordered w-full" id="gender" bind:value={updatedMemberData.gender}>
         <option value="MALE">남성</option>
         <option value="FEMALE">여성</option>
     </select>
-
     <label class="label" style="display: block; margin-top: 8px;" for="location">지역</label>
-    <input class="input" style="width: 80%;" type="text" id="location" bind:value={updatedMemberData.location} readonly />
-
+    <div class="flex">
+    <input class="input input-bordered w-full" placeholder="주소를 입력해주세요." style="width: 80%;" type="text" id="location" bind:value={updatedMemberData.location} readonly />
     <!-- 다음 주소 API 팝업 열기 버튼 -->
-    <button class="button" style="padding: 6px 7px; font-size: 14px;" on:click={openDaumAddressPopup}>주소 검색</button>
-
-    <label class="label" for="birth">생년월일</label>
-    <input class="input" type="date" id="birth" bind:value={updatedMemberData.birth} />
-
-    <div class="button-container">
-        <button class="button" on:click={updateMember}>회원 정보 업데이트</button>
+    <button class="btn btn-primary ml-3" style="padding: 6px 7px; font-size: 14px;" on:click={openDaumAddressPopup}>주소 검색</button>
     </div>
+    <label class="label" for="birth">생년월일</label>
+    <input class="input input-bordered w-full" type="date" id="birth" bind:value={updatedMemberData.birth} />
+
+    <div class="mt-5">
+        <button class="w-full btn btn-primary" on:click={updateMember}>회원 정보 수정</button>
+    </div>
+</div>
+</div>
+</div>
 </div>
