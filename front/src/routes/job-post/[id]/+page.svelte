@@ -19,8 +19,8 @@
 
 <style>
     .job-post-container {
-        background-color: #fff; /* 화이트 톤 배경색 설정 */
-        border: 1px solid #000; /* 블랙 톤 테두리 설정 */
+        background-color: #fff; /* 배경색 설정 */
+        border: 1px solid #000; /* 테두리 설정 */
         border-radius: 10px; /* 둥근 테두리 설정 */
         padding: 20px;
         margin: 20px;
@@ -112,9 +112,9 @@
         </p>
         <div class="info-box">
             <div>위치: {jobPostDto?.location}</div>
-            <div>댓글 수: {jobPostDto?.commentsCount}</div>
-            <div>지원자 수: {jobPostDto?.applicationCount}</div>
-            <div>관심등록 수: {jobPostDto?.interestsCount}</div>
+            <div>공고 마감: {jobPostDto?.deadLine}</div>
+            <div>지원 가능 최소 나이: {jobPostDto?.minAge}</div>
+            <div>성별 구분: {jobPostDto?.gender}</div>
         </div>
     </div>
 {/await}

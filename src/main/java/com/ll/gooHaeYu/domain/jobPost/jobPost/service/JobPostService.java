@@ -17,11 +17,10 @@ import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
-import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -198,7 +197,7 @@ public class JobPostService {
     @Transactional
     public void increaseViewCount(Long jobPostId) {
         JobPost jobPost = jobPostRepository.findById(jobPostId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
+                .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
         jobPost.increaseViewCount();
     }
 
@@ -241,7 +240,7 @@ public class JobPostService {
     public void deadline(String username, Long postId) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         if (!canEditPost(username,postDetail.getAuthor())) {
-            throw new CustomException(ErrorCode.NOT_ABLE);
+            throw new CustomException(NOT_ABLE);
         }
 
         List<Application> applicationList = postDetail.getApplications().stream()

@@ -29,6 +29,10 @@ export interface paths {
     /** 구인공고 삭제 */
     delete: operations["deleteJobPost"];
   };
+  "/api/employ/{postId}/{applicationIds}": {
+    /** 지원서 승인 */
+    put: operations["approve"];
+  };
   "/api/applications/{id}": {
     /** 지원서 상세 내용 */
     get: operations["detailApplication"];
@@ -66,9 +70,6 @@ export interface paths {
     /** 구인공고 관심 제거 */
     delete: operations["disinterest"];
   };
-  "/api/employ/{postId}/{applicationIds}": {
-    post: operations["approve"];
-  };
   "/member/socialLogin/{providerTypeCode}": {
     /** 소셜 로그인 */
     get: operations["socialLogin"];
@@ -97,8 +98,17 @@ export interface paths {
     /** 구인공고 글 목록 정렬 */
     get: operations["findAllPostSort"];
   };
+  "/api/job-posts/search": {
+    /** 게시물 검색 */
+    get: operations["searchJobPostsByTitleAndBody"];
+  };
   "/api/employ/{postId}": {
+    /** 공고 별 지원리스트 */
     get: operations["getList"];
+  };
+  "/api/job-posts/{id}/deadline": {
+    /** 공고 마감 */
+    delete: operations["deadline"];
   };
 }
 
@@ -230,6 +240,8 @@ export interface components {
       applicationCount: number;
       /** Format: int64 */
       interestsCount: number;
+      /** Format: date */
+      deadLine?: string;
       createdAt?: string;
       closed?: boolean;
     };
@@ -262,28 +274,45 @@ export interface components {
       success?: boolean;
       fail?: boolean;
     };
-    RsDataJobPostDto: {
+    JobPostDetailDto: {
+      /** Format: int64 */
+      id: number;
+      author: string;
+      title: string;
+      body: string;
+      location: string;
+      /** Format: int32 */
+      minAge?: number;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      /** Format: date */
+      deadLine?: string;
+      createdAt?: string;
+      modifyAt?: string;
+      closed?: boolean;
+    };
+    RsDataJobPostDetailDto: {
       resultCode?: string;
       /** Format: int32 */
       statusCode?: number;
       msg?: string;
-      data?: components["schemas"]["JobPostDto"];
+      data?: components["schemas"]["JobPostDetailDto"];
       success?: boolean;
       fail?: boolean;
     };
     PageJobPostDto: {
-      /** Format: int32 */
-      totalPages?: number;
       /** Format: int64 */
       totalElements?: number;
-      first?: boolean;
-      last?: boolean;
+      /** Format: int32 */
+      totalPages?: number;
       /** Format: int32 */
       size?: number;
       content?: components["schemas"]["JobPostDto"][];
       /** Format: int32 */
       number?: number;
       sort?: components["schemas"]["SortObject"];
+      first?: boolean;
+      last?: boolean;
       /** Format: int32 */
       numberOfElements?: number;
       pageable?: components["schemas"]["PageableObject"];
@@ -424,7 +453,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataJobPostDto"];
+          "*/*": components["schemas"]["RsDataJobPostDetailDto"];
         };
       };
     };
@@ -453,6 +482,21 @@ export interface operations {
     parameters: {
       path: {
         id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
+  };
+  /** 지원서 승인 */
+  approve: {
+    parameters: {
+      path: {
+        postId: number;
+        applicationIds: number[];
       };
     };
     responses: {
@@ -655,20 +699,6 @@ export interface operations {
       };
     };
   };
-  approve: {
-    parameters: {
-      path: {
-        postId: number;
-        applicationIds: number[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-    };
-  };
   /** 소셜 로그인 */
   socialLogin: {
     parameters: {
@@ -766,6 +796,25 @@ export interface operations {
       };
     };
   };
+  /** 게시물 검색 */
+  searchJobPostsByTitleAndBody: {
+    parameters: {
+      query?: {
+        titleOrBody?: string;
+        title?: string;
+        body?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["JobPostDto"][];
+        };
+      };
+    };
+  };
+  /** 공고 별 지원리스트 */
   getList: {
     parameters: {
       path: {
@@ -778,6 +827,20 @@ export interface operations {
         content: {
           "*/*": components["schemas"]["RsDataListApplicationDto"];
         };
+      };
+    };
+  };
+  /** 공고 마감 */
+  deadline: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
       };
     };
   };
