@@ -43,9 +43,7 @@
     }
 
     .form-group {
-        margin-bottom: 20px;
-        border-bottom: 1px solid #ccc; /* 각 폼 그룹 아래에 구분선 추가 */
-        padding-bottom: 10px; /* 구분선과 폼 요소 사이 간격 추가 */
+            margin-bottom: 10px;
     }
 
     .form-group:last-child {
@@ -81,17 +79,23 @@
     }
 </style>
 
-<div class="login-container">
-    <h1>회원가입</h1>
-    <form on:submit|preventDefault={submitJoinForm}>
-        <div class="form-group">
-            <label for="username">아이디</label>
-            <input type="text" id="username" name="username" placeholder="아이디를 입력하세요" required />
-        </div>
-        <div class="form-group">
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required />
-        </div>
-        <button class="join-button" type="submit">가입하기</button>
-    </form>
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="container mx-auto px-4">
+    <div class="max-w-sm mx-auto my-10">
+        <h2 class="text-2xl font-bold text-center my-3">회원가입</h2>
+       <form on:submit|preventDefault={submitJoinForm}>
+          <div class="form-group">
+              <label class="label" for="username">사용자ID</label>
+              <input type="text" id="username" name="username" class="input input-bordered w-full" placeholder="ID를 입력해주세요." required />
+          </div>
+          <div class="form-group">
+              <label class="label" for="password">비밀번호</label>
+              <input type="password" id="password" name="password" class="input input-bordered w-full" placeholder="비밀번호를 입력해주세요." required />
+          </div>
+          <div class="my-5">
+              <button type="submit" class="w-full btn btn-primary">가입하기</button>
+          </div>
+      </form>
+    </div>
+  </div>
 </div>
