@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.util.SerializationUtils;
 
+import java.util.Arrays;
 import java.util.Base64;
 
 public class CookieUtil {
@@ -47,5 +48,16 @@ public class CookieUtil {
                         Base64.getUrlDecoder().decode(cookie.getValue())
                 )
         );
+    }
+
+    public static Cookie findCookie(HttpServletRequest request, String cookieName) {
+        if (request.getCookies() == null) {
+            return null;
+        }
+
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(cookieName))
+                .findFirst()
+                .orElse(null);
     }
 }
