@@ -22,8 +22,8 @@ public class Essential {
     private int minAge;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Gender gender;
+    //@Column(nullable = false)
+    private Gender gender = Gender.UNDEFINED;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_post_detail_id", nullable = false)

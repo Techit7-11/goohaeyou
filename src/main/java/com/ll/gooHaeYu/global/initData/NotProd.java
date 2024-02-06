@@ -50,7 +50,7 @@ public class NotProd {
                         .birth(LocalDate.parse("2000-01-01"))
                         .gender(Gender.MALE)
                         .name("테스트")
-                        .location("경기도 수원시 영통구 이의동 263-1")
+                        .location("경기 수원시 영통구 이의동 263-1")
                         .phoneNumber("01011112222")
                         .build();
 
@@ -79,6 +79,8 @@ public class NotProd {
                             .title("구인공고 제목" + i)
                             .body("구인공고 내용" + i)
                             .location("서울특별시 광진구 천호대로124길")
+                            .deadLine(LocalDate.now().plusWeeks(2))
+                            .minAge(20)
                             .build();
 
                     jobPostService.writePost("testUser1", postRegister);
