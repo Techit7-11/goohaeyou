@@ -3,34 +3,21 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Essential;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
-import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@Builder
+@SuperBuilder
 @Getter
-public class JobPostDetailDto {
-    @NotNull
-    private Long id;
-    @NotNull
-    private String author;
-    @NotNull
-    private String title;
+public class JobPostDetailDto extends AbstractJobPostDto{
     @NotNull
     private String body;
-    @NotNull
-    private String location;
-    private int minAge;
-    private Gender gender;
-    private LocalDate deadLine;
-    private boolean isClosed = false; // 기본값 설정
-    @NonNull
-    private String createdAt;
+    private long applicationCount;
+    private long interestsCount;
+    private Essential essential;
+    private boolean isClosed;
     private String modifyAt;
 
     public static JobPostDetailDto fromEntity(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential) {
@@ -38,11 +25,15 @@ public class JobPostDetailDto {
 
         return JobPostDetailDto.builder()
                 .id(jobPost.getId())
-                .author(jobPost.getMember().getUsername())
+                .author(jobPostDetail.getAuthor())
                 .title(jobPost.getTitle())
                 .body(jobPostDetail.getBody())
-                .minAge(essential.getMinAge())
-                .gender(essential.getGender())
+                .location(jobPost.getLocation())
+                .incrementViewCount(jobPost.getIncrementViewCount())
+                .commentsCount(jobPost.getCommentsCount())
+                .applicationCount(jobPost.getApplicationCount())
+                .interestsCount(jobPost.getInterestsCount())
+                .essential(essential)
                 .deadLine(jobPost.getDeadline())
                 .isClosed(jobPost.isClosed())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
