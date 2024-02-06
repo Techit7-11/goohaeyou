@@ -46,7 +46,6 @@
 	}
 </script>
 
-
 <style>
 	.container {
 		background-color: #ffffff;

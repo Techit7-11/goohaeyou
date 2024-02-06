@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Tag(name = "JobPost", description = "구인공고 API")
@@ -70,29 +69,39 @@ public class JobPostController {
         // 쿠키 없으면 조회수 증가하고 쿠키 생성
         if (!isJobPostAlreadyVisited) {
             jobPostService.increaseViewCount(id);
-            addOrUpdateViewedJobPostsCookie(response, id, VIEWED_JOB_POSTS_COOKIE);
+            addOrUpdateViewedJobPostsCookie(request, response, id, VIEWED_JOB_POSTS_COOKIE);
         }
 
-        return  RsData.of(jobPostService.findById(id));
+        return RsData.of(jobPostService.findById(id));
     }
 
     // 방문 여부 확인 (쿠키를 활용)
     private boolean checkJobPostVisited(HttpServletRequest request, Long jobId, String cookieName) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(cookieName) && cookie.getValue().contains("[" + jobId + "]")) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        Cookie viewCookie = CookieUtil.findCookie(request, cookieName);
+        return viewCookie != null && viewCookie.getValue().contains("_" + jobId);
     }
 
     // 쿠키 추가
-    private void addOrUpdateViewedJobPostsCookie(HttpServletResponse response, Long jobId, String cookieName) {
-        String cookieValue = "[" + jobId + "]";
-        CookieUtil.addCookie(response, cookieName, cookieValue, 24 * 60 * 60);
+    private void addOrUpdateViewedJobPostsCookie(HttpServletRequest request, HttpServletResponse response, Long jobId, String cookieName) {
+        // 쿠키에서 방문한 게시물 ID 목록 가져옴
+        Cookie viewCookie = CookieUtil.findCookie(request, cookieName);
+        String newCookieValue;
+
+        // 가져온 목록에 현재 게시물 ID 추가
+        if (viewCookie != null) {
+            String existingValue = viewCookie.getValue();
+            if (!existingValue.contains("_" + jobId)) {
+                newCookieValue = existingValue + "_" + jobId;
+            } else {
+                // 이미 방문한 게시물이면 쿠키 값을 변경 X
+                return;
+            }
+        } else {
+            newCookieValue = "_" + jobId;
+        }
+
+        // 새로운 쿠키 값 설정 or 기존 쿠키 업데이트
+        CookieUtil.addCookie(response, cookieName, newCookieValue, 24 * 60 * 60); // 24시간
     }
 
     @PostMapping("/{id}/interest")

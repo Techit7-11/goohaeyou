@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class JobPostForm {
 
@@ -26,7 +25,7 @@ public class JobPostForm {
 
         private int minAge;
 
-        private Gender gender;
+        private Gender gender = Gender.UNDEFINED;
 
         private LocalDate deadLine;
 //        private LocalDateTime deadLine;
