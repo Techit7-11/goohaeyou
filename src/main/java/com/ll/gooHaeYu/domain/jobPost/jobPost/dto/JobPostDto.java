@@ -36,10 +36,10 @@ public class JobPostDto extends AbstractJobPostDto{
 
 
     public static Page<JobPostDto> toDtoListPage(Page<JobPost> jobPosts) {
-        List<JobPostDto> jobPostDto = jobPosts
+        List<JobPostDto> jobPostDtos = jobPosts
                 .map(JobPostDto::fromEntity)
                 .toList();
 
-        return new PageImpl<>(jobPostDto, PageRequest.of(jobPosts.getNumber(), jobPosts.getSize()), jobPosts.getTotalElements());
+        return new PageImpl<>(jobPostDtos, PageRequest.of(jobPosts.getNumber(), jobPosts.getSize()), jobPosts.getTotalElements());
     }
 }
