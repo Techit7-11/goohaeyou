@@ -1,8 +1,8 @@
 
-
+<script>
     import { onMount } from 'svelte';
     import rq from '$lib/rq/rq.svelte';
-  
+
     // 업데이트할 회원 정보 데이터
     let updatedMemberData = {
       name: '',

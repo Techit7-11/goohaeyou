@@ -38,4 +38,4 @@
   </div>
   </header>
 <main>{@render children()}</main>
-<footer>footer</footer>
+<footer class="bg-blue-900 text-white">footer</footer>

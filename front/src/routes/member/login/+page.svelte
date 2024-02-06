@@ -51,7 +51,7 @@
     }
 
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .form-group label {
@@ -93,22 +93,32 @@
     }
 </style>
 
-<div class="login-container">
-    <h1>로그인</h1>
-    <form on:submit|preventDefault={submitLoginForm}>
-        <div class="form-group">
-            <label for="username">아이디</label>
-            <input type="text" id="username" name="username" placeholder="아이디" required />
-        </div>
-        <div class="form-group">
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" placeholder="비밀번호" required />
-        </div>
-        <div class="button-group">
-            <button class="login-button" type="submit">로그인</button>
-            <a href={rq.getGoogleLoginUrl()} class="google-login">
-                <img src="/google.png" alt="구글 로그인"/>
-            </a>
-        </div>
-    </form>
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="container mx-auto px-4">
+    <div class="max-w-sm mx-auto my-10">
+        <h2 class="text-2xl font-bold text-center my-3">로그인</h2>
+      <form on:submit|preventDefault={submitLoginForm}>
+          <div class="form-group">
+              <label class="label" for="username">사용자ID</label>
+              <input type="text" id="username" name="username" class="input input-bordered w-full" placeholder="ID를 입력해주세요." required />
+          </div>
+          <div class="form-group">
+              <label class="label" for="password">비밀번호</label>
+              <input type="password" id="password" name="password" class="input input-bordered w-full" placeholder="비밀번호를 입력해주세요." required />
+          </div>
+          <div class="my-5">
+              <button type="submit" class="w-full btn btn-primary">들어가기</button>
+          </div>
+          <div>
+               <a href={rq.getGoogleLoginUrl()} class="flex justify-center my-5">
+                          <img src="/google.png" alt="구글 로그인"/>
+               </a>
+          </div>
+         <p class="text-center text-sm text-gray-500">
+                             아직 회원이 아니라면?
+               <a href="/member/join" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">회원가입</a>
+         </p>
+      </form>
+    </div>
+  </div>
 </div>
