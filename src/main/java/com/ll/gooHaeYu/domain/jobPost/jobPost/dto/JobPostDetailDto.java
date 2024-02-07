@@ -3,6 +3,7 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Essential;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
+import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -16,7 +17,8 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     private String body;
     private long applicationCount;
     private long interestsCount;
-    private Essential essential;
+    private int minAge = 0;
+    private Gender gender = Gender.UNDEFINED;
     private boolean isClosed;
     private String modifyAt;
 
@@ -33,7 +35,8 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .commentsCount(jobPost.getCommentsCount())
                 .applicationCount(jobPost.getApplicationCount())
                 .interestsCount(jobPost.getInterestsCount())
-                .essential(essential)
+                .gender(jobPostDetail.getEssential().getGender())
+                .minAge(jobPostDetail.getEssential().getMinAge())
                 .deadLine(jobPost.getDeadline())
                 .isClosed(jobPost.isClosed())
                 .createdAt(jobPost.getCreatedAt().format(formatter))

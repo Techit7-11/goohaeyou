@@ -97,6 +97,7 @@ public class MemberService {
         Member member = getMember(username);
 
         Member updatedMember = member.oauthDetailUpdate(form);
+        member.updateRole(Role.USER);
 
         return MemberDto.fromEntity(updatedMember);
     }

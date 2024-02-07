@@ -232,18 +232,14 @@ export interface components {
       id: number;
       author: string;
       title: string;
-      body: string;
       location: string;
       /** Format: int64 */
       commentsCount: number;
       /** Format: int64 */
-      applicationCount: number;
-      /** Format: int64 */
-      interestsCount: number;
+      incrementViewCount: number;
       /** Format: date */
       deadLine?: string;
-      createdAt?: string;
-      closed?: boolean;
+      createdAt: string;
     };
     RsDataListJobPostDto: {
       resultCode?: string;
@@ -279,15 +275,23 @@ export interface components {
       id: number;
       author: string;
       title: string;
-      body: string;
       location: string;
+      /** Format: int64 */
+      commentsCount: number;
+      /** Format: int64 */
+      incrementViewCount: number;
+      /** Format: date */
+      deadLine?: string;
+      createdAt: string;
+      body: string;
+      /** Format: int64 */
+      applicationCount?: number;
+      /** Format: int64 */
+      interestsCount?: number;
       /** Format: int32 */
       minAge?: number;
       /** @enum {string} */
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      /** Format: date */
-      deadLine?: string;
-      createdAt?: string;
       modifyAt?: string;
       closed?: boolean;
     };
