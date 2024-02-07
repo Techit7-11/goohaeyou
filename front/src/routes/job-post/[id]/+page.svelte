@@ -94,27 +94,37 @@
 
 {#await load()}
     <div>Loading...</div>
-{:then { data: jobPostDto }}
+{:then { data: jobPostDetailDto }}
     <div class="job-post-container">
-        <div class="id-box">No.{jobPostDto?.id}</div>
-        <div class="title-box">{jobPostDto?.title}</div>
+        <div class="id-box">No.{jobPostDetailDto?.id}</div>
+        <div class="title-box">{jobPostDetailDto?.title}</div>
         <div class="author-createdAt">
-            <p>{jobPostDto?.author}</p>
-            <p>등록일시 {jobPostDto?.createdAt}</p>
+            <p>{jobPostDetailDto?.author}</p>
+            <p>등록일시 {jobPostDetailDto?.createdAt}</p>
         </div>
-        <div class="content-box">{jobPostDto?.body}</div>
+        <div class="content-box">{jobPostDetailDto?.body}</div>
         <p>
-            {#if jobPostDto?.closed}
+            {#if jobPostDetailDto?.closed}
                 <span class="status-box">마감</span>
             {:else}
                 <span class="status-box">구인중</span>
             {/if}
         </p>
         <div class="info-box">
-            <div>위치: {jobPostDto?.location}</div>
-            <div>공고 마감: {jobPostDto?.deadLine}</div>
-            <div>지원 가능 최소 나이: {jobPostDto?.minAge}</div>
-            <div>성별 구분: {jobPostDto?.gender}</div>
+            <div>위치: {jobPostDetailDto?.location}</div>
+            <div>공고 마감: {jobPostDetailDto?.deadLine}</div>
+            <div>지원 가능 최소 나이: {jobPostDetailDto?.minAge}</div>
+            성별 구분: 
+            {#if jobPostDetailDto?.gender === 'MALE'}
+                남
+            {:else if jobPostDetailDto?.gender === 'FEMALE'}
+                여
+            {:else}
+                무관
+            {/if}
+            <div>최종 수정일자: {jobPostDetailDto?.modifyAt}</div>
+            <div>조회수: {jobPostDetailDto?.incrementViewCount}</div>
+            <div>관심 등록 수 : {jobPostDetailDto?.interestsCount}</div>
         </div>
     </div>
 {/await}

@@ -66,6 +66,7 @@
                 <a href="/job-post/{jobPostDto.id}">{jobPostDto.title}</a>
                 <a href="/job-post/{jobPostDto.id}">{jobPostDto.author}</a>
                 <a href="/job-post/{jobPostDto.id}">{jobPostDto.createdAt}</a>
+                <a href="/job-post/{jobPostDto.id}">{jobPostDto.location}</a>
                 <a href="/job-post/{jobPostDto.id}">
                     {#if jobPostDto.closed}
                         마감
