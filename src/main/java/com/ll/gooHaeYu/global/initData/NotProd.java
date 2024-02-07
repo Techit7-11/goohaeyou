@@ -74,6 +74,58 @@ public class NotProd {
 
                 memberService.login(loginForm);
 
+                JobPostForm.Register postRegister1 = JobPostForm.Register.builder()
+                        .title("주말 세탁물정리알바구해요 초보가능")
+                        .body("세탁물 단순 개비기입니다.\n" +
+                                "초보자도 가능해요.")
+                        .location("부산 동구 중앙대로 539")
+                        .deadLine(LocalDate.now().plusWeeks(2))
+                        .build();
+
+                jobPostService.writePost("testUser1", postRegister1);
+
+                JobPostForm.Register postRegister2 = JobPostForm.Register.builder()
+                        .title("과일 포장해 주실 분 구합니다")
+                        .body("5kg 과일박스 개인작업대로 들어올려 택배포장작업 또는 기타 포장작업 하는 업무 입니다 \n" +
+                                "개인작업대에서 과일 택배포장하시는거고 시간 잘갑니다\n" +
+                                "\n" +
+                                "02010 목요일 하루\n" +
+                                "\n" +
+                                "시간 8:00~12:00\n" +
+                                "일끝나고 입금")
+                        .location("경남 창원시 진해구 신항10로 98")
+                        .deadLine(LocalDate.now().plusWeeks(2))
+                        .minAge(20)
+                        .gender(Gender.UNDEFINED)
+                        .build();
+
+                jobPostService.writePost("testUser1", postRegister2);
+
+                JobPostForm.Register postRegister3 = JobPostForm.Register.builder()
+                        .title("촬영 현장 현장보조알바 구인 ")
+                        .body("유튜브 예능 촬영 현장 보조알바 분을 모집합니다.\n" +
+                                "약속 펑크 안내시는 책임감 있는 분들과 함께 일하게되는 기회가 되었으면 합니다.\n" +
+                                "\n" +
+                                "촬영 일정 : 02/10 14:30~22:00 / 이동 시간이 포함된 시간입니다.\n" +
+                                "\n" +
+                                "집합지 : 서울 성수역 인근\n" +
+                                "\n" +
+                                "담당 업무 : 촬영진행 보조\n" +
+                                "\n" +
+                                "페이 : 10만원\n" +
+                                "\n" +
+                                "\n" +
+                                "사무실에서 함께 짐을 챙겨 이동하고 촬영종료 후 정리하는 것이 주업무입니다.\n" +
+                                "\n" +
+                                "현장 스탭 안내에 따라 도움주시면 됩니다 :)\n")
+                        .location("서울 성동구 아차산로 100")
+                        .deadLine(LocalDate.now().plusDays(5))
+                        .minAge(20)
+                        .gender(Gender.MALE)
+                        .build();
+
+                jobPostService.writePost("testUser1", postRegister3);
+
                 IntStream.rangeClosed(1, 50).forEach(i -> {
                     JobPostForm.Register postRegister = JobPostForm.Register.builder()
                             .title("구인공고 제목" + i)
