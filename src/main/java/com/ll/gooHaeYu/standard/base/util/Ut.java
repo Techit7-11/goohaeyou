@@ -3,6 +3,9 @@ package com.ll.gooHaeYu.standard.base.util;
 import com.ll.gooHaeYu.global.config.AppConfig;
 import lombok.SneakyThrows;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Ut {
     public static class str {
         public static boolean isBlank(String str) {
@@ -18,6 +21,22 @@ public class Ut {
         @SneakyThrows
         public static void sleep(long millis) {
             Thread.sleep(millis);
+        }
+    }
+
+    public static class addr {
+        private static final Pattern LOCATION_PATTERN = Pattern.compile("^(서울|부산|대구|인천|광주|대전|울산|세종)|^(.*?[시도])\\s(.*?[시군구])");
+
+        public static String simplifyLocation(String location) {
+            Matcher matcher = LOCATION_PATTERN.matcher(location);
+            if (matcher.find()) {
+                for (int i = 1; i <= matcher.groupCount(); i++) {
+                    if (matcher.group(i) != null) {
+                        return matcher.group(i);
+                    }
+                }
+            }
+            return location; // 매치되는 패턴이 없다면 원본 문자열 반환
         }
     }
 

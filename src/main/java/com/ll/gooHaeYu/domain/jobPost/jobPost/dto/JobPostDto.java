@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.standard.base.util.Ut;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ public class JobPostDto extends AbstractJobPostDto{
                 .id(jobPost.getId())
                 .author(jobPost.getMember().getUsername())
                 .title(jobPost.getTitle())
-                .location(jobPost.getLocation())
+                .location(Ut.addr.simplifyLocation(jobPost.getLocation()))
                 .commentsCount(jobPost.getCommentsCount())
                 .incrementViewCount(jobPost.getIncrementViewCount())
                 .deadLine(jobPost.getDeadline())
