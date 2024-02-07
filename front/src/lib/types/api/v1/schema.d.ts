@@ -48,7 +48,7 @@ export interface paths {
     post: operations["write"];
   };
   "/api/member/login": {
-    /** 로그인, accessToken 쿠키 생성됨 */
+    /** 로그인, accessToken, refreshToken 쿠키 생성됨 */
     post: operations["login"];
   };
   "/api/member/join": {
@@ -151,8 +151,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["MemberDto"];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     RsDataURI: {
       resultCode?: string;
@@ -161,21 +161,12 @@ export interface components {
       msg?: string;
       /** Format: uri */
       data?: string;
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     LoginForm: {
       username: string;
       password: string;
-    };
-    RsDataString: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: string;
-      fail?: boolean;
-      success?: boolean;
     };
     JoinForm: {
       username: string;
@@ -206,8 +197,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["CommentDto"][];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     JobPostDto: {
       /** Format: int64 */
@@ -233,8 +224,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDto"][];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     ApplicationDto: {
       /** Format: int64 */
@@ -253,8 +244,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"][];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     JobPostDetailDto: {
       /** Format: int64 */
@@ -279,8 +270,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDetailDto"];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     PageJobPostDto: {
       /** Format: int32 */
@@ -304,12 +295,12 @@ export interface components {
       /** Format: int64 */
       offset?: number;
       sort?: components["schemas"]["SortObject"];
-      paged?: boolean;
-      unpaged?: boolean;
       /** Format: int32 */
       pageNumber?: number;
       /** Format: int32 */
       pageSize?: number;
+      paged?: boolean;
+      unpaged?: boolean;
     };
     RsDataPageJobPostDto: {
       resultCode?: string;
@@ -317,13 +308,13 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["PageJobPostDto"];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     SortObject: {
       empty?: boolean;
-      unsorted?: boolean;
       sorted?: boolean;
+      unsorted?: boolean;
     };
     RsDataApplicationDto: {
       resultCode?: string;
@@ -331,8 +322,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
   };
   responses: never;
@@ -579,7 +570,7 @@ export interface operations {
       };
     };
   };
-  /** 로그인, accessToken 쿠키 생성됨 */
+  /** 로그인, accessToken, refreshToken 쿠키 생성됨 */
   login: {
     requestBody: {
       content: {
@@ -589,9 +580,7 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: {
-          "*/*": components["schemas"]["RsDataString"];
-        };
+        content: never;
       };
     };
   };

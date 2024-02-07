@@ -6,6 +6,7 @@ import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.security.JwtTokenProvider;
+import com.ll.gooHaeYu.global.security.OAuth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,14 +48,12 @@ public class MemberService {
         return newMember.getId();
     }
 
-    public String  login(LoginForm form) {
+    public void login(LoginForm form) {
         Member member = getMember(form.getUsername());
 
         if (!bCryptPasswordEncoder.matches(form.getPassword(), member.getPassword())) {
             throw new CustomException(INVALID_PASSWORD);
         }
-
-        return jwtTokenProvider.generateToken(member, Duration.ofHours(1));
     }
 
     public Member getMember(String username) {
