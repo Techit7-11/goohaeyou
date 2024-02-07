@@ -23,8 +23,9 @@ import java.time.Duration;
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
+    public static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(1);
-    public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(10);  // 임시로 10시간으로 설정 (나중에 1시간으로 돌리기)
+    public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(1);
     public static final String REDIRECT_PATH = AppConfig.getSiteFrontUrl();
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -42,12 +43,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         addRefreshTokenToCookie(request, response, refreshToken);
 
         String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
-        String targetUrl = getTargetUrl(accessToken);
+        addAccessTokenToCookie(request, response, accessToken);
 
         clearAuthenticationAttributes(request, response);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, REDIRECT_PATH);
     }
 
+    // 리프레쉬 토큰 DB 저장
     private void saveRefreshToken(Long userId, String newRefreshToken) {
         RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
                 .map(entity -> entity.update(newRefreshToken))
@@ -56,6 +58,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         refreshTokenRepository.save(refreshToken);
     }
 
+    // 액세스 토큰 쿠키 저장
+    private void addAccessTokenToCookie(HttpServletRequest request, HttpServletResponse response, String accessToken) {
+        int cookieMaxAge = (int) ACCESS_TOKEN_DURATION.toSeconds();
+
+        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN_COOKIE_NAME);
+        CookieUtil.addCookie(response, ACCESS_TOKEN_COOKIE_NAME, accessToken, cookieMaxAge);
+    }
+
+    // 리프레쉬 토큰 쿠키 저장
     private void addRefreshTokenToCookie(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
         int cookieMaxAge = (int) REFRESH_TOKEN_DURATION.toSeconds();
 
@@ -63,15 +74,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         CookieUtil.addCookie(response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, cookieMaxAge);
     }
 
+    //인증 과정 중 생긴 요청 속성 제거
     private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-    }
-
-    private String getTargetUrl(String token) {
-        return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
-                .queryParam("access_token", token)
-                .build()
-                .toUriString();
     }
 }

@@ -154,8 +154,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["MemberDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     CreateAccessTokenRequest: {
       refreshToken?: string;
@@ -169,8 +169,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["CreateAccessTokenResponse"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     RsDataURI: {
       resultCode?: string;
@@ -179,8 +179,8 @@ export interface components {
       msg?: string;
       /** Format: uri */
       data?: string;
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     LoginForm: {
       username: string;
@@ -192,8 +192,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: string;
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     JoinForm: {
       username: string;
@@ -224,8 +224,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["CommentDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     JobPostDto: {
       /** Format: int64 */
@@ -251,8 +251,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     ApplicationDto: {
       /** Format: int64 */
@@ -271,8 +271,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     JobPostDetailDto: {
       /** Format: int64 */
@@ -297,37 +297,37 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDetailDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     PageJobPostDto: {
-      /** Format: int64 */
-      totalElements?: number;
       /** Format: int32 */
       totalPages?: number;
+      /** Format: int64 */
+      totalElements?: number;
+      first?: boolean;
+      last?: boolean;
       /** Format: int32 */
       size?: number;
       content?: components["schemas"]["JobPostDto"][];
       /** Format: int32 */
       number?: number;
       sort?: components["schemas"]["SortObject"];
-      first?: boolean;
-      last?: boolean;
+      pageable?: components["schemas"]["PageableObject"];
       /** Format: int32 */
       numberOfElements?: number;
-      pageable?: components["schemas"]["PageableObject"];
       empty?: boolean;
     };
     PageableObject: {
       /** Format: int64 */
       offset?: number;
       sort?: components["schemas"]["SortObject"];
-      /** Format: int32 */
-      pageSize?: number;
-      /** Format: int32 */
-      pageNumber?: number;
       paged?: boolean;
       unpaged?: boolean;
+      /** Format: int32 */
+      pageNumber?: number;
+      /** Format: int32 */
+      pageSize?: number;
     };
     RsDataPageJobPostDto: {
       resultCode?: string;
@@ -335,13 +335,13 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["PageJobPostDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     SortObject: {
       empty?: boolean;
-      sorted?: boolean;
       unsorted?: boolean;
+      sorted?: boolean;
     };
     RsDataApplicationDto: {
       resultCode?: string;
@@ -349,8 +349,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
   };
   responses: never;
@@ -370,8 +370,8 @@ export interface operations {
   modify: {
     parameters: {
       path: {
-        postId: number;
-        commentId: number;
+        arg1: number;
+        arg2: number;
       };
     };
     requestBody: {
@@ -495,8 +495,8 @@ export interface operations {
   approve: {
     parameters: {
       path: {
-        postId: number;
-        applicationIds: number[];
+        arg1: number;
+        arg2: number[];
       };
     };
     responses: {
@@ -703,10 +703,10 @@ export interface operations {
   socialLogin: {
     parameters: {
       query: {
-        redirectUrl: string;
+        arg0: string;
       };
       path: {
-        providerTypeCode: string;
+        arg1: string;
       };
     };
     responses: {
@@ -722,7 +722,7 @@ export interface operations {
   findByPostId: {
     parameters: {
       path: {
-        postId: number;
+        arg0: number;
       };
     };
     responses: {
@@ -818,7 +818,7 @@ export interface operations {
   getList: {
     parameters: {
       path: {
-        postId: number;
+        arg1: number;
       };
     };
     responses: {

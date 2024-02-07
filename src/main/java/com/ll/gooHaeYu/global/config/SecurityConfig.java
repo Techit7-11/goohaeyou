@@ -2,7 +2,6 @@ package com.ll.gooHaeYu.global.config;
 
 import com.ll.gooHaeYu.domain.member.member.repository.RefreshTokenRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.global.security.CustomLogoutSuccessHandler;
 import com.ll.gooHaeYu.global.security.CustomUserDetailsService;
 import com.ll.gooHaeYu.global.security.JwtFilter;
 import com.ll.gooHaeYu.global.security.JwtTokenProvider;
@@ -77,11 +76,19 @@ public class SecurityConfig {
                             .userInfoEndpoint()
                             .userService(oAuth2UserCustomService);
                 })
-                .logout(logout -> {
-                    logout
-                            .logoutSuccessUrl("/login")
-                            .logoutSuccessHandler(new CustomLogoutSuccessHandler());
-                })
+                .formLogin(
+                        formLogin ->
+                                formLogin
+                                        .loginPage("/member/login")
+                                        .permitAll()
+                )
+                .logout(
+                        logout ->
+                                logout
+                                        .logoutRequestMatcher(
+                                                new AntPathRequestMatcher("/member/logout")
+                                        )
+                )
                 .exceptionHandling(exceptionHandling -> {
                     exceptionHandling
                             .defaultAuthenticationEntryPointFor(
