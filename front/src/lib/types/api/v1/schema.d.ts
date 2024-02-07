@@ -43,9 +43,6 @@ export interface paths {
     /** 지원서 삭제 */
     delete: operations["deleteApplication"];
   };
-  "/api/token": {
-    post: operations["createNewAccessToken"];
-  };
   "/api/post-comment/{postId}/comment": {
     /** 댓글 작성 */
     post: operations["write"];
@@ -154,21 +151,6 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["MemberDto"];
-      fail?: boolean;
-      success?: boolean;
-    };
-    CreateAccessTokenRequest: {
-      refreshToken?: string;
-    };
-    CreateAccessTokenResponse: {
-      accessToken?: string;
-    };
-    RsDataCreateAccessTokenResponse: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["CreateAccessTokenResponse"];
       fail?: boolean;
       success?: boolean;
     };
@@ -573,21 +555,6 @@ export interface operations {
       /** @description OK */
       200: {
         content: never;
-      };
-    };
-  };
-  createNewAccessToken: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateAccessTokenRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["RsDataCreateAccessTokenResponse"];
-        };
       };
     };
   };
