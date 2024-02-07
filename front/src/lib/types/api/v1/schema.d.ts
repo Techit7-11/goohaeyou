@@ -47,6 +47,10 @@ export interface paths {
     /** 댓글 작성 */
     post: operations["write"];
   };
+  "/api/member/logout": {
+    /** 로그아웃 처리 및 쿠키 삭제 */
+    post: operations["logout"];
+  };
   "/api/member/login": {
     /** 로그인, accessToken, refreshToken 쿠키 생성됨 */
     post: operations["login"];
@@ -566,6 +570,17 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataURI"];
+        };
+      };
+    };
+  };
+  /** 로그아웃 처리 및 쿠키 삭제 */
+  logout: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": string;
         };
       };
     };

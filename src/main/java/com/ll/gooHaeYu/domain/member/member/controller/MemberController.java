@@ -11,6 +11,7 @@ import com.ll.gooHaeYu.domain.member.member.service.AuthenticationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
+import com.ll.gooHaeYu.standard.base.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Tag(name = "Member", description = "회원 관련 API")
 @RestController
@@ -49,6 +51,15 @@ public class MemberController {
         memberService.login(form);
         authenticationService.authenticateAndSetTokens(form.getUsername(), request, response);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping ("/logout")
+    @Operation(summary = "로그아웃 처리 및 쿠키 삭제")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Stream.of("refresh_token", "access_token", "JSESSIONID")
+                .forEach(cookieName -> CookieUtil.deleteCookie(request, response, cookieName));
+        request.getSession().invalidate();
+        return "redirect:/api/member/login?logout";
     }
 
     @GetMapping
