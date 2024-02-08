@@ -142,10 +142,15 @@ class Rq {
 	}
 
 	public async logoutAndRedirect(url: string) {
-		//await this.apiEndPoints().POST('/api/member/logout');  TO-DO
-
+		try {
+		await this.apiEndPoints().POST('/api/member/logout',{
+			credentials: "include",
+		});
 		this.setLogout();
 		this.replace(url);
+		} catch (error) {
+			console.error('Logout failed:', error);
+		}
 	}
 
 	public getGoogleLoginUrl() {

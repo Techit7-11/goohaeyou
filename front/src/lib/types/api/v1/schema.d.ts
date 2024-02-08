@@ -580,7 +580,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": Record<string, never>;
         };
       };
     };

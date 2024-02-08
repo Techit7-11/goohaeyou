@@ -23,7 +23,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 @Tag(name = "Member", description = "회원 관련 API")
@@ -55,11 +57,12 @@ public class MemberController {
 
     @PostMapping ("/logout")
     @Operation(summary = "로그아웃 처리 및 쿠키 삭제")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         Stream.of("refresh_token", "access_token", "JSESSIONID")
                 .forEach(cookieName -> CookieUtil.deleteCookie(request, response, cookieName));
-        request.getSession().invalidate();
-        return "redirect:/api/member/login?logout";
+        Map<String, String> responseMap = new HashMap<>();
+        responseMap.put("message", "로그아웃 되었습니다.");
+        return ResponseEntity.ok(responseMap);
     }
 
     @GetMapping
