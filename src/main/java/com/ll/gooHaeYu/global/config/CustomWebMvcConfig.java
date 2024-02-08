@@ -14,7 +14,7 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
                         "https://cdpn.io",
                         AppConfig.getSiteFrontUrl(),
                         "http://localhost:5173",
-                        "https://www.goohaeyou.site"
+                        "https://api.www.goohaeyou.site"
                 )
                 .allowedMethods("*")
                 .allowedHeaders("*")
