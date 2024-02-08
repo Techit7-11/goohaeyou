@@ -12,9 +12,9 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOrigins(
                         "https://cdpn.io",
-                        AppConfig.getSiteFrontUrl(),
                         "http://localhost:5173",
-                        "https://api.www.goohaeyou.site"
+                        AppConfig.getSiteFrontUrl(),
+                        AppConfig.getSiteBackUrl()
                 )
                 .allowedMethods("*")
                 .allowedHeaders("*")
