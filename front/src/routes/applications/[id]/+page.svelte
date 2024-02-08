@@ -33,7 +33,7 @@
 		console.log(postId);
 
 		if (response.data?.statusCode === 201) {
-			rq.msgAndRedirect({ msg: '지원 완료' }, undefined, 'http://localhost:5173/job-post/list');
+			rq.msgAndRedirect({ msg: '지원 완료' }, undefined, '/job-post/list');
 		}
 	}
 </script>
