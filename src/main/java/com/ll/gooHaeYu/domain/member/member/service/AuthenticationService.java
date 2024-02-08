@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.member.member.service;
 
+import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.RefreshToken;
 import com.ll.gooHaeYu.domain.member.member.repository.RefreshTokenRepository;
@@ -27,7 +28,7 @@ public class AuthenticationService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final MemberService memberService;
 
-    public void authenticateAndSetTokens(String username, HttpServletRequest request, HttpServletResponse response) {
+    public MemberDto authenticateAndSetTokens(String username, HttpServletRequest request, HttpServletResponse response) {
         Member member = memberService.getMember(username);
 
         // 리프레쉬 토큰
@@ -38,7 +39,10 @@ public class AuthenticationService {
         // 액세스 토큰
         String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
         addTokenToCookie(request, response, ACCESS_TOKEN_COOKIE_NAME, accessToken, ACCESS_TOKEN_DURATION);
+
+        return MemberDto.fromEntity(member);
     }
+
     // 리프레쉬 토큰 DB 저장
     private void saveRefreshToken(Long userId, String newRefreshToken) {
         RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
