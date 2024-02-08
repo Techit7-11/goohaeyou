@@ -1,7 +1,18 @@
 <script lang="ts">
 	import rq from '$lib/rq/rq.svelte';
 
-	async function loadMyPosts() {
+  import { onMount } from 'svelte';
+  import rq from '$lib/rq/rq.svelte';
+  import prettyDate from '$lib/utils/ut';
+
+    onMount(() => {
+        if (rq.isLogout()) {
+            rq.msgError('로그인이 필요합니다.');
+			rq.goTo('/member/login');
+        }
+    });
+  
+  async function loadMyPosts() {
 		const { data } = await rq.apiEndPoints().GET('/api/member/myposts', {});
 		return data;
 	}

@@ -12,6 +12,9 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 @Getter
 public class RsData<T> {
+    private static final int SUCCESS_CODE_MIN = 200;
+    private static final int SUCCESS_CODE_MAX = 399;
+
     @NonNull
     String resultCode;
     @NonNull
@@ -37,12 +40,10 @@ public class RsData<T> {
         return tRsData;
     }
 
-    @NonNull
     public boolean isSuccess() {
-        return getStatusCode() >= 200 && getStatusCode() < 400;
+        return getStatusCode() >= SUCCESS_CODE_MIN && getStatusCode() < SUCCESS_CODE_MAX;
     }
 
-    @NonNull
     public boolean isFail() {
         return !isSuccess();
     }
