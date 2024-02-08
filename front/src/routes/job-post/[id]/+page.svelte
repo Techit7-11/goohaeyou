@@ -16,7 +16,7 @@
 
 	async function apply() {
 		const postId = parseInt($page.params.id);
-		rq.goTo(`http://localhost:5173/applications/${postId}`);
+		rq.goTo(`/applications/${postId}`);
 	}
 </script>
 
