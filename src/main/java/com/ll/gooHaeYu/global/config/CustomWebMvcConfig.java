@@ -13,7 +13,8 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "https://cdpn.io",
                         AppConfig.getSiteFrontUrl(),
-                        "http://localhost:5173"
+                        "http://localhost:5173",
+                        "https://www.goohaeyou.site"
                 )
                 .allowedMethods("*")
                 .allowedHeaders("*")
