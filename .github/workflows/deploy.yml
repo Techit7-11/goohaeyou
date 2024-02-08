@@ -9,7 +9,7 @@ on:
       - Dockerfile
       - .github/workflows/deploy.yml
     branches:
-      - release
+      - dev
 jobs:
   deploy:
     name: Deploy app
