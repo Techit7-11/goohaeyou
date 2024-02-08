@@ -7,10 +7,10 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
   datasource:
-    url: NEED_TO_INPUT
-    username: NEED_TO_INPUT
-    password: NEED_TO_INPUT
-    driver-class-name: org.h2.Driver # NEED_TO_CHANGE
+    url: jdbc:h2:mem:db_prod;MODE=MYSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -28,6 +28,6 @@ logging:
     org.springframework.transaction.interceptor: INFO
 custom:
   site:
-    cookieDomain: NEED_TO_INPUT
-    frontUrl: NEED_TO_INPUT
-    backUrl: NEED_TO_INPUT
+    cookieDomain: "${custom.prod.cookieDomain}"
+    frontUrl: "${custom.prod.frontUrl}"
+    backUrl: "${custom.prod.backUrl}"

@@ -38,8 +38,8 @@ custom:
     backUrl: "http://${custom.dev.cookieDomain}:${server.port}"
   prod:
     cookieDomain: NEED_TO_INPUT
-    frontUrl: "https://${custom.production.cookieDomain}"
-    backUrl: "https://api.${custom.production.cookieDomain}"
+    frontUrl: "https://${custom.prod.cookieDomain}"
+    backUrl: "https://api.${custom.prod.cookieDomain}"
   site:
     cookieDomain: "${custom.dev.cookieDomain}"
     frontUrl: "${custom.dev.frontUrl}"
