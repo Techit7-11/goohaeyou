@@ -155,8 +155,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["MemberDto"];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     RsDataURI: {
       resultCode?: string;
@@ -165,8 +165,8 @@ export interface components {
       msg?: string;
       /** Format: uri */
       data?: string;
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     LoginForm: {
       username: string;
@@ -201,8 +201,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["CommentDto"][];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     JobPostDto: {
       /** Format: int64 */
@@ -224,8 +224,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDto"][];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     ApplicationDto: {
       /** Format: int64 */
@@ -244,8 +244,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"][];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     JobPostDetailDto: {
       /** Format: int64 */
@@ -278,25 +278,25 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDetailDto"];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     PageJobPostDto: {
       /** Format: int32 */
       totalPages?: number;
       /** Format: int64 */
       totalElements?: number;
-      first?: boolean;
-      last?: boolean;
       /** Format: int32 */
       size?: number;
       content?: components["schemas"]["JobPostDto"][];
       /** Format: int32 */
       number?: number;
       sort?: components["schemas"]["SortObject"];
-      pageable?: components["schemas"]["PageableObject"];
+      first?: boolean;
+      last?: boolean;
       /** Format: int32 */
       numberOfElements?: number;
+      pageable?: components["schemas"]["PageableObject"];
       empty?: boolean;
     };
     PageableObject: {
@@ -304,9 +304,9 @@ export interface components {
       offset?: number;
       sort?: components["schemas"]["SortObject"];
       /** Format: int32 */
-      pageNumber?: number;
-      /** Format: int32 */
       pageSize?: number;
+      /** Format: int32 */
+      pageNumber?: number;
       paged?: boolean;
       unpaged?: boolean;
     };
@@ -316,8 +316,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["PageJobPostDto"];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
     SortObject: {
       empty?: boolean;
@@ -330,8 +330,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"];
-      fail?: boolean;
       success?: boolean;
+      fail?: boolean;
     };
   };
   responses: never;
@@ -351,8 +351,8 @@ export interface operations {
   modify: {
     parameters: {
       path: {
-        arg1: number;
-        arg2: number;
+        postId: number;
+        commentId: number;
       };
     };
     requestBody: {
@@ -476,8 +476,8 @@ export interface operations {
   approve: {
     parameters: {
       path: {
-        arg1: number;
-        arg2: number[];
+        postId: number;
+        applicationIds: number[];
       };
     };
     responses: {
@@ -599,7 +599,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataMemberDto"];
+        };
       };
     };
   };
@@ -678,10 +680,10 @@ export interface operations {
   socialLogin: {
     parameters: {
       query: {
-        arg0: string;
+        redirectUrl: string;
       };
       path: {
-        arg1: string;
+        providerTypeCode: string;
       };
     };
     responses: {
@@ -697,7 +699,7 @@ export interface operations {
   findByPostId: {
     parameters: {
       path: {
-        arg0: number;
+        postId: number;
       };
     };
     responses: {
@@ -793,7 +795,7 @@ export interface operations {
   getList: {
     parameters: {
       path: {
-        arg1: number;
+        postId: number;
       };
     };
     responses: {
