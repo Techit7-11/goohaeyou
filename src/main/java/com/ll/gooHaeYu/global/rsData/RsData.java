@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.global.rsData;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.gooHaeYu.standard.base.Empty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,10 +41,12 @@ public class RsData<T> {
         return tRsData;
     }
 
+    @JsonIgnore   // 타입스크립트에서 사용X
     public boolean isSuccess() {
         return getStatusCode() >= SUCCESS_CODE_MIN && getStatusCode() < SUCCESS_CODE_MAX;
     }
 
+    @JsonIgnore
     public boolean isFail() {
         return !isSuccess();
     }

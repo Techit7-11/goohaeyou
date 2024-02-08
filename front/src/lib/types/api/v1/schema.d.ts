@@ -107,6 +107,9 @@ export interface paths {
     /** 공고 별 지원리스트 */
     get: operations["getList"];
   };
+  "/": {
+    get: operations["showMain"];
+  };
   "/api/job-posts/{id}/deadline": {
     /** 공고 마감 */
     delete: operations["deadline"];
@@ -155,8 +158,6 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["MemberDto"];
-      success?: boolean;
-      fail?: boolean;
     };
     RsDataURI: {
       resultCode?: string;
@@ -165,8 +166,6 @@ export interface components {
       msg?: string;
       /** Format: uri */
       data?: string;
-      success?: boolean;
-      fail?: boolean;
     };
     LoginForm: {
       username: string;
@@ -201,8 +200,6 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["CommentDto"][];
-      success?: boolean;
-      fail?: boolean;
     };
     JobPostDto: {
       /** Format: int64 */
@@ -224,8 +221,6 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDto"][];
-      success?: boolean;
-      fail?: boolean;
     };
     ApplicationDto: {
       /** Format: int64 */
@@ -244,8 +239,6 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"][];
-      success?: boolean;
-      fail?: boolean;
     };
     JobPostDetailDto: {
       /** Format: int64 */
@@ -278,22 +271,20 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDetailDto"];
-      success?: boolean;
-      fail?: boolean;
     };
     PageJobPostDto: {
-      /** Format: int32 */
-      totalPages?: number;
       /** Format: int64 */
       totalElements?: number;
+      /** Format: int32 */
+      totalPages?: number;
+      first?: boolean;
+      last?: boolean;
       /** Format: int32 */
       size?: number;
       content?: components["schemas"]["JobPostDto"][];
       /** Format: int32 */
       number?: number;
       sort?: components["schemas"]["SortObject"];
-      first?: boolean;
-      last?: boolean;
       /** Format: int32 */
       numberOfElements?: number;
       pageable?: components["schemas"]["PageableObject"];
@@ -303,12 +294,12 @@ export interface components {
       /** Format: int64 */
       offset?: number;
       sort?: components["schemas"]["SortObject"];
+      paged?: boolean;
+      unpaged?: boolean;
       /** Format: int32 */
       pageSize?: number;
       /** Format: int32 */
       pageNumber?: number;
-      paged?: boolean;
-      unpaged?: boolean;
     };
     RsDataPageJobPostDto: {
       resultCode?: string;
@@ -316,8 +307,6 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["PageJobPostDto"];
-      success?: boolean;
-      fail?: boolean;
     };
     SortObject: {
       empty?: boolean;
@@ -330,8 +319,6 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"];
-      success?: boolean;
-      fail?: boolean;
     };
   };
   responses: never;
@@ -803,6 +790,16 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListApplicationDto"];
+        };
+      };
+    };
+  };
+  showMain: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": string;
         };
       };
     };
