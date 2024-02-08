@@ -13,8 +13,8 @@
 		});
 
 		if (response.data?.statusCode === 200) {
-			rq.msgAndRedirect({ msg: '로그인 성공' }, undefined, 'http://localhost:5173/'); // 메인페이지로 먼저 이동 후에 로그인 상태로 바꾼다
-			rq.setLogined(response.data.data?.memberDto); // 로그인 상태로 바꾼다
+			rq.msgAndRedirect({ msg: '로그인 성공' }, undefined, 'http://localhost:5173/'); // 메인페이지로 이동
+			rq.setLogined(response.data?.data); // 로그인 상태로 바꾼다
 		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
 			// CustomException 오류 메시지 처리
 			const customErrorMessage = response.data?.data?.message;

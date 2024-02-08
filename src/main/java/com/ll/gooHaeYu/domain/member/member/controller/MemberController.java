@@ -49,10 +49,10 @@ public class MemberController {
 
     @PostMapping ("/login")
     @Operation(summary = "로그인, accessToken, refreshToken 쿠키 생성됨")
-    public ResponseEntity<Void> login(@RequestBody @Valid LoginForm form, HttpServletRequest request, HttpServletResponse response) {
+    public RsData<MemberDto> login(@RequestBody @Valid LoginForm form, HttpServletRequest request, HttpServletResponse response) {
         memberService.login(form);
-        authenticationService.authenticateAndSetTokens(form.getUsername(), request, response);
-        return ResponseEntity.ok().build();
+        MemberDto memberDto = authenticationService.authenticateAndSetTokens(form.getUsername(), request, response);
+        return RsData.of(memberDto);
     }
 
     @PostMapping ("/logout")
