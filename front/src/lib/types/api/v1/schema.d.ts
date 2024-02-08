@@ -155,8 +155,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["MemberDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     RsDataURI: {
       resultCode?: string;
@@ -165,8 +165,8 @@ export interface components {
       msg?: string;
       /** Format: uri */
       data?: string;
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     LoginForm: {
       username: string;
@@ -201,8 +201,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["CommentDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     JobPostDto: {
       /** Format: int64 */
@@ -228,8 +228,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     ApplicationDto: {
       /** Format: int64 */
@@ -248,8 +248,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     JobPostDetailDto: {
       /** Format: int64 */
@@ -274,8 +274,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDetailDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     PageJobPostDto: {
       /** Format: int32 */
@@ -312,8 +312,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["PageJobPostDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     SortObject: {
       empty?: boolean;
@@ -326,8 +326,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
   };
   responses: never;

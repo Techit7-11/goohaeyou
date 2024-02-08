@@ -9,8 +9,6 @@ class Rq {
 
 	constructor() {
 		this.member = this.makeReactivityMember();
-		// this.accessToken = localStorage.getItem('access_token'); // Declare accessToken as a class property.
-		this.loadAccessToken(); // Load access token when the class is instantiated.
 	}
 
 	// URL
@@ -89,21 +87,9 @@ class Rq {
 			baseUrl: import.meta.env.VITE_CORE_API_BASE_URL,
 			credentials: 'include',
 			headers: {
-				Authorization: `Bearer ${this.getAccessToken()}`,
 				'Content-Type': 'application/json'
 			}
 		});
-	}
-
-	public getAccessToken() {
-		// 만료시간이 안지났으면 리턴
-		if (true) {
-			return localStorage.getItem('access_token');
-		} else {
-			// 만료시간이 지났다면 리프레시토큰을 통해 액세스토큰 발급하고 리턴
-			// TO-DO
-			// POST /api/token 요청
-		}
 	}
 
 	// MSG, REDIRECT
@@ -168,27 +154,6 @@ class Rq {
 		}/member/socialLogin/google?redirectUrl=${encodeURIComponent(
 			import.meta.env.VITE_CORE_FRONT_BASE_URL
 		)}/member/socialLoginCallback?provierTypeCode=google`;
-	}
-
-	private loadAccessToken() {
-		// 브라우저에서만 동작
-		if (typeof window !== 'undefined') {
-			const urlSearchParams = new URLSearchParams(window.location.search);
-			const params = Object.fromEntries(urlSearchParams.entries());
-
-			if (params.access_token) {
-				// 매개변수로 access_token이 넘어왔다면
-				const accessToken = params.access_token;
-
-				// LocalStorage에 access_token 저장
-				localStorage.setItem('access_token', accessToken);
-
-				// 저장 후에는, 매개변수로 넘어온 access_token을 제거한다. (보안)
-				urlSearchParams.delete('access_token');
-				const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
-				window.history.replaceState({}, document.title, newUrl);
-			}
-		}
 	}
 }
 
