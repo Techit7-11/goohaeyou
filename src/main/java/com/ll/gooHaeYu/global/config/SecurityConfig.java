@@ -2,7 +2,6 @@ package com.ll.gooHaeYu.global.config;
 
 import com.ll.gooHaeYu.domain.member.member.repository.RefreshTokenRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.global.security.CustomLogoutSuccessHandler;
 import com.ll.gooHaeYu.global.security.CustomUserDetailsService;
 import com.ll.gooHaeYu.global.security.JwtFilter;
 import com.ll.gooHaeYu.global.security.JwtTokenProvider;
@@ -50,11 +49,13 @@ public class SecurityConfig {
         return httpSecurity
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors()
+                .and()
                 .authorizeHttpRequests(requests -> {
                     requests
                             .requestMatchers("/api/member/socialLogin/**").permitAll()
                             .requestMatchers("/oauth2/authorization/**").permitAll() // OAuth 2.0 인증 엔드포인트에 대한 접근 허용
-                            .requestMatchers("/login", "/api/member/join", "api/token").permitAll()
+                            .requestMatchers("/login", "/api/member/join", "api/member/login", "api/member/logout").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/job-posts/{id:\\d+}", "/api/job-posts",
                                     "/api/job-posts/search",
                                     "/api/post-comment/{postId}").permitAll()
@@ -77,11 +78,7 @@ public class SecurityConfig {
                             .userInfoEndpoint()
                             .userService(oAuth2UserCustomService);
                 })
-                .logout(logout -> {
-                    logout
-                            .logoutSuccessUrl("/login")
-                            .logoutSuccessHandler(new CustomLogoutSuccessHandler());
-                })
+
                 .exceptionHandling(exceptionHandling -> {
                     exceptionHandling
                             .defaultAuthenticationEntryPointFor(

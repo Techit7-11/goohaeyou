@@ -43,15 +43,16 @@ export interface paths {
     /** 지원서 삭제 */
     delete: operations["deleteApplication"];
   };
-  "/api/token": {
-    post: operations["createNewAccessToken"];
-  };
   "/api/post-comment/{postId}/comment": {
     /** 댓글 작성 */
     post: operations["write"];
   };
+  "/api/member/logout": {
+    /** 로그아웃 처리 및 쿠키 삭제 */
+    post: operations["logout"];
+  };
   "/api/member/login": {
-    /** 로그인, accessToken 쿠키 생성됨 */
+    /** 로그인, accessToken, refreshToken 쿠키 생성됨 */
     post: operations["login"];
   };
   "/api/member/join": {
@@ -154,23 +155,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["MemberDto"];
-      success?: boolean;
       fail?: boolean;
-    };
-    CreateAccessTokenRequest: {
-      refreshToken?: string;
-    };
-    CreateAccessTokenResponse: {
-      accessToken?: string;
-    };
-    RsDataCreateAccessTokenResponse: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["CreateAccessTokenResponse"];
       success?: boolean;
-      fail?: boolean;
     };
     RsDataURI: {
       resultCode?: string;
@@ -179,21 +165,12 @@ export interface components {
       msg?: string;
       /** Format: uri */
       data?: string;
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     LoginForm: {
       username: string;
       password: string;
-    };
-    RsDataString: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: string;
-      success?: boolean;
-      fail?: boolean;
     };
     JoinForm: {
       username: string;
@@ -224,8 +201,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["CommentDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     JobPostDto: {
       /** Format: int64 */
@@ -247,8 +224,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     ApplicationDto: {
       /** Format: int64 */
@@ -267,8 +244,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"][];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     JobPostDetailDto: {
       /** Format: int64 */
@@ -301,25 +278,25 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDetailDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     PageJobPostDto: {
-      /** Format: int64 */
-      totalElements?: number;
       /** Format: int32 */
       totalPages?: number;
+      /** Format: int64 */
+      totalElements?: number;
+      first?: boolean;
+      last?: boolean;
       /** Format: int32 */
       size?: number;
       content?: components["schemas"]["JobPostDto"][];
       /** Format: int32 */
       number?: number;
       sort?: components["schemas"]["SortObject"];
-      first?: boolean;
-      last?: boolean;
+      pageable?: components["schemas"]["PageableObject"];
       /** Format: int32 */
       numberOfElements?: number;
-      pageable?: components["schemas"]["PageableObject"];
       empty?: boolean;
     };
     PageableObject: {
@@ -327,9 +304,9 @@ export interface components {
       offset?: number;
       sort?: components["schemas"]["SortObject"];
       /** Format: int32 */
-      pageSize?: number;
-      /** Format: int32 */
       pageNumber?: number;
+      /** Format: int32 */
+      pageSize?: number;
       paged?: boolean;
       unpaged?: boolean;
     };
@@ -339,8 +316,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["PageJobPostDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
     SortObject: {
       empty?: boolean;
@@ -353,8 +330,8 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"];
-      success?: boolean;
       fail?: boolean;
+      success?: boolean;
     };
   };
   responses: never;
@@ -374,8 +351,8 @@ export interface operations {
   modify: {
     parameters: {
       path: {
-        postId: number;
-        commentId: number;
+        arg1: number;
+        arg2: number;
       };
     };
     requestBody: {
@@ -499,8 +476,8 @@ export interface operations {
   approve: {
     parameters: {
       path: {
-        postId: number;
-        applicationIds: number[];
+        arg1: number;
+        arg2: number[];
       };
     };
     responses: {
@@ -580,21 +557,6 @@ export interface operations {
       };
     };
   };
-  createNewAccessToken: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateAccessTokenRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["RsDataCreateAccessTokenResponse"];
-        };
-      };
-    };
-  };
   /** 댓글 작성 */
   write: {
     parameters: {
@@ -616,7 +578,18 @@ export interface operations {
       };
     };
   };
-  /** 로그인, accessToken 쿠키 생성됨 */
+  /** 로그아웃 처리 및 쿠키 삭제 */
+  logout: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": Record<string, never>;
+        };
+      };
+    };
+  };
+  /** 로그인, accessToken, refreshToken 쿠키 생성됨 */
   login: {
     requestBody: {
       content: {
@@ -626,9 +599,7 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: {
-          "*/*": components["schemas"]["RsDataString"];
-        };
+        content: never;
       };
     };
   };
@@ -707,10 +678,10 @@ export interface operations {
   socialLogin: {
     parameters: {
       query: {
-        redirectUrl: string;
+        arg0: string;
       };
       path: {
-        providerTypeCode: string;
+        arg1: string;
       };
     };
     responses: {
@@ -726,7 +697,7 @@ export interface operations {
   findByPostId: {
     parameters: {
       path: {
-        postId: number;
+        arg0: number;
       };
     };
     responses: {
@@ -822,7 +793,7 @@ export interface operations {
   getList: {
     parameters: {
       path: {
-        postId: number;
+        arg1: number;
       };
     };
     responses: {

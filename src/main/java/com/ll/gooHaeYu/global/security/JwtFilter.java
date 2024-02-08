@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.global.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -20,42 +23,43 @@ public class JwtFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService customUserDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-        final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+        // 쿠키에서 액세스 토큰 추출
+        String accessToken = extractTokenFromCookies(request, "access_token");
 
-        logger.info("authorization = " + authorization);
+        if (accessToken != null && !jwtTokenProvider.isExpired(accessToken)) { // 토큰 만료 확인 로직 수정
+            // 토큰에서 사용자 이름 추출
+            String username = jwtTokenProvider.getUsername(accessToken);
 
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            logger.error("authorization이 없습니다.");
-            filterChain.doFilter(request, response);
-            return;
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+                if (userDetails != null) {
+                    // 권한 부여 및 인증된 사용자의 정보를 SecurityContext에 설정
+                    UsernamePasswordAuthenticationToken authenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
+            }
+        } else {
+            // 토큰이 만료되었거나 유효하지 않은 경우의 처리 로직
+            // 예: 로그 출력, 에러 응답 설정 등
+            logger.info("Invalid or expired JWT token.");
         }
 
-        // Token 꺼내기
-        String token = authorization.split(" ")[1];
-
-        // Token Expired 되었는지 여부
-        if (jwtTokenProvider.isExpired(token)) {
-            logger.error("Token 이 만료되었습니다.");
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // username Token에서 꺼내기
-        String username = jwtTokenProvider.getUsername(token);
-
-        // 권한 부여
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-
-        // 인증된 사용자의 정보를 SecurityContext에 설정
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
+    }
+
+    private String extractTokenFromCookies(HttpServletRequest request, String cookieName) {
+        if (request.getCookies() != null) {
+            Optional<Cookie> accessTokenCookie = Arrays.stream(request.getCookies())
+                    .filter(cookie -> cookieName.equals(cookie.getName()))
+                    .findFirst();
+
+            return accessTokenCookie.map(Cookie::getValue).orElse(null);
+        }
+        return null;
     }
 }

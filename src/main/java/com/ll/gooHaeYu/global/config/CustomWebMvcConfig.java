@@ -12,7 +12,8 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOrigins(
                         "https://cdpn.io",
-                        AppConfig.getSiteFrontUrl()
+                        AppConfig.getSiteFrontUrl(),
+                        "http://localhost:5173"
                 )
                 .allowedMethods("*")
                 .allowedHeaders("*")
