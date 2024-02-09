@@ -11,10 +11,10 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:mysql://172.17.0.1:3306/goohaeyou_prod
-    username: lldjlocal
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:./db_dev;MODE=MYSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: update

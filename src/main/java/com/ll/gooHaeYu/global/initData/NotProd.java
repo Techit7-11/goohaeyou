@@ -60,7 +60,7 @@ public class NotProd {
                         .birth(LocalDate.parse("1995-01-01"))
                         .gender(Gender.FEMALE)
                         .name("관리자")
-                        .location("서울특별시 중구 세종대로 110")
+                        .location("서울 중구 세종대로 110")
                         .phoneNumber("01033334444")
                         .build();
 
@@ -130,7 +130,7 @@ public class NotProd {
                     JobPostForm.Register postRegister = JobPostForm.Register.builder()
                             .title("구인공고 제목" + i)
                             .body("구인공고 내용" + i)
-                            .location("서울특별시 광진구 천호대로124길")
+                            .location("서울 광진구 천호대로124길")
                             .deadLine(LocalDate.now().plusWeeks(2))
                             .minAge(20)
                             .build();

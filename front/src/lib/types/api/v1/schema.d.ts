@@ -214,6 +214,7 @@ export interface components {
       /** Format: date */
       deadLine?: string;
       createdAt: string;
+      closed?: boolean;
     };
     RsDataListJobPostDto: {
       resultCode?: string;
@@ -272,46 +273,26 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["JobPostDetailDto"];
     };
-    PageJobPostDto: {
-      /** Format: int64 */
-      totalElements?: number;
-      /** Format: int32 */
-      totalPages?: number;
-      first?: boolean;
-      last?: boolean;
-      /** Format: int32 */
-      size?: number;
-      content?: components["schemas"]["JobPostDto"][];
-      /** Format: int32 */
-      number?: number;
-      sort?: components["schemas"]["SortObject"];
-      /** Format: int32 */
-      numberOfElements?: number;
-      pageable?: components["schemas"]["PageableObject"];
-      empty?: boolean;
+    GetPostsResponseBody: {
+      itemPage: components["schemas"]["PageDtoJobPostDto"];
     };
-    PageableObject: {
+    PageDtoJobPostDto: {
       /** Format: int64 */
-      offset?: number;
-      sort?: components["schemas"]["SortObject"];
+      totalElementsCount: number;
+      /** Format: int64 */
+      pageElementsCount: number;
+      /** Format: int64 */
+      totalPagesCount: number;
       /** Format: int32 */
-      pageSize?: number;
-      /** Format: int32 */
-      pageNumber?: number;
-      paged?: boolean;
-      unpaged?: boolean;
+      number: number;
+      content: components["schemas"]["JobPostDto"][];
     };
-    RsDataPageJobPostDto: {
+    RsDataGetPostsResponseBody: {
       resultCode?: string;
       /** Format: int32 */
       statusCode?: number;
       msg?: string;
-      data?: components["schemas"]["PageJobPostDto"];
-    };
-    SortObject: {
-      empty?: boolean;
-      sorted?: boolean;
-      unsorted?: boolean;
+      data?: components["schemas"]["GetPostsResponseBody"];
     };
     RsDataApplicationDto: {
       resultCode?: string;
@@ -755,7 +736,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataPageJobPostDto"];
+          "*/*": components["schemas"]["RsDataGetPostsResponseBody"];
         };
       };
     };
