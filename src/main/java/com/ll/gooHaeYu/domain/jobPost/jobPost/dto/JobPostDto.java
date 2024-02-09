@@ -14,6 +14,7 @@ import java.util.List;
 @SuperBuilder
 @Getter
 public class JobPostDto extends AbstractJobPostDto{
+    private boolean isClosed;
 
     public static JobPostDto fromEntity(JobPost jobPost) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
@@ -25,6 +26,7 @@ public class JobPostDto extends AbstractJobPostDto{
                 .commentsCount(jobPost.getCommentsCount())
                 .incrementViewCount(jobPost.getIncrementViewCount())
                 .deadLine(jobPost.getDeadline())
+                .isClosed(jobPost.isClosed())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .build();
     }
