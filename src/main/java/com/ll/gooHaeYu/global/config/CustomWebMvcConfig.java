@@ -14,13 +14,12 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
                         "https://cdpn.io",
                         "http://localhost:5173",
                         AppConfig.getSiteFrontUrl(),
+                        AppConfig.getSiteBackUrl(),
                         "https://www.goohaeyou.site",
                         "https://api.www.goohaeyou.site"
                 )
                 .allowedMethods("*")
                 .allowedHeaders("*")
-                //.allowCredentials(true);
-                .allowedOriginPatterns("*")
-                .exposedHeaders("*");
+                .allowCredentials(true);
     }
 }
