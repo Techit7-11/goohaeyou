@@ -41,15 +41,8 @@
 		<div class="info-box">
 			<div>위치: {jobPostDetailDto?.location}</div>
 			<div>공고 마감: {jobPostDetailDto?.deadLine}</div>
-			<div>지원 가능 최소 나이: {jobPostDetailDto?.minAge}</div>
-			성별 구분:
-			{#if jobPostDetailDto?.gender === 'MALE'}
-				남
-			{:else if jobPostDetailDto?.gender === 'FEMALE'}
-				여
-			{:else}
-				무관
-			{/if}
+			<div>지원 가능 최소 나이: {jobPostDetailDto?.minAge === 0 ? '없음' : jobPostDetailDto?.minAge ?? '없음'}</div>
+			<div>성별 구분: {jobPostDetailDto?.gender === 'MALE' ? '남' : jobPostDetailDto?.gender === 'FEMALE' ? '여' : '무관'}</div>
 			<div>최종 수정일자: {jobPostDetailDto?.modifyAt}</div>
 			<div>조회수: {jobPostDetailDto?.incrementViewCount}</div>
 			<div>관심 등록 수 : {jobPostDetailDto?.interestsCount}</div>
