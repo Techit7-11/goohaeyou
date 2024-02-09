@@ -67,7 +67,7 @@
 		border-radius: 10px; /* 둥근 테두리 설정 */
 		padding: 20px;
 		margin: 20px;
-		width: 70%;
+		width: 90%;
 		box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); /* 입체적인 그림자 효과 추가 */
 	}
 
