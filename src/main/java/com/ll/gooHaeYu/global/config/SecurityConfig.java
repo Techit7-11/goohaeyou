@@ -49,6 +49,8 @@ public class SecurityConfig {
         return httpSecurity
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors()
+                .and()
                 .authorizeHttpRequests(requests -> {
                     requests
                             .requestMatchers("/api/member/socialLogin/**").permitAll()
