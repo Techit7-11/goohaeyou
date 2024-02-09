@@ -273,10 +273,10 @@ export interface components {
       data?: components["schemas"]["JobPostDetailDto"];
     };
     PageJobPostDto: {
-      /** Format: int32 */
-      totalPages?: number;
       /** Format: int64 */
       totalElements?: number;
+      /** Format: int32 */
+      totalPages?: number;
       first?: boolean;
       last?: boolean;
       /** Format: int32 */
@@ -295,11 +295,11 @@ export interface components {
       offset?: number;
       sort?: components["schemas"]["SortObject"];
       /** Format: int32 */
-      pageNumber?: number;
-      /** Format: int32 */
       pageSize?: number;
-      unpaged?: boolean;
+      /** Format: int32 */
+      pageNumber?: number;
       paged?: boolean;
+      unpaged?: boolean;
     };
     RsDataPageJobPostDto: {
       resultCode?: string;
