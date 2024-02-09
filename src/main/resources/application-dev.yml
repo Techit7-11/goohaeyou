@@ -3,4 +3,4 @@ spring:
     ansi:
       enabled: always
 app:
-  init-run: false
+  init-run: true

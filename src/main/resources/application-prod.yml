@@ -7,21 +7,21 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
   datasource:
-    url: jdbc:h2:mem:db_prod;MODE=MYSQL
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://172.17.0.1:3306/goohaeyou_prod
+    username: lldjlocal
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
     properties:
-      hibernate:    # 운영모드에서는 sql문이 필요없으니 모두 끈다
+      hibernate: # 운영모드에서는 sql문이 필요없으니 모두 끈다
         format_sql: false
         highlight_sql: false
         use_sql_comments: false
 logging:
   level:
-    com.ll.com.ll.gooHaeYu: INFO
+    com.ll.gooHaeYu: INFO
     org.hibernate.SQL: INFO
     org.hibernate.orm.jdbc.bind: INFO
     org.hibernate.orm.jdbc.extract: INFO
