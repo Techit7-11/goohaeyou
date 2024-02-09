@@ -19,7 +19,6 @@ public class Dev {
         return args -> {
             String backUrl = AppConfig.getSiteBackUrl();
             String cmd = "npx openapi-typescript " + backUrl + "/v3/api-docs -o ./front/src/lib/types/api/v1/schema.d.ts";
-            // npx openapi-typescript http://localhost:8090/v3/api-docs -o ./front/src/lib/types/api/v1/schema.d.ts
             Ut.cmd.runAsync(cmd);
         };
     }

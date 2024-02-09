@@ -1,1 +1,1 @@
-<div>메인</div>
+<div>main</div>
