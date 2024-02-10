@@ -7,10 +7,6 @@
 
 	let posts: components['schemas']['JobPostDto'][] = $state([]);
 
-	if (rq.member.name === null) {
-		rq.goTo('/member/social/modify');
-	}
-
 	async function load() {
 		const page_ = parseInt($page.url.searchParams.get('page') ?? '1');
 
