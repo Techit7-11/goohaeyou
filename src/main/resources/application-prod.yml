@@ -19,9 +19,9 @@ spring:
         format_sql: false
         highlight_sql: false
         use_sql_comments: false
-  h2:
-    console:
-      enabled: false # H2 콘솔 비활성화
+#  h2:
+#    console:
+#      enabled: false # H2 콘솔 비활성화
 logging:   # 추후에 root: INFO 로 변경 (보안 및 성능 고려)
   level:
     root: DEBUG  # 애플리케이션 전체 로그 레벨을 DEBUG로 설정
