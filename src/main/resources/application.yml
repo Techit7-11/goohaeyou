@@ -2,7 +2,7 @@ server:
   port: 8090
 spring:
   profiles:
-    active: dev
+#    active: dev
     include: secret
   jackson:
     serialization:
