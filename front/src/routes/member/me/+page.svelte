@@ -5,7 +5,7 @@
 	function navigateToModifyPage() {
 		rq.goTo('/member/social/modify');
 	}
-g
+
 	onMount(() => {
 		if (rq.isLogout()) {
 			rq.msgError('로그인이 필요합니다.');
