@@ -11,7 +11,7 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:h2:./db_dev;MODE=MYSQL
+    url: jdbc:h2:./db_dev;MODE=PostgreSQL
     username: sa
     password:
     driver-class-name: org.h2.Driver
