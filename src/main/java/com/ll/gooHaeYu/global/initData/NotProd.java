@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
-@Profile("!prod")
+@Profile("prod")
 public class NotProd {
     private final MemberService memberService;
     private final JobPostService jobPostService;
@@ -41,7 +41,7 @@ public class NotProd {
             @Transactional
             @Override
             public void run(ApplicationArguments args) {
-                if (!initRun) return;
+                //if (!initRun) return;
                 if (jobPostRepository.findById(1L).isPresent()) return;
 
                 JoinForm joinForm1 = JoinForm.builder()
