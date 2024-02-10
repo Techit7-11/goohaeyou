@@ -37,6 +37,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
+                .requestMatchers("/h2-console/**")
                 .requestMatchers("/static/**");
     }
 
