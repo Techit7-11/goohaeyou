@@ -326,8 +326,8 @@ export interface operations {
   modify: {
     parameters: {
       path: {
-        arg1: number;
-        arg2: number;
+        postId: number;
+        commentId: number;
       };
     };
     requestBody: {
@@ -451,8 +451,8 @@ export interface operations {
   approve: {
     parameters: {
       path: {
-        arg1: number;
-        arg2: number[];
+        postId: number;
+        applicationIds: number[];
       };
     };
     responses: {
@@ -655,10 +655,10 @@ export interface operations {
   socialLogin: {
     parameters: {
       query: {
-        arg0: string;
+        redirectUrl: string;
       };
       path: {
-        arg1: string;
+        providerTypeCode: string;
       };
     };
     responses: {
@@ -674,7 +674,7 @@ export interface operations {
   findByPostId: {
     parameters: {
       path: {
-        arg0: number;
+        postId: number;
       };
     };
     responses: {
@@ -770,7 +770,7 @@ export interface operations {
   getList: {
     parameters: {
       path: {
-        arg1: number;
+        postId: number;
       };
     };
     responses: {

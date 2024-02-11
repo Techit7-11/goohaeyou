@@ -8,9 +8,12 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.global.event.EventAfterApplication;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +32,7 @@ public class ApplicationService {
     private final MemberService memberService;
     private final JobPostService jobPostService;
     private final ApplicationRepository applicationRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public Long writeApplication(String username, Long id, ApplicationForm.Register form) {
@@ -48,6 +52,8 @@ public class ApplicationService {
         postDetail.getApplications().add(newApplication);
         postDetail.getJobPost().increaseApplicationsCount();
         applicationRepository.save(newApplication);
+
+        publisher.publishEvent(new EventAfterApplication(this, newApplication));
 
         return newApplication.getId();
     }
