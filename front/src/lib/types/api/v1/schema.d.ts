@@ -1185,6 +1185,24 @@ export interface operations {
       };
     };
   };
+<<<<<<< HEAD
+=======
+  /** 지원서 승인 */
+  approve: {
+    parameters: {
+      path: {
+        postId: number;
+        applicationIds: number[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
+  };
+>>>>>>> 26068db (feat: 이벤트 리스너 동작 확인)
   /** 지원서 상세 내용 */
   detailApplication: {
     parameters: {
