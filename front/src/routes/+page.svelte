@@ -26,6 +26,7 @@
 {#await load()}
 	<span class="loading loading-spinner loading-lg"></span>
 {:then { data: { itemPage } }}
+<div class="py-5">
 	<ul>
 		{#each posts ?? [] as post, index}
 			<li>
@@ -42,31 +43,10 @@
 			</li>
 		{/each}
 	</ul>
+	<div class="pt-3">
 	<Pagination page={itemPage} />
-	{#if page.totalPages > 0}
-    <div class="flex justify-center my-3">
-      <ul class="flex list-none">
-        <!-- 이전 페이지 버튼 -->
-        <li class={`btn ${page.number === 0 ? 'btn-disabled' : ''}`}>
-          <a on:click={() => goToPage(page.number - 1)}>이전</a>
-        </li>
-
-        <!-- 페이지 번호 버튼들 -->
-        {#each Array(page.totalPages) as _, pageIndex}
-          {#if pageIndex >= page.number - 5 && pageIndex <= page.number + 5}
-          <li class={`btn ${pageIndex === page.number ? 'btn-active' : ''}`}>
-            <a on:click={() => goToPage(pageIndex)}>{pageIndex + 1}</a>
-          </li>
-          {/if}
-        {/each}
-
-        <!-- 다음 페이지 버튼 -->
-        <li class={`btn ${page.number === page.totalPages - 1 ? 'btn-disabled' : ''}`}>
-          <a on:click={() => goToPage(page.number + 1)}>다음</a>
-        </li>
-      </ul>
-    </div>
-    {/if}
+	</div>
+</div>
 {/await}
 
 <style>
