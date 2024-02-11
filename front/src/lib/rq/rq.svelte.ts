@@ -143,11 +143,11 @@ class Rq {
 
 	public async logoutAndRedirect(url: string) {
 		try {
-		await this.apiEndPoints().POST('/api/member/logout',{
-			credentials: "include",
-		});
-		this.setLogout();
-		this.replace(url);
+			await this.apiEndPoints().POST('/api/member/logout', {
+				credentials: 'include'
+			});
+			this.setLogout();
+			this.replace(url);
 		} catch (error) {
 			console.error('Logout failed:', error);
 		}
@@ -164,17 +164,17 @@ class Rq {
 	public goToCurrentPageWithNewParam(name: string, value: string) {
 		// 현재 URL 객체 생성
 		const currentUrl = new URL(window.location.href);
-	
+
 		// 쿼리 매개변수를 수정하기 위한 URLSearchParams 객체 생성
 		const searchParams = currentUrl.searchParams;
-	
+
 		// 'page' 매개변수를 새 페이지 번호로 설정
 		searchParams.set(name, value);
-	
+
 		this.goToCurrentPageWithNewQueryStr(searchParams.toString());
 	}
-	
-	  public goToCurrentPageWithNewQueryStr(query: string) {
+
+	public goToCurrentPageWithNewQueryStr(query: string) {
 		this.goTo(window.location.pathname + '?' + query);
 	}
 }

@@ -182,6 +182,13 @@ export interface components {
       /** Format: date */
       birth: string;
     };
+    RsDataJoinForm: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JoinForm"];
+    };
     CommentDto: {
       /** Format: int64 */
       id: number;
@@ -319,8 +326,8 @@ export interface operations {
   modify: {
     parameters: {
       path: {
-        postId: number;
-        commentId: number;
+        arg1: number;
+        arg2: number;
       };
     };
     requestBody: {
@@ -444,8 +451,8 @@ export interface operations {
   approve: {
     parameters: {
       path: {
-        postId: number;
-        applicationIds: number[];
+        arg1: number;
+        arg2: number[];
       };
     };
     responses: {
@@ -584,7 +591,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataURI"];
+          "*/*": components["schemas"]["RsDataJoinForm"];
         };
       };
     };
@@ -648,10 +655,10 @@ export interface operations {
   socialLogin: {
     parameters: {
       query: {
-        redirectUrl: string;
+        arg0: string;
       };
       path: {
-        providerTypeCode: string;
+        arg1: string;
       };
     };
     responses: {
@@ -667,7 +674,7 @@ export interface operations {
   findByPostId: {
     parameters: {
       path: {
-        postId: number;
+        arg0: number;
       };
     };
     responses: {
@@ -763,7 +770,7 @@ export interface operations {
   getList: {
     parameters: {
       path: {
-        postId: number;
+        arg1: number;
       };
     };
     responses: {

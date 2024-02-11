@@ -42,9 +42,9 @@ public class MemberController {
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
-    public RsData<URI> join(@RequestBody @Valid JoinForm form) {
-        Long userId = memberService.join(form);
-        return RsData.of("201", "CREATE", URI.create("/api/member/join" + userId));
+    public RsData<JoinForm> join(@RequestBody @Valid JoinForm form) {
+        JoinForm joinForm = memberService.join(form);
+        return RsData.of(joinForm);
     }
 
     @PostMapping ("/login")
