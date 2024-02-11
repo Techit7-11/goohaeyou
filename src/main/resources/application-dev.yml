@@ -2,5 +2,29 @@ spring:
   output:
     ansi:
       enabled: always
+  datasource:
+    url: jdbc:h2:./db_dev;MODE=PostgreSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+  h2:
+    console:
+      enabled: true
+logging:
+  level:
+    com.ll.gooHaeYu: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
+    org.springframework.transaction.interceptor: TRACE
 app:
   init-run: true

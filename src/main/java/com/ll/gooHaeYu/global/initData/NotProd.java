@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
-@Profile("dev")
+@Profile("!prod")
 public class NotProd {
     private final MemberService memberService;
     private final JobPostService jobPostService;
