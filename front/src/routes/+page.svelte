@@ -4,7 +4,6 @@
 
 	import type { components } from '$lib/types/api/v1/schema';
 	import Pagination from '$lib/components/Pagination.svelte';
-
 	let posts: components['schemas']['JobPostDto'][] = $state([]);
 
 	async function load() {
@@ -44,6 +43,30 @@
 		{/each}
 	</ul>
 	<Pagination page={itemPage} />
+	{#if page.totalPages > 0}
+    <div class="flex justify-center my-3">
+      <ul class="flex list-none">
+        <!-- 이전 페이지 버튼 -->
+        <li class={`btn ${page.number === 0 ? 'btn-disabled' : ''}`}>
+          <a on:click={() => goToPage(page.number - 1)}>이전</a>
+        </li>
+
+        <!-- 페이지 번호 버튼들 -->
+        {#each Array(page.totalPages) as _, pageIndex}
+          {#if pageIndex >= page.number - 5 && pageIndex <= page.number + 5}
+          <li class={`btn ${pageIndex === page.number ? 'btn-active' : ''}`}>
+            <a on:click={() => goToPage(pageIndex)}>{pageIndex + 1}</a>
+          </li>
+          {/if}
+        {/each}
+
+        <!-- 다음 페이지 버튼 -->
+        <li class={`btn ${page.number === page.totalPages - 1 ? 'btn-disabled' : ''}`}>
+          <a on:click={() => goToPage(page.number + 1)}>다음</a>
+        </li>
+      </ul>
+    </div>
+    {/if}
 {/await}
 
 <style>

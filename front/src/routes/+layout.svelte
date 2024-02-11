@@ -55,4 +55,32 @@
 	</div>
 </header>
 <main>{@render children()}</main>
-<footer class="bg-base-300 text-gray-500">footer</footer>
+<footer class="flex justify-center p-10 footer bg-base-100 text-base-content">
+  <div class="flex flex-col items-center space-y-2">
+    <span class="footer-title">Services</span>
+    <a class="link link-hover">Branding</a>
+    <a class="link link-hover">Design</a>
+    <a class="link link-hover">Marketing</a>
+    <a class="link link-hover">Advertisement</a>
+  </div>
+  <div class="flex flex-col items-center space-y-2">
+    <span class="footer-title">Company</span>
+    <a class="link link-hover">About us</a>
+    <a class="link link-hover">Contact</a>
+    <a class="link link-hover">Jobs</a>
+    <a class="link link-hover">Press kit</a>
+  </div>
+  <div class="flex flex-col items-center space-y-2">
+    <span class="footer-title">Social</span>
+    <a class="link link-hover">Twitter</a>
+    <a class="link link-hover">Instagram</a>
+    <a class="link link-hover">YouTube</a>
+    <a class="link link-hover">LinkedIn</a>
+  </div>
+  <div class="flex flex-col items-center space-y-2">
+    <span class="footer-title">Legal</span>
+    <a class="link link-hover">Terms of Use</a>
+    <a class="link link-hover">Privacy Policy</a>
+    <a class="link link-hover">Cookie Policy</a>
+  </div>
+</footer>
