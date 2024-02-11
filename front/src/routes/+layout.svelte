@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<div class="navbar-center">
-			<a class="btn btn-ghost text-xl" href="/">구해유</a>
+			<a class="btn btn-ghost text-xl" href="/">GooHaeYou</a>
 		</div>
 		<div class="navbar-end">
 			{#if rq.isLogout()}
@@ -53,6 +53,42 @@
 			{/if}
 		</div>
 	</div>
+	<div style="border-bottom: 1px solid #dedede;"></div>
 </header>
 <main>{@render children()}</main>
-<footer class="bg-base-300 text-gray-500">footer</footer>
+<div style="border-bottom: 1px solid #dedede;"></div>
+<footer class="flex flex-col justify-center items-center p-10 footer bg-base-100 text-base-content">
+  <div class="flex">
+    <div class="flex flex-col items-center space-y-2">
+      <span class="footer-title">Services</span>
+      <a class="link link-hover">Branding</a>
+      <a class="link link-hover">Design</a>
+      <a class="link link-hover">Marketing</a>
+      <a class="link link-hover">Advertisement</a>
+    </div>
+    <div class="flex flex-col items-center space-y-2">
+      <span class="footer-title">Company</span>
+      <a class="link link-hover">About us</a>
+      <a class="link link-hover">Contact</a>
+      <a class="link link-hover">Jobs</a>
+      <a class="link link-hover">Press kit</a>
+    </div>
+    <div class="flex flex-col items-center space-y-2">
+      <span class="footer-title">Social</span>
+      <a class="link link-hover">Twitter</a>
+      <a class="link link-hover">Instagram</a>
+      <a class="link link-hover">YouTube</a>
+      <a class="link link-hover">LinkedIn</a>
+    </div>
+    <div class="flex flex-col items-center space-y-2">
+      <span class="footer-title">Legal</span>
+      <a class="link link-hover">Terms of Use</a>
+      <a class="link link-hover">Privacy Policy</a>
+      <a class="link link-hover">Cookie Policy</a>
+    </div>
+  </div>
+  <div>
+    <span class="text-sm text-center">© 2024 All Rights Reserved by Techit7-11번과_GooHaeYou
+</span>
+  </div>
+</footer>

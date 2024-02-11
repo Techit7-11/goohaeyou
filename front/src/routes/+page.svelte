@@ -4,7 +4,6 @@
 
 	import type { components } from '$lib/types/api/v1/schema';
 	import Pagination from '$lib/components/Pagination.svelte';
-
 	let posts: components['schemas']['JobPostDto'][] = $state([]);
 
 	async function load() {
@@ -27,6 +26,7 @@
 {#await load()}
 	<span class="loading loading-spinner loading-lg"></span>
 {:then { data: { itemPage } }}
+<div class="py-5">
 	<ul>
 		{#each posts ?? [] as post, index}
 			<li>
@@ -43,7 +43,10 @@
 			</li>
 		{/each}
 	</ul>
+	<div class="pt-3">
 	<Pagination page={itemPage} />
+	</div>
+</div>
 {/await}
 
 <style>
