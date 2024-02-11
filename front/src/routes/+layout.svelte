@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<div class="navbar-center">
-			<a class="btn btn-ghost text-xl" href="/">구해유</a>
+			<a class="btn btn-ghost text-xl" href="/">GooHaeYou</a>
 		</div>
 		<div class="navbar-end">
 			{#if rq.isLogout()}
@@ -53,8 +53,10 @@
 			{/if}
 		</div>
 	</div>
+	<div style="border-bottom: 1px solid #dedede;"></div>
 </header>
 <main>{@render children()}</main>
+<div style="border-bottom: 1px solid #dedede;"></div>
 <footer class="flex flex-col justify-center items-center p-10 footer bg-base-100 text-base-content">
   <div class="flex">
     <div class="flex flex-col items-center space-y-2">
