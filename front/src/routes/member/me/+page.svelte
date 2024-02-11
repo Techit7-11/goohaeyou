@@ -74,17 +74,16 @@
 					<div class="font-bold">생년월일</div>
 					<div class="text-gray-500 flex-auto text-right">{rq.member.birth}</div>
 				</div>
-				<div>
+				<div class="pb-10">
 					<button class="w-full btn btn-ghost" on:click={navigateToModifyPage}
 						>회원 정보 수정</button
 					>
 				</div>
-				<div class="divider"></div>
 			</div>
 			<div class="w-full">
 				<div class="container mx-auto px-4">
 					<div class="max-w-sm mx-auto">
-						<div role="tablist" class="tabs tabs-lifted">
+						<div role="tablist" class="tabs tabs-bordered">
 							<input
 								type="radio"
 								name="my_tabs_2"
@@ -93,7 +92,7 @@
 								aria-label="내 공고"
 								checked
 							/>
-							<div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyPosts()}
 									<p>loading...</p>
 								{:then { data: jobPostDtoList }}
@@ -116,7 +115,7 @@
 								aria-label="나의 지원"
 								checked
 							/>
-							<div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyApplications()}
 									<p>loading...</p>
 								{:then { data: applicationDtoList }}
@@ -138,7 +137,7 @@
 								class="tab"
 								aria-label="내가 쓴 댓글"
 							/>
-							<div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyComments()}
 									<p>loading...</p>
 								{:then { data: commentsDtoList }}
@@ -160,7 +159,7 @@
 							</div>
 
 							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="관심 공고" />
-							<div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyInterest()}
 									<p>loading...</p>
 								{:then { data: interestDtoList }}
