@@ -8,8 +8,10 @@
 		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
 		return data!;
 	}
-	function apply() {
-		rq.goTo(`/applications/${postId}`);
+
+	async function apply() {
+		const postId = parseInt($page.params.id);
+		rq.goTo(`/applications/${postId}/write`);
 	}
 	function editPost() {
 		rq.goTo(`/job-post/modify/${postId}`);

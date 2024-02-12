@@ -291,6 +291,10 @@ export interface components {
       /** Format: int64 */
       postId: number;
       body: string;
+      /** Format: date */
+      birth: string;
+      phone: string;
+      location: string;
       /** Format: date-time */
       createdAt?: string;
       approve?: boolean;
