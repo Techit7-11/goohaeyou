@@ -6,10 +6,13 @@
 		rq.goTo('/member/social/modify');
 	}
 
-	onMount(() => {
+	onMount(async () => {
+		// 로그인 상태를 비동기적으로 확인
+		await rq.initAuth(); // 로그인 상태를 초기화
 		if (rq.isLogout()) {
 			rq.msgError('로그인이 필요합니다.');
 			rq.goTo('/member/login');
+			return;
 		}
 	});
 
