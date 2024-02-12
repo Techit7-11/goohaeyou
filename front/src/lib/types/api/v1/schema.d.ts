@@ -118,218 +118,208 @@ export interface paths {
 export type webhooks = Record<string, never>;
 
 export interface components {
-	schemas: {
-		Register: {
-			content: string;
-		};
-		Modify: {
-			/** @enum {string} */
-			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
-			location?: string;
-			/** Format: date */
-			birth?: string;
-			password?: string;
-		};
-		SocialProfileForm: {
-			name: string;
-			phoneNumber: string;
-			/** @enum {string} */
-			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
-			location: string;
-			/** Format: date */
-			birth: string;
-		};
-		MemberDto: {
-			/** Format: int64 */
-			id: number;
-			username: string;
-			/** @enum {string} */
-			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
-			location?: string;
-			/** Format: date */
-			birth?: string;
-			name?: string;
-			phoneNumber?: string;
-		};
-		RsDataMemberDto: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			data?: components['schemas']['MemberDto'];
-		};
-		RsDataModify: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			data?: components['schemas']['Modify'];
-		};
-		RsDataURI: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			/** Format: uri */
-			data?: string;
-		};
-		LoginForm: {
-			username: string;
-			password: string;
-		};
-		JoinForm: {
-			username: string;
-			password: string;
-			name: string;
-			phoneNumber: string;
-			/** @enum {string} */
-			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
-			location: string;
-			/** Format: date */
-			birth: string;
-		};
-		RsDataJoinForm: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			data?: components['schemas']['JoinForm'];
-		};
-		RsDataRegister: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			data?: components['schemas']['Register'];
-		};
-		CommentDto: {
-			/** Format: int64 */
-			id: number;
-			/** Format: int64 */
-			jobPostId: number;
-			author: string;
-			content: string;
-			/** Format: date-time */
-			createAt: string;
-			/** Format: date-time */
-			modifyAt: string;
-		};
-		RsDataListCommentDto: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			data?: components['schemas']['CommentDto'][];
-		};
-		JobPostDto: {
-			/** Format: int64 */
-			id: number;
-			author: string;
-			title: string;
-			location: string;
-			/** Format: int64 */
-			commentsCount: number;
-			/** Format: int64 */
-			incrementViewCount: number;
-			/** Format: date */
-			deadLine?: string;
-			createdAt: string;
-			closed?: boolean;
-		};
-		RsDataListJobPostDto: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			data?: components['schemas']['JobPostDto'][];
-		};
-		ApplicationDto: {
-			/** Format: int64 */
-			id: number;
-			/** Format: int64 */
-			jobPostId: number;
-			jobPostName: string;
-			author: string;
-			/** Format: int64 */
-			postId: number;
-			body: string;
-			/** Format: date-time */
-			createdAt?: string;
-			approve?: boolean;
-		};
-		RsDataListApplicationDto: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			data?: components['schemas']['ApplicationDto'][];
-		};
-		JobPostDetailDto: {
-			/** Format: int64 */
-			id: number;
-			author: string;
-			title: string;
-			location: string;
-			/** Format: int64 */
-			commentsCount: number;
-			/** Format: int64 */
-			incrementViewCount: number;
-			/** Format: date */
-			deadLine?: string;
-			createdAt: string;
-			body: string;
-			/** Format: int64 */
-			applicationCount?: number;
-			/** Format: int64 */
-			interestsCount?: number;
-			/** Format: int32 */
-			minAge?: number;
-			/** @enum {string} */
-			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
-			modifyAt?: string;
-			closed?: boolean;
-		};
-		RsDataJobPostDetailDto: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			data?: components['schemas']['JobPostDetailDto'];
-		};
-		GetPostsResponseBody: {
-			itemPage: components['schemas']['PageDtoJobPostDto'];
-		};
-		PageDtoJobPostDto: {
-			/** Format: int64 */
-			totalElementsCount: number;
-			/** Format: int64 */
-			pageElementsCount: number;
-			/** Format: int64 */
-			totalPagesCount: number;
-			/** Format: int32 */
-			number: number;
-			content: components['schemas']['JobPostDto'][];
-		};
-		RsDataGetPostsResponseBody: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			data?: components['schemas']['GetPostsResponseBody'];
-		};
-		RsDataApplicationDto: {
-			resultCode?: string;
-			/** Format: int32 */
-			statusCode?: number;
-			msg?: string;
-			data?: components['schemas']['ApplicationDto'];
-		};
-	};
-	responses: never;
-	parameters: never;
-	requestBodies: never;
-	headers: never;
-	pathItems: never;
+  schemas: {
+    Register: {
+      content: string;
+    };
+    Modify: {
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location?: string;
+      /** Format: date */
+      birth?: string;
+      password?: string;
+    };
+    SocialProfileForm: {
+      name: string;
+      phoneNumber: string;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location: string;
+      /** Format: date */
+      birth: string;
+    };
+    MemberDto: {
+      /** Format: int64 */
+      id: number;
+      username: string;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location?: string;
+      /** Format: date */
+      birth?: string;
+      name?: string;
+      phoneNumber?: string;
+    };
+    RsDataMemberDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["MemberDto"];
+    };
+    RsDataURI: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      /** Format: uri */
+      data?: string;
+    };
+    LoginForm: {
+      username: string;
+      password: string;
+    };
+    JoinForm: {
+      username: string;
+      password: string;
+      name: string;
+      phoneNumber: string;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location: string;
+      /** Format: date */
+      birth: string;
+    };
+    RsDataJoinForm: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JoinForm"];
+    };
+    CommentDto: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      jobPostId: number;
+      author: string;
+      content: string;
+      /** Format: date-time */
+      createAt: string;
+      /** Format: date-time */
+      modifyAt: string;
+    };
+    RsDataListCommentDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["CommentDto"][];
+    };
+    JobPostDto: {
+      /** Format: int64 */
+      id: number;
+      author: string;
+      title: string;
+      location: string;
+      /** Format: int64 */
+      commentsCount: number;
+      /** Format: int64 */
+      incrementViewCount: number;
+      /** Format: date */
+      deadLine?: string;
+      createdAt: string;
+      closed?: boolean;
+    };
+    RsDataListJobPostDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JobPostDto"][];
+    };
+    ApplicationDto: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      jobPostId: number;
+      jobPostName: string;
+      author: string;
+      /** Format: int64 */
+      postId: number;
+      body: string;
+      /** Format: date */
+      birth: string;
+      phone: string;
+      location: string;
+      /** Format: date-time */
+      createdAt?: string;
+      approve?: boolean;
+    };
+    RsDataListApplicationDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["ApplicationDto"][];
+    };
+    JobPostDetailDto: {
+      /** Format: int64 */
+      id: number;
+      author: string;
+      title: string;
+      location: string;
+      /** Format: int64 */
+      commentsCount: number;
+      /** Format: int64 */
+      incrementViewCount: number;
+      /** Format: date */
+      deadLine?: string;
+      createdAt: string;
+      body: string;
+      /** Format: int64 */
+      applicationCount?: number;
+      /** Format: int64 */
+      interestsCount?: number;
+      /** Format: int32 */
+      minAge?: number;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      modifyAt?: string;
+      closed?: boolean;
+    };
+    RsDataJobPostDetailDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JobPostDetailDto"];
+    };
+    GetPostsResponseBody: {
+      itemPage: components["schemas"]["PageDtoJobPostDto"];
+    };
+    PageDtoJobPostDto: {
+      /** Format: int64 */
+      totalElementsCount: number;
+      /** Format: int64 */
+      pageElementsCount: number;
+      /** Format: int64 */
+      totalPagesCount: number;
+      /** Format: int32 */
+      number: number;
+      content: components["schemas"]["JobPostDto"][];
+    };
+    RsDataGetPostsResponseBody: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["GetPostsResponseBody"];
+    };
+    RsDataApplicationDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["ApplicationDto"];
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 
 export type $defs = Record<string, never>;
