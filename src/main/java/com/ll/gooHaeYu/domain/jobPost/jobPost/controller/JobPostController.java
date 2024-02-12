@@ -26,7 +26,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.lang.NonNull;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,21 +38,20 @@ public class JobPostController {
 
     @PostMapping
     @Operation(summary = "구인공고 작성")
-    public RsData<URI> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
-                                 @Valid @RequestBody JobPostForm.Register form) {
-        Long jobPostId = jobPostService.writePost(memberDetails.getUsername(), form);
+    public RsData<JobPostForm.Register> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                  @Valid @RequestBody JobPostForm.Register form) {
+        JobPostForm.Register jobPostForm = jobPostService.writePost(memberDetails.getUsername(), form);
 
-        return RsData.of("201", "CREATE", URI.create("/api/job-posts/" + jobPostId));
+        return RsData.of(jobPostForm);
     }
-
     @PutMapping("/{id}")
     @Operation(summary = "구인공고 수정")
-    public ResponseEntity<Void> modifyPost(@AuthenticationPrincipal MemberDetails memberDetails,
-                                           @PathVariable(name = "id") Long id,
-                                           @Valid @RequestBody JobPostForm.Modify form) {
-        jobPostService.modifyPost(memberDetails.getUsername(), id, form);
+    public RsData<JobPostForm.Modify> modifyPost(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                 @PathVariable(name = "id") Long id,
+                                                 @Valid @RequestBody JobPostForm.Modify form) {
+       JobPostForm.Modify jobPostForm = jobPostService.modifyPost(memberDetails.getUsername(), id, form);
 
-        return ResponseEntity.noContent().build();
+        return RsData.of(jobPostForm);
     }
 
     @GetMapping

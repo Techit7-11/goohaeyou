@@ -6,6 +6,10 @@
 	import Pagination from '$lib/components/Pagination.svelte';
 	let posts: components['schemas']['JobPostDto'][] = $state([]);
 
+	function JobPostWritePage() {
+		rq.goTo('/job-post');
+	}
+
 	async function load() {
 		const page_ = parseInt($page.url.searchParams.get('page') ?? '1');
 
@@ -26,27 +30,34 @@
 {#await load()}
 	<span class="loading loading-spinner loading-lg"></span>
 {:then { data: { itemPage } }}
-<div class="py-5">
-	<ul>
-		{#each posts ?? [] as post, index}
-			<li>
-				<a href="/job-post/{post.id}">(No.{index + 1}) {post.title}</a>
-				<a href="/job-post/{post.id}">작성자 : {post.author}</a>
-				<a href="/job-post/{post.id}">{post.location}</a>
-				<a href="/job-post/{post.id}">
-					{#if post.closed}
-						<div class="badge badge-neutral">마감</div>
-					{:else}
-						<div class="badge badge-primary">구인중</div>
-					{/if}
-				</a>
-			</li>
-		{/each}
-	</ul>
-	<div class="pt-3">
-	<Pagination page={itemPage} />
+	<div class="flex justify-center min-h-screen bg-base-100">
+		<div class="container mx-auto px-4">
+			<div class="py-5">
+				<ul>
+					{#each posts ?? [] as post, index}
+						<li>
+							<a href="/job-post/{post.id}">(No.{index + 1}) {post.title}</a>
+							<a href="/job-post/{post.id}">작성자 : {post.author}</a>
+							<a href="/job-post/{post.id}">{post.location}</a>
+							<a href="/job-post/{post.id}">
+								{#if post.closed}
+									<div class="badge badge-neutral">마감</div>
+								{:else}
+									<div class="badge badge-primary">구인중</div>
+								{/if}
+							</a>
+						</li>
+					{/each}
+				</ul>
+				<div class="max-w-sm mx-auto">
+					<button class="w-full btn btn-primary my-5" on:click={JobPostWritePage}>
+						글 작성하기
+					</button>
+					<Pagination page={itemPage} />
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 {/await}
 
 <style>
