@@ -36,6 +36,7 @@
 				>
 					<li><a href="/job-post/list">구인공고목록</a></li>
 					<li><a href="/member/me">마이페이지</a></li>
+					<li><a href="/notification/list">알림</a></li>
 				</ul>
 			</div>
 		</div>
