@@ -40,6 +40,10 @@
 	function summarizeBody(body) {
 		return body.length > 10 ? `${body.slice(0, 10)}...` : body;
 	}
+
+	function goToApplicationsList(postId) {
+        window.location.href = `/applications/list/${postId}`;
+    }
 </script>
 
 <div class="flex items-center justify-center min-h-screen bg-base-100">
@@ -108,6 +112,7 @@
 											<li>
 												<a href="/job-post/{post.id}">no.{index + 1}</a>
 												<a href="/job-post/{post.id}">{post.title}</a>
+												<button class="btn btn-outline btn-primary btn-sm ml-2 w-auto px-2" on:click={() => goToApplicationsList(post.id)}>지원서 확인</button>
 											</li>
 										{/each}
 									</ul>
