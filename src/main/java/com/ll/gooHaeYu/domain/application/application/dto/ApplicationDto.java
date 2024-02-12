@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.application.application.dto;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,9 +12,17 @@ import java.util.List;
 @Getter
 public class ApplicationDto {
 
+    @NotNull
     private Long id;
+    @NotNull
+    private Long jobPostId;
+    @NotNull
+    private String jobPostName;
+    @NotNull
     private String author;
+    @NotNull
     private Long postId;
+    @NotNull
     private String body;
     private LocalDateTime createdAt;
     private Boolean approve;
@@ -21,6 +30,8 @@ public class ApplicationDto {
     public static ApplicationDto fromEntity(Application application) {
         return ApplicationDto.builder()
                 .id(application.getId())
+                .jobPostId(application.getJobPostDetail().getJobPost().getId())
+                .jobPostName(application.getJobPostDetail().getJobPost().getTitle())
                 .author(application.getMember().getUsername())
                 .postId(application.getJobPostDetail().getJobPost().getId())
                 .body(application.getBody())
