@@ -61,7 +61,7 @@
             <div class="divider"></div>
             <div>
                 지원 가능 최소 나이: 
-                <span class="badge badge-default">
+                <span class="badge badge-outline">
                     {jobPostDetailDto.minAge === 0 ? '없음' : jobPostDetailDto.minAge ?? '없음'}
                 </span>
             </div>
@@ -75,10 +75,10 @@
             <div>내 성별: {rq.member.gender === 'MALE' ? '남' : rq.member.gender === 'FEMALE' ? '여' : '무관'}</div>
 			
             {#if memberAge !== '정보 없음' && memberAge >= jobPostDetailDto.minAge && (jobPostDetailDto.gender === 'UNDEFINED' || jobPostDetailDto.gender === rq.member.gender)}
-				<div class="alert alert-success text-sm py-2 px-4">지원 가능</div>
+            <div class="badge badge-accent">지원 가능</div>
                 <form on:submit|preventDefault={writeApplications}>
 					
-                    <div class="form-control w-full">
+                    <div class="form-control w-full mt-4">
                         <label class="label">
                             <span class="label-text text-lg">지원서 작성</span>
                         </label>
@@ -86,12 +86,15 @@
                             class="textarea textarea-bordered h-24 w-full"
                             placeholder="내용을 입력하세요." required bind:value={applicationsData.applicationBody}></textarea>
                     </div>
-                    <div class="form-control mt-8">
+                    <div class="form-control mt-3">
                         <button type="submit" class="btn btn-primary">지원하기</button>
                     </div>
                 </form>
             {:else}
-				<div class="alert alert-error text-sm py-2 px-4">지원 불가능</div>
+            <div class="badge badge-warning gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-4 h-4 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                지원 불가능
+              </div>
             {/if}
         </div>
     </div>
