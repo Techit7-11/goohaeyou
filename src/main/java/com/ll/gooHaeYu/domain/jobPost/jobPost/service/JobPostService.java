@@ -16,8 +16,12 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.global.event.ChangeOfPostEvent;
+import com.ll.gooHaeYu.global.event.PostDeletedEvent;
+import com.ll.gooHaeYu.global.event.PostGetInterestedEvent;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -31,6 +35,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.*;
+import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
+import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
@@ -42,6 +49,7 @@ public class JobPostService {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final EssentialRepository essentialRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public Long writePost(String username, JobPostForm.Register form) {
@@ -83,6 +91,7 @@ public class JobPostService {
     @Transactional
     public void modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+        JobPost jobPost = postDetail.getJobPost();
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
@@ -97,6 +106,9 @@ public class JobPostService {
            Application application = iterator.next();
            if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - application.getMember().getBirth().getYear()){
                applicationsToRemove.add(application);
+               publisher.publishEvent(new ChangeOfPostEvent(this,jobPost,application, POST_MODIFICATION,DELETE));
+           }else {
+               publisher.publishEvent(new ChangeOfPostEvent(this,jobPost,application,POST_MODIFICATION,NOTICE));
            }
        }
        postDetail.getApplications().removeAll(applicationsToRemove);
@@ -117,6 +129,7 @@ public class JobPostService {
         JobPost post = findByIdAndValidate(postId);
 
         Member member = findUserByUserNameValidate(username);
+        publisher.publishEvent(new PostDeletedEvent(this,post,member,DELETE));
         if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
             jobPostRepository.deleteById(postId);
         } else {
@@ -158,6 +171,7 @@ public class JobPostService {
                 .build());
 
         postDetail.getJobPost().increaseInterestCount();
+        publisher.publishEvent(new PostGetInterestedEvent(this, postDetail, member));
     }
 
     @Transactional
@@ -239,15 +253,34 @@ public class JobPostService {
     @Transactional
     public void deadline(String username, Long postId) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
+        JobPost jobPost = postDetail.getJobPost();
         if (!canEditPost(username,postDetail.getAuthor())) {
             throw new CustomException(NOT_ABLE);
         }
 
-        List<Application> applicationList = postDetail.getApplications().stream()
-                .filter(application -> application.getApprove() != null && !application.getApprove())
-                .collect(Collectors.toList());
+        List<Application> applicationList = postDetail.getApplications();
+        List<Application> removeApplicationList = new ArrayList<>();
 
         for (Application application : applicationList) {
+            if (application.getApprove()) {
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
+            }else {
+                removeApplicationList.add(application);
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_UNAPPROVE, DELETE));
+            }
+        }
+
+
+//        List<Application> applicationList = postDetail.getApplications().stream()
+//                .filter(application -> application.getApprove() != null && !application.getApprove())
+//                .peek(application -> publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_UNAPPROVE, DELETE)))
+//                .collect(Collectors.toList());
+//
+//        for (Application application : applicationList) {
+//            publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
+//
+//        }
+        for (Application application : removeApplicationList) {
             postDetail.getApplications().remove(application);
         }
     }
