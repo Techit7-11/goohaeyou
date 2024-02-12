@@ -2,6 +2,7 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { onMount } from 'svelte';
 
+<<<<<<< HEAD
 	onMount(async () => {
 		// 로그인 상태를 비동기적으로 확인
 		await rq.initAuth(); // 로그인 상태를 초기화
@@ -9,6 +10,12 @@
 			rq.msgError('로그인이 필요합니다.');
 			rq.goTo('/member/login');
 			return;
+=======
+	onMount(() => {
+		if (rq.isLogout()) {
+			rq.msgError('로그인이 필요합니다.');
+			rq.goTo('/member/login');
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
 		}
 	});
 
@@ -61,8 +68,11 @@
 		try {
 			await rq.apiEndPoints().DELETE('/api/notification/read');
 			alert('읽은 알림이 삭제되었습니다.');
+<<<<<<< HEAD
 			location.reload(); // 페이지 새로 고침
 			await loadMyNotification();
+=======
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
 		} catch (error) {
 			console.error('읽은 알림 삭제 중 오류가 발생했습니다.', error);
 			alert('읽은 알림을 삭제하는 데 실패했습니다.');
@@ -73,13 +83,17 @@
 		try {
 			await rq.apiEndPoints().DELETE('/api/notification/all');
 			alert('모든 알림이 삭제되었습니다.');
+<<<<<<< HEAD
 			location.reload(); // 페이지 새로 고침
 			await loadMyNotification();
+=======
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
 		} catch (error) {
 			console.error('모든 알림 삭제 중 오류가 발생했습니다.', error);
 			alert('모든 알림을 삭제하는 데 실패했습니다.');
 		}
 	}
+<<<<<<< HEAD
 
 	async function markNotificationAsRead(notification) {
 		try {
@@ -90,6 +104,8 @@
 			alert('알림을 확인하는 데 실패했습니다.');
 		}
 	}
+=======
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
 </script>
 
 {#await loadMyNotification()}
@@ -109,6 +125,7 @@
 				<ul>
 					{#each data ?? [] as notification, index}
 						<li>
+<<<<<<< HEAD
 							<a on:click={() => markNotificationAsRead(notification)} href={notification.url}
 								>(No.{index + 1})</a
 							>
@@ -123,6 +140,16 @@
 									<div class="badge badge-neutral">확인</div>
 								{:else}
 									<div class="badge badge-primary">미확인</div>
+=======
+							<a>(No.{index + 1})</a>
+							<a>{createNotificationSentence(notification)}</a>
+							<a>일 시 : {notification.createAt}</a>
+							<a>
+								{#if notification.seen}
+									<div class="badge badge-neutral">확인</div>
+								{:else}
+									<div class="badge badge-primary">미1확인</div>
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
 								{/if}
 							</a>
 						</li>

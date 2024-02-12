@@ -3,7 +3,9 @@
  * Do not make direct changes to the file.
  */
 
+
 export interface paths {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	'/api/post-comment/{postId}/comment/{commentId}': {
 		/** 댓글 수정 */
@@ -131,6 +133,8 @@ export interface paths {
 		delete: operations['deadline'];
 	};
 =======
+=======
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
   "/api/post-comment/{postId}/comment/{commentId}": {
     /** 댓글 수정 */
     put: operations["modify"];
@@ -159,6 +163,13 @@ export interface paths {
     /** 구인공고 삭제 */
     delete: operations["deleteJobPost"];
   };
+<<<<<<< HEAD
+=======
+  "/api/employ/{postId}/{applicationIds}": {
+    /** 지원서 승인 */
+    put: operations["approve"];
+  };
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
   "/api/applications/{id}": {
     /** 지원서 상세 내용 */
     get: operations["detailApplication"];
@@ -197,10 +208,13 @@ export interface paths {
     /** 구인공고 관심 제거 */
     delete: operations["disinterest"];
   };
+<<<<<<< HEAD
   "/api/employ/{postId}/{applicationIds}": {
     /** 지원서 승인 */
     patch: operations["approve"];
   };
+=======
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
   "/member/socialLogin/{providerTypeCode}": {
     /** 소셜 로그인 */
     get: operations["socialLogin"];
@@ -246,6 +260,7 @@ export interface paths {
   };
   "/api/notification/read": {
     /** 읽은 알림 전부 삭제 */
+<<<<<<< HEAD
     delete: operations["deleteReadAll"];
   };
   "/api/notification/all": {
@@ -253,11 +268,24 @@ export interface paths {
     delete: operations["deleteAll"];
   };
 >>>>>>> 8f5e574 (feat:지원서 승인 시 알림)
+=======
+    delete: operations["deleteAll"];
+  };
+  "/api/notification/all": {
+    /** 알림 전부 삭제 */
+    delete: operations["deleteReadAll"];
+  };
+  "/api/job-posts/{id}/deadline": {
+    /** 공고 마감 */
+    delete: operations["deadline"];
+  };
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
 }
 
 export type webhooks = Record<string, never>;
 
 export interface components {
+<<<<<<< HEAD
 	schemas: {
 		Register: {
 			content: string;
@@ -505,6 +533,240 @@ export interface components {
 	requestBodies: never;
 	headers: never;
 	pathItems: never;
+=======
+  schemas: {
+    Register: {
+      content: string;
+    };
+    Modify: {
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location?: string;
+      /** Format: date */
+      birth?: string;
+      password?: string;
+    };
+    SocialProfileForm: {
+      name: string;
+      phoneNumber: string;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location: string;
+      /** Format: date */
+      birth: string;
+    };
+    MemberDto: {
+      /** Format: int64 */
+      id: number;
+      username: string;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location?: string;
+      /** Format: date */
+      birth?: string;
+      name?: string;
+      phoneNumber?: string;
+    };
+    RsDataMemberDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["MemberDto"];
+    };
+    RsDataModify: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["Modify"];
+    };
+    RsDataURI: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      /** Format: uri */
+      data?: string;
+    };
+    LoginForm: {
+      username: string;
+      password: string;
+    };
+    JoinForm: {
+      username: string;
+      password: string;
+      name: string;
+      phoneNumber: string;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location: string;
+      /** Format: date */
+      birth: string;
+    };
+    RsDataJoinForm: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JoinForm"];
+    };
+    RsDataRegister: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["Register"];
+    };
+    CommentDto: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      jobPostId: number;
+      author: string;
+      content: string;
+      /** Format: date-time */
+      createAt: string;
+      /** Format: date-time */
+      modifyAt: string;
+    };
+    RsDataListCommentDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["CommentDto"][];
+    };
+    NotificationDto: {
+      /** Format: int64 */
+      id?: number;
+      createAt?: string;
+      toMember?: string;
+      fromMember?: string;
+      relPostTitle?: string;
+      /** @enum {string} */
+      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE";
+      /** @enum {string} */
+      resultTypeCode?: "NOTICE" | "DELETE" | "MODIFY";
+      seen?: boolean;
+    };
+    RsDataListNotificationDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["NotificationDto"][];
+    };
+    JobPostDto: {
+      /** Format: int64 */
+      id: number;
+      author: string;
+      title: string;
+      location: string;
+      /** Format: int64 */
+      commentsCount: number;
+      /** Format: int64 */
+      incrementViewCount: number;
+      /** Format: date */
+      deadLine?: string;
+      createdAt: string;
+      closed?: boolean;
+    };
+    RsDataListJobPostDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JobPostDto"][];
+    };
+    ApplicationDto: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      jobPostId: number;
+      jobPostName: string;
+      author: string;
+      /** Format: int64 */
+      postId: number;
+      body: string;
+      /** Format: date-time */
+      createdAt?: string;
+      approve?: boolean;
+    };
+    RsDataListApplicationDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["ApplicationDto"][];
+    };
+    JobPostDetailDto: {
+      /** Format: int64 */
+      id: number;
+      author: string;
+      title: string;
+      location: string;
+      /** Format: int64 */
+      commentsCount: number;
+      /** Format: int64 */
+      incrementViewCount: number;
+      /** Format: date */
+      deadLine?: string;
+      createdAt: string;
+      body: string;
+      /** Format: int64 */
+      applicationCount?: number;
+      /** Format: int64 */
+      interestsCount?: number;
+      /** Format: int32 */
+      minAge?: number;
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      modifyAt?: string;
+      closed?: boolean;
+    };
+    RsDataJobPostDetailDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JobPostDetailDto"];
+    };
+    GetPostsResponseBody: {
+      itemPage: components["schemas"]["PageDtoJobPostDto"];
+    };
+    PageDtoJobPostDto: {
+      /** Format: int64 */
+      totalElementsCount: number;
+      /** Format: int64 */
+      pageElementsCount: number;
+      /** Format: int64 */
+      totalPagesCount: number;
+      /** Format: int32 */
+      number: number;
+      content: components["schemas"]["JobPostDto"][];
+    };
+    RsDataGetPostsResponseBody: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["GetPostsResponseBody"];
+    };
+    RsDataApplicationDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["ApplicationDto"];
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
 }
 
 export type $defs = Record<string, never>;
@@ -512,6 +774,7 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	/** 댓글 수정 */
 	modify: {
@@ -1043,6 +1306,8 @@ export interface operations {
 		};
 	};
 =======
+=======
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
 
   /** 댓글 수정 */
   modify: {
@@ -1186,7 +1451,10 @@ export interface operations {
     };
   };
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
   /** 지원서 승인 */
   approve: {
     parameters: {
@@ -1202,7 +1470,10 @@ export interface operations {
       };
     };
   };
+<<<<<<< HEAD
 >>>>>>> 26068db (feat: 이벤트 리스너 동작 확인)
+=======
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
   /** 지원서 상세 내용 */
   detailApplication: {
     parameters: {
@@ -1392,6 +1663,7 @@ export interface operations {
       };
     };
   };
+<<<<<<< HEAD
   /** 지원서 승인 */
   approve: {
     parameters: {
@@ -1407,6 +1679,8 @@ export interface operations {
       };
     };
   };
+=======
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
   /** 소셜 로그인 */
   socialLogin: {
     parameters: {
@@ -1560,6 +1834,7 @@ export interface operations {
     };
   };
   /** 읽은 알림 전부 삭제 */
+<<<<<<< HEAD
   deleteReadAll: {
     responses: {
       /** @description OK */
@@ -1569,6 +1844,8 @@ export interface operations {
     };
   };
   /** 알림 전부 삭제 */
+=======
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
   deleteAll: {
     responses: {
       /** @description OK */
@@ -1577,5 +1854,31 @@ export interface operations {
       };
     };
   };
+<<<<<<< HEAD
 >>>>>>> 8f5e574 (feat:지원서 승인 시 알림)
+=======
+  /** 알림 전부 삭제 */
+  deleteReadAll: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
+  };
+  /** 공고 마감 */
+  deadline: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
+  };
+>>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
 }
