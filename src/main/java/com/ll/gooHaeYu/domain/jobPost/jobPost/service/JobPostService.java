@@ -80,7 +80,7 @@ public class JobPostService {
     }
 
     @Transactional
-    public void modifyPost(String username, Long id, JobPostForm.Modify form) {
+    public JobPostForm.Modify modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
@@ -99,6 +99,7 @@ public class JobPostService {
            }
        }
        postDetail.getApplications().removeAll(applicationsToRemove);
+        return form;
     }
 
     @Transactional

@@ -159,6 +159,13 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["MemberDto"];
     };
+    RsDataModify: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["Modify"];
+    };
     RsDataURI: {
       resultCode?: string;
       /** Format: int32 */
@@ -439,7 +446,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataModify"];
+        };
       };
     };
   };

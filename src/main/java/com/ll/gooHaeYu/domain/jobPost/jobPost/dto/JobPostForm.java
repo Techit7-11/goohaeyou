@@ -35,12 +35,24 @@ public class JobPostForm {
 
     @Builder
     @Getter
-    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Modify {
+        @NotBlank(message = "제목은 필수 입력 항목입니다.")
         private String title;
+
+        @NotBlank(message = "내용은 필수 입력 항목입니다.")
         private String body;
+
+        @NotBlank(message = "지역 설정은 필수입니다.")
+        private String location;
+
         private int minAge;
+
         private Gender gender;
+
+        @NotNull(message = "마감 기한은 필수입니다.")
+        @FutureOrPresent
         private LocalDate deadLine;
     }
 }

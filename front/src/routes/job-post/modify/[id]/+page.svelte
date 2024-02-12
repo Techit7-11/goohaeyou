@@ -1,29 +1,37 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import rq from '$lib/rq/rq.svelte';
+    import { onMount } from 'svelte';
+    import { page } from '$app/stores';
+    import rq from '$lib/rq/rq.svelte';
 
-	// 회원 정보 데이터
-	let newJobPostData = {
-		title: '',
-		body: '',
-		minAge: '',
-		gender: 'UNDEFINED',
-		location: '',
-		deadLine: ''
-	};
+    let jobPostData = {
+        title: '',
+        body: '',
+        minAge: '',
+        gender: 'UNDEFINED',
+        location: '',
+        deadLine: ''
+    };
 
-	onMount(() => {
-		if (rq.isLogout()) {
-			rq.msgError('로그인이 필요합니다.');
-			rq.goTo('/member/login');
-		}
-	});
-	// 글 작성 버튼을 클릭하면 실행될 함수
-	async function writeJobPost() {
-		const response = await rq.apiEndPoints().POST('/api/job-posts', { body: newJobPostData });
+    let postId;
+    onMount(async () => {
+         postId = parseInt($page.params.id)
+         await loadJobPostDetail(postId);
+         });
+
+    async function loadJobPostDetail(postId) {
+        const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
+        if (data) {
+            // 로드된 데이터로 jobPostData를 업데이트
+            jobPostData = { ...jobPostData, ...data };
+        }
+    }
+
+    // 공고 수정 제출 함수
+    async function submitForm() {
+        const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}`, { body: jobPostData });
 
 		if (response.data?.statusCode === 200) {
-			rq.msgAndRedirect({ msg: '글 작성 완료' }, undefined, '/');
+			rq.msgAndRedirect({ msg: '글 수정 완료' }, undefined, '/');
 		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
 			const customErrorMessage = response.data?.data?.message;
 			rq.msgError(customErrorMessage ?? '알 수 없는 오류가 발생했습니다.');
@@ -32,7 +40,7 @@
 				response.data.data.forEach((msg) => rq.msgError(msg));
 			}
 		} else {
-			rq.msgError('글 작성 중 오류가 발생했습니다.');
+			rq.msgError('글 수정 중 오류가 발생했습니다.');
 		}
 	}
 	// 다음 주소 API 팝업 열기
@@ -44,7 +52,7 @@
 		script.onload = function () {
 			new daum.Postcode({
 				oncomplete: function (data) {
-					newJobPostData.location = data.roadAddress;
+					jobPostData.location = data.roadAddress;
 				}
 			}).open();
 		};
@@ -55,15 +63,15 @@
 <div class="flex items-center justify-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
 		<div class="max-w-sm mx-auto my-10">
-			<h2 class="text-2xl font-bold text-center mb-10">공고 작성</h2>
-			<form on:submit|preventDefault={writeJobPost}>
+			<h2 class="text-2xl font-bold text-center mb-10">공고 수정</h2>
+			<form on:submit|preventDefault={submitForm}>
 				<div class="flex gap-4">
 					<div class="form-group flex-1">
 						<label class="label" for="gender">성별</label>
 						<select
 							class="input input-bordered w-full"
 							id="gender"
-							bind:value={newJobPostData.gender}
+							bind:value={jobPostData.gender}
 						>
 							<option value="UNDEFINED">무관</option>
 							<option value="MALE">남성</option>
@@ -77,7 +85,7 @@
 							id="minAge"
 							class="input input-bordered w-full"
 							placeholder="나이를 입력해주세요."
-							bind:value={newJobPostData.minAge}
+							bind:value={jobPostData.minAge}
 						/>
 					</div>
 				</div>
@@ -87,7 +95,7 @@
 						type="date"
 						id="deadLine"
 						class="input input-bordered w-full"
-						bind:value={newJobPostData.deadLine}
+						bind:value={jobPostData.deadLine}
 					/>
 				</div>
 				<div class="form-group">
@@ -100,7 +108,7 @@
 							style="width: 80%;"
 							type="text"
 							id="location"
-							bind:value={newJobPostData.location}
+							bind:value={jobPostData.location}
 							readonly
 						/>
 						<!-- 다음 주소 API 팝업 열기 버튼 -->
@@ -119,7 +127,7 @@
 						type="text"
 						id="title"
 						class="input input-bordered w-full"
-						bind:value={newJobPostData.title}
+						bind:value={jobPostData.title}
 						placeholder="제목을 입력해주세요."
 					/>
 				</div>
@@ -128,12 +136,12 @@
 					<textarea
 						id="body"
 						class="textarea textarea-bordered h-40 w-full"
-						bind:value={newJobPostData.body}
+						bind:value={jobPostData.body}
 						placeholder="내용을 입력해주세요."
 					></textarea>
 				</div>
 				<div class="form-group">
-					<button class="w-full btn btn-primary my-3" type="submit">글 작성</button>
+					<button class="w-full btn btn-primary my-3" type="submit">글 수정</button>
 				</div>
 			</form>
 		</div>

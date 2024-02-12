@@ -2,22 +2,22 @@
 	import { page } from '$app/stores';
 	import rq from '$lib/rq/rq.svelte';
 
+ let postId = parseInt($page.params.id);
+
 	async function load() {
-		const { data } = await rq.apiEndPoints().GET('/api/job-posts/{id}', {
-			params: {
-				path: {
-					id: parseInt($page.params.id)
-				}
-			}
-		});
-
-		return data!;
-	}
-
+            const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
+            return data!;
+        }
 	async function apply() {
-		const postId = parseInt($page.params.id);
-		rq.goTo(`/applications/${postId}`);
-	}
+            rq.goTo(`/applications/${postId}`);
+        }
+    	function editPost() {
+                rq.goTo(`/job-post/modify/${postId}`);
+            }
+    	function deletePost() {
+    		//postId 삭제
+    		alert('글이 삭제되었습니다.');
+    	}
 </script>
 
 {#await load()}
@@ -56,9 +56,16 @@
 			<div>최종 수정일자: {jobPostDetailDto?.modifyAt}</div>
 			<div>조회수: {jobPostDetailDto?.incrementViewCount}</div>
 			<div>관심 등록 수 : {jobPostDetailDto?.interestsCount}</div>
-			<div class="apply-button" style="text-align: right;">
-				<button class="btn" on:click={apply}>지원하기</button>
-			</div>
+			<div class="action-buttons" style="text-align: right;">
+            			{#if jobPostDetailDto?.author === rq.member.username}
+            				<button class="btn" on:click={editPost}>수정하기</button>
+            				<button class="btn" on:click={deletePost}>삭제하기</button>
+            			{:else}
+            				{#if !jobPostDetailDto?.closed}
+            					<button class="btn" on:click={apply}>지원하기</button>
+            				{/if}
+            			{/if}
+            		</div>
 		</div>
 	</div>
 {/await}
