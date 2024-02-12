@@ -35,8 +35,8 @@
 	}
 
 	function summarizeBody(body) {
-    return body.length > 10 ? `${body.slice(0, 10)}...` : body;
-    }
+		return body.length > 10 ? `${body.slice(0, 10)}...` : body;
+	}
 </script>
 
 <div class="flex items-center justify-center min-h-screen bg-base-100">
@@ -99,12 +99,12 @@
 							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyPosts()}
 									<p>loading...</p>
-								{:then { data: jobPostDtoList }}
+								{:then { data: posts }}
 									<ul>
-										{#each jobPostDtoList ?? [] as jobPostDto, index}
+										{#each posts ?? [] as post, index}
 											<li>
-												<a href="/applications/list/{jobPostDto.id}">no.{index + 1}</a>   
-												<a href="/applications/list/{jobPostDto.id}">{jobPostDto.title}</a>    
+												<a href="/job-post/{post.id}">no.{index + 1}</a>
+												<a href="/job-post/{post.id}">{post.title}</a>
 											</li>
 										{/each}
 									</ul>
@@ -126,8 +126,12 @@
 									<ul>
 										{#each applicationDtoList ?? [] as applicationDto}
 											<li>
-												<a href="/applications/detail/{applicationDto.id}">{applicationDto.jobPostName}</a>
-												<a href="/applications/detail/{applicationDto.id}">{summarizeBody(applicationDto.body)}</a>
+												<a href="/applications/detail/{applicationDto.id}"
+													>{applicationDto.jobPostName}</a
+												>
+												<a href="/applications/detail/{applicationDto.id}"
+													>{summarizeBody(applicationDto.body)}</a
+												>
 											</li>
 										{/each}
 									</ul>
