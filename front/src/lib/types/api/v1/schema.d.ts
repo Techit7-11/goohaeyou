@@ -261,6 +261,7 @@ export interface paths {
   "/api/notification/read": {
     /** 읽은 알림 전부 삭제 */
 <<<<<<< HEAD
+<<<<<<< HEAD
     delete: operations["deleteReadAll"];
   };
   "/api/notification/all": {
@@ -270,10 +271,13 @@ export interface paths {
 >>>>>>> 8f5e574 (feat:지원서 승인 시 알림)
 =======
     delete: operations["deleteAll"];
+=======
+    delete: operations["deleteReadAll"];
+>>>>>>> 3280ca8 (refactor:알림 삭제 로직 오류 수정 및 프론트 작업)
   };
   "/api/notification/all": {
     /** 알림 전부 삭제 */
-    delete: operations["deleteReadAll"];
+    delete: operations["deleteAll"];
   };
   "/api/job-posts/{id}/deadline": {
     /** 공고 마감 */
@@ -649,6 +653,7 @@ export interface components {
       /** @enum {string} */
       resultTypeCode?: "NOTICE" | "DELETE" | "MODIFY";
       seen?: boolean;
+      url?: string;
     };
     RsDataListNotificationDto: {
       resultCode?: string;
@@ -1835,6 +1840,7 @@ export interface operations {
   };
   /** 읽은 알림 전부 삭제 */
 <<<<<<< HEAD
+<<<<<<< HEAD
   deleteReadAll: {
     responses: {
       /** @description OK */
@@ -1847,6 +1853,9 @@ export interface operations {
 =======
 >>>>>>> f42d23d (feat:프론트 부분 작성 및 엔티티 url 추가)
   deleteAll: {
+=======
+  deleteReadAll: {
+>>>>>>> 3280ca8 (refactor:알림 삭제 로직 오류 수정 및 프론트 작업)
     responses: {
       /** @description OK */
       200: {
@@ -1858,7 +1867,7 @@ export interface operations {
 >>>>>>> 8f5e574 (feat:지원서 승인 시 알림)
 =======
   /** 알림 전부 삭제 */
-  deleteReadAll: {
+  deleteAll: {
     responses: {
       /** @description OK */
       200: {
