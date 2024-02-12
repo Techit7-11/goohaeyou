@@ -61,7 +61,7 @@
 		try {
 			await rq.apiEndPoints().DELETE('/api/notification/read');
 			alert('읽은 알림이 삭제되었습니다.');
-			// location.reload(); // 페이지 새로 고침
+			location.reload(); // 페이지 새로 고침
 			await loadMyNotification();
 		} catch (error) {
 			console.error('읽은 알림 삭제 중 오류가 발생했습니다.', error);
@@ -73,7 +73,7 @@
 		try {
 			await rq.apiEndPoints().DELETE('/api/notification/all');
 			alert('모든 알림이 삭제되었습니다.');
-			// location.reload(); // 페이지 새로 고침
+			location.reload(); // 페이지 새로 고침
 			await loadMyNotification();
 		} catch (error) {
 			console.error('모든 알림 삭제 중 오류가 발생했습니다.', error);
@@ -122,7 +122,7 @@
 								{#if notification.seen}
 									<div class="badge badge-neutral">확인</div>
 								{:else}
-									<div class="badge badge-primary">미1확인</div>
+									<div class="badge badge-primary">미확인</div>
 								{/if}
 							</a>
 						</li>
