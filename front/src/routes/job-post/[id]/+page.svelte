@@ -41,15 +41,18 @@
 		<div class="info-box">
 			<div>위치: {jobPostDetailDto?.location}</div>
 			<div>공고 마감: {jobPostDetailDto?.deadLine}</div>
-			<div>지원 가능 최소 나이: {jobPostDetailDto?.minAge}</div>
-			성별 구분:
-			{#if jobPostDetailDto?.gender === 'MALE'}
-				남
-			{:else if jobPostDetailDto?.gender === 'FEMALE'}
-				여
-			{:else}
-				무관
-			{/if}
+			<div>
+				지원 가능 최소 나이: {jobPostDetailDto?.minAge === 0
+					? '없음'
+					: jobPostDetailDto?.minAge ?? '없음'}
+			</div>
+			<div>
+				성별 구분: {jobPostDetailDto?.gender === 'MALE'
+					? '남'
+					: jobPostDetailDto?.gender === 'FEMALE'
+						? '여'
+						: '무관'}
+			</div>
 			<div>최종 수정일자: {jobPostDetailDto?.modifyAt}</div>
 			<div>조회수: {jobPostDetailDto?.incrementViewCount}</div>
 			<div>관심 등록 수 : {jobPostDetailDto?.interestsCount}</div>
@@ -67,7 +70,7 @@
 		border-radius: 10px; /* 둥근 테두리 설정 */
 		padding: 20px;
 		margin: 20px;
-		width: 70%;
+		width: 90%;
 		box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); /* 입체적인 그림자 효과 추가 */
 	}
 

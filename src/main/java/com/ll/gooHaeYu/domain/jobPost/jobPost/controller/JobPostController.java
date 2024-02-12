@@ -8,6 +8,7 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.global.config.AppConfig;
 import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
+import com.ll.gooHaeYu.standard.base.PageDto;
 import com.ll.gooHaeYu.standard.base.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.lang.NonNull;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -141,9 +143,12 @@ public class JobPostController {
         return ResponseEntity.ok(jobPostService.searchJobPostsByTitleAndBody(titleOrBody, title, body));
     }
 
+    public record GetPostsResponseBody(@NonNull PageDto<JobPostDto> itemPage) {
+    }
+
     @GetMapping("/sort")
     @Operation(summary = "구인공고 글 목록 정렬")
-    public RsData<Page<JobPostDto>> findAllPostSort(
+    public RsData<GetPostsResponseBody> findAllPostSort(
             @RequestParam(value="page", defaultValue="1") int page,
             @RequestParam(name = "sortBy", defaultValue = "createdAt") List<String> sortBys,
             @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders
@@ -157,12 +162,15 @@ public class JobPostController {
         }
 
         Pageable pageable = PageRequest.of(page - 1, AppConfig.getBasePageSize(), Sort.by(sorts));
-        System.out.println(sortOrders);
 
         Page<JobPost> itemPage = jobPostService.findBySort(pageable);
         Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
 
-        return RsData.of(_itemPage);
+        return RsData.of(
+                new GetPostsResponseBody(
+                        new PageDto<>(_itemPage)
+                )
+        );
     }
   
     @DeleteMapping("/{id}/deadline")

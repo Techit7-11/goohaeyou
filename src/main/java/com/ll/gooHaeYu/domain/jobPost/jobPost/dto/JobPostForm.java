@@ -28,7 +28,6 @@ public class JobPostForm {
         private Gender gender = Gender.UNDEFINED;
 
         private LocalDate deadLine;
-//        private LocalDateTime deadLine;
     }
 
     @Builder
