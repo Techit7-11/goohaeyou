@@ -52,7 +52,7 @@ public class JobPostService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public Long writePost(String username, JobPostForm.Register form) {
+    public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
         JobPost newPost = JobPost.builder()
                 .member(memberService.getMember(username))
                 .title(form.getTitle())
@@ -75,8 +75,7 @@ public class JobPostService {
         jobPostRepository.save(newPost);
         jobPostdetailRepository.save(postDetail);
         essentialRepository.save(essential);
-
-        return newPost.getId();
+        return form;
     }
 
     public JobPostDetailDto findById(Long id) {
@@ -89,7 +88,7 @@ public class JobPostService {
     }
 
     @Transactional
-    public void modifyPost(String username, Long id, JobPostForm.Modify form) {
+    public JobPostForm.Modify modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
         JobPost jobPost = postDetail.getJobPost();
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
@@ -112,6 +111,7 @@ public class JobPostService {
            }
        }
        postDetail.getApplications().removeAll(applicationsToRemove);
+        return form;
     }
 
     @Transactional

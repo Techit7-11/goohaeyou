@@ -7,19 +7,22 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
   datasource:
-    url: jdbc:postgresql://goohaeyou-db.internal:5432/goohaeyou-prod
+    url: jdbc:postgresql://goohaeyou-db.internal:5432/goohaeyou_prod
     username: postgres
     password: LwojnN4RcbLoYwl
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate # `prod` 환경에서는 주로 validate 또는 none을 사용
     properties:
       hibernate: # 운영모드에서는 sql문이 필요없으니 모두 끈다
         format_sql: false
         highlight_sql: false
         use_sql_comments: false
-logging:
+  h2:
+    console:
+      enabled: false # H2 콘솔 비활성화
+logging:   # 추후에 root: INFO or WARN 로 변경 (보안 및 성능 고려)
   level:
     root: DEBUG  # 애플리케이션 전체 로그 레벨을 DEBUG로 설정
     org.springframework.web: DEBUG  # Spring MVC 관련 로그를 DEBUG로 설정

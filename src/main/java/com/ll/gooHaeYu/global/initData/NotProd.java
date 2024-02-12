@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
-@Profile("dev")
+@Profile("!prod")
 public class NotProd {
     private final MemberService memberService;
     private final JobPostService jobPostService;
@@ -79,6 +79,7 @@ public class NotProd {
                         .body("세탁물 단순 개비기입니다.\n" +
                                 "초보자도 가능해요.")
                         .location("부산 동구 중앙대로 539")
+                        .gender(Gender.UNDEFINED)
                         .deadLine(LocalDate.now().plusWeeks(2))
                         .build();
 
@@ -133,6 +134,7 @@ public class NotProd {
                             .location("서울 광진구 천호대로124길")
                             .deadLine(LocalDate.now().plusWeeks(2))
                             .minAge(20)
+                            .gender(Gender.UNDEFINED)
                             .build();
 
                     jobPostService.writePost("testUser1", postRegister);

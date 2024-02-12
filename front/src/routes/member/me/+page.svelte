@@ -33,6 +33,10 @@
 		const { data } = await rq.apiEndPoints().GET('/api/member/myinterest', {});
 		return data;
 	}
+
+	function summarizeBody(body) {
+		return body.length > 10 ? `${body.slice(0, 10)}...` : body;
+	}
 </script>
 
 <div class="flex items-center justify-center min-h-screen bg-base-100">
@@ -74,17 +78,16 @@
 					<div class="font-bold">생년월일</div>
 					<div class="text-gray-500 flex-auto text-right">{rq.member.birth}</div>
 				</div>
-				<div>
+				<div class="pb-10">
 					<button class="w-full btn btn-ghost" on:click={navigateToModifyPage}
 						>회원 정보 수정</button
 					>
 				</div>
-				<div class="divider"></div>
 			</div>
 			<div class="w-full">
 				<div class="container mx-auto px-4">
 					<div class="max-w-sm mx-auto">
-						<div role="tablist" class="tabs tabs-lifted">
+						<div role="tablist" class="tabs tabs-bordered">
 							<input
 								type="radio"
 								name="my_tabs_2"
@@ -93,15 +96,15 @@
 								aria-label="내 공고"
 								checked
 							/>
-							<div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyPosts()}
 									<p>loading...</p>
-								{:then { data: jobPostDtoList }}
+								{:then { data: posts }}
 									<ul>
-										{#each jobPostDtoList ?? [] as jobPostDto, index}
+										{#each posts ?? [] as post, index}
 											<li>
-												<a href="/job-post/{jobPostDto.id}">no.{index + 1}</a>
-												<a href="/job-post/{jobPostDto.id}">{jobPostDto.title}</a>
+												<a href="/job-post/{post.id}">no.{index + 1}</a>
+												<a href="/job-post/{post.id}">{post.title}</a>
 											</li>
 										{/each}
 									</ul>
@@ -116,15 +119,19 @@
 								aria-label="나의 지원"
 								checked
 							/>
-							<div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyApplications()}
 									<p>loading...</p>
 								{:then { data: applicationDtoList }}
 									<ul>
 										{#each applicationDtoList ?? [] as applicationDto}
 											<li>
-												<a href="/job-post/{applicationDto.postId}">공고{applicationDto.postId}</a>
-												<a href="/job-post/{applicationDto.postId}">{applicationDto.body}</a>
+												<a href="/applications/detail/{applicationDto.id}"
+													>{applicationDto.jobPostName}</a
+												>
+												<a href="/applications/detail/{applicationDto.id}"
+													>{summarizeBody(applicationDto.body)}</a
+												>
 											</li>
 										{/each}
 									</ul>
@@ -138,7 +145,7 @@
 								class="tab"
 								aria-label="내가 쓴 댓글"
 							/>
-							<div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyComments()}
 									<p>loading...</p>
 								{:then { data: commentsDtoList }}
@@ -160,7 +167,7 @@
 							</div>
 
 							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="관심 공고" />
-							<div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyInterest()}
 									<p>loading...</p>
 								{:then { data: interestDtoList }}

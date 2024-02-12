@@ -22,7 +22,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
@@ -51,13 +50,17 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors()
                 .and()
+                .headers().frameOptions().disable()
+                .and()
                 .authorizeHttpRequests(requests -> {
                     requests
+                            .requestMatchers("/h2-console/**").permitAll()
                             .requestMatchers("/api/member/socialLogin/**").permitAll()
                             .requestMatchers("/oauth2/authorization/**").permitAll() // OAuth 2.0 인증 엔드포인트에 대한 접근 허용
                             .requestMatchers("/login", "/api/member/join", "api/member/login", "api/member/logout").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/job-posts/**", "/api/job-posts", "/api/job-posts/search", "/api/post-comment/{postId}").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                            .requestMatchers("/**").permitAll()
                             .anyRequest()
                             .authenticated();
 
