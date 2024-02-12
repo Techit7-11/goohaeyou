@@ -8,15 +8,21 @@
             const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
             return data!;
         }
-	async function apply() {
+	function apply() {
             rq.goTo(`/applications/${postId}`);
         }
     	function editPost() {
                 rq.goTo(`/job-post/modify/${postId}`);
             }
-    	function deletePost() {
-    		//postId 삭제
-    		alert('글이 삭제되었습니다.');
+    	async function deletePost() {
+    		try {
+                    const { data } = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}`);
+                    alert('글이 삭제되었습니다.');
+                    rq.goTo(`/job-post/list`);
+                } catch (error) {
+                    console.error('글 삭제 중 오류가 발생했습니다.', error);
+                    alert('글을 삭제하는 데 실패했습니다.');
+                }
     	}
 </script>
 
