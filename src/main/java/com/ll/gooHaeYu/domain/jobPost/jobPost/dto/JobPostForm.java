@@ -1,10 +1,10 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -12,7 +12,8 @@ public class JobPostForm {
 
     @Builder
     @Getter
-    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Register {
         @NotBlank(message = "제목은 필수 입력 항목입니다.")
         private String title;
@@ -27,6 +28,8 @@ public class JobPostForm {
 
         private Gender gender = Gender.UNDEFINED;
 
+        @NotNull(message = "마감 기한은 필수입니다.")
+        @FutureOrPresent
         private LocalDate deadLine;
     }
 
@@ -39,6 +42,5 @@ public class JobPostForm {
         private int minAge;
         private Gender gender;
         private LocalDate deadLine;
-//        private LocalDateTime deadLine;
     }
 }

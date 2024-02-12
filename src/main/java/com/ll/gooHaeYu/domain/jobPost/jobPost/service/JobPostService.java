@@ -44,7 +44,7 @@ public class JobPostService {
     private final EssentialRepository essentialRepository;
 
     @Transactional
-    public Long writePost(String username, JobPostForm.Register form) {
+    public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
         JobPost newPost = JobPost.builder()
                 .member(memberService.getMember(username))
                 .title(form.getTitle())
@@ -67,8 +67,7 @@ public class JobPostService {
         jobPostRepository.save(newPost);
         jobPostdetailRepository.save(postDetail);
         essentialRepository.save(essential);
-
-        return newPost.getId();
+        return form;
     }
 
     public JobPostDetailDto findById(Long id) {
