@@ -16,7 +16,7 @@
 
 	async function apply() {
 		const postId = parseInt($page.params.id);
-		rq.goTo(`/applications/${postId}`);
+		rq.goTo(`/applications/${postId}/write`);
 	}
 </script>
 
