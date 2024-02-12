@@ -2,10 +2,13 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { onMount } from 'svelte';
 
-	onMount(() => {
+	onMount(async () => {
+		// 로그인 상태를 비동기적으로 확인
+		await rq.initAuth(); // 로그인 상태를 초기화
 		if (rq.isLogout()) {
 			rq.msgError('로그인이 필요합니다.');
 			rq.goTo('/member/login');
+			return;
 		}
 	});
 
@@ -58,6 +61,8 @@
 		try {
 			await rq.apiEndPoints().DELETE('/api/notification/read');
 			alert('읽은 알림이 삭제되었습니다.');
+			// location.reload(); // 페이지 새로 고침
+			await loadMyNotification();
 		} catch (error) {
 			console.error('읽은 알림 삭제 중 오류가 발생했습니다.', error);
 			alert('읽은 알림을 삭제하는 데 실패했습니다.');
@@ -68,9 +73,21 @@
 		try {
 			await rq.apiEndPoints().DELETE('/api/notification/all');
 			alert('모든 알림이 삭제되었습니다.');
+			// location.reload(); // 페이지 새로 고침
+			await loadMyNotification();
 		} catch (error) {
 			console.error('모든 알림 삭제 중 오류가 발생했습니다.', error);
 			alert('모든 알림을 삭제하는 데 실패했습니다.');
+		}
+	}
+
+	async function markNotificationAsRead(notification) {
+		try {
+			await rq.apiEndPoints().PUT(`/api/notification/${notification.id}`);
+			alert('알림이 확인되었습니다.');
+		} catch (error) {
+			console.error('알림 확인 중 오류가 발생했습니다.', error);
+			alert('알림을 확인하는 데 실패했습니다.');
 		}
 	}
 </script>
@@ -92,10 +109,16 @@
 				<ul>
 					{#each data ?? [] as notification, index}
 						<li>
-							<a>(No.{index + 1})</a>
-							<a>{createNotificationSentence(notification)}</a>
-							<a>일 시 : {notification.createAt}</a>
-							<a>
+							<a on:click={() => markNotificationAsRead(notification)} href={notification.url}
+								>(No.{index + 1})</a
+							>
+							<a on:click={() => markNotificationAsRead(notification)} href={notification.url}
+								>{createNotificationSentence(notification)}</a
+							>
+							<a on:click={() => markNotificationAsRead(notification)} href={notification.url}
+								>일 시 : {notification.createAt}</a
+							>
+							<a on:click={() => markNotificationAsRead(notification)} href={notification.url}>
 								{#if notification.seen}
 									<div class="badge badge-neutral">확인</div>
 								{:else}

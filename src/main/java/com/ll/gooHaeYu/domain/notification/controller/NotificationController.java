@@ -27,15 +27,15 @@ public class NotificationController {
         return RsData.of(notificationService.getList(authentication.getName()));
     }
 
-    @DeleteMapping("/read")
-    @Operation(summary = "읽은 알림 전부 삭제")
+    @DeleteMapping("/all")
+    @Operation(summary = "알림 전부 삭제")
     public ResponseEntity<Void> deleteAll(Authentication authentication) {
         notificationService.deleteAllNotification(authentication.getName());
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/all")
-    @Operation(summary = "알림 전부 삭제")
+    @DeleteMapping("/read")
+    @Operation(summary = "읽은 알림 전부 삭제")
     public ResponseEntity<Void> deleteReadAll(Authentication authentication) {
         notificationService.deleteReadAllNotification(authentication.getName());
         return ResponseEntity.noContent().build();

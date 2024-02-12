@@ -120,11 +120,11 @@ export interface paths {
   };
   "/api/notification/read": {
     /** 읽은 알림 전부 삭제 */
-    delete: operations["deleteAll"];
+    delete: operations["deleteReadAll"];
   };
   "/api/notification/all": {
     /** 알림 전부 삭제 */
-    delete: operations["deleteReadAll"];
+    delete: operations["deleteAll"];
   };
   "/api/job-posts/{id}/deadline": {
     /** 공고 마감 */
@@ -250,6 +250,7 @@ export interface components {
       /** @enum {string} */
       resultTypeCode?: "NOTICE" | "DELETE" | "MODIFY";
       seen?: boolean;
+      url?: string;
     };
     RsDataListNotificationDto: {
       resultCode?: string;
@@ -873,7 +874,7 @@ export interface operations {
     };
   };
   /** 읽은 알림 전부 삭제 */
-  deleteAll: {
+  deleteReadAll: {
     responses: {
       /** @description OK */
       200: {
@@ -882,7 +883,7 @@ export interface operations {
     };
   };
   /** 알림 전부 삭제 */
-  deleteReadAll: {
+  deleteAll: {
     responses: {
       /** @description OK */
       200: {

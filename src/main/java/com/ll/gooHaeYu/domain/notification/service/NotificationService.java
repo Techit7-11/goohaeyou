@@ -86,7 +86,7 @@ public class NotificationService {
     public void applicationCreatedAndChangedNotification(ApplicationCreateAndChangedEvent event) {
         JobPost jobPost = event.getJobPostDetail().getJobPost();
         Application application = event.getApplication();
-        String url = "/applications/list/"+application.getId();
+        String url = "/applications/detail/"+application.getId();
         makeNotification(jobPost.getMember(),application.getMember(), jobPost.getTitle(), event.getCauseTypeCode(), NOTICE, url);
     }
 

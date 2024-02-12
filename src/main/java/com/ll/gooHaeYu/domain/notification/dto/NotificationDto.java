@@ -25,6 +25,7 @@ public class NotificationDto {
     private CauseTypeCode causeTypeCode;
     private ResultTypeCode resultTypeCode;
     private boolean seen;
+    private String url;
 
     public static NotificationDto fromEntity(Notification notification) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -37,6 +38,7 @@ public class NotificationDto {
                 .causeTypeCode(notification.getCauseTypeCode())
                 .resultTypeCode(notification.getResultTypeCode())
                 .seen(notification.isSeen())
+                .url(notification.getUrl())
                 .build();
     }
 
