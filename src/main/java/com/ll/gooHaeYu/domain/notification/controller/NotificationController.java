@@ -8,11 +8,9 @@ import com.ll.gooHaeYu.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +26,27 @@ public class NotificationController {
     public RsData<List<NotificationDto>> getList(Authentication authentication) {
         return RsData.of(notificationService.getList(authentication.getName()));
     }
+
+    @DeleteMapping("/read")
+    @Operation(summary = "읽은 알림 전부 삭제")
+    public ResponseEntity<Void> deleteAll(Authentication authentication) {
+        notificationService.deleteAllNotification(authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/all")
+    @Operation(summary = "알림 전부 삭제")
+    public ResponseEntity<Void> deleteReadAll(Authentication authentication) {
+        notificationService.deleteReadAllNotification(authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "알림 읽음 처리")
+    public ResponseEntity<Void> read(Authentication authentication,
+                                     @PathVariable(name = "id") Long id) {
+        notificationService.readNotification(authentication.getName(),id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

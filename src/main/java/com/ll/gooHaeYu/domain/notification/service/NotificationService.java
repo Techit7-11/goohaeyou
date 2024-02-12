@@ -13,6 +13,7 @@ import com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode;
 import com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode;
 import com.ll.gooHaeYu.domain.notification.repository.NotificationRepository;
 import com.ll.gooHaeYu.global.event.*;
+import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ import java.util.List;
 import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.*;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.NOTIFICATION_NOT_EXIST;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +41,8 @@ public class NotificationService {
         log.debug("이벤트 로직 실행");
         JobPost jobPost = event.getJobPost();
         Application application = event.getApplication();
-        makeNotification(application.getMember(),jobPost.getMember(),jobPost.getTitle(),event.getCauseTypeCode(),NOTICE);
+        String url = "/job-post/"+jobPost.getId();
+        makeNotification(application.getMember(),jobPost.getMember(),jobPost.getTitle(),event.getCauseTypeCode(),NOTICE, url);
     }
 
     @Transactional
@@ -46,7 +50,8 @@ public class NotificationService {
         log.debug("이벤트 로직 실행");
         JobPost jobPost = event.getJobPost();
         Application application = event.getApplication();
-        makeNotification(application.getMember(),jobPost.getMember(),jobPost.getTitle(),event.getCauseTypeCode(),DELETE);
+        String url = "/job-post/"+jobPost.getId();
+        makeNotification(application.getMember(),jobPost.getMember(),jobPost.getTitle(),event.getCauseTypeCode(),DELETE,url);
     }
 
     @Transactional
@@ -54,9 +59,10 @@ public class NotificationService {
         log.debug("이벤트 로직 실행");
         JobPost jobPost = event.getJobPost();
         Member fromMember = event.getMember();
+        String url = "/";
         List<Application> applicationList = jobPost.getJobPostDetail().getApplications();
         for (Application application : applicationList) {
-            makeNotification(application.getMember(),fromMember,jobPost.getTitle(),POST_DELETED,DELETE);
+            makeNotification(application.getMember(),fromMember,jobPost.getTitle(),POST_DELETED,DELETE,url);
         }
     }
 
@@ -64,24 +70,27 @@ public class NotificationService {
     public void commentCreatedNotification(CommentCreatedEvent event) {
         JobPost jobPost = event.getJobPostDetail().getJobPost();
         Comment comment = event.getComment();
-        makeNotification(jobPost.getMember(), comment.getMember(), jobPost.getTitle(), COMMENT_CREATED, NOTICE);
+        String url = "/job-post/"+jobPost.getId();
+        makeNotification(jobPost.getMember(), comment.getMember(), jobPost.getTitle(), COMMENT_CREATED, NOTICE, url);
     }
 
     @Transactional
     public void postGetInterestedNotification(PostGetInterestedEvent event) {
         JobPost jobPost = event.getJobPostDetail().getJobPost();
         Member member = event.getMember();
-        makeNotification(jobPost.getMember(),member, jobPost.getTitle(), POST_INTERESTED, NOTICE);
+        String url = "/job-post/"+jobPost.getId();
+        makeNotification(jobPost.getMember(),member, jobPost.getTitle(), POST_INTERESTED, NOTICE, url);
     }
 
     @Transactional
     public void applicationCreatedAndChangedNotification(ApplicationCreateAndChangedEvent event) {
         JobPost jobPost = event.getJobPostDetail().getJobPost();
         Application application = event.getApplication();
-        makeNotification(jobPost.getMember(),application.getMember(), jobPost.getTitle(), event.getCauseTypeCode(), NOTICE);
+        String url = "/applications/list/"+application.getId();
+        makeNotification(jobPost.getMember(),application.getMember(), jobPost.getTitle(), event.getCauseTypeCode(), NOTICE, url);
     }
 
-    private void makeNotification(Member toMember, Member fromMember, String jobPostTitle, CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode) {
+    private void makeNotification(Member toMember, Member fromMember, String jobPostTitle, CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {
         Notification notification = Notification.builder()
                 .createAt(LocalDateTime.now())
                 .toMember(toMember)
@@ -90,6 +99,7 @@ public class NotificationService {
                 .causeTypeCode(causeTypeCode)
                 .resultTypeCode(resultTypeCode)
                 .seen(false)
+                .url(url)
                 .build();
 
         notificationRepository.save(notification);
@@ -98,7 +108,33 @@ public class NotificationService {
 
     public List<NotificationDto> getList(String username) {
         Member member = memberService.getMember(username);
-        List<Notification> notificationList = notificationRepository.findByToMember(member);
+        List<Notification> notificationList = notificationRepository.findByToMemberOrderByCreateAtDesc(member);
         return NotificationDto.toDtoList(notificationList);
+    }
+
+    @Transactional
+    public void deleteReadAllNotification(String username) {
+        Member toMember = memberService.getMember(username);
+        List<Notification> readNotification = notificationRepository.findByToMemberAndSeenIsTrue(toMember);
+        notificationRepository.deleteAll(readNotification);
+    }
+
+    @Transactional
+    public void deleteAllNotification(String username) {
+        Member toMember = memberService.getMember(username);
+        List<Notification> removeNotification = notificationRepository.findByToMember(toMember);
+        notificationRepository.deleteAll(removeNotification);
+    }
+
+    @Transactional
+    public void readNotification(String username, Long notificationId) {
+        Member toMember = memberService.getMember(username);
+        Notification notification = findByIdAndValidate(notificationId);
+        notification.update();
+    }
+
+    private Notification findByIdAndValidate (Long notificationId) {
+        return notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new CustomException(NOTIFICATION_NOT_EXIST));
     }
 }

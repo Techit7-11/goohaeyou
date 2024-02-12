@@ -11,13 +11,14 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Builder
 @Getter
 public class NotificationDto {
     private Long id;
-    private LocalDateTime createAt;
+    private String createAt;
     private String toMember;
     private String fromMember;
     private String relPostTitle;
@@ -26,9 +27,10 @@ public class NotificationDto {
     private boolean seen;
 
     public static NotificationDto fromEntity(Notification notification) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return NotificationDto.builder()
                 .id(notification.getId())
-                .createAt(notification.getCreateAt())
+                .createAt(notification.getCreateAt().format(formatter))
                 .toMember(notification.getToMember().getUsername())
                 .fromMember(notification.getFromMember().getUsername())
                 .relPostTitle(notification.getRelPostTitle())

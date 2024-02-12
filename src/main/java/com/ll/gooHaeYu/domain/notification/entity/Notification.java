@@ -7,6 +7,7 @@ import com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -33,4 +34,9 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     private ResultTypeCode resultTypeCode;
     private boolean seen;
+    private String url;
+
+    public void update() {
+        this.seen = true;
+    }
 }
