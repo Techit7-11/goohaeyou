@@ -286,6 +286,7 @@ export interface components {
       id: number;
       /** Format: int64 */
       jobPostId: number;
+      jobPostAuthorUsername: string;
       jobPostName: string;
       author: string;
       /** Format: int64 */
