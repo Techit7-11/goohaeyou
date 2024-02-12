@@ -26,6 +26,17 @@
 		return new Date(dateString).toLocaleString('ko-KR', options);
 	}
 
+	function calculateAge(birthDate) {
+        const birth = new Date(birthDate);
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
 	async function approve(jobPostId, applicationId) {
 		// SweetAlert2를 사용하여 사용자에게 승인 확인 요청
 		const result = await Swal.fire({
@@ -54,8 +65,14 @@
 			<h2 class="card-title text-xl font-bold mb-4">지원서 상세 정보</h2>
 			<p class="mb-2"><strong>지원서 번호:</strong> {application.id}</p>
 			<p class="mb-2"><strong>지원자:</strong> {application.author}</p>
-			<p class="mb-2"><strong>내용:</strong> {application.body}</p>
+			<p class="mb-2"><strong>지원자 나이:</strong> {calculateAge(application.birth)}</p>
+			<p class="mb-2"><strong>지원자 연락처:</strong> {application.phone}</p>
+			<p class="mb-2"><strong>지원자 주소:</strong> {application.location}</p>
 			<p class="mb-2"><strong>제출일:</strong> {formatDate(application.createdAt)}</p>
+			<div class="mb-2">
+                <strong>내용:</strong>
+                <div class="p-3 bg-gray-100 rounded overflow-auto" style="max-height: 200px;">{application.body}</div>
+            </div>
 			<p class="mb-2">
 				<strong>승인 상태:</strong>
 				{#if application.approve === true}
@@ -67,7 +84,7 @@
 				{/if}
 			</p>
 			<!-- 승인 버튼 -->
-			{#if application.approve == null}
+			{#if application.approve == null && application.jobPostAuthorUsername == rq.member.username}
 				<div class="text-center mt-2">
 					<button
 						class="btn btn-outline btn-info"
@@ -76,7 +93,7 @@
 				</div>
 			{/if}
 			<!-- 승인완료 버튼 -->
-			{#if application.approve == true}
+			{#if application.approve == true && application.jobPostAuthorUsername == rq.member.username}
 				<div class="text-center mt-2">
 					<button class="btn btn-disabled" disabled>승인완료</button>
 				</div>
