@@ -1,9 +1,13 @@
 package com.ll.gooHaeYu.domain.notification.service;
 
+import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
+import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.domain.notification.dto.NotificationDto;
 import com.ll.gooHaeYu.domain.notification.entity.Notification;
 import com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode;
 import com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode;
@@ -27,6 +31,7 @@ import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOT
 @Slf4j
 public class NotificationService {
     private final NotificationRepository notificationRepository;
+    private final MemberService memberService;
 
     @Transactional
     public void notifyApplicantsAboutPost(ChangeOfPostEvent event) {
@@ -89,5 +94,11 @@ public class NotificationService {
 
         notificationRepository.save(notification);
         log.debug("알림 생성");
+    }
+
+    public List<NotificationDto> getList(String username) {
+        Member member = memberService.getMember(username);
+        List<Notification> notificationList = notificationRepository.findByToMember(member);
+        return NotificationDto.toDtoList(notificationList);
     }
 }
