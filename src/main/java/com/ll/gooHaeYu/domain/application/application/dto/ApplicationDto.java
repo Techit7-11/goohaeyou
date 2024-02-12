@@ -18,6 +18,8 @@ public class ApplicationDto {
     @NotNull
     private Long jobPostId;
     @NotNull
+    private String jobPostAuthorUsername;
+    @NotNull
     private String jobPostName;
     @NotNull
     private String author;
@@ -38,6 +40,7 @@ public class ApplicationDto {
         return ApplicationDto.builder()
                 .id(application.getId())
                 .jobPostId(application.getJobPostDetail().getJobPost().getId())
+                .jobPostAuthorUsername(application.getJobPostDetail().getAuthor())
                 .jobPostName(application.getJobPostDetail().getJobPost().getTitle())
                 .author(application.getMember().getUsername())
                 .postId(application.getJobPostDetail().getJobPost().getId())
