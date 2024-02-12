@@ -1,34 +1,34 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { page } from '$app/stores';
-    import rq from '$lib/rq/rq.svelte';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import rq from '$lib/rq/rq.svelte';
 
-    let jobPostData = {
-        title: '',
-        body: '',
-        minAge: '',
-        gender: 'UNDEFINED',
-        location: '',
-        deadLine: ''
-    };
+	let jobPostData = {
+		title: '',
+		body: '',
+		minAge: '',
+		gender: 'UNDEFINED',
+		location: '',
+		deadLine: ''
+	};
 
-    let postId;
-    onMount(async () => {
-         postId = parseInt($page.params.id)
-         await loadJobPostDetail(postId);
-         });
+	let postId;
+	onMount(async () => {
+		postId = parseInt($page.params.id);
+		await loadJobPostDetail(postId);
+	});
 
-    async function loadJobPostDetail(postId) {
-        const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
-        if (data) {
-            // 로드된 데이터로 jobPostData를 업데이트
-            jobPostData = { ...jobPostData, ...data };
-        }
-    }
+	async function loadJobPostDetail(postId) {
+		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
+		if (data) {
+			// 로드된 데이터로 jobPostData를 업데이트
+			jobPostData = { ...jobPostData, ...data };
+		}
+	}
 
-    // 공고 수정 제출 함수
-    async function submitForm() {
-        const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}`, { body: jobPostData });
+	// 공고 수정 제출 함수
+	async function submitForm() {
+		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}`, { body: jobPostData });
 
 		if (response.data?.statusCode === 200) {
 			rq.msgAndRedirect({ msg: '글 수정 완료' }, undefined, '/');
@@ -68,11 +68,7 @@
 				<div class="flex gap-4">
 					<div class="form-group flex-1">
 						<label class="label" for="gender">성별</label>
-						<select
-							class="input input-bordered w-full"
-							id="gender"
-							bind:value={jobPostData.gender}
-						>
+						<select class="input input-bordered w-full" id="gender" bind:value={jobPostData.gender}>
 							<option value="UNDEFINED">무관</option>
 							<option value="MALE">남성</option>
 							<option value="FEMALE">여성</option>

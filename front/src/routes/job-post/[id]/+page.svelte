@@ -2,28 +2,28 @@
 	import { page } from '$app/stores';
 	import rq from '$lib/rq/rq.svelte';
 
- let postId = parseInt($page.params.id);
+	let postId = parseInt($page.params.id);
 
 	async function load() {
-            const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
-            return data!;
-        }
+		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
+		return data!;
+	}
 	function apply() {
-            rq.goTo(`/applications/${postId}`);
-        }
-    	function editPost() {
-                rq.goTo(`/job-post/modify/${postId}`);
-            }
-    	async function deletePost() {
-    		try {
-                    const { data } = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}`);
-                    alert('글이 삭제되었습니다.');
-                    rq.goTo(`/job-post/list`);
-                } catch (error) {
-                    console.error('글 삭제 중 오류가 발생했습니다.', error);
-                    alert('글을 삭제하는 데 실패했습니다.');
-                }
-    	}
+		rq.goTo(`/applications/${postId}`);
+	}
+	function editPost() {
+		rq.goTo(`/job-post/modify/${postId}`);
+	}
+	async function deletePost() {
+		try {
+			const { data } = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}`);
+			alert('글이 삭제되었습니다.');
+			rq.goTo(`/job-post/list`);
+		} catch (error) {
+			console.error('글 삭제 중 오류가 발생했습니다.', error);
+			alert('글을 삭제하는 데 실패했습니다.');
+		}
+	}
 </script>
 
 {#await load()}
@@ -63,15 +63,13 @@
 			<div>조회수: {jobPostDetailDto?.incrementViewCount}</div>
 			<div>관심 등록 수 : {jobPostDetailDto?.interestsCount}</div>
 			<div class="action-buttons" style="text-align: right;">
-            			{#if jobPostDetailDto?.author === rq.member.username}
-            				<button class="btn" on:click={editPost}>수정하기</button>
-            				<button class="btn" on:click={deletePost}>삭제하기</button>
-            			{:else}
-            				{#if !jobPostDetailDto?.closed}
-            					<button class="btn" on:click={apply}>지원하기</button>
-            				{/if}
-            			{/if}
-            		</div>
+				{#if jobPostDetailDto?.author === rq.member.username}
+					<button class="btn" on:click={editPost}>수정하기</button>
+					<button class="btn" on:click={deletePost}>삭제하기</button>
+				{:else if !jobPostDetailDto?.closed}
+					<button class="btn" on:click={apply}>지원하기</button>
+				{/if}
+			</div>
 		</div>
 	</div>
 {/await}
