@@ -35,8 +35,8 @@
 	}
 
 	function summarizeBody(body) {
-    return body.length > 10 ? `${body.slice(0, 10)}...` : body;
-    }
+		return body.length > 10 ? `${body.slice(0, 10)}...` : body;
+	}
 </script>
 
 <div class="flex items-center justify-center min-h-screen bg-base-100">
@@ -103,8 +103,8 @@
 									<ul>
 										{#each jobPostDtoList ?? [] as jobPostDto, index}
 											<li>
-												<a href="/applications/list/{jobPostDto.id}">no.{index + 1}</a>   
-												<a href="/applications/list/{jobPostDto.id}">{jobPostDto.title}</a>    
+												<a href="/applications/list/{jobPostDto.id}">no.{index + 1}</a>
+												<a href="/applications/list/{jobPostDto.id}">{jobPostDto.title}</a>
 											</li>
 										{/each}
 									</ul>
@@ -126,8 +126,12 @@
 									<ul>
 										{#each applicationDtoList ?? [] as applicationDto}
 											<li>
-												<a href="/applications/detail/{applicationDto.id}">{applicationDto.jobPostName}</a>
-												<a href="/applications/detail/{applicationDto.id}">{summarizeBody(applicationDto.body)}</a>
+												<a href="/applications/detail/{applicationDto.id}"
+													>{applicationDto.jobPostName}</a
+												>
+												<a href="/applications/detail/{applicationDto.id}"
+													>{summarizeBody(applicationDto.body)}</a
+												>
 											</li>
 										{/each}
 									</ul>
