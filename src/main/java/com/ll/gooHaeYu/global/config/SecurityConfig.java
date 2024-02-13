@@ -59,9 +59,9 @@ public class SecurityConfig {
                             .requestMatchers("/login", "/api/member/join", "api/member/login", "api/member/logout").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/job-posts/**", "/api/job-posts", "/api/job-posts/search", "/api/post-comment/{postId}").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                            .requestMatchers("/**").permitAll();
-//                            .anyRequest()
-//                            .authenticated();
+                            .requestMatchers("/**").permitAll()
+                            .anyRequest()
+                            .authenticated();
 
                 })
                 .sessionManagement(
