@@ -37,7 +37,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-//                .requestMatchers(toH2Console())
+                .requestMatchers("/h2-console/**")
                 .requestMatchers("/static/**");
     }
 
@@ -49,8 +49,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors()
                 .and()
-                .headers().frameOptions().disable()
-                .and()
                 .authorizeHttpRequests(requests -> {
                     requests
                             .requestMatchers("/h2-console/**").permitAll()
@@ -59,9 +57,9 @@ public class SecurityConfig {
                             .requestMatchers("/login", "/api/member/join", "api/member/login", "api/member/logout").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/job-posts/**", "/api/job-posts", "/api/job-posts/search", "/api/post-comment/{postId}").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                            .requestMatchers("/**").permitAll();
-//                            .anyRequest()
-//                            .authenticated();
+                            .requestMatchers("/**").permitAll()
+                            .anyRequest()
+                            .authenticated();
 
                 })
                 .sessionManagement(
