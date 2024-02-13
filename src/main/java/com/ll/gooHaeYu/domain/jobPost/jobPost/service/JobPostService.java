@@ -24,6 +24,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -296,6 +297,15 @@ public class JobPostService {
         JobPost jobPost = event.getJobPost();
         jobPost.employed();
         jobPostRepository.save(jobPost);
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *") // 00:00:00.000000에 실행
+    public void checkAndCloseExpiredJobPosts() {
+        List<JobPost> expiredJobPosts = findExpiredJobPosts(LocalDate.now());
+        for (JobPost jobPost : expiredJobPosts) {
+            publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
+        }
     }
 
 }
