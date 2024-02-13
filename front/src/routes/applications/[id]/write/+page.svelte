@@ -32,6 +32,11 @@
 
 		console.log(postId);
 
+		if (response.data?.msg == "CUSTOM_EXCEPTION") {
+			rq.msgAndRedirect({ msg: response.data?.data?.message }, undefined, `/job-post/${postId}`);
+
+		}
+
 		if (response.data?.statusCode === 201) {
 			rq.msgAndRedirect({ msg: '지원 완료' }, undefined, `/job-post/${postId}`);
 		}
