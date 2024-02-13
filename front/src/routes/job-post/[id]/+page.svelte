@@ -201,7 +201,7 @@
 							</div>
 						</div>
 						{#if comment.isEditing}
-							<textarea class="textarea w-full" bind:value={editingContent}></textarea>
+							<textarea class="textarea textarea-bordered w-full" bind:value={editingContent}></textarea>
 						{:else}
 							<div class="text-gray-700">{comment.content}</div>
 						{/if}
