@@ -4,18 +4,26 @@ import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
+<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+=======
+import lombok.Builder;
+import lombok.Getter;
+>>>>>>> main
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Builder
 @Getter
+<<<<<<< HEAD
 @NoArgsConstructor
 @AllArgsConstructor
+=======
+>>>>>>> main
 public class SocialProfileForm {   // JorinForm에서 username, password 제외
 
     @NotBlank(message = "이름은 필수 항목입니다.")

@@ -47,6 +47,10 @@ public class JobPost extends BaseTimeEntity {
 
     @Column(nullable = false)
     private LocalDate deadline;
+<<<<<<< HEAD
+=======
+//    private LocalDateTime deadline;
+>>>>>>> main
 
     @OneToOne(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private JobPostDetail jobPostDetail;

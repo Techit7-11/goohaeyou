@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script lang="ts">
 	import { page } from '$app/stores';
 	import rq from '$lib/rq/rq.svelte';
@@ -104,3 +105,6 @@
 		border-top: 2px solid #eee; /* 상단 경계선 */
 	}
 </style>
+=======
+<div>main</div>
+>>>>>>> main

@@ -2,6 +2,11 @@ package com.ll.gooHaeYu.global.security;
 
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
+<<<<<<< HEAD
+=======
+import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.global.exception.ErrorCode;
+>>>>>>> main
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +23,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByUsername(username)
+<<<<<<< HEAD
                 .orElseThrow(() -> new UsernameNotFoundException("error"));
+=======
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+>>>>>>> main
 
         return new MemberDetails(member);
     }

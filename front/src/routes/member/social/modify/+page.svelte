@@ -46,6 +46,53 @@
 	}
 </script>
 
+<<<<<<< HEAD
+=======
+<style>
+	.container {
+		background-color: #ffffff;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		border-radius: 8px;
+		padding: 24px;
+		max-width: 400px;
+		margin: 0 auto;
+	}
+
+	.select {
+		width: 25%;
+		padding: 7px;
+		border: 1px solid #dddddd;
+		border-radius: 15px;
+		font-size: 15px;
+		margin-bottom: 12px;
+		background-color: #ffffff;
+	}
+
+	.button-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.button {
+		background-color: #5a66d8;
+		color: #ffffff;
+		padding: 8px 9px;
+		border: none;
+		border-radius: 4px;
+		font-size: 16px;
+		cursor: pointer;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+		transition: background-color 0.3s ease;
+		margin-top: 8px;
+	}
+
+	.button:hover {
+		background-color: #86b3e4;
+	}
+</style>
+
+>>>>>>> main
 <div class="flex items-center justify-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
 		<h2 class="text-2xl font-bold text-center my-3">필수 회원 정보 입력</h2>
@@ -109,6 +156,7 @@
 		</div>
 	</div>
 </div>
+<<<<<<< HEAD
 
 <style>
 	.container {
@@ -153,3 +201,5 @@
 		background-color: #86b3e4;
 	}
 </style>
+=======
+>>>>>>> main

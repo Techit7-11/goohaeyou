@@ -16,12 +16,17 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+<<<<<<< HEAD
 import com.ll.gooHaeYu.global.event.ChangeOfPostEvent;
 import com.ll.gooHaeYu.global.event.PostDeletedEvent;
 import com.ll.gooHaeYu.global.event.PostGetInterestedEvent;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+=======
+import com.ll.gooHaeYu.global.exception.CustomException;
+import lombok.RequiredArgsConstructor;
+>>>>>>> main
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -35,9 +40,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+<<<<<<< HEAD
 import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.*;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
+=======
+>>>>>>> main
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
@@ -49,10 +57,16 @@ public class JobPostService {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final EssentialRepository essentialRepository;
+<<<<<<< HEAD
     private final ApplicationEventPublisher publisher;
 
     @Transactional
     public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
+=======
+
+    @Transactional
+    public Long writePost(String username, JobPostForm.Register form) {
+>>>>>>> main
         JobPost newPost = JobPost.builder()
                 .member(memberService.getMember(username))
                 .title(form.getTitle())
@@ -75,7 +89,12 @@ public class JobPostService {
         jobPostRepository.save(newPost);
         jobPostdetailRepository.save(postDetail);
         essentialRepository.save(essential);
+<<<<<<< HEAD
         return form;
+=======
+
+        return newPost.getId();
+>>>>>>> main
     }
 
     public JobPostDetailDto findById(Long id) {
@@ -88,9 +107,14 @@ public class JobPostService {
     }
 
     @Transactional
+<<<<<<< HEAD
     public JobPostForm.Modify modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
         JobPost jobPost = postDetail.getJobPost();
+=======
+    public void modifyPost(String username, Long id, JobPostForm.Modify form) {
+        JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+>>>>>>> main
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
@@ -105,6 +129,7 @@ public class JobPostService {
            Application application = iterator.next();
            if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - application.getMember().getBirth().getYear()){
                applicationsToRemove.add(application);
+<<<<<<< HEAD
                publisher.publishEvent(new ChangeOfPostEvent(this,jobPost,application, POST_MODIFICATION,DELETE));
            }else {
                publisher.publishEvent(new ChangeOfPostEvent(this,jobPost,application,POST_MODIFICATION,NOTICE));
@@ -112,6 +137,11 @@ public class JobPostService {
        }
        postDetail.getApplications().removeAll(applicationsToRemove);
         return form;
+=======
+           }
+       }
+       postDetail.getApplications().removeAll(applicationsToRemove);
+>>>>>>> main
     }
 
     @Transactional
@@ -129,7 +159,10 @@ public class JobPostService {
         JobPost post = findByIdAndValidate(postId);
 
         Member member = findUserByUserNameValidate(username);
+<<<<<<< HEAD
         publisher.publishEvent(new PostDeletedEvent(this,post,member,DELETE));
+=======
+>>>>>>> main
         if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
             jobPostRepository.deleteById(postId);
         } else {
@@ -171,7 +204,10 @@ public class JobPostService {
                 .build());
 
         postDetail.getJobPost().increaseInterestCount();
+<<<<<<< HEAD
         publisher.publishEvent(new PostGetInterestedEvent(this, postDetail, member));
+=======
+>>>>>>> main
     }
 
     @Transactional
@@ -253,11 +289,15 @@ public class JobPostService {
     @Transactional
     public void deadline(String username, Long postId) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
+<<<<<<< HEAD
         JobPost jobPost = postDetail.getJobPost();
+=======
+>>>>>>> main
         if (!canEditPost(username,postDetail.getAuthor())) {
             throw new CustomException(NOT_ABLE);
         }
 
+<<<<<<< HEAD
         List<Application> applicationList = postDetail.getApplications();
         List<Application> removeApplicationList = new ArrayList<>();
 
@@ -281,6 +321,13 @@ public class JobPostService {
 //
 //        }
         for (Application application : removeApplicationList) {
+=======
+        List<Application> applicationList = postDetail.getApplications().stream()
+                .filter(application -> application.getApprove() != null && !application.getApprove())
+                .collect(Collectors.toList());
+
+        for (Application application : applicationList) {
+>>>>>>> main
             postDetail.getApplications().remove(application);
         }
     }

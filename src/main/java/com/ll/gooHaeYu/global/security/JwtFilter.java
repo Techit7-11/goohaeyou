@@ -6,6 +6,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
+=======
+import org.springframework.http.HttpHeaders;
+>>>>>>> main
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +37,11 @@ public class JwtFilter extends OncePerRequestFilter {
             String username = jwtTokenProvider.getUsername(accessToken);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+<<<<<<< HEAD
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);   // 여기서 익셉션 잡기
+=======
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+>>>>>>> main
                 if (userDetails != null) {
                     // 권한 부여 및 인증된 사용자의 정보를 SecurityContext에 설정
                     UsernamePasswordAuthenticationToken authenticationToken =

@@ -25,7 +25,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(1);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(1);
+<<<<<<< HEAD
     public static final String REDIRECT_PATH = AppConfig.getSiteFrontUrl() + "/member/socialLoginCallback";
+=======
+    public static final String REDIRECT_PATH = AppConfig.getSiteFrontUrl();
+>>>>>>> main
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;

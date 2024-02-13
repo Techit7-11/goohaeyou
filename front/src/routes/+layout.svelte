@@ -36,12 +36,19 @@
 				>
 					<li><a href="/job-post/list">구인공고목록</a></li>
 					<li><a href="/member/me">마이페이지</a></li>
+<<<<<<< HEAD
 					<li><a href="/notification/list">알림</a></li>
+=======
+>>>>>>> main
 				</ul>
 			</div>
 		</div>
 		<div class="navbar-center">
+<<<<<<< HEAD
 			<a class="btn btn-ghost text-xl" href="/">GooHaeYou</a>
+=======
+			<a class="btn btn-ghost text-xl" href="/">구해유</a>
+>>>>>>> main
 		</div>
 		<div class="navbar-end">
 			{#if rq.isLogout()}
@@ -54,6 +61,7 @@
 			{/if}
 		</div>
 	</div>
+<<<<<<< HEAD
 	<div style="border-bottom: 1px solid #dedede;"></div>
 </header>
 <main>{@render children()}</main>
@@ -109,3 +117,8 @@
 		<p>© 2024 All Rights Reserved by Techit7-11번과_GooHaeYou</p>
 	</aside>
 </footer>
+=======
+</header>
+<main>{@render children()}</main>
+<footer class="bg-base-300 text-gray-500">footer</footer>
+>>>>>>> main

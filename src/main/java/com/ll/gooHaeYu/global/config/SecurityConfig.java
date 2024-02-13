@@ -37,6 +37,10 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
+<<<<<<< HEAD
+=======
+                .requestMatchers("/h2-console/**")
+>>>>>>> main
                 .requestMatchers("/static/**");
     }
 
@@ -46,13 +50,24 @@ public class SecurityConfig {
         return httpSecurity
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
+<<<<<<< HEAD
+=======
+                .cors()
+                .and()
+>>>>>>> main
                 .authorizeHttpRequests(requests -> {
                     requests
                             .requestMatchers("/h2-console/**").permitAll()
                             .requestMatchers("/api/member/socialLogin/**").permitAll()
                             .requestMatchers("/oauth2/authorization/**").permitAll() // OAuth 2.0 인증 엔드포인트에 대한 접근 허용
                             .requestMatchers("/login", "/api/member/join", "api/member/login", "api/member/logout").permitAll()
+<<<<<<< HEAD
                             .requestMatchers(HttpMethod.GET, "/api/job-posts/**", "/api/job-posts", "/api/job-posts/search", "/api/post-comment/{postId}").permitAll()
+=======
+                            .requestMatchers(HttpMethod.GET, "/api/job-posts/**", "/api/job-posts",
+                                    "/api/job-posts/search",
+                                    "/api/post-comment/{postId}").permitAll()
+>>>>>>> main
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                             .requestMatchers("/**").permitAll()
                             .anyRequest()

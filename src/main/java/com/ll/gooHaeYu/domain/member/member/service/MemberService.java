@@ -6,11 +6,20 @@ import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.security.JwtTokenProvider;
+<<<<<<< HEAD
+=======
+import com.ll.gooHaeYu.global.security.OAuth.OAuth2SuccessHandler;
+>>>>>>> main
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+<<<<<<< HEAD
+=======
+import java.time.Duration;
+
+>>>>>>> main
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
@@ -23,7 +32,11 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
+<<<<<<< HEAD
     public JoinForm join(JoinForm form) {
+=======
+    public Long join(JoinForm form) {
+>>>>>>> main
         memberRepository.findByUsername(form.getUsername())
                 .ifPresent(member -> {
                     throw new CustomException(DUPLICATE_USERNAME);
@@ -41,7 +54,12 @@ public class MemberService {
                 .birth(form.getBirth())
                 .role(role)
                 .build());
+<<<<<<< HEAD
         return form;
+=======
+
+        return newMember.getId();
+>>>>>>> main
     }
 
     public void login(LoginForm form) {

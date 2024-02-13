@@ -1,11 +1,17 @@
 package com.ll.gooHaeYu.domain.application.application.dto;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+<<<<<<< HEAD
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+=======
+import lombok.Builder;
+import lombok.Getter;
+
+>>>>>>> main
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,6 +19,7 @@ import java.util.List;
 @Getter
 public class ApplicationDto {
 
+<<<<<<< HEAD
     @NotNull
     private Long id;
     @NotNull
@@ -33,12 +40,19 @@ public class ApplicationDto {
     private String phone;
     @NotNull
     private String location;
+=======
+    private Long id;
+    private String author;
+    private Long postId;
+    private String body;
+>>>>>>> main
     private LocalDateTime createdAt;
     private Boolean approve;
 
     public static ApplicationDto fromEntity(Application application) {
         return ApplicationDto.builder()
                 .id(application.getId())
+<<<<<<< HEAD
                 .jobPostId(application.getJobPostDetail().getJobPost().getId())
                 .jobPostAuthorUsername(application.getJobPostDetail().getAuthor())
                 .jobPostName(application.getJobPostDetail().getJobPost().getTitle())
@@ -48,6 +62,11 @@ public class ApplicationDto {
                 .birth(application.getMember().getBirth())
                 .phone(application.getMember().getPhoneNumber())
                 .location(application.getMember().getLocation())
+=======
+                .author(application.getMember().getUsername())
+                .postId(application.getJobPostDetail().getJobPost().getId())
+                .body(application.getBody())
+>>>>>>> main
                 .createdAt(application.getCreatedAt())
                 .approve(application.getApprove())
                 .build();

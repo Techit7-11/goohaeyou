@@ -11,12 +11,17 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+<<<<<<< HEAD
 import com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode;
 import com.ll.gooHaeYu.global.event.CommentCreatedEvent;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
+=======
+import com.ll.gooHaeYu.global.exception.CustomException;
+import lombok.RequiredArgsConstructor;
+>>>>>>> main
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +40,10 @@ public class CommentService {
     private final JobPostRepository jobPostRepository;
 
     private final MemberRepository memberRepository;
+<<<<<<< HEAD
     private final ApplicationEventPublisher publisher;
+=======
+>>>>>>> main
 
     @Transactional
     public Long writeComment(Long postId, String username, CommentForm.Register form) {
@@ -47,7 +55,11 @@ public class CommentService {
                 .build();
         postDetail.getComments().add(comment);
         postDetail.getJobPost().increaseCommentsCount();
+<<<<<<< HEAD
         publisher.publishEvent(new CommentCreatedEvent(this,postDetail,comment));
+=======
+
+>>>>>>> main
         return postId;
     }
 
