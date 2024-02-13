@@ -108,7 +108,7 @@ public class JobPostController {
     @Operation(summary = "구인공고 관심 등록")
     public ResponseEntity<Void> increase(@AuthenticationPrincipal MemberDetails memberDetails,
                                          @PathVariable(name = "id") Long id) {
-        jobPostService.Interest(memberDetails.getUsername(),id);
+        jobPostService.Interest(memberDetails.getUsername(), id);
 
         return ResponseEntity.noContent().build();
     }
@@ -117,7 +117,7 @@ public class JobPostController {
     @Operation(summary = "구인공고 관심 제거")
     public ResponseEntity<Void> disinterest(@AuthenticationPrincipal MemberDetails memberDetails,
                                             @PathVariable(name = "id") Long id) {
-        jobPostService.disinterest(memberDetails.getUsername(),id);
+        jobPostService.disinterest(memberDetails.getUsername(), id);
 
         return ResponseEntity.noContent().build();
     }
@@ -133,12 +133,12 @@ public class JobPostController {
 
     @GetMapping("/search")
     @Operation(summary = "게시물 검색")
-    public ResponseEntity<List<JobPostDto>> searchJobPostsByTitleAndBody(
+    public RsData<List<JobPostDto>> searchJobPostsByTitleAndBody(
             @RequestParam(required = false, name = "titleOrBody") String titleOrBody,
             @RequestParam(required = false, name = "title") String title,
             @RequestParam(required = false, name = "body") String body) {
 
-        return ResponseEntity.ok(jobPostService.searchJobPostsByTitleAndBody(titleOrBody, title, body));
+        return RsData.of(jobPostService.searchJobPostsByTitleAndBody(titleOrBody, title, body));
     }
 
     public record GetPostsResponseBody(@NonNull PageDto<JobPostDto> itemPage) {
@@ -147,7 +147,7 @@ public class JobPostController {
     @GetMapping("/sort")
     @Operation(summary = "구인공고 글 목록 정렬")
     public RsData<GetPostsResponseBody> findAllPostSort(
-            @RequestParam(value="page", defaultValue="1") int page,
+            @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(name = "sortBy", defaultValue = "createdAt") List<String> sortBys,
             @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders
     ) {
@@ -170,14 +170,4 @@ public class JobPostController {
                 )
         );
     }
-  
-//    @DeleteMapping("/{id}/deadline")
-//    @Operation(summary = "공고 마감")
-//    public ResponseEntity<Void> deadline(@AuthenticationPrincipal MemberDetails memberDetails,
-//                                         @PathVariable(name = "id") Long id) {
-//        jobPostService.deadline(memberDetails.getUsername(), id);
-//
-//        return ResponseEntity.noContent().build();
-//    }
-
 }
