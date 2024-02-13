@@ -109,10 +109,10 @@
 		<div class="flex justify-between items-center">
 			<div class="text-gray-500">No.{jobPostDetailDto?.id}</div>
 			<div class="text-xl font-bold">{jobPostDetailDto?.title}</div>
-			<div>
+			<div class="flex items-center">
 				{#if jobPostDetailDto?.author === rq.member.username}
-					<button class="btn btn-outline" on:click={editPost}>수정하기</button>
-					<button class="btn btn-outline btn-error" on:click={deletePost}>삭제하기</button>
+					<button class="btn btn-outline btn-xs mr-2" on:click={editPost}>수정하기</button> <!-- 수정 -->
+					<button class="btn btn-outline btn-xs btn-error" on:click={deletePost}>삭제하기</button>
 				{:else if !jobPostDetailDto?.closed && rq.isLogin}
 					<button class="btn btn-outline btn-info" on:click={apply}>지원하기</button>
 				{/if}
