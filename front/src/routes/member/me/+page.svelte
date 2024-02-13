@@ -42,8 +42,8 @@
 	}
 
 	function goToApplicationsList(postId) {
-        window.location.href = `/applications/list/${postId}`;
-    }
+		window.location.href = `/applications/list/${postId}`;
+	}
 </script>
 
 <div class="flex items-center justify-center min-h-screen bg-base-100">
@@ -107,15 +107,19 @@
 								{#await loadMyPosts()}
 									<p>loading...</p>
 								{:then { data: posts }}
-									<ul>
-										{#each posts ?? [] as post, index}
-											<li>
-												<a href="/job-post/{post.id}">no.{index + 1}</a>
-												<a href="/job-post/{post.id}">{post.title}</a>
-												<button class="btn btn-outline btn-primary btn-sm ml-2 w-auto px-2" on:click={() => goToApplicationsList(post.id)}>지원서 확인</button>
-											</li>
-										{/each}
-									</ul>
+									{#each posts ?? [] as post, index}
+										<a href="/job-post/{post.id}" class="card-link">
+											<div class="card">
+												<div class="text-sm text-gray-500">no.{index + 1}</div>
+												<div class="text-xl font-bold">{post.title}</div>
+												<button
+													class="btn btn-primary my-3"
+													on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
+												>
+												<div class="divider"></div>
+											</div>
+										</a>
+									{/each}
 								{/await}
 							</div>
 
@@ -131,18 +135,15 @@
 								{#await loadMyApplications()}
 									<p>loading...</p>
 								{:then { data: applicationDtoList }}
-									<ul>
-										{#each applicationDtoList ?? [] as applicationDto}
-											<li>
-												<a href="/applications/detail/{applicationDto.id}"
-													>{applicationDto.jobPostName}</a
-												>
-												<a href="/applications/detail/{applicationDto.id}"
-													>{summarizeBody(applicationDto.body)}</a
-												>
-											</li>
-										{/each}
-									</ul>
+									{#each applicationDtoList ?? [] as applicationDto}
+										<a href="/applications/detail/{applicationDto.id}" class="card-link">
+											<div class="card">
+												<div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
+												<div class="text-xl font-bold">{summarizeBody(applicationDto.body)}</div>
+												<div class="divider"></div>
+											</div>
+										</a>
+									{/each}
 								{/await}
 							</div>
 
@@ -153,24 +154,19 @@
 								class="tab"
 								aria-label="내가 쓴 댓글"
 							/>
-							<div role="tabpanel" class="tab-content p-5">
+							<div role="tabpanel" class="tab-content p-7">
 								{#await loadMyComments()}
 									<p>loading...</p>
 								{:then { data: commentsDtoList }}
-									<ul>
-										{#each commentsDtoList ?? [] as commentsDto}
-											<li>
-												<a href="/job-post/{commentsDto.id}"
-													>{commentsDto.jobPostId}
-													번 공고</a
-												>
-												<a href="/job-post/{commentsDto.id}"
-													>[{commentsDto.content}
-													]</a
-												>
-											</li>
-										{/each}
-									</ul>
+									{#each commentsDtoList ?? [] as commentsDto}
+										<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
+											<div class="card">
+												<div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
+												<div class="text-xl ont-bold">{commentsDto.content}</div>
+												<div class="divider"></div>
+											</div>
+										</a>
+									{/each}
 								{/await}
 							</div>
 
@@ -179,17 +175,15 @@
 								{#await loadMyInterest()}
 									<p>loading...</p>
 								{:then { data: interestDtoList }}
-									<ul>
-										{#each interestDtoList ?? [] as interestDto}
-											<li>
-												<a href="/job-post/{interestDto.id}"
-													>{interestDto.id}
-													번 공고</a
-												>
-												<a href="/job-post/{interestDto.id}">{interestDto.title}</a>
-											</li>
-										{/each}
-									</ul>
+									{#each interestDtoList ?? [] as interestDto}
+										<a href="/job-post/{interestDto.id}" class="card-link">
+											<div class="card">
+												<div class="text-sm text-gray-500">{interestDto.id}번 공고</div>
+												<div class="text-xl ont-bold">{interestDto.title}</div>
+												<div class="divider"></div>
+											</div>
+										</a>
+									{/each}
 								{/await}
 							</div>
 						</div>
@@ -199,47 +193,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	ul {
-		list-style-type: none;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	li {
-		background-color: #ffffff;
-		margin: 6px 0;
-		padding: 10px;
-		width: 100%; /* 화면 너비의 대부분을 차지 */
-		max-width: 600px; /* 최대 너비 설정 */
-		box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* 섬세한 그림자 효과 */
-		border-radius: 8px; /* 부드럽게 둥근 모서리 */
-		display: flex;
-		flex-direction: column; /* 세로 정렬 */
-		border: 1px solid #eee; /* 미세한 경계선 */
-	}
-
-	a {
-		color: #43404e;
-		text-decoration: none; /* 밑줄 제거 */
-		font-weight: bold; /* 글씨 굵게 */
-		margin-bottom: 8px; /* 요소 사이의 여백 */
-	}
-
-	a:hover {
-		color: #a5a5a5; /* 호버 시 색상 변경 */
-	}
-
-	footer {
-		width: 100%;
-		background-color: #f7f7f7; /* 밝은 회색 배경 */
-		color: #6f6d70;
-		text-align: center;
-		padding: 20px 0;
-		box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* 상단으로 그림자 효과 */
-		border-top: 2px solid #eee; /* 상단 경계선 */
-	}
-</style>
