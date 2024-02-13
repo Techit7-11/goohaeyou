@@ -22,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 @EnableWebSecurity // 기본 웹 보안 활성화
@@ -37,7 +38,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-//                .requestMatchers(toH2Console())
+                .requestMatchers(toH2Console())
                 .requestMatchers("/static/**");
     }
 
@@ -59,9 +60,9 @@ public class SecurityConfig {
                             .requestMatchers("/login", "/api/member/join", "api/member/login", "api/member/logout").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/job-posts/**", "/api/job-posts", "/api/job-posts/search", "/api/post-comment/{postId}").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                            .requestMatchers("/**").permitAll()
-                            .anyRequest()
-                            .authenticated();
+                            .requestMatchers("/**").permitAll();
+//                            .anyRequest()
+//                            .authenticated();
 
                 })
                 .sessionManagement(
