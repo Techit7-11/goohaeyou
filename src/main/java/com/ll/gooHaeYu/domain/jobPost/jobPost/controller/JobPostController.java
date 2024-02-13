@@ -171,13 +171,13 @@ public class JobPostController {
         );
     }
   
-    @DeleteMapping("/{id}/deadline")
-    @Operation(summary = "공고 마감")
-    public ResponseEntity<Void> deadline(@AuthenticationPrincipal MemberDetails memberDetails,
-                                         @PathVariable(name = "id") Long id) {
-        jobPostService.deadline(memberDetails.getUsername(), id);
-
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping("/{id}/deadline")
+//    @Operation(summary = "공고 마감")
+//    public ResponseEntity<Void> deadline(@AuthenticationPrincipal MemberDetails memberDetails,
+//                                         @PathVariable(name = "id") Long id) {
+//        jobPostService.deadline(memberDetails.getUsername(), id);
+//
+//        return ResponseEntity.noContent().build();
+//    }
 
 }

@@ -56,4 +56,11 @@ public class NotificationEventListener {
         log.debug("지원서 작성 및 수정 알림");
         notificationService.applicationCreatedAndChangedNotification(event);
     }
+
+    @EventListener
+    public void jobPostClosedEventListen(PostDeadlineEvent event) {
+        // 공고 마감 시
+        log.debug("공고 마감 시 작성자에게 알림");
+        notificationService.jobPostClosedNotificationEventListen(event);
+    }
 }
