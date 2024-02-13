@@ -122,26 +122,11 @@
 				</div>
 			{/if}
 
-			{#if application.approve == null && application.jobPostAuthorUsername == rq.member.username}
-				<div class="text-center mt-2">
-					<button
-						class="btn btn-outline btn-info"
-						on:click={() => approve(application.jobPostId, application.id)}>승인하기</button
-					>
-				</div>
-			{/if}
-
-			{#if application.approve == true && application.jobPostAuthorUsername == rq.member.username}
-				<div class="text-center mt-2">
-					<button class="btn btn-disabled" disabled>승인완료</button>
-				</div>
-			{/if}
-
 			<!-- 승인 버튼 -->
 			{#if application.approve == null && application.jobPostAuthorUsername == rq.member.username}
 				<div class="text-center mt-2">
 					<button
-						class="btn btn-outline btn-info"
+						class="btn btn-accent"
 						on:click={() => approve(application.jobPostId, application.id)}>승인하기</button
 					>
 				</div>
