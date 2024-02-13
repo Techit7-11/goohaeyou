@@ -844,7 +844,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["JobPostDto"][];
+          "*/*": components["schemas"]["RsDataListJobPostDto"];
         };
       };
     };
