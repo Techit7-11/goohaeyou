@@ -7,6 +7,7 @@
 	let postId = parseInt($page.params.id);
 	let comments = [];
 	let newComment = '';
+	let editingContent = "";
 
 	async function load() {
 		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
@@ -34,37 +35,46 @@
     async function loadComments() {
         try {
             const { data } = await rq.apiEndPoints().GET(`/api/post-comment/${postId}`);
-            comments = data.data.reverse();
+            comments = data.data.map(comment => ({
+                ...comment,
+                isEditing: false // 모든 댓글에 isEditing 속성 추가
+            })).reverse();
         } catch (error) {
             console.error('댓글을 로드하는 중 오류가 발생했습니다.', error);
         }
     }
 
     async function addComment() {
-    console.log("addComment 함수 호출됨");
     	    try {
-                    console.log("전송 데이터:", { text: newComment }); // 요청 데이터 확인
                     const response = await rq.apiEndPoints().POST(`/api/post-comment/${postId}/comment`, {
                         body: { content: newComment }
                     });
-                    console.log("서버 응답:", response); // 서버 응답 확인
                     newComment = ''; // 입력 필드 초기화
                     loadComments(); // 댓글 목록 새로고침
                 } catch (error) {
                     console.error('댓글 추가 중 오류가 발생했습니다.', error);
                 }
             }
-
-    	async function editComment(commentId, newText) {
-    	    try {
-    	        await rq.apiEndPoints().PUT(`/api/post-comment/${postId}/comment/${commentId}`, {
-    	            body: { text: newText }
-    	        });
-    	        loadComments();
-    	    } catch (error) {
-    	        console.error('댓글 수정 중 오류가 발생했습니다.', error);
-    	    }
-    	}
+        // 댓글 수정 시작
+    	function startEdit(commentId) {
+            comments = comments.map(comment => ({
+                ...comment,
+                isEditing: comment.id === commentId
+            }));
+            const currentComment = comments.find(comment => comment.id === commentId);
+            editingContent = currentComment ? currentComment.content : "";
+        }
+        // 댓글 수정 제출
+        async function submitEdit(commentId) {
+            try {
+                await rq.apiEndPoints().PUT(`/api/post-comment/${postId}/comment/${commentId}`, {
+                    body: { content: editingContent }
+                });
+                await loadComments(); // 댓글 목록 새로고침
+            } catch (error) {
+                console.error('댓글 수정 중 오류가 발생했습니다.', error);
+            }
+        }
 
     	async function deleteComment(commentId) {
     	    try {
@@ -147,18 +157,26 @@
                         </div>
                         <div>
                             <div class="font-bold">{comment.author}</div>
-                            <div class="text-xs text-gray-500">작성일자 : {formatDateTime(comment.createAt)}</div>
-                            {#if !comment.createAt === comment.modifyAt}
-                            <div class="text-xs text-gray-500">수정일자 : {formatDateTime(comment.modifyAt)}</div>
+                            <div class="text-xs text-gray-500">작성 일자 : {formatDateTime(comment.createAt)}</div>
+                            {#if comment.createAt !== comment.modifyAt}
+                                <div class="text-xs text-gray-500">수정 일자 : {formatDateTime(comment.modifyAt)}</div>
                             {/if}
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-xs btn-ghost" on:click={() => editComment(comment.id, '새로운 텍스트')}>수정</button>
+                    {#if comment.isEditing}
+                    <button class="btn btn-xs btn-ghost" on:click={() => submitEdit(comment.id)}>수정 완료</button>
+                    {:else}
+                        <button class="btn btn-xs btn-ghost" on:click={() => startEdit(comment.id)}>수정</button>
+                        {/if}
                         <button class="btn btn-xs btn-ghost" on:click={() => deleteComment(comment.id)}>삭제</button>
                     </div>
                 </div>
+                {#if comment.isEditing}
+                            <textarea class="textarea w-full" bind:value={editingContent}></textarea>
+                        {:else}
                 <div class="text-gray-700">{comment.content}</div>
+                 {/if}
             </div>
             {/each}
         </div>
