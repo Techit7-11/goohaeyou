@@ -7,6 +7,18 @@
 	let dataLoaded: boolean = false; // 데이터가 로드되었는지 여부를 저장하는 변수 추가
 	const dispatch = createEventDispatcher(); // 검색 버튼 클릭 이벤트를 디스패치하기 위한 함수
 
+	async function loading() {
+		dataLoaded = false;
+
+		load();
+	}
+
+	function handleKeyPress(event) {
+		if (event.key === 'Enter') {
+			loading();
+		}
+	}
+
 	async function load() {
 		const kwInput = document.querySelector('input[name="kw"]') as HTMLInputElement;
 		kw = kwInput.value;
@@ -19,8 +31,8 @@
 		console.log(kw, kwType);
 		console.log(data);
 
-		dispatch('search', data); // 검색 결과를 부모 컴포넌트로 디스패치
-		dataLoaded = true; // 데이터 로드 상태 업데이트
+		dispatch('search', data);
+		dataLoaded = true;
 
 		return data;
 	}
@@ -32,8 +44,14 @@
 		<option value="title">제목</option>
 		<option value="body">내용</option>
 	</select>
-	<input name="kw" type="text" placeholder="검색어" class="input w-full max-w-xs" />
-	<button class="btn" on:click={load}>검색</button>
+	<input
+		name="kw"
+		type="text"
+		placeholder="검색어"
+		class="input w-full max-w-xs"
+		on:keyup={handleKeyPress}
+	/>
+	<button class="btn" on:click={loading}>검색</button>
 </div>
 
 <div>
@@ -43,9 +61,9 @@
 			<p>loading...</p>
 		{:then { data: jobPostDtoList }}
 			<ul>
-				{#each jobPostDtoList ?? [] as jobPostDto}
+				{#each jobPostDtoList ?? [] as jobPostDto, index}
 					<li>
-						<a href="/job-post/{jobPostDto.id}">{jobPostDto.title}</a>
+						<a href="/job-post/{jobPostDto.id}">(No.{index + 1}) {jobPostDto.title}</a>
 					</li>
 				{/each}
 			</ul>
