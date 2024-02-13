@@ -16,6 +16,7 @@ import com.ll.gooHaeYu.global.event.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,6 +89,14 @@ public class NotificationService {
         Application application = event.getApplication();
         String url = "/applications/detail/"+application.getId();
         makeNotification(jobPost.getMember(),application.getMember(), jobPost.getTitle(), event.getCauseTypeCode(), NOTICE, url);
+    }
+
+    @EventListener
+    @Transactional
+    public void jobPostClosedNotificationEventListen(PostDeadlineEvent event) {
+        JobPost jobPost = event.getJobPost();
+        String url = "/job-post/"+jobPost.getId();
+        makeNotification(jobPost.getMember(),jobPost.getMember(), jobPost.getTitle(),POST_DEADLINE,NOTICE,url);
     }
 
     private void makeNotification(Member toMember, Member fromMember, String jobPostTitle, CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {

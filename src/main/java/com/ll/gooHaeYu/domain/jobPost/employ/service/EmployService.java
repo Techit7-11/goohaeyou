@@ -2,15 +2,24 @@ package com.ll.gooHaeYu.domain.jobPost.employ.service;
 
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
+import com.ll.gooHaeYu.global.event.ChangeOfPostEvent;
+import com.ll.gooHaeYu.global.event.PostEmployedEvent;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.APPLICATION_APPROVED;
+import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.APPLICATION_UNAPPROVE;
+import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
+import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
 
 @Service
@@ -18,6 +27,7 @@ import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
 @Transactional(readOnly = true)
 public class EmployService {
     private final JobPostService jobPostService;
+    private final ApplicationEventPublisher publisher;
 
     public List<ApplicationDto> getList(String username, Long postId) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
@@ -28,17 +38,27 @@ public class EmployService {
 
     @Transactional
     public void approve(String username, Long postId, List<Long> applicationIds) {
-        JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
+        JobPost jobPost = jobPostService.findByIdAndValidate(postId);
+        JobPostDetail postDetail = jobPost.getJobPostDetail();
         checkPermissions(username,postDetail.getAuthor());
+
+        List<Application> applicationList = new ArrayList<>();
 
         for (Application application : postDetail.getApplications()) {
             if(applicationIds.contains(application.getId())) {
                 // TODO : 승인 후 알림
                 application.approve();
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
             }else {
                 application.reject();
+                applicationList.add(application);
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_UNAPPROVE, DELETE));
             }
         }
+        for (Application application : applicationList) {
+            postDetail.getApplications().remove(application);
+        }
+        publisher.publishEvent(new PostEmployedEvent(this, jobPost));
     }
 
     public void checkPermissions (String username, String author){

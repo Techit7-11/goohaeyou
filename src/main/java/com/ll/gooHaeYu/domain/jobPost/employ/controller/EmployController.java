@@ -26,7 +26,7 @@ public class EmployController {
         return RsData.of(employService.getList(authentication.getName(), postId));
     }
 
-    @PutMapping("/{applicationIds}")
+    @PatchMapping("/{applicationIds}")
     @Operation(summary = "지원서 승인")
     public ResponseEntity<Void> approve(Authentication authentication,
                         @PathVariable Long postId,

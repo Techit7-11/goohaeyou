@@ -21,6 +21,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     private Gender gender = Gender.UNDEFINED;
     private boolean isClosed;
     private String modifyAt;
+    private boolean employed;
 
     public static JobPostDetailDto fromEntity(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
@@ -39,6 +40,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .minAge(jobPostDetail.getEssential().getMinAge())
                 .deadLine(jobPost.getDeadline())
                 .isClosed(jobPost.isClosed())
+                .employed(jobPost.isEmployed())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .modifyAt(jobPost.getModifiedAt().format(formatter))
                 .build();

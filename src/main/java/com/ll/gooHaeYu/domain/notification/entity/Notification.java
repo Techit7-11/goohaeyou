@@ -7,7 +7,6 @@ import com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
