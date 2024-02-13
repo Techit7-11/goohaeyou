@@ -48,6 +48,11 @@
 
 	async function addComment() {
 		try {
+			if (rq.isLogout()) {
+				rq.msgError('로그인이 필요합니다.');
+				rq.goTo('/member/login');
+				return;
+			}
 			const response = await rq.apiEndPoints().POST(`/api/post-comment/${postId}/comment`, {
 				body: { content: newComment }
 			});
@@ -186,22 +191,25 @@
 								</div>
 							</div>
 							<div>
-								{#if comment.isEditing}
-									<button class="btn btn-xs btn-ghost" on:click={() => submitEdit(comment.id)}
-										>수정 완료</button
-									>
-								{:else}
-									<button class="btn btn-xs btn-ghost" on:click={() => startEdit(comment.id)}
-										>수정</button
+								{#if comment.author === rq.member.username}
+									{#if comment.isEditing}
+										<button class="btn btn-xs btn-ghost" on:click={() => submitEdit(comment.id)}
+											>수정 완료</button
+										>
+									{:else}
+										<button class="btn btn-xs btn-ghost" on:click={() => startEdit(comment.id)}
+											>수정</button
+										>
+									{/if}
+									<button class="btn btn-xs btn-ghost" on:click={() => deleteComment(comment.id)}
+										>삭제</button
 									>
 								{/if}
-								<button class="btn btn-xs btn-ghost" on:click={() => deleteComment(comment.id)}
-									>삭제</button
-								>
 							</div>
 						</div>
 						{#if comment.isEditing}
-							<textarea class="textarea textarea-bordered w-full" bind:value={editingContent}></textarea>
+							<textarea class="textarea textarea-bordered w-full" bind:value={editingContent}
+							></textarea>
 						{:else}
 							<div class="text-gray-700">{comment.content}</div>
 						{/if}
