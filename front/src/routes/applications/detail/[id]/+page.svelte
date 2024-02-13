@@ -27,15 +27,15 @@
 	}
 
 	function calculateAge(birthDate) {
-        const birth = new Date(birthDate);
-        const today = new Date();
-        let age = today.getFullYear() - birth.getFullYear();
-        const m = today.getMonth() - birth.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-            age--;
-        }
-        return age;
-    }
+		const birth = new Date(birthDate);
+		const today = new Date();
+		let age = today.getFullYear() - birth.getFullYear();
+		const m = today.getMonth() - birth.getMonth();
+		if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+			age--;
+		}
+		return age;
+	}
 
 	async function approve(jobPostId, applicationId) {
 		// SweetAlert2를 사용하여 사용자에게 승인 확인 요청
@@ -70,9 +70,11 @@
 			<p class="mb-2"><strong>지원자 주소:</strong> {application.location}</p>
 			<p class="mb-2"><strong>제출일:</strong> {formatDate(application.createdAt)}</p>
 			<div class="mb-2">
-                <strong>내용:</strong>
-                <div class="p-3 bg-gray-100 rounded overflow-auto" style="max-height: 200px;">{application.body}</div>
-            </div>
+				<strong>내용:</strong>
+				<div class="p-3 bg-gray-100 rounded overflow-auto" style="max-height: 200px;">
+					{application.body}
+				</div>
+			</div>
 			<p class="mb-2">
 				<strong>승인 상태:</strong>
 				{#if application.approve === true}

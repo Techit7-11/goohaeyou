@@ -42,8 +42,8 @@
 	}
 
 	function goToApplicationsList(postId) {
-        window.location.href = `/applications/list/${postId}`;
-    }
+		window.location.href = `/applications/list/${postId}`;
+	}
 </script>
 
 <div class="flex items-center justify-center min-h-screen bg-base-100">
@@ -107,16 +107,19 @@
 								{#await loadMyPosts()}
 									<p>loading...</p>
 								{:then { data: posts }}
-										{#each posts ?? [] as post, index}
+									{#each posts ?? [] as post, index}
 										<a href="/job-post/{post.id}" class="card-link">
-                                                                                            <div class="card">
-                                                                                            <div class="text-sm text-gray-500">no.{index + 1}</div>
-                                                                                            <div class="text-xl font-bold">{post.title}</div>
-                                                                                            <button class="btn btn-primary my-3" on:click={() => goToApplicationsList(post.id)}>지원서 확인</button>
-                                                                                            <div class="divider"></div>
-                                                                                            </div>
-                                                                                        </a>
-										{/each}
+											<div class="card">
+												<div class="text-sm text-gray-500">no.{index + 1}</div>
+												<div class="text-xl font-bold">{post.title}</div>
+												<button
+													class="btn btn-primary my-3"
+													on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
+												>
+												<div class="divider"></div>
+											</div>
+										</a>
+									{/each}
 								{/await}
 							</div>
 
@@ -132,16 +135,15 @@
 								{#await loadMyApplications()}
 									<p>loading...</p>
 								{:then { data: applicationDtoList }}
-										{#each applicationDtoList ?? [] as applicationDto}
-												<a href="/applications/detail/{applicationDto.id}" class="card-link">
-                                                                                                    <div class="card">
-                                                                                                    <div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
-                                                                                                    <div class="text-xl font-bold">{summarizeBody(applicationDto.body)}</div>
-                                                                                                    <div class="divider"></div>
-                                                                                                    </div>
-                                                                                                </a>
-										{/each}
-
+									{#each applicationDtoList ?? [] as applicationDto}
+										<a href="/applications/detail/{applicationDto.id}" class="card-link">
+											<div class="card">
+												<div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
+												<div class="text-xl font-bold">{summarizeBody(applicationDto.body)}</div>
+												<div class="divider"></div>
+											</div>
+										</a>
+									{/each}
 								{/await}
 							</div>
 
@@ -156,15 +158,15 @@
 								{#await loadMyComments()}
 									<p>loading...</p>
 								{:then { data: commentsDtoList }}
-										{#each commentsDtoList ?? [] as commentsDto}
-												<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
-                                                    <div class="card">
-                                                    <div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
-                                                    <div class="text-xl ont-bold">{commentsDto.content}</div>
-                                                    <div class="divider"></div>
-                                                    </div>
-                                                </a>
-										{/each}
+									{#each commentsDtoList ?? [] as commentsDto}
+										<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
+											<div class="card">
+												<div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
+												<div class="text-xl ont-bold">{commentsDto.content}</div>
+												<div class="divider"></div>
+											</div>
+										</a>
+									{/each}
 								{/await}
 							</div>
 
@@ -173,17 +175,15 @@
 								{#await loadMyInterest()}
 									<p>loading...</p>
 								{:then { data: interestDtoList }}
-									<ul>
-										{#each interestDtoList ?? [] as interestDto}
-											<li>
-												<a href="/job-post/{interestDto.id}"
-													>{interestDto.id}
-													번 공고</a
-												>
-												<a href="/job-post/{interestDto.id}">{interestDto.title}</a>
-											</li>
-										{/each}
-									</ul>
+									{#each interestDtoList ?? [] as interestDto}
+										<a href="/job-post/{interestDto.id}" class="card-link">
+											<div class="card">
+												<div class="text-sm text-gray-500">{interestDto.id}번 공고</div>
+												<div class="text-xl ont-bold">{interestDto.title}</div>
+												<div class="divider"></div>
+											</div>
+										</a>
+									{/each}
 								{/await}
 							</div>
 						</div>
