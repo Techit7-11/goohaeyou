@@ -34,23 +34,26 @@
     async function loadComments() {
         try {
             const { data } = await rq.apiEndPoints().GET(`/api/post-comment/${postId}`);
-            comments = data.data;
+            comments = data.data.reverse();
         } catch (error) {
             console.error('댓글을 로드하는 중 오류가 발생했습니다.', error);
         }
     }
 
     async function addComment() {
+    console.log("addComment 함수 호출됨");
     	    try {
-    	        await rq.apiEndPoints().POST(`/api/post-comment/${postId}/comment`, {
-    	            body: { text: newComment }
-    	        });
-    	        newComment = ''; // 입력 필드 초기화
-    	        loadComments(); // 댓글 목록 새로고침
-    	    } catch (error) {
-    	        console.error('댓글 추가 중 오류가 발생했습니다.', error);
-    	    }
-    	}
+                    console.log("전송 데이터:", { text: newComment }); // 요청 데이터 확인
+                    const response = await rq.apiEndPoints().POST(`/api/post-comment/${postId}/comment`, {
+                        body: { content: newComment }
+                    });
+                    console.log("서버 응답:", response); // 서버 응답 확인
+                    newComment = ''; // 입력 필드 초기화
+                    loadComments(); // 댓글 목록 새로고침
+                } catch (error) {
+                    console.error('댓글 추가 중 오류가 발생했습니다.', error);
+                }
+            }
 
     	async function editComment(commentId, newText) {
     	    try {
@@ -72,7 +75,7 @@
     	    }
     	}
     function formatDateTime(dateTimeString) {
-            return format(new Date(dateTimeString), 'yyyy-MM-dd HH:mm'); // '년-월-일 시:분' 형식
+            return format(new Date(dateTimeString), 'yyyy-MM-dd HH:mm');
         }
 
     onMount(async () => {
