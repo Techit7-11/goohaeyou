@@ -1,14 +1,17 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import rq from '$lib/rq/rq.svelte';
+	import { format } from 'date-fns';
 
 	let postId = parseInt($page.params.id);
+	let comments = [];
+	let newComment = '';
 
 	async function load() {
 		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
 		return data!;
 	}
-
 	async function apply() {
 		const postId = parseInt($page.params.id);
 		rq.goTo(`/applications/${postId}/write`);
@@ -26,6 +29,55 @@
 			alert('글을 삭제하는 데 실패했습니다.');
 		}
 	}
+
+    // 댓글
+    async function loadComments() {
+        try {
+            const { data } = await rq.apiEndPoints().GET(`/api/post-comment/${postId}`);
+            comments = data.data;
+        } catch (error) {
+            console.error('댓글을 로드하는 중 오류가 발생했습니다.', error);
+        }
+    }
+
+    async function addComment() {
+    	    try {
+    	        await rq.apiEndPoints().POST(`/api/post-comment/${postId}/comment`, {
+    	            body: { text: newComment }
+    	        });
+    	        newComment = ''; // 입력 필드 초기화
+    	        loadComments(); // 댓글 목록 새로고침
+    	    } catch (error) {
+    	        console.error('댓글 추가 중 오류가 발생했습니다.', error);
+    	    }
+    	}
+
+    	async function editComment(commentId, newText) {
+    	    try {
+    	        await rq.apiEndPoints().PUT(`/api/post-comment/${postId}/comment/${commentId}`, {
+    	            body: { text: newText }
+    	        });
+    	        loadComments();
+    	    } catch (error) {
+    	        console.error('댓글 수정 중 오류가 발생했습니다.', error);
+    	    }
+    	}
+
+    	async function deleteComment(commentId) {
+    	    try {
+    	        await rq.apiEndPoints().DELETE(`/api/post-comment/${postId}/comment/${commentId}`);
+    	        loadComments();
+    	    } catch (error) {
+    	        console.error('댓글 삭제 중 오류가 발생했습니다.', error);
+    	    }
+    	}
+    function formatDateTime(dateTimeString) {
+            return format(new Date(dateTimeString), 'yyyy-MM-dd HH:mm'); // '년-월-일 시:분' 형식
+        }
+
+    onMount(async () => {
+        await loadComments();
+    });
 </script>
 
 {#await load()}
@@ -68,6 +120,45 @@
         <div>조회수: {jobPostDetailDto?.incrementViewCount}</div>
         <div>관심 등록 수: {jobPostDetailDto?.interestsCount}</div>
       </div>
+    </div>
+  </div>
+
+<div class="container mx-auto px-4 py-8">
+    <div class="w-full max-w-xl mx-auto">
+        <!-- 댓글 입력 폼 -->
+        <div class="flex justify-between items-center mb-4">
+            <textarea class="textarea textarea-bordered w-full" placeholder="댓글을 입력하세요." bind:value={newComment}></textarea>
+            <button class="btn btn-ghost mx-3" on:click={addComment}>댓글 달기</button>
+        </div>
+        <div class="divider"></div>
+        <!-- 댓글 목록 -->
+        <div class="space-y-4">
+            {#each comments as comment}
+            <div class="p-4 rounded-lg bg-base-100 shadow">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-2">
+                        <div class="avatar">
+                            <div class="w-8 rounded-full">
+                                <img src="https://placeimg.com/64/64/people" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-bold">{comment.author}</div>
+                            <div class="text-xs text-gray-500">작성일자 : {formatDateTime(comment.createAt)}</div>
+                            {#if !comment.createAt === comment.modifyAt}
+                            <div class="text-xs text-gray-500">수정일자 : {formatDateTime(comment.modifyAt)}</div>
+                            {/if}
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-xs btn-ghost" on:click={() => editComment(comment.id, '새로운 텍스트')}>수정</button>
+                        <button class="btn btn-xs btn-ghost" on:click={() => deleteComment(comment.id)}>삭제</button>
+                    </div>
+                </div>
+                <div class="text-gray-700">{comment.content}</div>
+            </div>
+            {/each}
+        </div>
     </div>
   </div>
 {/await}

@@ -182,13 +182,12 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["Modify"];
     };
-    RsDataURI: {
+    RsDataRegister: {
       resultCode?: string;
       /** Format: int32 */
       statusCode?: number;
       msg?: string;
-      /** Format: uri */
-      data?: string;
+      data?: components["schemas"]["Register"];
     };
     LoginForm: {
       username: string;
@@ -212,12 +211,13 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["JoinForm"];
     };
-    RsDataRegister: {
+    RsDataURI: {
       resultCode?: string;
       /** Format: int32 */
       statusCode?: number;
       msg?: string;
-      data?: components["schemas"]["Register"];
+      /** Format: uri */
+      data?: string;
     };
     CommentDto: {
       /** Format: int64 */
@@ -526,8 +526,8 @@ export interface operations {
   approve: {
     parameters: {
       path: {
-        postId: number;
-        applicationIds: number[];
+        arg1: number;
+        arg2: number[];
       };
     };
     responses: {
@@ -623,7 +623,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataURI"];
+          "*/*": components["schemas"]["RsDataRegister"];
         };
       };
     };
@@ -730,10 +730,10 @@ export interface operations {
   socialLogin: {
     parameters: {
       query: {
-        redirectUrl: string;
+        arg0: string;
       };
       path: {
-        providerTypeCode: string;
+        arg1: string;
       };
     };
     responses: {
@@ -856,7 +856,7 @@ export interface operations {
   getList_1: {
     parameters: {
       path: {
-        postId: number;
+        arg1: number;
       };
     };
     responses: {
