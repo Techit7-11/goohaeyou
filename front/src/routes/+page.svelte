@@ -28,58 +28,55 @@
 </script>
 
 {#await load()}
-<div class="flex items-center justify-center min-h-screen">
-    <span class="loading loading-dots loading-lg"></span>
-</div>
+	<div class="flex items-center justify-center min-h-screen">
+		<span class="loading loading-dots loading-lg"></span>
+	</div>
 {:then { data: { itemPage } }}
 	<div class="flex justify-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
 			<div class="py-5">
 				{#each posts ?? [] as post, index}
 					<a href="/job-post/{post.id}" class="block">
-                        <div class="card relative bg-base-100 shadow-xl my-4">
-                            <div class="card-body">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-10">
-                                        <div class="text-bold w-16">{post.author}</div>
-                                        <div class="flex flex-col">
-                                            <div class="font-bold">{post.title}</div>
-                                            <div class="text-xs text-gray-500">{post.location}</div>
+						<div class="card relative bg-base-100 shadow-xl my-4">
+							<div class="card-body">
+								<div class="flex items-center justify-between">
+									<div class="flex items-center space-x-10">
+										<div class="text-bold w-16">{post.author}</div>
+										<div class="flex flex-col">
+											<div class="font-bold">{post.title}</div>
+											<div class="text-xs text-gray-500">{post.location}</div>
+										</div>
+									</div>
 
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex flex-col space-y-1 mr-6">
-                                            <div class="flex justify-between">
-                                                <div class="text-xs text-gray-500 mr-6">조회</div>
-                                                <div class="text-xs">{post.incrementViewCount}</div>
-                                            </div>
-                                            <div class="flex justify-between">
-                                                <div class="text-xs text-gray-500 mr-6">댓글</div>
-                                                <div class="text-xs">{post.commentsCount}</div>
-                                            </div>
-                                            <div class="flex justify-between">
-                                                <div class="text-xs text-gray-500 mr-6">찜</div>
-                                                <div class="text-xs"></div>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col items-center">
-                                            {#if post.closed}
-                                                <div class="badge badge-neutral">마감</div>
-                                            {:else}
-                                                <div class="badge badge-primary my-1">구인중</div>
-                                                <div class="text-xs text-gray-500">마감기한</div>
-                                                <div class="text-xs text-gray-500">{post.deadLine}</div>
-                                            {/if}
-                                        </div>
-                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-
+									<div class="flex items-center justify-between">
+										<div class="flex flex-col space-y-1 mr-6">
+											<div class="flex justify-between">
+												<div class="text-xs text-gray-500 mr-6">조회</div>
+												<div class="text-xs">{post.incrementViewCount}</div>
+											</div>
+											<div class="flex justify-between">
+												<div class="text-xs text-gray-500 mr-6">댓글</div>
+												<div class="text-xs">{post.commentsCount}</div>
+											</div>
+											<div class="flex justify-between">
+												<div class="text-xs text-gray-500 mr-6">찜</div>
+												<div class="text-xs"></div>
+											</div>
+										</div>
+										<div class="flex flex-col items-center">
+											{#if post.closed}
+												<div class="badge badge-neutral">마감</div>
+											{:else}
+												<div class="badge badge-primary my-1">구인중</div>
+												<div class="text-xs text-gray-500">마감기한</div>
+												<div class="text-xs text-gray-500">{post.deadLine}</div>
+											{/if}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</a>
 				{/each}
 
 				<div class="max-w-sm mx-auto">

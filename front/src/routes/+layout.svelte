@@ -42,8 +42,7 @@
 				<a class="btn btn-ghost mx-3" href="/member/login">Login</a>
 			{/if}
 			{#if rq.isLogin()}
-				<button class="btn btn-ghost mx-3" on:click={() => rq.logoutAndRedirect('/')}
-					>Logout</button
+				<button class="btn btn-ghost mx-3" on:click={() => rq.logoutAndRedirect('/')}>Logout</button
 				>
 			{/if}
 		</div>

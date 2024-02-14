@@ -94,8 +94,8 @@
 
 {#await loadMyNotification()}
 	<div class="flex items-center justify-center min-h-screen">
-        <span class="loading loading-dots loading-lg"></span>
-    </div>
+		<span class="loading loading-dots loading-lg"></span>
+	</div>
 {:then { data }}
 	<div class="flex justify-center mt-4">
 		<button class="btn btn-lg btn-primary rounded-full mx-2" on:click={deleteAllNotifications}

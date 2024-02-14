@@ -39,11 +39,11 @@
 </script>
 
 <div class="container flex justify-center items-center">
-    <select class="select max-w-xs text-center flex flex-1" name="kwType">
-        <option value="titleOrBody">제목 + 내용</option>
-        <option value="title">제목</option>
-        <option value="body">내용</option>
-    </select>
+	<select class="select max-w-xs text-center flex flex-1" name="kwType">
+		<option value="titleOrBody">제목 + 내용</option>
+		<option value="title">제목</option>
+		<option value="body">내용</option>
+	</select>
 	<input
 		name="kw"
 		type="text"
@@ -52,8 +52,20 @@
 		on:keyup={handleKeyPress}
 	/>
 	<button class="btn btn-ghost btn-circle" on:click={loading}>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-        </button>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-5 w-5"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			><path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="2"
+				d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+			/></svg
+		>
+	</button>
 </div>
 
 <div>
@@ -61,53 +73,52 @@
 		<!-- 데이터가 로드되었는지 확인 -->
 		{#await load()}
 			<div class="flex items-center justify-center min-h-screen">
-                <span class="loading loading-dots loading-lg"></span>
-            </div>
+				<span class="loading loading-dots loading-lg"></span>
+			</div>
 		{:then { data: posts }}
-				{#each posts ?? [] as post, index}
-					<a href="/job-post/{post.id}" class="block">
-                                            <div class="card relative bg-base-100 shadow-xl my-4">
-                                                <div class="card-body">
-                                                    <div class="flex items-center justify-between">
-                                                        <div class="flex items-center space-x-10">
-                                                            <div class="text-bold w-16">{post.author}</div>
-                                                            <div class="flex flex-col">
-                                                                <div class="font-bold">{post.title}</div>
-                                                                <div class="text-xs text-gray-500">{post.location}</div>
+			{#each posts ?? [] as post, index}
+				<a href="/job-post/{post.id}" class="block">
+					<div class="card relative bg-base-100 shadow-xl my-4">
+						<div class="card-body">
+							<div class="flex items-center justify-between">
+								<div class="flex items-center space-x-10">
+									<div class="text-bold w-16">{post.author}</div>
+									<div class="flex flex-col">
+										<div class="font-bold">{post.title}</div>
+										<div class="text-xs text-gray-500">{post.location}</div>
+									</div>
+								</div>
 
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="flex items-center justify-between">
-                                                            <div class="flex flex-col space-y-1 mr-6">
-                                                                <div class="flex justify-between">
-                                                                    <div class="text-xs text-gray-500 mr-6">조회</div>
-                                                                    <div class="text-xs">{post.incrementViewCount}</div>
-                                                                </div>
-                                                                <div class="flex justify-between">
-                                                                    <div class="text-xs text-gray-500 mr-6">댓글</div>
-                                                                    <div class="text-xs">{post.commentsCount}</div>
-                                                                </div>
-                                                                <div class="flex justify-between">
-                                                                    <div class="text-xs text-gray-500 mr-6">찜</div>
-                                                                    <div class="text-xs"></div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex flex-col items-center">
-                                                                {#if post.closed}
-                                                                    <div class="badge badge-neutral">마감</div>
-                                                                {:else}
-                                                                    <div class="badge badge-primary my-1">구인중</div>
-                                                                    <div class="text-xs text-gray-500">마감기한</div>
-                                                                    <div class="text-xs text-gray-500">{post.deadLine}</div>
-                                                                {/if}
-                                                            </div>
-                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-{/each}
+								<div class="flex items-center justify-between">
+									<div class="flex flex-col space-y-1 mr-6">
+										<div class="flex justify-between">
+											<div class="text-xs text-gray-500 mr-6">조회</div>
+											<div class="text-xs">{post.incrementViewCount}</div>
+										</div>
+										<div class="flex justify-between">
+											<div class="text-xs text-gray-500 mr-6">댓글</div>
+											<div class="text-xs">{post.commentsCount}</div>
+										</div>
+										<div class="flex justify-between">
+											<div class="text-xs text-gray-500 mr-6">찜</div>
+											<div class="text-xs"></div>
+										</div>
+									</div>
+									<div class="flex flex-col items-center">
+										{#if post.closed}
+											<div class="badge badge-neutral">마감</div>
+										{:else}
+											<div class="badge badge-primary my-1">구인중</div>
+											<div class="text-xs text-gray-500">마감기한</div>
+											<div class="text-xs text-gray-500">{post.deadLine}</div>
+										{/if}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</a>
+			{/each}
 		{/await}
 	{/if}
 </div>

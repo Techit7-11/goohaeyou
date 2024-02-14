@@ -102,11 +102,11 @@
 
 {#await load()}
 	<div class="flex items-center justify-center min-h-screen">
-        <span class="loading loading-dots loading-lg"></span>
-    </div>
+		<span class="loading loading-dots loading-lg"></span>
+	</div>
 {:then { data: jobPostDetailDto }}
 	<div class="p-6 max-w-4xl mx-auto my-10 bg-white rounded-box shadow-lg">
-				<div>{jobPostDetailDto?.author}</div>
+		<div>{jobPostDetailDto?.author}</div>
 		<div class="flex justify-between items-center">
 			<div class="text-xl font-bold">{jobPostDetailDto?.title}</div>
 			<div class="flex items-center">
@@ -123,42 +123,42 @@
 			<div class="flex flex-col items-end text-gray-700 text-sm">
 				<div>등록 일자 : {jobPostDetailDto?.createdAt}</div>
 				{#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifyAt}
-				<div class="text-sm">수정 일자 : {jobPostDetailDto?.modifyAt}</div>
-                									{/if}
+					<div class="text-sm">수정 일자 : {jobPostDetailDto?.modifyAt}</div>
+				{/if}
 			</div>
 			<div class="divider"></div>
 			<div class="grid grid-cols-4 gap-4 my-4">
-                <div class="text-sm">모집 상태 :</div>
-                <div>
-                				<span
-                					class="badge badge-outline {jobPostDetailDto?.closed ? 'badge-error' : 'badge-success'}"
-                				>
-                					{jobPostDetailDto?.closed ? '마감' : '구인중'}
-                				</span>
-                			</div>
-                <div class="text-sm">공고 마감 :</div>
-                <div class="text-sm">{jobPostDetailDto?.deadLine}</div>
-                <div class="text-sm">지원 가능 나이 :</div>
-                <div class="text-sm">
-                    {jobPostDetailDto?.minAge === 0 ? '없음' : jobPostDetailDto?.minAge ?? '없음'}
-                </div>
-                <div class="text-sm">성별 구분 :</div>
-                <div class="text-sm">
-                    {jobPostDetailDto?.gender === 'MALE'
-                        ? '남'
-                        : jobPostDetailDto?.gender === 'FEMALE'
-                            ? '여'
-                            : '무관'}
-                </div>
-            </div>
-                <div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
+				<div class="text-sm">모집 상태 :</div>
+				<div>
+					<span
+						class="badge badge-outline {jobPostDetailDto?.closed ? 'badge-error' : 'badge-success'}"
+					>
+						{jobPostDetailDto?.closed ? '마감' : '구인중'}
+					</span>
+				</div>
+				<div class="text-sm">공고 마감 :</div>
+				<div class="text-sm">{jobPostDetailDto?.deadLine}</div>
+				<div class="text-sm">지원 가능 나이 :</div>
+				<div class="text-sm">
+					{jobPostDetailDto?.minAge === 0 ? '없음' : jobPostDetailDto?.minAge ?? '없음'}
+				</div>
+				<div class="text-sm">성별 구분 :</div>
+				<div class="text-sm">
+					{jobPostDetailDto?.gender === 'MALE'
+						? '남'
+						: jobPostDetailDto?.gender === 'FEMALE'
+							? '여'
+							: '무관'}
+				</div>
+			</div>
+			<div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
 			<div class="divider"></div>
-                <div class="flex justify-end text-gray-700 text-sm">
-                <div class="text-sm">관심 등록 수 :</div>
-                <div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
-                <div class="text-sm">조회 :</div>
-                <div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
-                </div>
+			<div class="flex justify-end text-gray-700 text-sm">
+				<div class="text-sm">관심 등록 수 :</div>
+				<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
+				<div class="text-sm">조회 :</div>
+				<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
+			</div>
 			<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
 				<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
 			</div>

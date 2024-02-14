@@ -32,8 +32,8 @@
 
 {#await loadApplications()}
 	<div class="flex items-center justify-center min-h-screen">
-        <span class="loading loading-dots loading-lg"></span>
-    </div>
+		<span class="loading loading-dots loading-lg"></span>
+	</div>
 {:then { data: applications }}
 	{#if applications.length > 0}
 		<div class="flex flex-col items-center">

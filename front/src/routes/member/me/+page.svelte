@@ -111,8 +111,8 @@
 							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyPosts()}
 									<div class="flex items-center justify-center min-h-screen">
-                                        <span class="loading loading-dots loading-lg"></span>
-                                    </div>
+										<span class="loading loading-dots loading-lg"></span>
+									</div>
 								{:then { data: posts }}
 									{#each posts ?? [] as post, index}
 										<a href="/job-post/{post.id}" class="card-link">
