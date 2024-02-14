@@ -59,27 +59,27 @@
 	}
 
 	async function deleteApplication(applicationId: number) {
-        try {
-            const response = await rq.apiEndPoints().DELETE(`/api/applications/${applicationId}`, {
-                headers: { 'Content-Type': 'application/json' }
-            });
+		try {
+			const response = await rq.apiEndPoints().DELETE(`/api/applications/${applicationId}`, {
+				headers: { 'Content-Type': 'application/json' }
+			});
 
-			if (response.data?.msg == "CUSTOM_EXCEPTION") {
+			if (response.data?.msg == 'CUSTOM_EXCEPTION') {
 				alert(response.data?.data?.message);
 			}
-			
+
 			if (response.data?.statusCode === 204) {
 				alert('지원서가 삭제되었습니다.');
-            	rq.goTo('/member/me');
-			} 
-        } catch (error) {
-            alert('지원서 삭제에 실패했습니다. 다시 시도해주세요.');
-        }
-    }
+				rq.goTo('/member/me');
+			}
+		} catch (error) {
+			alert('지원서 삭제에 실패했습니다. 다시 시도해주세요.');
+		}
+	}
 
 	function goToEditPage(applicationId: number) {
 		rq.goTo(`/applications/modify/${applicationId}`);
-    }
+	}
 </script>
 
 {#await loadApplication() then application}
@@ -109,15 +109,20 @@
 					<span class="badge badge-warning">진행중</span>
 				{/if}
 			</p>
-			
+
 			{#if application.approve == null}
 				<div class="text-center mt-2 flex justify-center items-center space-x-2">
 					{#if application.author == rq.member.username}
-						<button class="btn btn-active btn-primary btn-sm" on:click={() => goToEditPage(application.id)}>지원서 수정</button>
+						<button
+							class="btn btn-active btn-primary btn-sm"
+							on:click={() => goToEditPage(application.id)}>지원서 수정</button
+						>
 					{/if}
 
 					{#if application.author == rq.member.username}
-						<button class="btn btn-active btn-sm" on:click={() => deleteApplication(application.id)}>지원서 삭제</button>
+						<button class="btn btn-active btn-sm" on:click={() => deleteApplication(application.id)}
+							>지원서 삭제</button
+						>
 					{/if}
 				</div>
 			{/if}
