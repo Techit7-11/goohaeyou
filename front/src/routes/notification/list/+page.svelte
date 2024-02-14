@@ -25,6 +25,8 @@
 				return '가 삭제 되어';
 			case 'POST_INTERESTED':
 				return '에서 관심을 받아서';
+			case 'POST_DEADLINE':
+				return '에서 지원서 접수가 마감되었습니다.';
 			case 'COMMENT_CREATED':
 				return '에서 댓글이 작성 되어';
 			case 'APPLICATION_CREATED':
@@ -44,8 +46,8 @@
 				return '알립니다.';
 			case 'DELETE':
 				return '삭제 되었습니다.';
-			case 'MODIFY':
-				return '변경 되었습니다.';
+			case 'APPROVE':
+				return '지원서를 승인 해주세요.';
 		}
 	}
 
@@ -98,12 +100,33 @@
 	</div>
 {:then { data }}
 	<div class="flex justify-center mt-4">
-		<button class="btn btn-lg btn-primary rounded-full mx-2" on:click={deleteAllNotifications}
-			>모든 알림 삭제</button
+		<button
+			class="relative text-center h-20 w-60 transition-all duration-500
+    		before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-zinc-400 before:transition-all
+    		before:duration-300 before:opacity-10 before:hover:opacity-0 before:hover:scale-50
+    		after:absolute after:top-0 after:left-0 after:w-full after:h-full after:opacity-0 after:transition-all after:duration-300
+    		after:border after:border-black after:border-solid after:border-2 after:border-opacity-50 after:scale-125 after:hover:opacity-100 after:hover:scale-100"
+			style="color: black; font-size: 16px;"
+			on:click={deleteAllNotifications}
 		>
-		<button class="btn btn-lg btn-primary rounded-full mx-2" on:click={deleteReadNotifications}
-			>읽은 알림 삭제</button
+			<span class="relative text-black uppercase font-thin" style="font-size: 20px;"
+				>모든 알림 삭제</span
+			>
+		</button>
+
+		<button
+			class="relative text-center h-20 w-60 transition-all duration-500
+    		before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-zinc-400 before:transition-all
+    		before:duration-300 before:opacity-10 before:hover:opacity-0 before:hover:scale-50
+    		after:absolute after:top-0 after:left-0 after:w-full after:h-full after:opacity-0 after:transition-all after:duration-300
+    		after:border after:border-black after:border-solid after:border-2 after:border-opacity-50 after:scale-125 after:hover:opacity-100 after:hover:scale-100"
+			style="color: black; font-size: 16px;"
+			on:click={deleteReadNotifications}
 		>
+			<span class="relative text-black uppercase font-thin" style="font-size: 20px;"
+				>읽은 알림 삭제</span
+			>
+		</button>
 	</div>
 	<div class="flex justify-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">

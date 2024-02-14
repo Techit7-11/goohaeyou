@@ -11,7 +11,7 @@
 	let interested = false;
 
 	onMount(async () => {
-    	const { data } = await checkInterestStatus(postId); // 해당 공고에 대해 로그인한 유저의 관심등록 여부 확인
+		const { data } = await checkInterestStatus(postId); // 해당 공고에 대해 로그인한 유저의 관심등록 여부 확인
 		interested = data?.data;
 
 		await loadComments();
@@ -49,7 +49,7 @@
 
 	async function registerInterest(postId: number) {
 		const response = await rq.apiEndPoints().POST(`/api/job-posts/${postId}/interest`);
-		
+
 		if (response.data?.msg == 'CUSTOM_EXCEPTION') {
 			rq.msgAndRedirect({ msg: response.data?.data?.message }, undefined, `/job-post/${postId}`);
 		} else if (response.data?.statusCode === 204) {
@@ -61,7 +61,7 @@
 
 	async function removeInterest(postId: number) {
 		const response = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}/interest`);
-		
+
 		if (response.data?.msg == 'CUSTOM_EXCEPTION') {
 			rq.msgAndRedirect({ msg: response.data?.data?.message }, undefined, `/job-post/${postId}`);
 		}
@@ -136,6 +136,16 @@
 	function formatDateTime(dateTimeString) {
 		return format(new Date(dateTimeString), 'yyyy-MM-dd HH:mm');
 	}
+
+	// 공고 조기 마감
+	async function postEarlyClosing() {
+		try {
+			const { data } = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
+			alert('공고가 마감 되었습니다.');
+		} catch (error) {
+			console.error('공고 조기마감 중 오류가 발생했습니다.', error);
+		}
+	}
 </script>
 
 {#await load()}
@@ -149,6 +159,10 @@
 			<div class="text-xl font-bold">{jobPostDetailDto?.title}</div>
 			<div class="flex items-center">
 				{#if jobPostDetailDto?.author === rq.member.username}
+					{#if !jobPostDetailDto.closed}
+						<button class="btn btn-primary btn-xs mr-2" on:click={postEarlyClosing}>조기마감</button
+						>
+					{/if}
 					<button class="btn btn-primary btn-xs mr-2" on:click={editPost}>수정하기</button>
 					<!-- 수정 -->
 					<button class="btn btn-xs" on:click={deletePost}>삭제하기</button>
@@ -179,7 +193,11 @@
 					</span>
 				</div>
 				<div class="text-sm">공고 마감 :</div>
-				<div class="text-sm">{jobPostDetailDto?.deadLine}</div>
+				{#if jobPostDetailDto?.deadLine === null}
+					<span class="badge badge-outline badge-error"> 조기마감 </span>
+				{:else}
+					<div class="text-sm">{jobPostDetailDto?.deadLine}</div>
+				{/if}
 				<div class="text-sm">지원 가능 나이 :</div>
 				<div class="text-sm">
 					{jobPostDetailDto?.minAge === 0 ? '없음' : jobPostDetailDto?.minAge ?? '없음'}
@@ -214,6 +232,7 @@
 					<div class="text-sm">조회 :</div>
 					<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
 				</div>
+
 			</div>
 			<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
 				<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>

@@ -152,4 +152,17 @@ public class JobPostController {
                 )
         );
     }
+
+    @PutMapping("/{id}/closing")
+    public ResponseEntity<Void> postEarlyClosing(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                 @PathVariable(name = "id") Long id) {
+        jobPostService.postEarlyClosing(memberDetails.getUsername(), id);
+
+        return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/a")
+    public ResponseEntity<Void> a(){
+        jobPostService.checkAndCloseExpiredJobPosts();
+        return ResponseEntity.noContent().build();
+    }
 }

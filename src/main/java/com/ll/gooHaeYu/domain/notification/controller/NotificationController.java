@@ -1,10 +1,9 @@
 package com.ll.gooHaeYu.domain.notification.controller;
 
-import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.notification.dto.NotificationDto;
 import com.ll.gooHaeYu.domain.notification.service.NotificationService;
 import com.ll.gooHaeYu.global.rsData.RsData;
+import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +46,12 @@ public class NotificationController {
                                      @PathVariable(name = "id") Long id) {
         notificationService.readNotification(authentication.getName(),id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/new")
+    @Operation(summary = "읽지 않은 알림 유무 확인")
+    public RsData<Boolean> unreadNotification(Authentication memberDetails) {
+        return RsData.of(notificationService.unreadNotification(memberDetails.getName()));
     }
 
 }
