@@ -11,6 +11,10 @@ export interface paths {
     /** 댓글 삭제 */
     delete: operations["delete"];
   };
+  "/api/notification/{id}": {
+    /** 알림 읽음 처리 */
+    put: operations["read"];
+  };
   "/api/member": {
     /** 내 정보 조회 */
     get: operations["detailMember"];
@@ -79,6 +83,10 @@ export interface paths {
     /** 해당 공고에 달린 댓글 목록 */
     get: operations["findByPostId"];
   };
+  "/api/notification": {
+    /** 유저 별 알림리스트 */
+    get: operations["getList"];
+  };
   "/api/member/myposts": {
     /** 내 공고 조회 */
     get: operations["detailMyPosts"];
@@ -105,10 +113,18 @@ export interface paths {
   };
   "/api/employ/{postId}": {
     /** 공고 별 지원리스트 */
-    get: operations["getList"];
+    get: operations["getList_1"];
   };
   "/": {
     get: operations["showMain"];
+  };
+  "/api/notification/read": {
+    /** 읽은 알림 전부 삭제 */
+    delete: operations["deleteReadAll"];
+  };
+  "/api/notification/all": {
+    /** 알림 전부 삭제 */
+    delete: operations["deleteAll"];
   };
   "/api/job-posts/{id}/deadline": {
     /** 공고 마감 */
@@ -159,6 +175,13 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["MemberDto"];
     };
+    RsDataModify: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["Modify"];
+    };
     RsDataURI: {
       resultCode?: string;
       /** Format: int32 */
@@ -182,6 +205,20 @@ export interface components {
       /** Format: date */
       birth: string;
     };
+    RsDataJoinForm: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["JoinForm"];
+    };
+    RsDataRegister: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["Register"];
+    };
     CommentDto: {
       /** Format: int64 */
       id: number;
@@ -200,6 +237,27 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["CommentDto"][];
+    };
+    NotificationDto: {
+      /** Format: int64 */
+      id?: number;
+      createAt?: string;
+      toMember?: string;
+      fromMember?: string;
+      relPostTitle?: string;
+      /** @enum {string} */
+      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE";
+      /** @enum {string} */
+      resultTypeCode?: "NOTICE" | "DELETE" | "MODIFY";
+      seen?: boolean;
+      url?: string;
+    };
+    RsDataListNotificationDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["NotificationDto"][];
     };
     JobPostDto: {
       /** Format: int64 */
@@ -225,11 +283,19 @@ export interface components {
     };
     ApplicationDto: {
       /** Format: int64 */
-      id?: number;
-      author?: string;
+      id: number;
       /** Format: int64 */
-      postId?: number;
-      body?: string;
+      jobPostId: number;
+      jobPostAuthorUsername: string;
+      jobPostName: string;
+      author: string;
+      /** Format: int64 */
+      postId: number;
+      body: string;
+      /** Format: date */
+      birth: string;
+      phone: string;
+      location: string;
       /** Format: date-time */
       createdAt?: string;
       approve?: boolean;
@@ -350,6 +416,20 @@ export interface operations {
       };
     };
   };
+  /** 알림 읽음 처리 */
+  read: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
+  };
   /** 내 정보 조회 */
   detailMember: {
     responses: {
@@ -422,7 +502,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataModify"];
+        };
       };
     };
   };
@@ -584,7 +666,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataURI"];
+          "*/*": components["schemas"]["RsDataJoinForm"];
         };
       };
     };
@@ -611,7 +693,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataURI"];
+          "*/*": components["schemas"]["RsDataRegister"];
         };
       };
     };
@@ -675,6 +757,17 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListCommentDto"];
+        };
+      };
+    };
+  };
+  /** 유저 별 알림리스트 */
+  getList: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataListNotificationDto"];
         };
       };
     };
@@ -760,7 +853,7 @@ export interface operations {
     };
   };
   /** 공고 별 지원리스트 */
-  getList: {
+  getList_1: {
     parameters: {
       path: {
         postId: number;
@@ -782,6 +875,24 @@ export interface operations {
         content: {
           "*/*": string;
         };
+      };
+    };
+  };
+  /** 읽은 알림 전부 삭제 */
+  deleteReadAll: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
+  };
+  /** 알림 전부 삭제 */
+  deleteAll: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
       };
     };
   };

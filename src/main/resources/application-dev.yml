@@ -27,4 +27,4 @@ logging:
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
 app:
-  init-run: true
+  init-run: false
