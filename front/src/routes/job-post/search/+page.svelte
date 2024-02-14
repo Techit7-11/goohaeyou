@@ -58,7 +58,9 @@
 	{#if dataLoaded}
 		<!-- 데이터가 로드되었는지 확인 -->
 		{#await load()}
-			<p>loading...</p>
+			<div class="flex items-center justify-center min-h-screen">
+                <span class="loading loading-dots loading-lg"></span>
+            </div>
 		{:then { data: jobPostDtoList }}
 			<ul>
 				{#each jobPostDtoList ?? [] as jobPostDto, index}

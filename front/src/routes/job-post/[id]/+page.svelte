@@ -101,9 +101,9 @@
 </script>
 
 {#await load()}
-	<div class="flex justify-center items-center h-screen">
-		<span class="loading loading-dots loading-md"></span>
-	</div>
+	<div class="flex items-center justify-center min-h-screen">
+        <span class="loading loading-dots loading-lg"></span>
+    </div>
 {:then { data: jobPostDetailDto }}
 	<div class="p-6 max-w-4xl mx-auto my-10 bg-white rounded-box shadow-lg">
 		<div class="flex justify-between items-center">

@@ -28,7 +28,9 @@
 </script>
 
 {#await load()}
-	<span class="loading loading-spinner loading-lg"></span>
+<div class="flex items-center justify-center min-h-screen">
+    <span class="loading loading-dots loading-lg"></span>
+</div>
 {:then { data: { itemPage } }}
 	<div class="flex justify-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
