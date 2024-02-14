@@ -318,6 +318,7 @@ export interface components {
       /** Format: int64 */
       postId: number;
       body: string;
+      name: string;
       /** Format: date */
       birth: string;
       phone: string;

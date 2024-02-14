@@ -232,7 +232,6 @@
 					<div class="text-sm">조회 :</div>
 					<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
 				</div>
-
 			</div>
 			<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
 				<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
