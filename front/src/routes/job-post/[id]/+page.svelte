@@ -114,6 +114,7 @@
 					<button class="btn btn-primary btn-xs mr-2" on:click={editPost}>수정하기</button>
 					<!-- 수정 -->
 					<button class="btn btn-xs" on:click={deletePost}>삭제하기</button>
+
 				{:else if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin}  <!-- 지원 가능한 경우 -->
 					<button class="btn btn-outline btn-info" on:click={apply}>지원하기</button>
 				{/if}
