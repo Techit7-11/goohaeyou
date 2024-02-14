@@ -139,12 +139,22 @@
 
 	// 공고 조기 마감
 	async function postEarlyClosing() {
-		try {
-			const { data } = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
-			alert('공고가 마감 되었습니다.');
-		} catch (error) {
-			console.error('공고 조기마감 중 오류가 발생했습니다.', error);
+
+		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
+
+		if (response.data?.statusCode === 204) {
+			alert('공고가 조기 마감 되었습니다.');
+			location.reload();
+		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.data?.message);
+		} else {
+			console.error('조기 마감에 실패하였습니다.');
 		}
+	}
+
+	// 지원서 목록으로 이동
+	function goToApplicationsList(postId) {
+		window.location.href = `/applications/list/${postId}`;
 	}
 </script>
 
@@ -159,12 +169,10 @@
 			<div class="text-xl font-bold">{jobPostDetailDto?.title}</div>
 			<div class="flex items-center">
 				{#if jobPostDetailDto?.author === rq.member.username}
-					{#if !jobPostDetailDto.closed}
-						<button class="btn btn-primary btn-xs mr-2" on:click={postEarlyClosing}>조기마감</button
-						>
-					{/if}
 					<button class="btn btn-primary btn-xs mr-2" on:click={editPost}>수정하기</button>
-					<!-- 수정 -->
+					{#if !jobPostDetailDto.closed}
+						<button class="btn btn-xs mr-2" on:click={postEarlyClosing}>조기마감</button>
+					{/if}
 					<button class="btn btn-xs" on:click={deletePost}>삭제하기</button>
 				{:else if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin}
 					<!-- 지원 가능한 경우 -->
@@ -183,14 +191,13 @@
 			<div class="grid grid-cols-4 gap-4 my-4">
 				<div class="text-sm">모집 상태 :</div>
 				<div>
-					{#if jobPostDetailDto?.employed}
-						<span class="badge badge-outline badge-error">구인완료</span>
+					{#if jobPostDetailDto.closed}
+						<div class="badge badge-neutral">마감</div>
+					{:else if jobPostDetailDto.employed}
+						<div class="badge badge-ghost my-1">구인완료</div>
+					{:else}
+						<div class="badge badge-primary my-1">구인중</div>
 					{/if}
-					<span
-						class="badge badge-outline {jobPostDetailDto?.closed ? 'badge-error' : 'badge-success'}"
-					>
-						{jobPostDetailDto?.closed ? '공고마감' : '지원가능'}
-					</span>
 				</div>
 				<div class="text-sm">공고 마감 :</div>
 				{#if jobPostDetailDto?.deadLine === null}
@@ -212,14 +219,15 @@
 				</div>
 			</div>
 			<div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
+
 			<div class="divider"></div>
 			<div class="flex justify-between text-gray-700 text-sm">
-				{#if rq.isLogin() && jobPostDetailDto?.author !== rq.member.username}
+				{#if rq.isLogin() && jobPostDetailDto?.author !== rq.member.username && jobPostDetailDto?.closed === false}
 					<div>
 						{#if interested}
-							<button class="btn btn-ghost px-1 py-1 text-xs" on:click={() => removeInterest(postId)}>관심 취소</button>
+							<button class="btn btn-ghost px-1 py-1 text-xs text-gray-600" on:click={() => removeInterest(postId)}>관심 취소</button>
 						{:else}
-							<button class="btn btn-ghost px-1 py-1 text-xs" on:click={() => registerInterest(postId)}>
+							<button class="btn btn-ghost px-1 py-1 text-xs text-gray-600" on:click={() => registerInterest(postId)}>
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
 								관심 공고
 							</button>
@@ -231,6 +239,12 @@
 					<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
 					<div class="text-sm">조회 :</div>
 					<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
+					{#if jobPostDetailDto?.author === rq.member.username}
+						<button
+							class="btn btn-primary btn-xs"
+							on:click={() => goToApplicationsList(jobPostDetailDto?.id)}>지원서 확인</button
+						>
+					{/if}
 				</div>
 			</div>
 			<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
