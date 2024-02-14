@@ -27,7 +27,10 @@ public enum ErrorCode {
 
     INVALID_LOGIN_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 로그인 요청입니다."),
 
-    CANNOT_SUBMISSION(HttpStatus.CONFLICT,"지원 불가능 합니다.");
+    CANNOT_SUBMISSION(HttpStatus.CONFLICT,"지원 불가능 합니다."),
+
+    NOT_POSSIBLE_TO_APPROVE_IT_YET(HttpStatus.FORBIDDEN,"공고 마감 후 승인이 가능 합니다.");
+
 
     private final HttpStatus status;
     private final String message;

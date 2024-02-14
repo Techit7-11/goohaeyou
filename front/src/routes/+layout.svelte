@@ -9,6 +9,8 @@
 	onMount(() => {
 		rq.initAuth();
 	});
+
+	const unreadNotification = rq.apiEndPoints().GET('/api/notification/new', {});
 </script>
 
 <header>
@@ -36,7 +38,14 @@
 				>
 					<li><a href="/job-post/list">구인공고목록</a></li>
 					<li><a href="/member/me">마이페이지</a></li>
-					<li><a href="/notification/list">알림</a></li>
+					{#if rq.isLogin()}
+						<!-- {#if unreadNotification} 
+							<li><a href="/notification/list" class="text-red-500">알림</a></li>
+						{/if} -->
+						<!-- {#if !unreadNotification} -->
+						<li><a href="/notification/list">알림</a></li>
+						<!-- {/if} -->
+					{/if}
 				</ul>
 			</div>
 		</div>

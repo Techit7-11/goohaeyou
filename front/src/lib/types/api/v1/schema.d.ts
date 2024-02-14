@@ -33,6 +33,12 @@ export interface paths {
     /** 구인공고 삭제 */
     delete: operations["deleteJobPost"];
   };
+  "/api/job-posts/{id}/closing": {
+    put: operations["postEarlyClosing"];
+  };
+  "/api/job-posts/a": {
+    put: operations["a"];
+  };
   "/api/applications/{id}": {
     /** 지원서 상세 내용 */
     get: operations["detailApplication"];
@@ -86,6 +92,10 @@ export interface paths {
   "/api/notification": {
     /** 유저 별 알림리스트 */
     get: operations["getList"];
+  };
+  "/api/notification/new": {
+    /** 읽지 않은 알림 유무 확인 */
+    get: operations["unreadNotification"];
   };
   "/api/member/myposts": {
     /** 내 공고 조회 */
@@ -244,7 +254,7 @@ export interface components {
       /** @enum {string} */
       causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE";
       /** @enum {string} */
-      resultTypeCode?: "NOTICE" | "DELETE" | "MODIFY";
+      resultTypeCode?: "NOTICE" | "DELETE" | "APPROVE";
       seen?: boolean;
       url?: string;
     };
@@ -254,6 +264,13 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["NotificationDto"][];
+    };
+    RsDataBoolean: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: boolean;
     };
     JobPostDto: {
       /** Format: int64 */
@@ -519,6 +536,27 @@ export interface operations {
       };
     };
   };
+  postEarlyClosing: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
+  };
+  a: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
+  };
   /** 지원서 상세 내용 */
   detailApplication: {
     parameters: {
@@ -769,6 +807,17 @@ export interface operations {
       };
     };
   };
+  /** 읽지 않은 알림 유무 확인 */
+  unreadNotification: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataBoolean"];
+        };
+      };
+    };
+  };
   /** 내 공고 조회 */
   detailMyPosts: {
     responses: {
@@ -844,7 +893,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["JobPostDto"][];
+          "*/*": components["schemas"]["RsDataListJobPostDto"];
         };
       };
     };

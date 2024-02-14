@@ -301,6 +301,7 @@ public class JobPostService {
 
     @Transactional
     @Scheduled(cron = "0 0 0 * * *") // 00:00:00.000000에 실행
+//    @Scheduled(cron = "*/10 * * * * *")
     public void checkAndCloseExpiredJobPosts() {
         List<JobPost> expiredJobPosts = findExpiredJobPosts(LocalDate.now());
         for (JobPost jobPost : expiredJobPosts) {
@@ -308,4 +309,13 @@ public class JobPostService {
         }
     }
 
+    @Transactional
+    public void postEarlyClosing(String username, Long id) {
+        JobPost jobPost = findByIdAndValidate(id);
+        if (!canEditPost(username, jobPost.getMember().getUsername())) {
+            throw new CustomException(NOT_ABLE);
+        }
+        jobPost.update();
+        publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
+    }
 }

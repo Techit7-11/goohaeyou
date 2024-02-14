@@ -21,6 +21,7 @@ import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.APPL
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_POSSIBLE_TO_APPROVE_IT_YET;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,8 @@ public class EmployService {
     public void approve(String username, Long postId, List<Long> applicationIds) {
         JobPost jobPost = jobPostService.findByIdAndValidate(postId);
         JobPostDetail postDetail = jobPost.getJobPostDetail();
+
+        if (!jobPost.isClosed()) throw new CustomException(NOT_POSSIBLE_TO_APPROVE_IT_YET);
         checkPermissions(username,postDetail.getAuthor());
 
         List<Application> applicationList = new ArrayList<>();

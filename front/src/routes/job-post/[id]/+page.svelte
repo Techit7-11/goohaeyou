@@ -98,6 +98,14 @@
 	onMount(async () => {
 		await loadComments();
 	});
+
+	function formatDeadline(deadline) {
+		if (deadline !== null) {
+			return deadline;
+		} else {
+			return '조기 마감';
+		}
+	}
 </script>
 
 {#await load()}
@@ -135,7 +143,7 @@
 			</div>
 			<div class="grid grid-cols-2 gap-4 mt-4">
 				<div>위치: {jobPostDetailDto?.location}</div>
-				<div>공고 마감: {jobPostDetailDto?.deadLine}</div>
+				<div>공고 마감: {formatDeadline(jobPostDetailDto?.deadLine)}</div>
 				<div>
 					지원 가능 최소 나이: {jobPostDetailDto?.minAge === 0
 						? '없음'
