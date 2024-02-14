@@ -52,6 +52,10 @@
 										<div class="flex flex-col items-center">
 											{#if post.closed}
 												<div class="badge badge-neutral">마감</div>
+											{:else if post.employed}
+												<div class="badge badge-ghost my-1">구인완료</div>
+												<div class="text-xs text-gray-500">마감기한</div>
+												<div class="text-xs text-gray-500">{post.deadLine}</div>
 											{:else}
 												<div class="badge badge-primary my-1">구인중</div>
 												<div class="text-xs text-gray-500">마감기한</div>
