@@ -33,31 +33,28 @@
 	<div class="flex justify-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
 			<div class="py-5">
-
-					{#each posts ?? [] as post, index}
-						<a href="/job-post/{post.id}" class="card-link">
-                            <div class="card relative bg-base-100 shadow-xl my-4">
-                                <div class="card-body">
-                                    <div class="flex justify-between">
-                                        <div>
-                                            <div class="font-bold">no.{index + 1}  {post.title}</div>
-                                            <div class="text-sm text-gray-500">작성자 : {post.author}</div>
-                                            <div class="text-sm text-gray-500">지역 : {post.location}</div>
-                                        </div>
-                                        <div class="absolute right-0 top-1/2 transform -translate-y-1/2">
-                                            {#if post.closed}
-                                                <div class="badge badge-neutral mx-5">마감</div>
-                                            {:else}
-                                                <div class="badge badge-primary mx-5">구인중</div>
-                                            {/if}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-
-					{/each}
+				{#each posts ?? [] as post, index}
+					<a href="/job-post/{post.id}" class="card-link">
+						<div class="card relative bg-base-100 shadow-xl my-4">
+							<div class="card-body">
+								<div class="flex justify-between">
+									<div>
+										<div class="font-bold">no.{index + 1} {post.title}</div>
+										<div class="text-sm text-gray-500">작성자 : {post.author}</div>
+										<div class="text-sm text-gray-500">지역 : {post.location}</div>
+									</div>
+									<div class="absolute right-0 top-1/2 transform -translate-y-1/2">
+										{#if post.closed}
+											<div class="badge badge-neutral mx-5">마감</div>
+										{:else}
+											<div class="badge badge-primary mx-5">구인중</div>
+										{/if}
+									</div>
+								</div>
+							</div>
+						</div>
+					</a>
+				{/each}
 
 				<div class="max-w-sm mx-auto">
 					<button class="w-full btn btn-primary my-5" on:click={JobPostWritePage}>

@@ -13,19 +13,19 @@
 	};
 
 	onMount(async () => {
-            try {
-                await rq.initAuth(); // 로그인 상태를 초기화
-                if (rq.isLogout()) {
-                    rq.msgError('로그인이 필요합니다.');
-                    rq.goTo('/member/login');
-                    return;
-                }
-            } catch (error) {
-                console.error('인증 초기화 중 오류 발생:', error);
-                rq.msgError('인증 과정에서 오류가 발생했습니다.');
-                rq.goTo('/member/login');
-            }
-        });
+		try {
+			await rq.initAuth(); // 로그인 상태를 초기화
+			if (rq.isLogout()) {
+				rq.msgError('로그인이 필요합니다.');
+				rq.goTo('/member/login');
+				return;
+			}
+		} catch (error) {
+			console.error('인증 초기화 중 오류 발생:', error);
+			rq.msgError('인증 과정에서 오류가 발생했습니다.');
+			rq.goTo('/member/login');
+		}
+	});
 
 	// 글 작성 버튼을 클릭하면 실행될 함수
 	async function writeJobPost() {
