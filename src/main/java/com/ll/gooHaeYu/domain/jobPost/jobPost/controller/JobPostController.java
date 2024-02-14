@@ -104,24 +104,6 @@ public class JobPostController {
         CookieUtil.addCookie(response, cookieName, newCookieValue, 24 * 60 * 60); // 24시간
     }
 
-    @PostMapping("/{id}/interest")
-    @Operation(summary = "구인공고 관심 등록")
-    public ResponseEntity<Void> increase(@AuthenticationPrincipal MemberDetails memberDetails,
-                                         @PathVariable(name = "id") Long id) {
-        jobPostService.Interest(memberDetails.getUsername(), id);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{id}/interest")
-    @Operation(summary = "구인공고 관심 제거")
-    public ResponseEntity<Void> disinterest(@AuthenticationPrincipal MemberDetails memberDetails,
-                                            @PathVariable(name = "id") Long id) {
-        jobPostService.disinterest(memberDetails.getUsername(), id);
-
-        return ResponseEntity.noContent().build();
-    }
-
     @DeleteMapping("/{id}")
     @Operation(summary = "구인공고 삭제")
     public ResponseEntity<Void> deleteJobPost(@AuthenticationPrincipal MemberDetails memberDetails,
