@@ -19,7 +19,6 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     @NotNull
     private String body;
     private long applicationCount;
-    private long interestsCount;
     private int minAge = 0;
     private Gender gender = Gender.UNDEFINED;
     private boolean isClosed;

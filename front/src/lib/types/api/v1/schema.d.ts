@@ -276,6 +276,8 @@ export interface components {
       commentsCount: number;
       /** Format: int64 */
       incrementViewCount: number;
+      /** Format: int64 */
+      interestsCount: number;
       /** Format: date */
       deadLine?: string;
       createdAt: string;
@@ -324,14 +326,14 @@ export interface components {
       commentsCount: number;
       /** Format: int64 */
       incrementViewCount: number;
+      /** Format: int64 */
+      interestsCount: number;
       /** Format: date */
       deadLine?: string;
       createdAt: string;
       body: string;
       /** Format: int64 */
       applicationCount?: number;
-      /** Format: int64 */
-      interestsCount?: number;
       /** Format: int32 */
       minAge?: number;
       /** @enum {string} */
@@ -739,8 +741,8 @@ export interface operations {
   approve: {
     parameters: {
       path: {
-        arg1: number;
-        arg2: number[];
+        postId: number;
+        applicationIds: number[];
       };
     };
     responses: {
@@ -754,10 +756,10 @@ export interface operations {
   socialLogin: {
     parameters: {
       query: {
-        arg0: string;
+        redirectUrl: string;
       };
       path: {
-        arg1: string;
+        providerTypeCode: string;
       };
     };
     responses: {
@@ -896,7 +898,7 @@ export interface operations {
   getList_1: {
     parameters: {
       path: {
-        arg1: number;
+        postId: number;
       };
     };
     responses: {
