@@ -33,22 +33,32 @@
 	<div class="flex justify-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
 			<div class="py-5">
-				<ul>
+
 					{#each posts ?? [] as post, index}
-						<li>
-							<a href="/job-post/{post.id}">(No.{index + 1}) {post.title}</a>
-							<a href="/job-post/{post.id}">작성자 : {post.author}</a>
-							<a href="/job-post/{post.id}">{post.location}</a>
-							<a href="/job-post/{post.id}">
-								{#if post.closed}
-									<div class="badge badge-neutral">마감</div>
-								{:else}
-									<div class="badge badge-primary">구인중</div>
-								{/if}
-							</a>
-						</li>
+						<a href="/job-post/{post.id}" class="card-link">
+                            <div class="card relative bg-base-100 shadow-xl my-4">
+                                <div class="card-body">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <div class="font-bold">no.{index + 1}  {post.title}</div>
+                                            <div class="text-sm text-gray-500">작성자 : {post.author}</div>
+                                            <div class="text-sm text-gray-500">지역 : {post.location}</div>
+                                        </div>
+                                        <div class="absolute right-0 top-1/2 transform -translate-y-1/2">
+                                            {#if post.closed}
+                                                <div class="badge badge-neutral mx-5">마감</div>
+                                            {:else}
+                                                <div class="badge badge-primary mx-5">구인중</div>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+
 					{/each}
-				</ul>
+
 				<div class="max-w-sm mx-auto">
 					<button class="w-full btn btn-primary my-5" on:click={JobPostWritePage}>
 						글 작성하기
@@ -61,46 +71,7 @@
 {/await}
 
 <style>
-	ul {
-		list-style-type: none;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	li {
-		background-color: #ffffff;
-		margin: 12px 0;
-		padding: 10px;
-		padding-left: 20px;
-		width: 80%; /* 화면 너비의 대부분을 차지 */
-		max-width: 600px; /* 최대 너비 설정 */
-		box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* 섬세한 그림자 효과 */
-		border-radius: 8px; /* 부드럽게 둥근 모서리 */
-		display: flex;
-		flex-direction: column; /* 세로 정렬 */
-		border: 1px solid #eee; /* 미세한 경계선 */
-	}
-
-	a {
-		color: #43404e;
-		text-decoration: none; /* 밑줄 제거 */
-		font-weight: bold; /* 글씨 굵게 */
-		margin-bottom: 5px; /* 요소 사이의 여백 */
-	}
-
 	a:hover {
 		color: #a5a5a5; /* 호버 시 색상 변경 */
-	}
-
-	footer {
-		width: 100%;
-		background-color: #f7f7f7; /* 밝은 회색 배경 */
-		color: #6f6d70;
-		text-align: center;
-		padding: 20px 0;
-		box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* 상단으로 그림자 효과 */
-		border-top: 2px solid #eee; /* 상단 경계선 */
 	}
 </style>
