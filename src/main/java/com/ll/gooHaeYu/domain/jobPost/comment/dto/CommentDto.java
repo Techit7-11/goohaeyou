@@ -3,14 +3,18 @@ package com.ll.gooHaeYu.domain.jobPost.comment.dto;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentDto {
     @NotNull
     private Long id;

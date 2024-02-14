@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +18,8 @@ public class ApplicationDto {
     @NotNull
     private Long jobPostId;
     @NotNull
+    private String jobPostAuthorUsername;
+    @NotNull
     private String jobPostName;
     @NotNull
     private String author;
@@ -24,6 +27,12 @@ public class ApplicationDto {
     private Long postId;
     @NotNull
     private String body;
+    @NotNull
+    private LocalDate birth;
+    @NotNull
+    private String phone;
+    @NotNull
+    private String location;
     private LocalDateTime createdAt;
     private Boolean approve;
 
@@ -31,10 +40,14 @@ public class ApplicationDto {
         return ApplicationDto.builder()
                 .id(application.getId())
                 .jobPostId(application.getJobPostDetail().getJobPost().getId())
+                .jobPostAuthorUsername(application.getJobPostDetail().getAuthor())
                 .jobPostName(application.getJobPostDetail().getJobPost().getTitle())
                 .author(application.getMember().getUsername())
                 .postId(application.getJobPostDetail().getJobPost().getId())
                 .body(application.getBody())
+                .birth(application.getMember().getBirth())
+                .phone(application.getMember().getPhoneNumber())
+                .location(application.getMember().getLocation())
                 .createdAt(application.getCreatedAt())
                 .approve(application.getApprove())
                 .build();

@@ -47,7 +47,9 @@ public class JobPost extends BaseTimeEntity {
 
     @Column(nullable = false)
     private LocalDate deadline;
-//    private LocalDateTime deadline;
+
+    @Column(nullable = false)
+    private boolean employed;
 
     @OneToOne(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private JobPostDetail jobPostDetail;
@@ -61,6 +63,10 @@ public class JobPost extends BaseTimeEntity {
 
     public void close() {
         this.closed = true;
+    }
+
+    public void employed() {
+        this.employed = true;
     }
 
     public void increaseCommentsCount() {

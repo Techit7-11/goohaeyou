@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,20 +39,20 @@ public class ApplicationController {
 
     @PutMapping("/{id}")
     @Operation(summary = "지원서 수정")
-    public ResponseEntity<Void> modifyApplication(@AuthenticationPrincipal MemberDetails memberDetails,
+    public RsData<Void> modifyApplication(@AuthenticationPrincipal MemberDetails memberDetails,
                                            @PathVariable(name = "id") Long id,
                                            @Valid @RequestBody ApplicationForm.Modify form) {
         applicationService.modifyApplication(memberDetails.getUsername(), id, form);
 
-        return ResponseEntity.noContent().build();
+        return RsData.of("204", "NO_CONTENT");
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "지원서 삭제")
-    public ResponseEntity<Void> deleteApplication(@AuthenticationPrincipal MemberDetails memberDetails,
+    public RsData<Void> deleteApplication(@AuthenticationPrincipal MemberDetails memberDetails,
                                            @PathVariable(name = "id") Long id) {
         applicationService.deleteApplication(memberDetails.getUsername(), id);
 
-        return ResponseEntity.noContent().build();
+        return RsData.of("204", "NO_CONTENT");
     }
 }

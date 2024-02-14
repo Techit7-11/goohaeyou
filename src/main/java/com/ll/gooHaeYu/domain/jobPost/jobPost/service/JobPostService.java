@@ -16,11 +16,15 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.global.event.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +35,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.*;
+import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
+import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
@@ -42,9 +49,10 @@ public class JobPostService {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final EssentialRepository essentialRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public Long writePost(String username, JobPostForm.Register form) {
+    public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
         JobPost newPost = JobPost.builder()
                 .member(memberService.getMember(username))
                 .title(form.getTitle())
@@ -67,8 +75,7 @@ public class JobPostService {
         jobPostRepository.save(newPost);
         jobPostdetailRepository.save(postDetail);
         essentialRepository.save(essential);
-
-        return newPost.getId();
+        return form;
     }
 
     public JobPostDetailDto findById(Long id) {
@@ -81,8 +88,9 @@ public class JobPostService {
     }
 
     @Transactional
-    public void modifyPost(String username, Long id, JobPostForm.Modify form) {
+    public JobPostForm.Modify modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+        JobPost jobPost = postDetail.getJobPost();
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
@@ -97,9 +105,13 @@ public class JobPostService {
            Application application = iterator.next();
            if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - application.getMember().getBirth().getYear()){
                applicationsToRemove.add(application);
+               publisher.publishEvent(new ChangeOfPostEvent(this,jobPost,application, POST_MODIFICATION,DELETE));
+           }else {
+               publisher.publishEvent(new ChangeOfPostEvent(this,jobPost,application,POST_MODIFICATION,NOTICE));
            }
        }
        postDetail.getApplications().removeAll(applicationsToRemove);
+        return form;
     }
 
     @Transactional
@@ -117,6 +129,7 @@ public class JobPostService {
         JobPost post = findByIdAndValidate(postId);
 
         Member member = findUserByUserNameValidate(username);
+        publisher.publishEvent(new PostDeletedEvent(this,post,member,DELETE));
         if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
             jobPostRepository.deleteById(postId);
         } else {
@@ -158,6 +171,7 @@ public class JobPostService {
                 .build());
 
         postDetail.getJobPost().increaseInterestCount();
+        publisher.publishEvent(new PostGetInterestedEvent(this, postDetail, member));
     }
 
     @Transactional
@@ -236,21 +250,22 @@ public class JobPostService {
         return spec;
     }
 
-    @Transactional
-    public void deadline(String username, Long postId) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
-        if (!canEditPost(username,postDetail.getAuthor())) {
-            throw new CustomException(NOT_ABLE);
-        }
-
-        List<Application> applicationList = postDetail.getApplications().stream()
-                .filter(application -> application.getApprove() != null && !application.getApprove())
-                .collect(Collectors.toList());
-
-        for (Application application : applicationList) {
-            postDetail.getApplications().remove(application);
-        }
-    }
+//    @Transactional
+//    public void deadline(String username, Long postId) {
+//        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
+//        JobPost jobPost = postDetail.getJobPost();
+//        if (!canEditPost(username,postDetail.getAuthor())) {
+//            throw new CustomException(NOT_ABLE);
+//        }
+//
+//        List<Application> applicationList = postDetail.getApplications().stream()
+//                .filter(application -> application.getApprove() != null && !application.getApprove())
+//                .collect(Collectors.toList());
+//
+//        for (Application application : applicationList) {
+//            postDetail.getApplications().remove(application);
+//        }
+//    }
 
 
     public List<JobPost> findExpiredJobPosts(LocalDate currentDate) { //    ver.  LocalDate
@@ -266,6 +281,31 @@ public class JobPostService {
     public void closeJobPost(JobPost jobPost) {
         jobPost.close();
         jobPostRepository.save(jobPost);
+    }
+
+    @EventListener
+    @Transactional
+    public void jobPostClosedEventListen(PostDeadlineEvent event) {
+        JobPost jobPost = event.getJobPost();
+        jobPost.close();
+        jobPostRepository.save(jobPost);
+    }
+
+    @EventListener
+    @Transactional
+    public void jobPostEmployedEventListen(PostEmployedEvent event) {
+        JobPost jobPost = event.getJobPost();
+        jobPost.employed();
+        jobPostRepository.save(jobPost);
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *") // 00:00:00.000000에 실행
+    public void checkAndCloseExpiredJobPosts() {
+        List<JobPost> expiredJobPosts = findExpiredJobPosts(LocalDate.now());
+        for (JobPost jobPost : expiredJobPosts) {
+            publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
+        }
     }
 
 }

@@ -11,11 +11,7 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
                 .allowedOrigins(
-                        "https://cdpn.io",
-                        "http://localhost:5173",
-                        AppConfig.getSiteFrontUrl(),
-                        "https://www.goohaeyou.site",
-                        "https://api.www.goohaeyou.site"
+                        AppConfig.getSiteFrontUrl()
                 )
                 .allowedMethods("*")
                 .allowedHeaders("*")
