@@ -10,13 +10,39 @@
 		rq.goTo('/job-post');
 	}
 
+	let sortBy_: string = 'createdAt'; // 초기 정렬 기준
+	let sortOrder_: string = 'desc'; // 초기 정렬 순서
+
 	async function load() {
 		const page_ = parseInt($page.url.searchParams.get('page') ?? '1');
+
+		let sortByParam = sortBy_; // 정렬 기준
+		let sortOrderParam = sortOrder_; // 정렬 순서
+
+		// '지원자 많은 순'인 경우 추가로 'id'를 2차 정렬 기준으로 설정
+		if (sortBy_ === 'applicationCount' && sortOrder_ === 'desc') {
+			sortByParam = `${sortBy_},id`;
+			sortOrderParam = `${sortOrder_},asc`;
+		}
+
+		// '댓글 많은 순'인 경우 추가로 'id'를 2차 정렬 기준으로 설정
+		if (sortBy_ === 'commentsCount' && sortOrder_ === 'desc') {
+			sortByParam = `${sortBy_},id`;
+			sortOrderParam = `${sortOrder_},asc`;
+		}
+
+		// '마감 빠른 순'인 경우 추가로 'applicationCount'을 2차 정렬 기준으로 설정
+		if (sortBy_ === 'deadline' && sortOrder_ === 'asc') {
+			sortByParam = `${sortBy_},applicationCount`;
+			sortOrderParam = `${sortOrder_},desc`;
+		}
 
 		const { data } = await rq.apiEndPoints().GET('/api/job-posts/sort', {
 			params: {
 				query: {
-					page: page_
+					page: page_,
+					sortBy: sortByParam,
+					sortOrder: sortOrderParam
 				}
 			}
 		});
@@ -25,7 +51,31 @@
 
 		return data!;
 	}
+
+	function handleSortSelect(event) {
+		const selectedValue = event.target.value;
+		const [sortBy, sortOrder] = selectedValue.split(' '); // 선택된 값에서 정렬 기준과 정렬 순서를 분리
+
+		sortBy_ = sortBy;
+		sortOrder_ = sortOrder;
+
+		// 정렬 기준과 정렬 순서를 사용하여 load 함수 호출
+		load();
+	}
 </script>
+
+<div class="sort mx-auto w-80">
+	<select class="sort-select select-bordered w-full max-w-xs" on:change={handleSortSelect}>
+		<option value="createdAt desc">최신 등록 순</option>
+		<option value="createdAt asc">오래된 순</option>
+		<option value="applicationCount desc">지원자 많은 순</option>
+		<option value="commentsCount desc">댓글 많은 순</option>
+		<option value="incrementViewCount desc">조회수 높은 순</option>
+		<option value="interestsCount desc">관심 많은 순</option>
+		<option value="title asc">공고 제목 순</option>
+		<option value="deadline asc">마감 빠른 순</option>
+	</select>
+</div>
 
 {#await load()}
 	<span class="loading loading-spinner loading-lg"></span>
