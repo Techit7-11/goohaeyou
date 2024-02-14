@@ -126,7 +126,7 @@
 			{#if application.approve == null && application.jobPostAuthorUsername == rq.member.username}
 				<div class="text-center mt-2">
 					<button
-						class="btn btn-accent"
+						class="btn btn-active btn-accent"
 						on:click={() => approve(application.jobPostId, application.id)}>승인하기</button
 					>
 				</div>
