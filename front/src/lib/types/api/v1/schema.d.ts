@@ -178,6 +178,13 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["Modify"];
     };
+    RsDataVoid: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: Record<string, never>;
+    };
     RsDataRegister: {
       resultCode?: string;
       /** Format: int32 */
@@ -550,7 +557,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
       };
     };
   };
@@ -585,7 +594,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
       };
     };
   };
