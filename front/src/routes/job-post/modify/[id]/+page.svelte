@@ -14,27 +14,27 @@
 	let postId;
 
 	onMount(async () => {
-            postId = parseInt($page.params.id);
-            console.log('Mounted - postId:', postId);
-            if (!isNaN(postId)) {
-                console.log('Valid postId, loading job post detail...');
-                await loadJobPostDetail(postId);
-            }
-        });
+		postId = parseInt($page.params.id);
+		console.log('Mounted - postId:', postId);
+		if (!isNaN(postId)) {
+			console.log('Valid postId, loading job post detail...');
+			await loadJobPostDetail(postId);
+		}
+	});
 
 	async function loadJobPostDetail(postId) {
-            try {
-                console.log(`Loading job post detail for postId: ${postId}`);
-                const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
-                console.log('Job post data loaded:', data);
-                if (data) {
-                    jobPostData = { ...jobPostData, ...data.data };
-                    console.log('jobPostData updated:', jobPostData);
-                }
-            } catch (error) {
-                console.error('Error loading job post detail:', error);
-            }
-        }
+		try {
+			console.log(`Loading job post detail for postId: ${postId}`);
+			const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
+			console.log('Job post data loaded:', data);
+			if (data) {
+				jobPostData = { ...jobPostData, ...data.data };
+				console.log('jobPostData updated:', jobPostData);
+			}
+		} catch (error) {
+			console.error('Error loading job post detail:', error);
+		}
+	}
 	// 공고 수정 제출 함수
 	async function submitForm() {
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}`, { body: jobPostData });

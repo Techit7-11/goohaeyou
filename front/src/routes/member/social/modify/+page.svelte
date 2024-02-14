@@ -1,48 +1,48 @@
 <script>
-    import { onMount } from 'svelte';
-    import rq from '$lib/rq/rq.svelte';
+	import { onMount } from 'svelte';
+	import rq from '$lib/rq/rq.svelte';
 
-    // 업데이트할 회원 정보 데이터
-    let updatedMemberData = {
-        name: '',
-        phoneNumber: '',
-        gender: 'MALE',
-        location: '',
-        birth: '2000-01-01'
-    };
+	// 업데이트할 회원 정보 데이터
+	let updatedMemberData = {
+		name: '',
+		phoneNumber: '',
+		gender: 'MALE',
+		location: '',
+		birth: '2000-01-01'
+	};
 
-    onMount(async () => {
-        await loadMemberDetail();
-    });
+	onMount(async () => {
+		await loadMemberDetail();
+	});
 
-    // 회원 정보를 불러와서 폼에 채워주는 함수
-    async function loadMemberDetail() {
-        try {
-            const { data } = await rq.apiEndPoints().GET('/api/member');
-            console.log('Member data loaded:', data.data);
-            if (data) {
-                updatedMemberData = {
-                    ...updatedMemberData,
-                    ...data.data
-                };
-            }
-        } catch (error) {
-            console.error('Error loading member detail:', error);
-            rq.msgError('회원 정보를 불러오는데 실패했습니다.');
-        }
-    }
+	// 회원 정보를 불러와서 폼에 채워주는 함수
+	async function loadMemberDetail() {
+		try {
+			const { data } = await rq.apiEndPoints().GET('/api/member');
+			console.log('Member data loaded:', data.data);
+			if (data) {
+				updatedMemberData = {
+					...updatedMemberData,
+					...data.data
+				};
+			}
+		} catch (error) {
+			console.error('Error loading member detail:', error);
+			rq.msgError('회원 정보를 불러오는데 실패했습니다.');
+		}
+	}
 
-    // 업데이트 버튼을 클릭하면 실행될 함수
-    async function updateMember() {
-        const response = await rq.apiEndPoints().PUT('/api/member/social', { body: updatedMemberData });
+	// 업데이트 버튼을 클릭하면 실행될 함수
+	async function updateMember() {
+		const response = await rq.apiEndPoints().PUT('/api/member/social', { body: updatedMemberData });
 
-        if (response.data?.statusCode === 200) {
-            rq.msgAndRedirect({ msg: '회원정보 수정 완료' }, undefined, '/');
-        } else {
-            // Error handling remains the same
-            console.log('Error updating member:', response.data?.msg);
-        }
-    }
+		if (response.data?.statusCode === 200) {
+			rq.msgAndRedirect({ msg: '회원정보 수정 완료' }, undefined, '/');
+		} else {
+			// Error handling remains the same
+			console.log('Error updating member:', response.data?.msg);
+		}
+	}
 
 	// 다음 주소 API 팝업 열기
 	function openDaumAddressPopup() {
