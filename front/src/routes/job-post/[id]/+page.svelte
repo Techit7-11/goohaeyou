@@ -101,58 +101,70 @@
 </script>
 
 {#await load()}
-	<div class="flex justify-center items-center h-screen">
-		<span class="loading loading-dots loading-md"></span>
+	<div class="flex items-center justify-center min-h-screen">
+		<span class="loading loading-dots loading-lg"></span>
 	</div>
 {:then { data: jobPostDetailDto }}
 	<div class="p-6 max-w-4xl mx-auto my-10 bg-white rounded-box shadow-lg">
+		<div>{jobPostDetailDto?.author}</div>
 		<div class="flex justify-between items-center">
-			<div class="text-gray-500">No.{jobPostDetailDto?.id}</div>
 			<div class="text-xl font-bold">{jobPostDetailDto?.title}</div>
 			<div class="flex items-center">
 				{#if jobPostDetailDto?.author === rq.member.username}
 					<button class="btn btn-primary btn-xs mr-2" on:click={editPost}>수정하기</button>
 					<!-- 수정 -->
 					<button class="btn btn-xs" on:click={deletePost}>삭제하기</button>
-				{:else if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin}  <!-- 지원 가능한 경우 --> 
-					<button class="btn btn-outline btn-info" on:click={apply}>지원하기</button>
+				{:else if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin}
+					<!-- 지원 가능한 경우 -->
+					<button class="btn btn btn-neutral" on:click={apply}>지원하기</button>
 				{/if}
 			</div>
 		</div>
 		<div class="mt-4">
-			<div class="flex justify-between text-gray-700 text-sm">
-				<div>{jobPostDetailDto?.author}</div>
-				<div>등록일시 {jobPostDetailDto?.createdAt}</div>
-			</div>
-			<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
-				<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
-			</div>
-			<div class="mt-4 flex items-center space-x-2">
-				{#if jobPostDetailDto?.employed}
-					<span class="badge badge-outline badge-error">구인완료</span>
+			<div class="flex flex-col items-end text-gray-700 text-sm">
+				<div>등록 일자 : {jobPostDetailDto?.createdAt}</div>
+				{#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifyAt}
+					<div class="text-sm">수정 일자 : {jobPostDetailDto?.modifyAt}</div>
 				{/if}
-				<span class="badge badge-outline {jobPostDetailDto?.closed ? 'badge-error' : 'badge-success'}">
-					{jobPostDetailDto?.closed ? '공고마감' : '지원가능'}
-				</span>
 			</div>
-			<div class="grid grid-cols-2 gap-4 mt-4">
-				<div>위치: {jobPostDetailDto?.location}</div>
-				<div>공고 마감: {jobPostDetailDto?.deadLine}</div>
+			<div class="divider"></div>
+			<div class="grid grid-cols-4 gap-4 my-4">
+				<div class="text-sm">모집 상태 :</div>
 				<div>
-					지원 가능 최소 나이: {jobPostDetailDto?.minAge === 0
-						? '없음'
-						: jobPostDetailDto?.minAge ?? '없음'}
+					{#if jobPostDetailDto?.employed}
+						<span class="badge badge-outline badge-error">구인완료</span>
+					{/if}
+					<span
+						class="badge badge-outline {jobPostDetailDto?.closed ? 'badge-error' : 'badge-success'}"
+					>
+						{jobPostDetailDto?.closed ? '공고마감' : '지원가능'}
+					</span>
 				</div>
-				<div>
-					성별 구분: {jobPostDetailDto?.gender === 'MALE'
+				<div class="text-sm">공고 마감 :</div>
+				<div class="text-sm">{jobPostDetailDto?.deadLine}</div>
+				<div class="text-sm">지원 가능 나이 :</div>
+				<div class="text-sm">
+					{jobPostDetailDto?.minAge === 0 ? '없음' : jobPostDetailDto?.minAge ?? '없음'}
+				</div>
+				<div class="text-sm">성별 구분 :</div>
+				<div class="text-sm">
+					{jobPostDetailDto?.gender === 'MALE'
 						? '남'
 						: jobPostDetailDto?.gender === 'FEMALE'
 							? '여'
 							: '무관'}
 				</div>
-				<div>최종 수정일자: {jobPostDetailDto?.modifyAt}</div>
-				<div>조회수: {jobPostDetailDto?.incrementViewCount}</div>
-				<div>관심 등록 수: {jobPostDetailDto?.interestsCount}</div>
+			</div>
+			<div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
+			<div class="divider"></div>
+			<div class="flex justify-end text-gray-700 text-sm">
+				<div class="text-sm">관심 등록 :</div>
+				<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
+				<div class="text-sm">조회 :</div>
+				<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
+			</div>
+			<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
+				<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
 			</div>
 		</div>
 	</div>
