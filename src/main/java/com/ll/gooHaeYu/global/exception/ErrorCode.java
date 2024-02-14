@@ -34,7 +34,9 @@ public enum ErrorCode {
 
     UNSATISFIED_REQUIREMENTS(HttpStatus.FORBIDDEN, "지원 필수요건에 충족되지 못합니다."),
 
-    NOT_ELIGIBLE_FOR_OWN_JOB(HttpStatus.FORBIDDEN, "본인의 공고에는 지원이 불가능합니다.");
+    NOT_ELIGIBLE_FOR_OWN_JOB(HttpStatus.FORBIDDEN, "본인의 공고에는 지원이 불가능합니다."),
+
+    NOT_POSSIBLE_TO_APPROVE_IT_YET(HttpStatus.FORBIDDEN,"공고 마감 후 승인이 가능 합니다.");;
 
     private final HttpStatus status;
     private final String message;
