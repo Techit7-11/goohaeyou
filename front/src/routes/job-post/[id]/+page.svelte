@@ -196,8 +196,10 @@
 				</div>
 			</div>
 			<div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
-      <div>
-					{#if rq.isLogin() && jobPostDetailDto?.author !== rq.member.username}
+			<div class="divider"></div>
+			<div class="flex justify-between text-gray-700 text-sm">
+				{#if rq.isLogin() && jobPostDetailDto?.author !== rq.member.username}
+					<div>
 						{#if interested}
 							<button class="btn btn-ghost px-1 py-1 text-xs" on:click={() => removeInterest(postId)}>관심 취소</button>
 						{:else}
@@ -206,14 +208,14 @@
 								관심 공고
 							</button>
 						{/if}
-				 {/if}
-			</div>
-			<div class="divider"></div>
-			<div class="flex justify-end text-gray-700 text-sm">
-				<div class="text-sm">관심 등록 :</div>
-				<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
-				<div class="text-sm">조회 :</div>
-				<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
+					</div>
+				{/if}
+				<div class="flex items-center">
+					<div class="text-sm">관심 등록 :</div>
+					<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
+					<div class="text-sm">조회 :</div>
+					<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
+				</div>
 			</div>
 			<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
 				<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>

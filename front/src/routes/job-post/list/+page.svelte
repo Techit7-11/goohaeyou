@@ -110,7 +110,7 @@
 											</div>
 											<div class="flex justify-between">
 												<div class="text-xs text-gray-500 mr-6">찜</div>
-												<div class="text-xs"></div>
+												<div class="text-xs">{post.interestsCount}</div>
 											</div>
 										</div>
 										<div class="flex flex-col items-center">
