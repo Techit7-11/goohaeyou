@@ -723,8 +723,8 @@ export interface operations {
   approve: {
     parameters: {
       path: {
-        postId: number;
-        applicationIds: number[];
+        arg1: number;
+        arg2: number[];
       };
     };
     responses: {
@@ -738,10 +738,10 @@ export interface operations {
   socialLogin: {
     parameters: {
       query: {
-        redirectUrl: string;
+        arg0: string;
       };
       path: {
-        providerTypeCode: string;
+        arg1: string;
       };
     };
     responses: {
@@ -864,7 +864,7 @@ export interface operations {
   getList_1: {
     parameters: {
       path: {
-        postId: number;
+        arg1: number;
       };
     };
     responses: {

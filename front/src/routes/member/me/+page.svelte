@@ -7,14 +7,19 @@
 	}
 
 	onMount(async () => {
-		// 로그인 상태를 비동기적으로 확인
-		await rq.initAuth(); // 로그인 상태를 초기화
-		if (rq.isLogout()) {
-			rq.msgError('로그인이 필요합니다.');
-			rq.goTo('/member/login');
-			return;
-		}
-	});
+        try {
+            await rq.initAuth(); // 로그인 상태를 초기화
+            if (rq.isLogout()) {
+                rq.msgError('로그인이 필요합니다.');
+                rq.goTo('/member/login');
+                return;
+            }
+        } catch (error) {
+            console.error('인증 초기화 중 오류 발생:', error);
+            rq.msgError('인증 과정에서 오류가 발생했습니다.');
+            rq.goTo('/member/login');
+        }
+    });
 
 	async function loadMyPosts() {
 		const { data } = await rq.apiEndPoints().GET('/api/member/myposts', {});
@@ -112,13 +117,13 @@
 											<div class="card">
 												<div class="text-sm text-gray-500">no.{index + 1}</div>
 												<div class="text-xl font-bold">{post.title}</div>
+											</div>
+										</a>
 												<button
-													class="btn btn-primary my-3"
+													class="btn btn-primary my-3 w-full"
 													on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
 												>
 												<div class="divider"></div>
-											</div>
-										</a>
 									{/each}
 								{/await}
 							</div>
@@ -129,7 +134,6 @@
 								role="tab"
 								class="tab"
 								aria-label="나의 지원"
-								checked
 							/>
 							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyApplications()}
