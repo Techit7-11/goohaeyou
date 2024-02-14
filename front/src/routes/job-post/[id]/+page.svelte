@@ -52,12 +52,10 @@
 		
 		if (response.data?.msg == 'CUSTOM_EXCEPTION') {
 			rq.msgAndRedirect({ msg: response.data?.data?.message }, undefined, `/job-post/${postId}`);
-		}
-
-		if (response.data?.statusCode === 204) {
+		} else if (response.data?.statusCode === 204) {
 			interested = true;
 		} else {
-			console.error('관심 등록 실패');
+			console.error('관심 등록에 실패하였습니다.');
 		}
 	}
 
@@ -71,7 +69,7 @@
 		if (response.data?.statusCode === 204) {
 			interested = false;
 		} else {
-			console.error('관심 취소 실패');
+			console.error('관심 취소에 실패하였습니다.');
 		}
 	}
 
