@@ -154,7 +154,7 @@
 			<div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
 			<div class="divider"></div>
 			<div class="flex justify-end text-gray-700 text-sm">
-				<div class="text-sm">관심 등록 수 :</div>
+				<div class="text-sm">관심 등록:</div>
 				<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
 				<div class="text-sm">조회 :</div>
 				<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
