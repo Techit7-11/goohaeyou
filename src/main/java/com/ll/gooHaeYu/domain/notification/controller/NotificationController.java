@@ -50,7 +50,7 @@ public class NotificationController {
 
     @GetMapping("/new")
     @Operation(summary = "읽지 않은 알림 유무 확인")
-    public RsData<Boolean> unreadNotification(@PathVariable MemberDetails memberDetails) {
+    public RsData<Boolean> unreadNotification(Authentication memberDetails) {
         return RsData.of(notificationService.unreadNotification(memberDetails.getName()));
     }
 

@@ -272,32 +272,6 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["NotificationDto"][];
     };
-    GrantedAuthority: {
-      authority?: string;
-    };
-    MemberDetails: {
-      password?: string;
-      name?: string;
-      enabled?: boolean;
-      location?: string;
-      /** Format: int64 */
-      id?: number;
-      attributes?: {
-        [key: string]: Record<string, never>;
-      };
-      /** @enum {string} */
-      role?: "ADMIN" | "USER" | "GUEST";
-      username?: string;
-      phoneNumber?: string;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      /** Format: date */
-      birth?: string;
-      authorities?: components["schemas"]["GrantedAuthority"][];
-      accountNonLocked?: boolean;
-      accountNonExpired?: boolean;
-      credentialsNonExpired?: boolean;
-    };
     RsDataBoolean: {
       resultCode?: string;
       /** Format: int32 */
@@ -846,11 +820,6 @@ export interface operations {
   };
   /** 읽지 않은 알림 유무 확인 */
   unreadNotification: {
-    parameters: {
-      path: {
-        memberDetails: components["schemas"]["MemberDetails"];
-      };
-    };
     responses: {
       /** @description OK */
       200: {
