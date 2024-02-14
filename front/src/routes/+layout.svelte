@@ -6,6 +6,23 @@
 
 	const { children } = $props();
 
+  function handleAuthAction() {
+    if (rq.isLogin()) {
+      rq.logoutAndRedirect('/');
+    } else {
+      window.location.href = '/member/login';
+    }
+  }
+  function NavMyPage() {
+   window.location.href = '/member/me';
+      }
+        function NavHomepage() {
+         window.location.href = '/';
+            }
+              function NavAlert() {
+               window.location.href = '/notification/list';
+                  }
+
 	onMount(() => {
 		rq.initAuth();
 	});
@@ -109,3 +126,22 @@
 		<p>© 2024 All Rights Reserved by Techit7-11번과_GooHaeYou</p>
 	</aside>
 </footer>
+<div class="btm-nav">
+   <button on:click={NavHomepage}>
+    <span class="btm-nav-label">Home</span>
+  </button>
+   <button on:click={NavAlert}>
+    <span class="btm-nav-label">alert</span>
+  </button>
+  <button on:click={handleAuthAction}>
+    {#if rq.isLogout()}
+      <span class="btm-nav-label">Login</span>
+    {/if}
+    {#if rq.isLogin()}
+      <span class="btm-nav-label">Logout</span>
+    {/if}
+  </button>
+   <button on:click={NavMyPage}>
+      <span class="btm-nav-label">MyPage</span>
+    </button>
+</div>
