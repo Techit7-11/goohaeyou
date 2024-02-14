@@ -171,7 +171,9 @@ public class JobPostService {
                 .build());
 
         postDetail.getJobPost().increaseInterestCount();
-        publisher.publishEvent(new PostGetInterestedEvent(this, postDetail, member));
+        if (!postDetail.getAuthor().equals(username)) {
+            publisher.publishEvent(new PostGetInterestedEvent(this, postDetail, member));
+        }
     }
 
     @Transactional

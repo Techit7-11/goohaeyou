@@ -29,31 +29,35 @@
 	onMount(() => {
 		rq.initAuth();
 	});
-	let a: boolean = false;
-	async function unreadNotification() {
-		let result = false;
-		if (rq.isLogin()) {
-			const response = await rq.apiEndPoints().GET(`/api/notification/new`);
-			console.log('데이터');
-			console.log(response.data?.data);
-			if (response.data?.data !== undefined) {
-				a = response.data?.data;
-				console.log(typeof response.data?.data);
-			}
-		}
-	}
 
-	function runMethodPeriodically() {
-		// 30초마다 메소드를 실행하기 위해 setInterval 함수 사용
-		setInterval(() => {
-			unreadNotification();
-			console.log('a 값, 타입');
-			console.log(a);
-			console.log(typeof a);
-		}, 30000); // 30초를 밀리초 단위로 표현한 값
-	}
+	// 해당 부분은 읽지 않은 알림이 있을 경우 ui 변경 시도를 위해 작성했습니다.
+	// 논리 타입의 a는 변경이 잘 됩니다.
+	// 하지만 ui부분에서 a값 변경과 동시에 추가적인 ui변경은 안됩니다.
+	// let a: boolean = false;
+	// async function unreadNotification() {
+	// 	let result = false;
+	// 	if (rq.isLogin()) {
+	// 		const response = await rq.apiEndPoints().GET(`/api/notification/new`);
+	// 		console.log('데이터');
+	// 		console.log(response.data?.data);
+	// 		if (response.data?.data !== undefined) {
+	// 			a = response.data?.data;
+	// 			console.log(typeof response.data?.data);
+	// 		}
+	// 	}
+	// }
 
-	runMethodPeriodically();
+	// function runMethodPeriodically() {
+	// 	// 30초마다 메소드를 실행하기 위해 setInterval 함수 사용
+	// 	setInterval(() => {
+	// 		unreadNotification();
+	// 		console.log('a 값, 타입');
+	// 		console.log(a);
+	// 		console.log(typeof a);
+	// 	}, 30000); // 30초를 밀리초 단위로 표현한 값
+	// }
+
+	// runMethodPeriodically();
 </script>
 
 <header>
@@ -161,8 +165,8 @@
 			/></svg
 		>
 	</button>
-	{#if a}
-		<button on:click={NavAlert}>
+	<!-- {#if a} -->
+	<!-- <button on:click={NavAlert}>
 			<span class="btm-nav-label"></span>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -178,24 +182,25 @@
 				/></svg
 			>
 		</button>
-	{:else}
-		<button on:click={NavAlert}>
-			<span class="btm-nav-label"></span>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="h-6 w-6"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				><path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-				/></svg
-			>
-		</button>
-	{/if}
+	{:else} -->
+	<button on:click={NavAlert}>
+		<span class="btm-nav-label"></span>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-6 w-6"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			><path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="2"
+				d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+			/></svg
+		>
+	</button>
+	<!-- {/if} -->
+
 	<button on:click={NavMyPage}>
 		<span class="btm-nav-label"></span>
 		<svg
