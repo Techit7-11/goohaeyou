@@ -38,12 +38,12 @@
 	}
 </script>
 
-<div class="container">
-	<select class="select w-full max-w-xs" name="kwType">
-		<option value="titleOrBody">제목 + 내용</option>
-		<option value="title">제목</option>
-		<option value="body">내용</option>
-	</select>
+<div class="container flex justify-center items-center">
+    <select class="select w-full max-w-xs text-center " name="kwType">
+        <option value="titleOrBody">제목 + 내용</option>
+        <option value="title">제목</option>
+        <option value="body">내용</option>
+    </select>
 	<input
 		name="kw"
 		type="text"
@@ -51,7 +51,9 @@
 		class="input w-full max-w-xs"
 		on:keyup={handleKeyPress}
 	/>
-	<button class="btn" on:click={loading}>검색</button>
+	<button class="btn btn-ghost btn-circle" on:click={loading}>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        </button>
 </div>
 
 <div>

@@ -41,7 +41,7 @@
 							<div class="card-body">
 								<div class="flex justify-between">
 									<div>
-										<div class="font-bold">no.{index + 1} {post.title}</div>
+										<div class="font-bold">{post.title}</div>
 										<div class="text-sm text-gray-500">작성자 : {post.author}</div>
 										<div class="text-sm text-gray-500">지역 : {post.location}</div>
 									</div>
