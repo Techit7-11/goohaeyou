@@ -37,32 +37,27 @@
 		<div class="flex flex-col items-center">
 			<ul class="w-full max-w-4xl">
 				{#each applications ?? [] as application, index}
-					<li class="m-4">
-						<a
-							href={`/applications/detail/${application.id}`}
-							class="block text-current no-underline"
-						>
-							<div class="card bg-base-100 shadow-xl">
-								<div class="card-body">
-									<h2 class="card-title">
-										지원서 번호 #{index + 1}
-									</h2>
-									<p>지원자 ID: {application.author}</p>
-									<p>지원내용: {summarizeBody(application.body)}</p>
-									<p>지원일: {formatDate(application.createdAt)}</p>
-									<p>
-										승인 여부:
-										{#if application.approve === true}
-											<span class="badge badge-success">승인</span>
-										{:else if application.approve === false}
-											<span class="badge badge-error">미승인</span>
-										{:else}
-											<span class="badge badge-warning">진행중</span>
-										{/if}
-									</p>
-								</div>
-							</div>
-						</a>
+					<li class="card bg-base-100 shadow-xl m-4">
+						<div class="card-body">
+							<h2 class="card-title">
+								<a href={`/applications/detail/${application.id}`} class="link link-hover">
+									지원서 번호 #{index + 1}
+								</a>
+							</h2>
+							<p>지원자 ID: {application.author}</p>
+							<p>지원내용: {summarizeBody(application.body)}</p>
+							<p>지원일: {formatDate(application.createdAt)}</p>
+							<p>
+								승인 여부:
+								{#if application.approve === true}
+									<span class="badge badge-success">승인</span>
+								{:else if application.approve === false}
+									<span class="badge badge-error">미승인</span>
+								{:else}
+									<span class="badge badge-warning">진행중</span>
+								{/if}
+							</p>
+						</div>
 					</li>
 				{/each}
 			</ul>
