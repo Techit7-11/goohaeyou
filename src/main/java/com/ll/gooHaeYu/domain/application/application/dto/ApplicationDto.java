@@ -28,6 +28,8 @@ public class ApplicationDto {
     @NotNull
     private String body;
     @NotNull
+    private String name;
+    @NotNull
     private LocalDate birth;
     @NotNull
     private String phone;
@@ -45,6 +47,7 @@ public class ApplicationDto {
                 .author(application.getMember().getUsername())
                 .postId(application.getJobPostDetail().getJobPost().getId())
                 .body(application.getBody())
+                .name(application.getMember().getName())
                 .birth(application.getMember().getBirth())
                 .phone(application.getMember().getPhoneNumber())
                 .location(application.getMember().getLocation())

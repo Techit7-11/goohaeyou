@@ -6,7 +6,6 @@ import com.ll.gooHaeYu.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,11 +27,11 @@ public class EmployController {
 
     @PatchMapping("/{applicationIds}")
     @Operation(summary = "지원서 승인")
-    public ResponseEntity<Void> approve(Authentication authentication,
+    public RsData<Void> approve(Authentication authentication,
                         @PathVariable Long postId,
                         @PathVariable List<Long> applicationIds) {
         employService.approve(authentication.getName(), postId, applicationIds);
 
-        return ResponseEntity.noContent().build();
+        return RsData.of("204", "NO_CONTENT");
     }
 }

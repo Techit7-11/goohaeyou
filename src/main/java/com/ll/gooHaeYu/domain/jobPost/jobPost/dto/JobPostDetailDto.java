@@ -23,7 +23,6 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     private Gender gender = Gender.UNDEFINED;
     private boolean isClosed;
     private String modifyAt;
-    private boolean employed;
     private List<String> interestedUsernames;
 
     public static JobPostDetailDto fromEntity(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential) {
