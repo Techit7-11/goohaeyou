@@ -116,7 +116,7 @@
 										<a href="/job-post/{post.id}" class="card-link">
 											<div class="card">
 												<div class="text-sm text-gray-500">no.{index + 1}</div>
-												<div class="text-xl font-bold">{post.title}</div>
+												<div class="text-lg font-bold">{post.title}</div>
 											</div>
 										</a>
 										<button
@@ -137,7 +137,7 @@
 										<a href="/applications/detail/{applicationDto.id}" class="card-link">
 											<div class="card">
 												<div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
-												<div class="text-xl font-bold">{summarizeBody(applicationDto.body)}</div>
+												<div class="text-lg font-bold">{summarizeBody(applicationDto.body)}</div>
 												<div class="divider"></div>
 											</div>
 										</a>
@@ -160,7 +160,7 @@
 										<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
 											<div class="card">
 												<div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
-												<div class="text-xl ont-bold">{commentsDto.content}</div>
+												<div class="text-lg font-bold">{commentsDto.content}</div>
 												<div class="divider"></div>
 											</div>
 										</a>
@@ -177,7 +177,7 @@
 										<a href="/job-post/{interestDto.id}" class="card-link">
 											<div class="card">
 												<div class="text-sm text-gray-500">{interestDto.id}번 공고</div>
-												<div class="text-xl ont-bold">{interestDto.title}</div>
+												<div class="text-lg font-bold">{interestDto.title}</div>
 												<div class="divider"></div>
 											</div>
 										</a>
