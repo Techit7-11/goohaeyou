@@ -189,6 +189,12 @@ public class JobPostService {
         return post.getInterests().stream().anyMatch(interest -> interest.getMember().equals(member));
     }
 
+    public boolean isInterested(String username, Long id) {
+        List<String> interestedUsernames = findById(id).getInterestedUsernames();
+
+        return interestedUsernames.stream().anyMatch(username::equals);
+    }
+
     public List<JobPostDto> findByUsername(String username) {
 
         Member member = memberService.getMember(username);

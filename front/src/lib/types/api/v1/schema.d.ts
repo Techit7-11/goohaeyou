@@ -67,7 +67,7 @@ export interface paths {
   };
   "/api/job-posts/{id}/interest": {
     /** 구인공고 관심 등록 */
-    post: operations["increase"];
+    post: operations["interest"];
     /** 구인공고 관심 제거 */
     delete: operations["disinterest"];
   };
@@ -102,6 +102,10 @@ export interface paths {
   "/api/member/myapplications": {
     /** 내 지원서 조회 */
     get: operations["detailMyApplications"];
+  };
+  "/api/job-posts/{id}/members/interest": {
+    /** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
+    get: operations["isInterested"];
   };
   "/api/job-posts/sort": {
     /** 구인공고 글 목록 정렬 */
@@ -334,6 +338,7 @@ export interface components {
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
       modifyAt?: string;
       employed?: boolean;
+      interestedUsernames?: string[];
       closed?: boolean;
     };
     RsDataJobPostDetailDto: {
@@ -342,6 +347,13 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JobPostDetailDto"];
+    };
+    RsDataBoolean: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: boolean;
     };
     GetPostsResponseBody: {
       itemPage: components["schemas"]["PageDtoJobPostDto"];
@@ -692,7 +704,7 @@ export interface operations {
     };
   };
   /** 구인공고 관심 등록 */
-  increase: {
+  interest: {
     parameters: {
       path: {
         id: number;
@@ -701,7 +713,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
       };
     };
   };
@@ -715,7 +729,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
       };
     };
   };
@@ -820,6 +836,22 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListApplicationDto"];
+        };
+      };
+    };
+  };
+  /** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
+  isInterested: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataBoolean"];
         };
       };
     };
