@@ -41,7 +41,7 @@
 							<div class="card-body">
 								<div class="flex items-center justify-between">
 									<div class="flex items-center space-x-10">
-										<div class="text-bold w-16">{post.author}</div>
+										<div class="text-bold w-12">{post.author}</div>
 										<div class="flex flex-col">
 											<div class="font-bold">{post.title}</div>
 											<div class="text-xs text-gray-500">{post.location}</div>
@@ -49,20 +49,6 @@
 									</div>
 
 									<div class="flex items-center justify-between">
-										<div class="flex flex-col space-y-1 mr-6">
-											<div class="flex justify-between">
-												<div class="text-xs text-gray-500 mr-6">조회</div>
-												<div class="text-xs">{post.incrementViewCount}</div>
-											</div>
-											<div class="flex justify-between">
-												<div class="text-xs text-gray-500 mr-6">댓글</div>
-												<div class="text-xs">{post.commentsCount}</div>
-											</div>
-											<div class="flex justify-between">
-												<div class="text-xs text-gray-500 mr-6">찜</div>
-												<div class="text-xs"></div>
-											</div>
-										</div>
 										<div class="flex flex-col items-center">
 											{#if post.closed}
 												<div class="badge badge-neutral">마감</div>
@@ -74,6 +60,20 @@
 										</div>
 									</div>
 								</div>
+										<div class="flex justify-center items-center ">
+											<div class="flex">
+												<div class="text-xs text-gray-500">조회</div>
+												<div class="text-xs mx-3">{post.incrementViewCount}</div>
+											</div>
+											<div class="flex">
+												<div class="text-xs text-gray-500">댓글</div>
+												<div class="text-xs mx-3">{post.commentsCount}</div>
+											</div>
+											<div class="flex">
+												<div class="text-xs text-gray-500">찜</div>
+												<div class="text-xs mx-3"></div>
+											</div>
+										</div>
 							</div>
 						</div>
 					</a>
