@@ -114,7 +114,7 @@
 					<button class="btn btn-primary btn-xs mr-2" on:click={editPost}>수정하기</button>
 					<!-- 수정 -->
 					<button class="btn btn-xs" on:click={deletePost}>삭제하기</button>
-				{:else if !jobPostDetailDto?.closed && rq.isLogin}
+				{:else if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin}  <!-- 지원 가능한 경우 --> 
 					<button class="btn btn-outline btn-info" on:click={apply}>지원하기</button>
 				{/if}
 			</div>
@@ -127,11 +127,12 @@
 			<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
 				<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
 			</div>
-			<div class="mt-4">
-				<span
-					class="badge badge-outline {jobPostDetailDto?.closed ? 'badge-error' : 'badge-success'}"
-				>
-					{jobPostDetailDto?.closed ? '마감' : '구인중'}
+			<div class="mt-4 flex items-center space-x-2">
+				{#if jobPostDetailDto?.employed}
+					<span class="badge badge-outline badge-error">구인완료</span>
+				{/if}
+				<span class="badge badge-outline {jobPostDetailDto?.closed ? 'badge-error' : 'badge-success'}">
+					{jobPostDetailDto?.closed ? '공고마감' : '지원가능'}
 				</span>
 			</div>
 			<div class="grid grid-cols-2 gap-4 mt-4">

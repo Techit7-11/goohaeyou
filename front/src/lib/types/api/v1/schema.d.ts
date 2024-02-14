@@ -3,380 +3,388 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/api/post-comment/{postId}/comment/{commentId}": {
-    /** 댓글 수정 */
-    put: operations["modify"];
-    /** 댓글 삭제 */
-    delete: operations["delete"];
-  };
-  "/api/notification/{id}": {
-    /** 알림 읽음 처리 */
-    put: operations["read"];
-  };
-  "/api/member": {
-    /** 내 정보 조회 */
-    get: operations["detailMember"];
-    /** 내 정보 수정 */
-    put: operations["modifyMember"];
-  };
-  "/api/member/social": {
-    /** 최초 소셜로그인 - 필수 회원정보 입력 */
-    put: operations["updateSocialMember"];
-  };
-  "/api/job-posts/{id}": {
-    /** 구인공고 단건 조회 */
-    get: operations["showDetailPost"];
-    /** 구인공고 수정 */
-    put: operations["modifyPost"];
-    /** 구인공고 삭제 */
-    delete: operations["deleteJobPost"];
-  };
-  "/api/applications/{id}": {
-    /** 지원서 상세 내용 */
-    get: operations["detailApplication"];
-    /** 지원서 수정 */
-    put: operations["modifyApplication"];
-    /** 지원서 작성 */
-    post: operations["writeApplication"];
-    /** 지원서 삭제 */
-    delete: operations["deleteApplication"];
-  };
-  "/api/post-comment/{postId}/comment": {
-    /** 댓글 작성 */
-    post: operations["write"];
-  };
-  "/api/member/logout": {
-    /** 로그아웃 처리 및 쿠키 삭제 */
-    post: operations["logout"];
-  };
-  "/api/member/login": {
-    /** 로그인, accessToken, refreshToken 쿠키 생성됨 */
-    post: operations["login"];
-  };
-  "/api/member/join": {
-    /** 회원가입 */
-    post: operations["join"];
-  };
-  "/api/job-posts": {
-    /** 구인공고 글 목록 가져오기 */
-    get: operations["findAllPost"];
-    /** 구인공고 작성 */
-    post: operations["writePost"];
-  };
-  "/api/job-posts/{id}/interest": {
-    /** 구인공고 관심 등록 */
-    post: operations["increase"];
-    /** 구인공고 관심 제거 */
-    delete: operations["disinterest"];
-  };
-  "/api/employ/{postId}/{applicationIds}": {
-    /** 지원서 승인 */
-    patch: operations["approve"];
-  };
-  "/member/socialLogin/{providerTypeCode}": {
-    /** 소셜 로그인 */
-    get: operations["socialLogin"];
-  };
-  "/api/post-comment/{postId}": {
-    /** 해당 공고에 달린 댓글 목록 */
-    get: operations["findByPostId"];
-  };
-  "/api/notification": {
-    /** 유저 별 알림리스트 */
-    get: operations["getList"];
-  };
-  "/api/member/myposts": {
-    /** 내 공고 조회 */
-    get: operations["detailMyPosts"];
-  };
-  "/api/member/myinterest": {
-    /** 내 관심 공고 조회 */
-    get: operations["detailMyInterestingPosts"];
-  };
-  "/api/member/mycomments": {
-    /** 내 댓글 조회 */
-    get: operations["detailMyComments"];
-  };
-  "/api/member/myapplications": {
-    /** 내 지원서 조회 */
-    get: operations["detailMyApplications"];
-  };
-  "/api/job-posts/sort": {
-    /** 구인공고 글 목록 정렬 */
-    get: operations["findAllPostSort"];
-  };
-  "/api/job-posts/search": {
-    /** 게시물 검색 */
-    get: operations["searchJobPostsByTitleAndBody"];
-  };
-  "/api/employ/{postId}": {
-    /** 공고 별 지원리스트 */
-    get: operations["getList_1"];
-  };
-  "/": {
-    get: operations["showMain"];
-  };
-  "/api/notification/read": {
-    /** 읽은 알림 전부 삭제 */
-    delete: operations["deleteReadAll"];
-  };
-  "/api/notification/all": {
-    /** 알림 전부 삭제 */
-    delete: operations["deleteAll"];
-  };
+	'/api/post-comment/{postId}/comment/{commentId}': {
+		/** 댓글 수정 */
+		put: operations['modify'];
+		/** 댓글 삭제 */
+		delete: operations['delete'];
+	};
+	'/api/notification/{id}': {
+		/** 알림 읽음 처리 */
+		put: operations['read'];
+	};
+	'/api/member': {
+		/** 내 정보 조회 */
+		get: operations['detailMember'];
+		/** 내 정보 수정 */
+		put: operations['modifyMember'];
+	};
+	'/api/member/social': {
+		/** 최초 소셜로그인 - 필수 회원정보 입력 */
+		put: operations['updateSocialMember'];
+	};
+	'/api/job-posts/{id}': {
+		/** 구인공고 단건 조회 */
+		get: operations['showDetailPost'];
+		/** 구인공고 수정 */
+		put: operations['modifyPost'];
+		/** 구인공고 삭제 */
+		delete: operations['deleteJobPost'];
+	};
+	'/api/applications/{id}': {
+		/** 지원서 상세 내용 */
+		get: operations['detailApplication'];
+		/** 지원서 수정 */
+		put: operations['modifyApplication'];
+		/** 지원서 작성 */
+		post: operations['writeApplication'];
+		/** 지원서 삭제 */
+		delete: operations['deleteApplication'];
+	};
+	'/api/post-comment/{postId}/comment': {
+		/** 댓글 작성 */
+		post: operations['write'];
+	};
+	'/api/member/logout': {
+		/** 로그아웃 처리 및 쿠키 삭제 */
+		post: operations['logout'];
+	};
+	'/api/member/login': {
+		/** 로그인, accessToken, refreshToken 쿠키 생성됨 */
+		post: operations['login'];
+	};
+	'/api/member/join': {
+		/** 회원가입 */
+		post: operations['join'];
+	};
+	'/api/job-posts': {
+		/** 구인공고 글 목록 가져오기 */
+		get: operations['findAllPost'];
+		/** 구인공고 작성 */
+		post: operations['writePost'];
+	};
+	'/api/job-posts/{id}/interest': {
+		/** 구인공고 관심 등록 */
+		post: operations['increase'];
+		/** 구인공고 관심 제거 */
+		delete: operations['disinterest'];
+	};
+	'/api/employ/{postId}/{applicationIds}': {
+		/** 지원서 승인 */
+		patch: operations['approve'];
+	};
+	'/member/socialLogin/{providerTypeCode}': {
+		/** 소셜 로그인 */
+		get: operations['socialLogin'];
+	};
+	'/api/post-comment/{postId}': {
+		/** 해당 공고에 달린 댓글 목록 */
+		get: operations['findByPostId'];
+	};
+	'/api/notification': {
+		/** 유저 별 알림리스트 */
+		get: operations['getList'];
+	};
+	'/api/member/myposts': {
+		/** 내 공고 조회 */
+		get: operations['detailMyPosts'];
+	};
+	'/api/member/myinterest': {
+		/** 내 관심 공고 조회 */
+		get: operations['detailMyInterestingPosts'];
+	};
+	'/api/member/mycomments': {
+		/** 내 댓글 조회 */
+		get: operations['detailMyComments'];
+	};
+	'/api/member/myapplications': {
+		/** 내 지원서 조회 */
+		get: operations['detailMyApplications'];
+	};
+	'/api/job-posts/sort': {
+		/** 구인공고 글 목록 정렬 */
+		get: operations['findAllPostSort'];
+	};
+	'/api/job-posts/search': {
+		/** 게시물 검색 */
+		get: operations['searchJobPostsByTitleAndBody'];
+	};
+	'/api/employ/{postId}': {
+		/** 공고 별 지원리스트 */
+		get: operations['getList_1'];
+	};
+	'/': {
+		get: operations['showMain'];
+	};
+	'/api/notification/read': {
+		/** 읽은 알림 전부 삭제 */
+		delete: operations['deleteReadAll'];
+	};
+	'/api/notification/all': {
+		/** 알림 전부 삭제 */
+		delete: operations['deleteAll'];
+	};
 }
 
 export type webhooks = Record<string, never>;
 
 export interface components {
-  schemas: {
-    Register: {
-      content: string;
-    };
-    Modify: {
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location?: string;
-      /** Format: date */
-      birth?: string;
-      password?: string;
-    };
-    SocialProfileForm: {
-      name: string;
-      phoneNumber: string;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location: string;
-      /** Format: date */
-      birth: string;
-    };
-    MemberDto: {
-      /** Format: int64 */
-      id: number;
-      username: string;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location?: string;
-      /** Format: date */
-      birth?: string;
-      name?: string;
-      phoneNumber?: string;
-    };
-    RsDataMemberDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["MemberDto"];
-    };
-    RsDataModify: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["Modify"];
-    };
-    RsDataVoid: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: Record<string, never>;
-    };
-    RsDataRegister: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["Register"];
-    };
-    LoginForm: {
-      username: string;
-      password: string;
-    };
-    JoinForm: {
-      username: string;
-      password: string;
-      name: string;
-      phoneNumber: string;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location: string;
-      /** Format: date */
-      birth: string;
-    };
-    RsDataJoinForm: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["JoinForm"];
-    };
-    RsDataURI: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      /** Format: uri */
-      data?: string;
-    };
-    CommentDto: {
-      /** Format: int64 */
-      id: number;
-      /** Format: int64 */
-      jobPostId: number;
-      author: string;
-      content: string;
-      /** Format: date-time */
-      createAt: string;
-      /** Format: date-time */
-      modifyAt: string;
-    };
-    RsDataListCommentDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["CommentDto"][];
-    };
-    NotificationDto: {
-      /** Format: int64 */
-      id?: number;
-      createAt?: string;
-      toMember?: string;
-      fromMember?: string;
-      relPostTitle?: string;
-      /** @enum {string} */
-      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE";
-      /** @enum {string} */
-      resultTypeCode?: "NOTICE" | "DELETE" | "MODIFY";
-      seen?: boolean;
-      url?: string;
-    };
-    RsDataListNotificationDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["NotificationDto"][];
-    };
-    JobPostDto: {
-      /** Format: int64 */
-      id: number;
-      author: string;
-      title: string;
-      location: string;
-      /** Format: int64 */
-      commentsCount: number;
-      /** Format: int64 */
-      incrementViewCount: number;
-      /** Format: date */
-      deadLine?: string;
-      createdAt: string;
-      closed?: boolean;
-    };
-    RsDataListJobPostDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["JobPostDto"][];
-    };
-    ApplicationDto: {
-      /** Format: int64 */
-      id: number;
-      /** Format: int64 */
-      jobPostId: number;
-      jobPostAuthorUsername: string;
-      jobPostName: string;
-      author: string;
-      /** Format: int64 */
-      postId: number;
-      body: string;
-      /** Format: date */
-      birth: string;
-      phone: string;
-      location: string;
-      /** Format: date-time */
-      createdAt?: string;
-      approve?: boolean;
-    };
-    RsDataListApplicationDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["ApplicationDto"][];
-    };
-    JobPostDetailDto: {
-      /** Format: int64 */
-      id: number;
-      author: string;
-      title: string;
-      location: string;
-      /** Format: int64 */
-      commentsCount: number;
-      /** Format: int64 */
-      incrementViewCount: number;
-      /** Format: date */
-      deadLine?: string;
-      createdAt: string;
-      body: string;
-      /** Format: int64 */
-      applicationCount?: number;
-      /** Format: int64 */
-      interestsCount?: number;
-      /** Format: int32 */
-      minAge?: number;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      modifyAt?: string;
-      employed?: boolean;
-      closed?: boolean;
-    };
-    RsDataJobPostDetailDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["JobPostDetailDto"];
-    };
-    GetPostsResponseBody: {
-      itemPage: components["schemas"]["PageDtoJobPostDto"];
-    };
-    PageDtoJobPostDto: {
-      /** Format: int64 */
-      totalElementsCount: number;
-      /** Format: int64 */
-      pageElementsCount: number;
-      /** Format: int64 */
-      totalPagesCount: number;
-      /** Format: int32 */
-      number: number;
-      content: components["schemas"]["JobPostDto"][];
-    };
-    RsDataGetPostsResponseBody: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["GetPostsResponseBody"];
-    };
-    RsDataApplicationDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["ApplicationDto"];
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+	schemas: {
+		Register: {
+			content: string;
+		};
+		Modify: {
+			/** @enum {string} */
+			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
+			location?: string;
+			/** Format: date */
+			birth?: string;
+			password?: string;
+		};
+		SocialProfileForm: {
+			name: string;
+			phoneNumber: string;
+			/** @enum {string} */
+			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
+			location: string;
+			/** Format: date */
+			birth: string;
+		};
+		MemberDto: {
+			/** Format: int64 */
+			id: number;
+			username: string;
+			/** @enum {string} */
+			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
+			location?: string;
+			/** Format: date */
+			birth?: string;
+			name?: string;
+			phoneNumber?: string;
+		};
+		RsDataMemberDto: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['MemberDto'];
+		};
+		RsDataModify: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['Modify'];
+		};
+		RsDataVoid: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: Record<string, never>;
+		};
+		RsDataRegister: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['Register'];
+		};
+		LoginForm: {
+			username: string;
+			password: string;
+		};
+		JoinForm: {
+			username: string;
+			password: string;
+			name: string;
+			phoneNumber: string;
+			/** @enum {string} */
+			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
+			location: string;
+			/** Format: date */
+			birth: string;
+		};
+		RsDataJoinForm: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['JoinForm'];
+		};
+		RsDataURI: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			/** Format: uri */
+			data?: string;
+		};
+		CommentDto: {
+			/** Format: int64 */
+			id: number;
+			/** Format: int64 */
+			jobPostId: number;
+			author: string;
+			content: string;
+			/** Format: date-time */
+			createAt: string;
+			/** Format: date-time */
+			modifyAt: string;
+		};
+		RsDataListCommentDto: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['CommentDto'][];
+		};
+		NotificationDto: {
+			/** Format: int64 */
+			id?: number;
+			createAt?: string;
+			toMember?: string;
+			fromMember?: string;
+			relPostTitle?: string;
+			/** @enum {string} */
+			causeTypeCode?:
+				| 'POST_MODIFICATION'
+				| 'POST_DELETED'
+				| 'POST_INTERESTED'
+				| 'POST_DEADLINE'
+				| 'COMMENT_CREATED'
+				| 'APPLICATION_CREATED'
+				| 'APPLICATION_MODIFICATION'
+				| 'APPLICATION_APPROVED'
+				| 'APPLICATION_UNAPPROVE';
+			/** @enum {string} */
+			resultTypeCode?: 'NOTICE' | 'DELETE' | 'MODIFY';
+			seen?: boolean;
+			url?: string;
+		};
+		RsDataListNotificationDto: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['NotificationDto'][];
+		};
+		JobPostDto: {
+			/** Format: int64 */
+			id: number;
+			author: string;
+			title: string;
+			location: string;
+			/** Format: int64 */
+			commentsCount: number;
+			/** Format: int64 */
+			incrementViewCount: number;
+			/** Format: date */
+			deadLine?: string;
+			createdAt: string;
+			closed?: boolean;
+		};
+		RsDataListJobPostDto: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['JobPostDto'][];
+		};
+		ApplicationDto: {
+			/** Format: int64 */
+			id: number;
+			/** Format: int64 */
+			jobPostId: number;
+			jobPostAuthorUsername: string;
+			jobPostName: string;
+			author: string;
+			/** Format: int64 */
+			postId: number;
+			body: string;
+			/** Format: date */
+			birth: string;
+			phone: string;
+			location: string;
+			/** Format: date-time */
+			createdAt?: string;
+			approve?: boolean;
+		};
+		RsDataListApplicationDto: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['ApplicationDto'][];
+		};
+		JobPostDetailDto: {
+			/** Format: int64 */
+			id: number;
+			author: string;
+			title: string;
+			location: string;
+			/** Format: int64 */
+			commentsCount: number;
+			/** Format: int64 */
+			incrementViewCount: number;
+			/** Format: date */
+			deadLine?: string;
+			createdAt: string;
+			body: string;
+			/** Format: int64 */
+			applicationCount?: number;
+			/** Format: int64 */
+			interestsCount?: number;
+			/** Format: int32 */
+			minAge?: number;
+			/** @enum {string} */
+			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
+			modifyAt?: string;
+			employed?: boolean;
+			closed?: boolean;
+		};
+		RsDataJobPostDetailDto: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['JobPostDetailDto'];
+		};
+		GetPostsResponseBody: {
+			itemPage: components['schemas']['PageDtoJobPostDto'];
+		};
+		PageDtoJobPostDto: {
+			/** Format: int64 */
+			totalElementsCount: number;
+			/** Format: int64 */
+			pageElementsCount: number;
+			/** Format: int64 */
+			totalPagesCount: number;
+			/** Format: int32 */
+			number: number;
+			content: components['schemas']['JobPostDto'][];
+		};
+		RsDataGetPostsResponseBody: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['GetPostsResponseBody'];
+		};
+		RsDataApplicationDto: {
+			resultCode?: string;
+			/** Format: int32 */
+			statusCode?: number;
+			msg?: string;
+			data?: components['schemas']['ApplicationDto'];
+		};
+	};
+	responses: never;
+	parameters: never;
+	requestBodies: never;
+	headers: never;
+	pathItems: never;
 }
 
 export type $defs = Record<string, never>;
@@ -723,8 +731,8 @@ export interface operations {
   approve: {
     parameters: {
       path: {
-        arg1: number;
-        arg2: number[];
+        postId: number;
+        applicationIds: number[];
       };
     };
     responses: {
@@ -738,10 +746,10 @@ export interface operations {
   socialLogin: {
     parameters: {
       query: {
-        arg0: string;
+        redirectUrl: string;
       };
       path: {
-        arg1: string;
+        providerTypeCode: string;
       };
     };
     responses: {
@@ -864,7 +872,7 @@ export interface operations {
   getList_1: {
     parameters: {
       path: {
-        arg1: number;
+        postId: number;
       };
     };
     responses: {

@@ -11,21 +11,36 @@
 		birth: '2000-01-01'
 	};
 
+	onMount(async () => {
+		await loadMemberDetail();
+	});
+
+	// 회원 정보를 불러와서 폼에 채워주는 함수
+	async function loadMemberDetail() {
+		try {
+			const { data } = await rq.apiEndPoints().GET('/api/member');
+			console.log('Member data loaded:', data.data);
+			if (data) {
+				updatedMemberData = {
+					...updatedMemberData,
+					...data.data
+				};
+			}
+		} catch (error) {
+			console.error('Error loading member detail:', error);
+			rq.msgError('회원 정보를 불러오는데 실패했습니다.');
+		}
+	}
+
 	// 업데이트 버튼을 클릭하면 실행될 함수
 	async function updateMember() {
 		const response = await rq.apiEndPoints().PUT('/api/member/social', { body: updatedMemberData });
 
 		if (response.data?.statusCode === 200) {
 			rq.msgAndRedirect({ msg: '회원정보 수정 완료' }, undefined, '/');
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage ?? '알 수 없는 오류가 발생했습니다.');
-		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
-			if (Array.isArray(response.data.data)) {
-				response.data.data.forEach((msg) => rq.msgError(msg));
-			}
 		} else {
-			rq.msgError('로그인 중 오류가 발생했습니다.');
+			// Error handling remains the same
+			console.log('Error updating member:', response.data?.msg);
 		}
 	}
 
@@ -48,7 +63,7 @@
 
 <div class="flex items-center justify-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
-		<h2 class="text-2xl font-bold text-center my-3">필수 회원 정보 입력</h2>
+		<h2 class="text-2xl font-bold text-center my-3">회원 정보 수정</h2>
 		<div class="max-w-sm mx-auto">
 			<div>
 				<label class="label" for="name">이름</label>
