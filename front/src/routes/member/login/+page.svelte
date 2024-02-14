@@ -21,7 +21,8 @@
 			rq.msgError(customErrorMessage ?? '알 수 없는 오류가 발생했습니다.');
 		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
 			if (Array.isArray(response.data.data)) {
-				response.data.data.forEach((msg) => rq.msgError(msg));
+				rq.msgError(response.data.data[0])
+
 			}
 		} else {
 			rq.msgError('로그인 중 오류가 발생했습니다.');

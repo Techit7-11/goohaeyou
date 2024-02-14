@@ -32,15 +32,18 @@
 			}
 		});
 
-		if (response.data?.msg == 'CUSTOM_EXCEPTION') {
+		if (response.data?.statusCode === 204) {
+			rq.msgAndRedirect({ msg: '수정 완료' }, undefined, `/applications/detail/${applicationId}`);
+		} else if (response.data?.msg == 'CUSTOM_EXCEPTION') {
 			rq.msgAndRedirect(
 				{ msg: response.data?.data?.message },
 				undefined,
 				`/applications/detail/${applicationId}`
 			);
-		}
-		if (response.data?.statusCode === 204) {
-			rq.msgAndRedirect({ msg: '수정 완료' }, undefined, `/applications/detail/${applicationId}`);
+		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
+			if (Array.isArray(response.data.data)) {
+				rq.msgError(response.data.data[0])
+			}
 		} else {
 			rq.msgAndRedirect(
 				undefined,

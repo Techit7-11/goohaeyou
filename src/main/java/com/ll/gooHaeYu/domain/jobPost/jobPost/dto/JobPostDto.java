@@ -25,6 +25,7 @@ public class JobPostDto extends AbstractJobPostDto{
                 .location(Ut.addr.simplifyLocation(jobPost.getLocation()))
                 .commentsCount(jobPost.getCommentsCount())
                 .incrementViewCount(jobPost.getIncrementViewCount())
+                .interestsCount(jobPost.getInterestsCount())
                 .deadLine(jobPost.getDeadline())
                 .isClosed(jobPost.isClosed())
                 .createdAt(jobPost.getCreatedAt().format(formatter))

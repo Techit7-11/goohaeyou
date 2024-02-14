@@ -32,12 +32,17 @@
 
 		console.log(postId);
 
-		if (response.data?.msg == 'CUSTOM_EXCEPTION') {
-			rq.msgAndRedirect({ msg: response.data?.data?.message }, undefined, `/job-post/${postId}`);
-		}
-
 		if (response.data?.statusCode === 201) {
 			rq.msgAndRedirect({ msg: '지원 완료' }, undefined, `/job-post/${postId}`);
+		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
+			const customErrorMessage = response.data?.data?.message;
+			rq.msgError(customErrorMessage);
+		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
+			if (Array.isArray(response.data.data)) {
+				rq.msgError(response.data.data[0]);
+			}
+		} else {
+			rq.msgError('지원서를 작성하는 중 오류가 발생했습니다.');
 		}
 	}
 

@@ -52,12 +52,10 @@
 
 		if (response.data?.msg == 'CUSTOM_EXCEPTION') {
 			rq.msgAndRedirect({ msg: response.data?.data?.message }, undefined, `/job-post/${postId}`);
-		}
-
-		if (response.data?.statusCode === 204) {
+		} else if (response.data?.statusCode === 204) {
 			interested = true;
 		} else {
-			console.error('관심 등록 실패');
+			console.error('관심 등록에 실패하였습니다.');
 		}
 	}
 
@@ -71,7 +69,7 @@
 		if (response.data?.statusCode === 204) {
 			interested = false;
 		} else {
-			console.error('관심 취소 실패');
+			console.error('관심 취소에 실패하였습니다.');
 		}
 	}
 
@@ -214,41 +212,27 @@
 				</div>
 			</div>
 			<div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
-			<div>
-				{#if rq.isLogin() && jobPostDetailDto?.author !== rq.member.username}
-					{#if interested}
-						<button class="btn btn-ghost px-1 py-1 text-xs" on:click={() => removeInterest(postId)}
-							>관심 취소</button
-						>
-					{:else}
-						<button
-							class="btn btn-ghost px-1 py-1 text-xs"
-							on:click={() => registerInterest(postId)}
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								><path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-								/></svg
-							>
-							관심 공고
-						</button>
-					{/if}
-				{/if}
-			</div>
 			<div class="divider"></div>
-			<div class="flex justify-end text-gray-700 text-sm">
-				<div class="text-sm">관심 등록 :</div>
-				<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
-				<div class="text-sm">조회 :</div>
-				<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
+			<div class="flex justify-between text-gray-700 text-sm">
+				{#if rq.isLogin() && jobPostDetailDto?.author !== rq.member.username}
+					<div>
+						{#if interested}
+							<button class="btn btn-ghost px-1 py-1 text-xs" on:click={() => removeInterest(postId)}>관심 취소</button>
+						{:else}
+							<button class="btn btn-ghost px-1 py-1 text-xs" on:click={() => registerInterest(postId)}>
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+								관심 공고
+							</button>
+						{/if}
+					</div>
+				{/if}
+				<div class="flex items-center">
+					<div class="text-sm">관심 등록 :</div>
+					<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
+					<div class="text-sm">조회 :</div>
+					<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
+				</div>
+
 			</div>
 			<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
 				<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>

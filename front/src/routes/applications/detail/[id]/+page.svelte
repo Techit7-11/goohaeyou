@@ -53,7 +53,7 @@
 			await rq.apiEndPoints().PATCH(`/api/employ/${jobPostId}/${applicationId}`, {
 				headers: { 'Content-Type': 'application/json' }
 			});
-			Swal.fire('해당 지원서가 승인되었습니다.', '완료');
+
 			window.location.reload(); // 승인 후 페이지 새로고침
 		}
 	}

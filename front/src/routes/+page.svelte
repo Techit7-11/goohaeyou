@@ -71,7 +71,7 @@
 											</div>
 											<div class="flex">
 												<div class="text-xs text-gray-500">찜</div>
-												<div class="text-xs mx-3"></div>
+												<div class="text-xs mx-3">{post.interestsCount}</div>
 											</div>
 										</div>
 							</div>
