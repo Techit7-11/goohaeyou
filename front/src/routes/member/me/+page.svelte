@@ -97,7 +97,7 @@
 				</div>
 			</div>
 			<div class="w-full">
-				<div class="container mx-auto px-4">
+				<div class="container">
 					<div class="max-w-sm mx-auto">
 						<div role="tablist" class="tabs tabs-bordered">
 							<input
@@ -105,12 +105,14 @@
 								name="my_tabs_2"
 								role="tab"
 								class="tab"
-								aria-label="내 공고"
+								aria-label="작성공고"
 								checked
 							/>
 							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyPosts()}
-									<p>loading...</p>
+									<div class="flex items-center justify-center min-h-screen">
+										<span class="loading loading-dots loading-lg"></span>
+									</div>
 								{:then { data: posts }}
 									{#each posts ?? [] as post, index}
 										<a href="/job-post/{post.id}" class="card-link">
@@ -128,7 +130,7 @@
 								{/await}
 							</div>
 
-							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="나의 지원" />
+							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="지원현황" />
 							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyApplications()}
 									<p>loading...</p>
@@ -150,7 +152,7 @@
 								name="my_tabs_2"
 								role="tab"
 								class="tab"
-								aria-label="내가 쓴 댓글"
+								aria-label="작성댓글"
 							/>
 							<div role="tabpanel" class="tab-content p-7">
 								{#await loadMyComments()}
@@ -168,7 +170,7 @@
 								{/await}
 							</div>
 
-							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="관심 공고" />
+							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="관심공고" />
 							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyInterest()}
 									<p>loading...</p>
