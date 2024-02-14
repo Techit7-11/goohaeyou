@@ -101,7 +101,7 @@
 		</div>
 	</nav>
 	<aside>
-		<p>© 2024 All Rights Reserved by Techit7-11번과_GooHaeYou</p>
+		<p class="mb-10">© 2024 All Rights Reserved by Techit7-11번과_GooHaeYou</p>
 	</aside>
 </footer>
 <div class="btm-nav">
