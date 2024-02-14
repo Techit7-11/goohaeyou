@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import rq from '$lib/rq/rq.svelte';
-	import Swal from 'sweetalert2'; // SweetAlert2를 사용하여 예/아니오 확인 메시지 표시
 
 	async function loadApplication() {
 		const { data } = await rq.apiEndPoints().GET('/api/applications/{id}', {
@@ -38,23 +37,17 @@
 	}
 
 	async function approve(jobPostId, applicationId) {
-		// SweetAlert2를 사용하여 사용자에게 승인 확인 요청
-		const result = await Swal.fire({
-			title: '승인하시겠습니까?',
-			text: '이 작업은 다시 되돌릴 수 없습니다.',
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'OK'
+		const response = await rq.apiEndPoints().PATCH(`/api/employ/${jobPostId}/${applicationId}`, {
+			headers: { 'Content-Type': 'application/json' }
 		});
 
-		if (result.isConfirmed) {
-			await rq.apiEndPoints().PATCH(`/api/employ/${jobPostId}/${applicationId}`, {
-				headers: { 'Content-Type': 'application/json' }
-			});
-
-			window.location.reload(); // 승인 후 페이지 새로고침
+		if (response.data?.statusCode === 204) {
+			alert('지원서가 승인되었습니다.');
+			location.reload();
+		} else if (response.data?.msg == 'CUSTOM_EXCEPTION') {
+			alert(response.data?.data?.message);
+		} else {
+			alert('지원서 승인에 실패했습니다. 다시 시도해주세요.');
 		}
 	}
 
