@@ -34,6 +34,7 @@ export interface paths {
     delete: operations["deleteJobPost"];
   };
   "/api/job-posts/{id}/closing": {
+    /** 조기 마감 */
     put: operations["postEarlyClosing"];
   };
   "/api/job-posts/a": {
@@ -295,9 +296,10 @@ export interface components {
       incrementViewCount: number;
       /** Format: int64 */
       interestsCount: number;
+      createdAt: string;
+      employed?: boolean;
       /** Format: date */
       deadLine?: string;
-      createdAt: string;
       closed?: boolean;
     };
     RsDataListJobPostDto: {
@@ -346,9 +348,10 @@ export interface components {
       incrementViewCount: number;
       /** Format: int64 */
       interestsCount: number;
+      createdAt: string;
+      employed?: boolean;
       /** Format: date */
       deadLine?: string;
-      createdAt: string;
       body: string;
       /** Format: int64 */
       applicationCount?: number;
@@ -357,7 +360,6 @@ export interface components {
       /** @enum {string} */
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
       modifyAt?: string;
-      employed?: boolean;
       interestedUsernames?: string[];
       closed?: boolean;
     };
@@ -553,6 +555,7 @@ export interface operations {
       };
     };
   };
+  /** 조기 마감 */
   postEarlyClosing: {
     parameters: {
       path: {
@@ -562,7 +565,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
       };
     };
   };
@@ -782,7 +787,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
       };
     };
   };
