@@ -177,8 +177,8 @@
 			<div class="text-xl font-bold">{jobPostDetailDto?.title}</div>
 			<div class="flex items-center">
 				{#if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin && jobPostDetailDto?.author !== rq.member.username}
-                    <button class="btn btn-neutral" on:click={apply}>지원하기</button>
-                {/if}
+					<button class="btn btn-neutral" on:click={apply}>지원하기</button>
+				{/if}
 			</div>
 		</div>
 		<div class="mt-4">
