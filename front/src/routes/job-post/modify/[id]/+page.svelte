@@ -45,7 +45,7 @@
 			rq.msgError(customErrorMessage);
 		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
 			if (Array.isArray(response.data.data)) {
-				rq.msgError(response.data.data[0])
+				rq.msgError(response.data.data[0]);
 			}
 		} else {
 			rq.msgError('글 수정 중 오류가 발생했습니다.');

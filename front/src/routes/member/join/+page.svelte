@@ -23,11 +23,11 @@
 		if (response.data?.statusCode === 200) {
 			rq.msgAndRedirect({ msg: '회원가입 완료' }, undefined, '/');
 		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			const customErrorMessage = response.data?.data?.message;	
+			const customErrorMessage = response.data?.data?.message;
 			rq.msgError(customErrorMessage);
 		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
 			if (Array.isArray(response.data.data)) {
-				rq.msgError(response.data.data[0])
+				rq.msgError(response.data.data[0]);
 			}
 		} else {
 			rq.msgError('회원가입 중 오류가 발생했습니다.');

@@ -51,7 +51,7 @@
 	}
 </script>
 
-<div class="flex items-center justify-center min-h-screen bg-base-100">
+<div class="flex items-center justify-center bg-base-100">
 	<div class="container mx-auto px-4">
 		<div class="max-w-sm mx-auto my-10">
 			<div class="text-center">
@@ -97,88 +97,88 @@
 				</div>
 			</div>
 			<div class="w-full flex justify-center">
-						<div role="tablist" class="tabs tabs-bordered">
-							<input
-								type="radio"
-								name="my_tabs_2"
-								role="tab"
-								class="tab"
-								aria-label="작성공고"
-								checked
-							/>
-							<div role="tabpanel" class="tab-content p-5">
-								{#await loadMyPosts()}
-									<div class="flex items-center justify-center min-h-screen">
-										<span class="loading loading-dots loading-lg"></span>
+				<div role="tablist" class="tabs tabs-bordered">
+					<input
+						type="radio"
+						name="my_tabs_2"
+						role="tab"
+						class="tab"
+						aria-label="작성공고"
+						checked
+					/>
+					<div role="tabpanel" class="tab-content p-5">
+						{#await loadMyPosts()}
+							<div class="flex items-center justify-center min-h-screen">
+								<span class="loading loading-dots loading-lg"></span>
+							</div>
+						{:then { data: posts }}
+							{#each posts ?? [] as post, index}
+								<a href="/job-post/{post.id}" class="card-link">
+									<div class="card">
+										<div class="text-sm text-gray-500">no.{index + 1}</div>
+										<div class="text-lg font-bold">{post.title}</div>
 									</div>
-								{:then { data: posts }}
-									{#each posts ?? [] as post, index}
-										<a href="/job-post/{post.id}" class="card-link">
-											<div class="card">
-												<div class="text-sm text-gray-500">no.{index + 1}</div>
-												<div class="text-lg font-bold">{post.title}</div>
-											</div>
-										</a>
-										<button
-											class="btn btn-primary my-3 w-full"
-											on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
-										>
+								</a>
+								<button
+									class="btn btn-primary my-3 w-full"
+									on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
+								>
+								<div class="divider"></div>
+							{/each}
+						{/await}
+					</div>
+
+					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="지원현황" />
+					<div role="tabpanel" class="tab-content p-5">
+						{#await loadMyApplications()}
+							<p>loading...</p>
+						{:then { data: applicationDtoList }}
+							{#each applicationDtoList ?? [] as applicationDto}
+								<a href="/applications/detail/{applicationDto.id}" class="card-link">
+									<div class="card">
+										<div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
+										<div class="text-lg font-bold">{summarizeBody(applicationDto.body)}</div>
 										<div class="divider"></div>
-									{/each}
-								{/await}
-							</div>
+									</div>
+								</a>
+							{/each}
+						{/await}
+					</div>
 
-							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="지원현황" />
-							<div role="tabpanel" class="tab-content p-5">
-								{#await loadMyApplications()}
-									<p>loading...</p>
-								{:then { data: applicationDtoList }}
-									{#each applicationDtoList ?? [] as applicationDto}
-										<a href="/applications/detail/{applicationDto.id}" class="card-link">
-											<div class="card">
-												<div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
-												<div class="text-lg font-bold">{summarizeBody(applicationDto.body)}</div>
-												<div class="divider"></div>
-											</div>
-										</a>
-									{/each}
-								{/await}
-							</div>
+					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="작성댓글" />
+					<div role="tabpanel" class="tab-content p-5">
+						{#await loadMyComments()}
+							<p>loading...</p>
+						{:then { data: commentsDtoList }}
+							{#each commentsDtoList ?? [] as commentsDto}
+								<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
+									<div class="card">
+										<div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
+										<div class="text-lg font-bold">{commentsDto.content}</div>
+										<div class="divider"></div>
+									</div>
+								</a>
+							{/each}
+						{/await}
+					</div>
 
-							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="작성댓글" />
-							<div role="tabpanel" class="tab-content p-5">
-								{#await loadMyComments()}
-									<p>loading...</p>
-								{:then { data: commentsDtoList }}
-									{#each commentsDtoList ?? [] as commentsDto}
-										<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
-											<div class="card">
-												<div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
-												<div class="text-lg font-bold">{commentsDto.content}</div>
-												<div class="divider"></div>
-											</div>
-										</a>
-									{/each}
-								{/await}
-							</div>
-
-							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="관심공고" />
-							<div role="tabpanel" class="tab-content p-5">
-								{#await loadMyInterest()}
-									<p>loading...</p>
-								{:then { data: interestDtoList }}
-									{#each interestDtoList ?? [] as interestDto}
-										<a href="/job-post/{interestDto.id}" class="card-link">
-											<div class="card">
-												<div class="text-sm text-gray-500">{interestDto.id}번 공고</div>
-												<div class="text-lg font-bold">{interestDto.title}</div>
-												<div class="divider"></div>
-											</div>
-										</a>
-									{/each}
-								{/await}
-							</div>
-						</div>
+					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="관심공고" />
+					<div role="tabpanel" class="tab-content p-5">
+						{#await loadMyInterest()}
+							<p>loading...</p>
+						{:then { data: interestDtoList }}
+							{#each interestDtoList ?? [] as interestDto}
+								<a href="/job-post/{interestDto.id}" class="card-link">
+									<div class="card">
+										<div class="text-sm text-gray-500">{interestDto.id}번 공고</div>
+										<div class="text-lg font-bold">{interestDto.title}</div>
+										<div class="divider"></div>
+									</div>
+								</a>
+							{/each}
+						{/await}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

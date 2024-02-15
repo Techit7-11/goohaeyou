@@ -22,8 +22,17 @@
 		return data!;
 	}
 	async function apply() {
-		const postId = parseInt($page.params.id);
-		rq.goTo(`/applications/${postId}/write`);
+		try {
+			if (rq.isLogout()) {
+				rq.msgError('로그인이 필요합니다.');
+				rq.goTo('/member/login');
+				return;
+			}
+			const postId = parseInt($page.params.id);
+			rq.goTo(`/applications/${postId}/write`);
+		} catch (error) {
+			console.error('애플리케이션 작성 중 오류가 발생했습니다:', error);
+		}
 	}
 	function editPost() {
 		rq.goTo(`/job-post/modify/${postId}`);
@@ -139,7 +148,6 @@
 
 	// 공고 조기 마감
 	async function postEarlyClosing() {
-
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
 
 		if (response.data?.statusCode === 204) {
@@ -168,16 +176,9 @@
 		<div class="flex justify-between items-center">
 			<div class="text-xl font-bold">{jobPostDetailDto?.title}</div>
 			<div class="flex items-center">
-				{#if jobPostDetailDto?.author === rq.member.username}
-					<button class="btn btn-primary btn-xs mr-2" on:click={editPost}>수정하기</button>
-					{#if !jobPostDetailDto.closed}
-						<button class="btn btn-xs mr-2" on:click={postEarlyClosing}>조기마감</button>
-					{/if}
-					<button class="btn btn-xs" on:click={deletePost}>삭제하기</button>
-				{:else if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin}
-					<!-- 지원 가능한 경우 -->
-					<button class="btn btn btn-neutral" on:click={apply}>지원하기</button>
-				{/if}
+				{#if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin && jobPostDetailDto?.author !== rq.member.username}
+                    <button class="btn btn-neutral" on:click={apply}>지원하기</button>
+                {/if}
 			</div>
 		</div>
 		<div class="mt-4">
@@ -225,25 +226,52 @@
 				{#if rq.isLogin() && jobPostDetailDto?.author !== rq.member.username && jobPostDetailDto?.closed === false}
 					<div>
 						{#if interested}
-							<button class="btn btn-ghost px-1 py-1 text-xs text-gray-600" on:click={() => removeInterest(postId)}>관심 취소</button>
+							<button
+								class="btn btn-ghost px-1 py-1 text-xs text-gray-600"
+								on:click={() => removeInterest(postId)}>관심 취소</button
+							>
 						{:else}
-							<button class="btn btn-ghost px-1 py-1 text-xs text-gray-600" on:click={() => registerInterest(postId)}>
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+							<button
+								class="btn btn-ghost px-1 py-1 text-xs text-gray-600"
+								on:click={() => registerInterest(postId)}
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-6 w-6"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									><path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+									/></svg
+								>
 								관심 공고
 							</button>
 						{/if}
 					</div>
 				{/if}
-				<div class="flex items-center">
+				<div class="flex">
 					<div class="text-sm">관심 등록 :</div>
 					<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
 					<div class="text-sm">조회 :</div>
 					<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
+				</div>
+				<div class="flex">
 					{#if jobPostDetailDto?.author === rq.member.username}
-						<button
-							class="btn btn-primary btn-xs"
-							on:click={() => goToApplicationsList(jobPostDetailDto?.id)}>지원서 확인</button
-						>
+						<button class="btn btn-primary btn-xs mx-1" on:click={editPost}>수정하기</button>
+						<button class="btn btn-xs mx-1" on:click={deletePost}>삭제하기</button>
+						{#if !jobPostDetailDto.closed}
+							<button class="btn btn-xs mx-1" on:click={postEarlyClosing}>조기마감</button>
+						{/if}
+						{#if jobPostDetailDto?.author === rq.member.username}
+							<button
+								class="btn btn-primary btn-xs mx-1"
+								on:click={() => goToApplicationsList(jobPostDetailDto?.id)}>지원서 확인</button
+							>
+						{/if}
 					{/if}
 				</div>
 			</div>
