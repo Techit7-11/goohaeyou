@@ -36,7 +36,7 @@
 	async function updateMember() {
 		const response = await rq.apiEndPoints().PUT('/api/member/social', { body: updatedMemberData });
 
-		if (response.data?.statusCode === 204) {
+		if (response.data?.statusCode === 200) {
 			rq.msgAndRedirect({ msg: '회원정보 수정 완료' }, undefined, '/');
 		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
 			const customErrorMessage = response.data?.data?.message;
