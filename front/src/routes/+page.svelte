@@ -64,8 +64,8 @@
 	}
 </script>
 
-<div class="sort mx-auto w-80">
-	<select class="sort-select select-bordered w-full max-w-xs" on:change={handleSortSelect}>
+<div class="sort  mx-auto w-80 mt-5">
+	<select class="select select-bordered w-full max-w-xs" on:change={handleSortSelect}>
 		<option value="createdAt desc">최신 등록 순</option>
 		<option value="createdAt asc">오래된 순</option>
 		<option value="applicationCount desc">지원자 많은 순</option>
@@ -83,7 +83,7 @@
 {:then { data: { itemPage } }}
 	<div class="flex justify-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
-			<div class="py-5">
+			<div>
 				{#each posts ?? [] as post, index}
 					<a href="/job-post/{post.id}" class="block">
 						<div class="card relative bg-base-100 shadow-xl my-4">
