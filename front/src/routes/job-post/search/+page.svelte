@@ -38,7 +38,7 @@
 	}
 </script>
 
-<div class="container flex justify-center items-center">
+<div class="flex justify-center items-center">
 	<select class="select max-w-xs text-center flex flex-1" name="kwType">
 		<option value="titleOrBody">제목 + 내용</option>
 		<option value="title">제목</option>
