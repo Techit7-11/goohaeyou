@@ -81,29 +81,30 @@
 					<div class="card relative bg-base-100 shadow-xl my-4">
 						<div class="card-body">
 							<div class="flex items-center justify-between">
-								<div class="flex items-center space-x-10">
-									<div class="text-bold w-16">{post.author}</div>
-									<div class="flex flex-col">
-										<div class="font-bold">{post.title}</div>
-										<div class="text-xs text-gray-500">{post.location}</div>
+								<div class="flex items-center">
+									<div class="flex flex-col mr-10">
+										<div class="text-bold text-gray-500 mb-1">{post.author}</div>
+										<div class="flex flex-col">
+											<div class="font-bold">{post.title}</div>
+											<div class="text-xs text-gray-500">{post.location}</div>
+											<div class="flex mt-2">
+												<div class="flex">
+													<div class="text-xs text-gray-500">조회</div>
+													<div class="text-xs mx-2">{post.incrementViewCount}</div>
+												</div>
+												<div class="flex">
+													<div class="text-xs text-gray-500">댓글</div>
+													<div class="text-xs mx-2">{post.commentsCount}</div>
+												</div>
+												<div class="flex">
+													<div class="text-xs text-gray-500">찜</div>
+													<div class="text-xs mx-2">{post.interestsCount}</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
-
 								<div class="flex items-center justify-between">
-									<div class="flex flex-col space-y-1 mr-6">
-										<div class="flex justify-between">
-											<div class="text-xs text-gray-500 mr-6">조회</div>
-											<div class="text-xs">{post.incrementViewCount}</div>
-										</div>
-										<div class="flex justify-between">
-											<div class="text-xs text-gray-500 mr-6">댓글</div>
-											<div class="text-xs">{post.commentsCount}</div>
-										</div>
-										<div class="flex justify-between">
-											<div class="text-xs text-gray-500 mr-6">찜</div>
-											<div class="text-xs">{post.interestsCount}</div>
-										</div>
-									</div>
 									<div class="flex flex-col items-center">
 										{#if post.closed}
 											<div class="badge badge-neutral">마감</div>
