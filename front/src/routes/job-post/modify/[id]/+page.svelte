@@ -42,10 +42,10 @@
 			rq.msgAndRedirect({ msg: '글 수정 완료' }, undefined, '/');
 		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
 			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage ?? '알 수 없는 오류가 발생했습니다.');
+			rq.msgError(customErrorMessage);
 		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
 			if (Array.isArray(response.data.data)) {
-				response.data.data.forEach((msg) => rq.msgError(msg));
+				rq.msgError(response.data.data[0]);
 			}
 		} else {
 			rq.msgError('글 수정 중 오류가 발생했습니다.');

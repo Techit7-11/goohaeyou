@@ -104,24 +104,6 @@ public class JobPostController {
         CookieUtil.addCookie(response, cookieName, newCookieValue, 24 * 60 * 60); // 24시간
     }
 
-    @PostMapping("/{id}/interest")
-    @Operation(summary = "구인공고 관심 등록")
-    public ResponseEntity<Void> increase(@AuthenticationPrincipal MemberDetails memberDetails,
-                                         @PathVariable(name = "id") Long id) {
-        jobPostService.Interest(memberDetails.getUsername(), id);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{id}/interest")
-    @Operation(summary = "구인공고 관심 제거")
-    public ResponseEntity<Void> disinterest(@AuthenticationPrincipal MemberDetails memberDetails,
-                                            @PathVariable(name = "id") Long id) {
-        jobPostService.disinterest(memberDetails.getUsername(), id);
-
-        return ResponseEntity.noContent().build();
-    }
-
     @DeleteMapping("/{id}")
     @Operation(summary = "구인공고 삭제")
     public ResponseEntity<Void> deleteJobPost(@AuthenticationPrincipal MemberDetails memberDetails,
@@ -169,5 +151,20 @@ public class JobPostController {
                         new PageDto<>(_itemPage)
                 )
         );
+    }
+
+    @PutMapping("/{id}/closing")
+    @Operation(summary = "조기 마감")
+    public RsData<Void> postEarlyClosing(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                 @PathVariable(name = "id") Long id) {
+        jobPostService.postEarlyClosing(memberDetails.getUsername(), id);
+
+        return RsData.of("204", "NO_CONTENT");
+    }
+
+    @PutMapping("/a")
+    public ResponseEntity<Void> a(){
+        jobPostService.checkAndCloseExpiredJobPosts();
+        return ResponseEntity.noContent().build();
     }
 }

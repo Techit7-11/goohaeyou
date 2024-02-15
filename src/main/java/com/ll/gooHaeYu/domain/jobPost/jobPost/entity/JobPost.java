@@ -45,7 +45,6 @@ public class JobPost extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean closed = false;
 
-    @Column(nullable = false)
     private LocalDate deadline;
 
     @Column(nullable = false)
@@ -59,6 +58,10 @@ public class JobPost extends BaseTimeEntity {
             this.title = title;
         }
         this.deadline = deadline;
+    }
+
+    public void update() {
+        this.deadline = null;
     }
 
     public void close() {
