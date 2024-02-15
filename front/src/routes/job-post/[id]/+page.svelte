@@ -11,11 +11,14 @@
 	let interested = false;
 
 	onMount(async () => {
-		const { data } = await checkInterestStatus(postId); // 해당 공고에 대해 로그인한 유저의 관심등록 여부 확인
-		interested = data?.data;
+        await loadComments(); // 댓글 로드
+        await updateInterestStatus(); // 관심등록 여부 확인 및 상태 업데이트
+    });
 
-		await loadComments();
-	});
+	async function updateInterestStatus() {
+        const { data } = await checkInterestStatus(postId);
+        interested = data?.data;
+    }
 
 	async function load() {
 		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
@@ -312,11 +315,11 @@
 					<div class="p-4 rounded-lg bg-base-100 shadow">
 						<div class="flex items-center justify-between mb-2">
 							<div class="flex items-center space-x-2">
-								<div class="avatar">
-									<div class="w-8 rounded-full">
-										<img src="https://placeimg.com/64/64/people" />
-									</div>
-								</div>
+								<div class="avatar online placeholder">
+                                  <div class="bg-neutral text-neutral-content rounded-full w-8">
+                                    <span class="text-xs">{comment.author.slice(0, 3)}</span>
+                                  </div>
+                                </div>
 								<div>
 									<div class="font-bold">{comment.author}</div>
 									<div class="text-xs text-gray-500">
@@ -350,7 +353,7 @@
 							<textarea class="textarea textarea-bordered w-full" bind:value={editingContent}
 							></textarea>
 						{:else}
-							<div class="text-gray-700">{comment.content}</div>
+							<div class="text-gray-700 ml-2">{comment.content}</div>
 						{/if}
 					</div>
 				{/each}
