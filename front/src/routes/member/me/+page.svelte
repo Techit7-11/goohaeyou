@@ -96,9 +96,7 @@
 					>
 				</div>
 			</div>
-			<div class="w-full">
-				<div class="container">
-					<div class="max-w-sm mx-auto">
+			<div class="w-full flex justify-center">
 						<div role="tablist" class="tabs tabs-bordered">
 							<input
 								type="radio"
@@ -148,7 +146,7 @@
 							</div>
 
 							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="작성댓글" />
-							<div role="tabpanel" class="tab-content p-7">
+							<div role="tabpanel" class="tab-content p-5">
 								{#await loadMyComments()}
 									<p>loading...</p>
 								{:then { data: commentsDtoList }}
@@ -181,8 +179,6 @@
 								{/await}
 							</div>
 						</div>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>
