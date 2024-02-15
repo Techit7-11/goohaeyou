@@ -36,9 +36,6 @@ export interface paths {
 		/** 조기 마감 */
 		put: operations['postEarlyClosing'];
 	};
-	'/api/job-posts/a': {
-		put: operations['a'];
-	};
 	'/api/applications/{id}': {
 		/** 지원서 상세 내용 */
 		get: operations['detailApplication'];
@@ -578,14 +575,6 @@ export interface operations {
 			};
 		};
 	};
-	a: {
-		responses: {
-			/** @description OK */
-			200: {
-				content: never;
-			};
-		};
-	};
 	/** 지원서 상세 내용 */
 	detailApplication: {
 		parameters: {
@@ -787,8 +776,8 @@ export interface operations {
 	approve: {
 		parameters: {
 			path: {
-				postId: number;
-				applicationIds: number[];
+				arg1: number;
+				arg2: number[];
 			};
 		};
 		responses: {
@@ -804,10 +793,10 @@ export interface operations {
 	socialLogin: {
 		parameters: {
 			query: {
-				redirectUrl: string;
+				arg0: string;
 			};
 			path: {
-				providerTypeCode: string;
+				arg1: string;
 			};
 		};
 		responses: {
@@ -957,7 +946,7 @@ export interface operations {
 	getList_1: {
 		parameters: {
 			path: {
-				postId: number;
+				arg1: number;
 			};
 		};
 		responses: {

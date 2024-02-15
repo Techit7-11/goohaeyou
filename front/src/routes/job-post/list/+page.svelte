@@ -64,15 +64,14 @@
 	}
 </script>
 
-<div class="sort mx-auto w-80">
-	<select class="sort-select select-bordered w-full max-w-xs" on:change={handleSortSelect}>
+<div class="sort mx-auto w-80 mt-5">
+	<select class="select select-bordered w-full max-w-xs" on:change={handleSortSelect}>
 		<option value="createdAt desc">최신 등록 순</option>
 		<option value="createdAt asc">오래된 순</option>
 		<option value="applicationCount desc">지원자 많은 순</option>
 		<option value="commentsCount desc">댓글 많은 순</option>
 		<option value="incrementViewCount desc">조회수 높은 순</option>
 		<option value="interestsCount desc">관심 많은 순</option>
-		<option value="title asc">공고 제목 순</option>
 		<option value="deadline asc">마감 빠른 순</option>
 	</select>
 </div>
@@ -84,42 +83,39 @@
 {:then { data: { itemPage } }}
 	<div class="flex justify-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
-			<div class="py-5">
+			<div>
 				{#each posts ?? [] as post, index}
 					<a href="/job-post/{post.id}" class="block">
 						<div class="card relative bg-base-100 shadow-xl my-4">
 							<div class="card-body">
 								<div class="flex items-center justify-between">
-									<div class="flex items-center space-x-10">
-										<div class="text-bold w-16">{post.author}</div>
-										<div class="flex flex-col">
-											<div class="font-bold">{post.title}</div>
-											<div class="text-xs text-gray-500">{post.location}</div>
+									<div class="flex items-center">
+										<div class="flex flex-col mr-10">
+											<div class="text-bold text-gray-500 mb-1">{post.author}</div>
+											<div class="flex flex-col">
+												<div class="font-bold">{post.title}</div>
+												<div class="text-xs text-gray-500">{post.location}</div>
+												<div class="flex mt-2">
+													<div class="flex">
+														<div class="text-xs text-gray-500">조회</div>
+														<div class="text-xs mx-2">{post.incrementViewCount}</div>
+													</div>
+													<div class="flex">
+														<div class="text-xs text-gray-500">댓글</div>
+														<div class="text-xs mx-2">{post.commentsCount}</div>
+													</div>
+													<div class="flex">
+														<div class="text-xs text-gray-500">찜</div>
+														<div class="text-xs mx-2">{post.interestsCount}</div>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
-
 									<div class="flex items-center justify-between">
-										<div class="flex flex-col space-y-1 mr-6">
-											<div class="flex justify-between">
-												<div class="text-xs text-gray-500 mr-6">조회</div>
-												<div class="text-xs">{post.incrementViewCount}</div>
-											</div>
-											<div class="flex justify-between">
-												<div class="text-xs text-gray-500 mr-6">댓글</div>
-												<div class="text-xs">{post.commentsCount}</div>
-											</div>
-											<div class="flex justify-between">
-												<div class="text-xs text-gray-500 mr-6">찜</div>
-												<div class="text-xs">{post.interestsCount}</div>
-											</div>
-										</div>
 										<div class="flex flex-col items-center">
 											{#if post.closed}
 												<div class="badge badge-neutral">마감</div>
-											{:else if post.employed}
-												<div class="badge badge-ghost my-1">구인완료</div>
-												<div class="text-xs text-gray-500">마감기한</div>
-												<div class="text-xs text-gray-500">{post.deadLine}</div>
 											{:else}
 												<div class="badge badge-primary my-1">구인중</div>
 												<div class="text-xs text-gray-500">마감기한</div>
@@ -133,7 +129,7 @@
 					</a>
 				{/each}
 
-				<div class="max-w-sm mx-auto">
+				<div class="max-w-sm mx-auto my-5">
 					<button class="w-full btn btn-primary my-5" on:click={JobPostWritePage}>
 						글 작성하기
 					</button>

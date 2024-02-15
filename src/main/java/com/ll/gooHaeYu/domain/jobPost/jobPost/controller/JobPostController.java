@@ -161,10 +161,4 @@ public class JobPostController {
 
         return RsData.of("204", "NO_CONTENT");
     }
-
-    @PutMapping("/a")
-    public ResponseEntity<Void> a(){
-        jobPostService.checkAndCloseExpiredJobPosts();
-        return ResponseEntity.noContent().build();
-    }
 }

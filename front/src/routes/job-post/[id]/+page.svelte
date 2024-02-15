@@ -11,14 +11,14 @@
 	let interested = false;
 
 	onMount(async () => {
-        await loadComments(); // 댓글 로드
-        await updateInterestStatus(); // 관심등록 여부 확인 및 상태 업데이트
-    });
+		await loadComments(); // 댓글 로드
+		await updateInterestStatus(); // 관심등록 여부 확인 및 상태 업데이트
+	});
 
 	async function updateInterestStatus() {
-        const { data } = await checkInterestStatus(postId);
-        interested = data?.data;
-    }
+		const { data } = await checkInterestStatus(postId);
+		interested = data?.data;
+	}
 
 	async function load() {
 		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
@@ -150,7 +150,7 @@
 	}
 
 	// 공고 조기 마감
-	async function postEarlyClosing() {
+	async function postEarlyClosing(postId) {
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
 
 		if (response.data?.statusCode === 204) {
@@ -238,7 +238,9 @@
 						<button class="btn btn-primary btn-xs mx-1" on:click={editPost}>수정하기</button>
 						<button class="btn btn-xs mx-1" on:click={deletePost}>삭제하기</button>
 						{#if !jobPostDetailDto.closed}
-							<button class="btn btn-xs mx-1" on:click={postEarlyClosing}>조기마감</button>
+							<button class="btn btn-xs mx-1" on:click={postEarlyClosing(jobPostDetailDto?.id)}
+								>조기마감</button
+							>
 						{/if}
 						{#if jobPostDetailDto?.author === rq.member.username}
 							<button
@@ -316,10 +318,10 @@
 						<div class="flex items-center justify-between mb-2">
 							<div class="flex items-center space-x-2">
 								<div class="avatar online placeholder">
-                                  <div class="bg-neutral text-neutral-content rounded-full w-8">
-                                    <span class="text-xs">{comment.author.slice(0, 3)}</span>
-                                  </div>
-                                </div>
+									<div class="bg-neutral text-neutral-content rounded-full w-8">
+										<span class="text-xs">{comment.author.slice(0, 3)}</span>
+									</div>
+								</div>
 								<div>
 									<div class="font-bold">{comment.author}</div>
 									<div class="text-xs text-gray-500">

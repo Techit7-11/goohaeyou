@@ -129,7 +129,7 @@
 					</a>
 				{/each}
 
-				<div class="max-w-sm mx-auto">
+				<div class="max-w-sm mx-auto my-5">
 					<button class="w-full btn btn-primary my-5" on:click={JobPostWritePage}>
 						글 작성하기
 					</button>
