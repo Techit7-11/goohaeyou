@@ -308,7 +308,7 @@ public class JobPostService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0 0 * * *") // 00:00:00.000000에 실행
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 00:00:00.000000에 실행
 //    @Scheduled(cron = "*/10 * * * * *")
     public void checkAndCloseExpiredJobPosts() {
         List<JobPost> expiredJobPosts = findExpiredJobPosts(LocalDate.now());
