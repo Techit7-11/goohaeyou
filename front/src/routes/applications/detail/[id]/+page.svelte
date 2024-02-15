@@ -79,8 +79,19 @@
 	<div class="container mx-auto p-4">
 		<div class="card bg-base-100 shadow-xl rounded-lg p-5">
 			<div class="flex items-center mb-4">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="w-6 h-6 mr-2"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+					/>
 				</svg>
 				<h2 class="card-title text-xl font-bold">지원서 상세 정보</h2>
 			</div>
@@ -98,7 +109,7 @@
 					<p><strong>주소:</strong> {application.location}</p>
 				</div>
 			</div>
-			<hr class="my-4 border-t border-gray-300 opacity-50">
+			<hr class="my-4 border-t border-gray-300 opacity-50" />
 			<div class="mb-2">
 				<strong>작성 내용</strong>
 				<div class="p-3 bg-gray-100 rounded overflow-auto mt-1" style="max-height: 200px;">
@@ -107,8 +118,7 @@
 			</div>
 
 			<p class="mb-2 mt-3"><strong>지원서 번호:</strong> {application.id}</p>
-      	    <p class="mb-2"><strong>제출일:</strong> {formatDate(application.createdAt)}</p>
-
+			<p class="mb-2"><strong>제출일:</strong> {formatDate(application.createdAt)}</p>
 
 			<p class="mb-2 mt-2">
 				<strong>승인 상태:</strong>

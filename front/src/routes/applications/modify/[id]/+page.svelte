@@ -42,7 +42,7 @@
 			);
 		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
 			if (Array.isArray(response.data.data)) {
-				rq.msgError(response.data.data[0])
+				rq.msgError(response.data.data[0]);
 			}
 		} else {
 			rq.msgAndRedirect(
