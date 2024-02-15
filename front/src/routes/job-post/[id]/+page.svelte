@@ -22,9 +22,18 @@
 		return data!;
 	}
 	async function apply() {
-		const postId = parseInt($page.params.id);
-		rq.goTo(`/applications/${postId}/write`);
-	}
+      try {
+        if (rq.isLogout()) {
+          rq.msgError('로그인이 필요합니다.');
+          rq.goTo('/member/login');
+          return;
+        }
+        const postId = parseInt($page.params.id);
+        rq.goTo(`/applications/${postId}/write`);
+      } catch (error) {
+        console.error('애플리케이션 작성 중 오류가 발생했습니다:', error);
+      }
+    }
 	function editPost() {
 		rq.goTo(`/job-post/modify/${postId}`);
 	}
