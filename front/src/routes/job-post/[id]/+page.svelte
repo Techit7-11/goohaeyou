@@ -150,7 +150,7 @@
 	}
 
 	// 공고 조기 마감
-	async function postEarlyClosing(postId) {
+	async function postEarlyClosing() {
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
 
 		if (response.data?.statusCode === 204) {
@@ -238,9 +238,7 @@
 						<button class="btn btn-primary btn-xs mx-1" on:click={editPost}>수정하기</button>
 						<button class="btn btn-xs mx-1" on:click={deletePost}>삭제하기</button>
 						{#if !jobPostDetailDto.closed}
-							<button class="btn btn-xs mx-1" on:click={postEarlyClosing(jobPostDetailDto?.id)}
-								>조기마감</button
-							>
+							<button class="btn btn-xs mx-1" on:click={() => postEarlyClosing()}>조기마감</button>
 						{/if}
 						{#if jobPostDetailDto?.author === rq.member.username}
 							<button
