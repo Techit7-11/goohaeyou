@@ -147,13 +147,7 @@
 								{/await}
 							</div>
 
-							<input
-								type="radio"
-								name="my_tabs_2"
-								role="tab"
-								class="tab"
-								aria-label="작성댓글"
-							/>
+							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="작성댓글" />
 							<div role="tabpanel" class="tab-content p-7">
 								{#await loadMyComments()}
 									<p>loading...</p>
