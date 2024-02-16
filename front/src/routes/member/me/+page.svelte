@@ -106,7 +106,7 @@
 						aria-label="작성공고"
 						checked
 					/>
-					<div role="tabpanel" class="tab-content p-5">
+					<div role="tabpanel" class="tab-content p-5 max-w-xs overflow-hidden">
 						{#await loadMyPosts()}
 							<div class="flex items-center justify-center min-h-screen">
 								<span class="loading loading-dots loading-lg"></span>
@@ -116,7 +116,7 @@
 								<a href="/job-post/{post.id}" class="card-link">
 									<div class="card">
 										<div class="text-sm text-gray-500">no.{index + 1}</div>
-										<div class="text-lg font-bold">{post.title}</div>
+										<div class="text-lg font-bold truncate">{post.title}</div>
 									</div>
 								</a>
 								<button
@@ -129,7 +129,7 @@
 					</div>
 
 					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="지원현황" />
-					<div role="tabpanel" class="tab-content p-5">
+					<div role="tabpanel" class="tab-content p-5 max-w-xs overflow-hidden">
 						{#await loadMyApplications()}
 							<p>loading...</p>
 						{:then { data: applicationDtoList }}
@@ -137,7 +137,9 @@
 								<a href="/applications/detail/{applicationDto.id}" class="card-link">
 									<div class="card">
 										<div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
-										<div class="text-lg font-bold">{summarizeBody(applicationDto.body)}</div>
+										<div class="text-lg font-bold truncate">
+											{summarizeBody(applicationDto.body)}
+										</div>
 										<div class="divider"></div>
 									</div>
 								</a>
@@ -146,7 +148,7 @@
 					</div>
 
 					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="작성댓글" />
-					<div role="tabpanel" class="tab-content p-5">
+					<div role="tabpanel" class="tab-content p-5 max-w-xs overflow-hidden">
 						{#await loadMyComments()}
 							<p>loading...</p>
 						{:then { data: commentsDtoList }}
@@ -154,7 +156,7 @@
 								<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
 									<div class="card">
 										<div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
-										<div class="text-lg font-bold">{commentsDto.content}</div>
+										<div class="text-lg font-bold truncate">{commentsDto.content}</div>
 										<div class="divider"></div>
 									</div>
 								</a>
@@ -163,7 +165,7 @@
 					</div>
 
 					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="관심공고" />
-					<div role="tabpanel" class="tab-content p-5">
+					<div role="tabpanel" class="tab-content p-5 max-w-xs overflow-hidden">
 						{#await loadMyInterest()}
 							<p>loading...</p>
 						{:then { data: interestDtoList }}
@@ -171,7 +173,7 @@
 								<a href="/job-post/{interestDto.id}" class="card-link">
 									<div class="card">
 										<div class="text-sm text-gray-500">{interestDto.id}번 공고</div>
-										<div class="text-lg font-bold">{interestDto.title}</div>
+										<div class="text-lg font-bold truncate">{interestDto.title}</div>
 										<div class="divider"></div>
 									</div>
 								</a>
