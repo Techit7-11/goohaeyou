@@ -92,8 +92,10 @@
 									<div class="flex items-center">
 										<div class="flex flex-col mr-10">
 											<div class="text-bold text-gray-500 mb-1">{post.author}</div>
-											<div class="flex flex-col">
-												<div class="font-bold">{post.title}</div>
+											<div
+												class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
+											>
+												<div class="font-bold truncate">{post.title}</div>
 												<div class="text-xs text-gray-500">{post.location}</div>
 												<div class="flex mt-2">
 													<div class="flex">
