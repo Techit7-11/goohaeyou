@@ -16,15 +16,15 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.global.event.ChangeOfPostEvent;
-import com.ll.gooHaeYu.global.event.PostDeletedEvent;
-import com.ll.gooHaeYu.global.event.PostGetInterestedEvent;
+import com.ll.gooHaeYu.global.event.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -171,7 +171,9 @@ public class JobPostService {
                 .build());
 
         postDetail.getJobPost().increaseInterestCount();
-        publisher.publishEvent(new PostGetInterestedEvent(this, postDetail, member));
+        if (!postDetail.getAuthor().equals(username)) {
+            publisher.publishEvent(new PostGetInterestedEvent(this, postDetail, member));
+        }
     }
 
     @Transactional
@@ -187,6 +189,12 @@ public class JobPostService {
 
     public boolean hasInterest(JobPostDetail post, Member member) {
         return post.getInterests().stream().anyMatch(interest -> interest.getMember().equals(member));
+    }
+
+    public boolean isInterested(String username, Long id) {
+        List<String> interestedUsernames = findById(id).getInterestedUsernames();
+
+        return interestedUsernames.stream().anyMatch(username::equals);
     }
 
     public List<JobPostDto> findByUsername(String username) {
@@ -250,40 +258,22 @@ public class JobPostService {
         return spec;
     }
 
-    @Transactional
-    public void deadline(String username, Long postId) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
-        JobPost jobPost = postDetail.getJobPost();
-        if (!canEditPost(username,postDetail.getAuthor())) {
-            throw new CustomException(NOT_ABLE);
-        }
-
-        List<Application> applicationList = postDetail.getApplications();
-        List<Application> removeApplicationList = new ArrayList<>();
-
-        for (Application application : applicationList) {
-            if (application.getApprove()) {
-                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
-            }else {
-                removeApplicationList.add(application);
-                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_UNAPPROVE, DELETE));
-            }
-        }
-
-
+//    @Transactional
+//    public void deadline(String username, Long postId) {
+//        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
+//        JobPost jobPost = postDetail.getJobPost();
+//        if (!canEditPost(username,postDetail.getAuthor())) {
+//            throw new CustomException(NOT_ABLE);
+//        }
+//
 //        List<Application> applicationList = postDetail.getApplications().stream()
 //                .filter(application -> application.getApprove() != null && !application.getApprove())
-//                .peek(application -> publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_UNAPPROVE, DELETE)))
 //                .collect(Collectors.toList());
 //
 //        for (Application application : applicationList) {
-//            publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
-//
+//            postDetail.getApplications().remove(application);
 //        }
-        for (Application application : removeApplicationList) {
-            postDetail.getApplications().remove(application);
-        }
-    }
+//    }
 
 
     public List<JobPost> findExpiredJobPosts(LocalDate currentDate) { //    ver.  LocalDate
@@ -301,4 +291,39 @@ public class JobPostService {
         jobPostRepository.save(jobPost);
     }
 
+    @EventListener
+    @Transactional
+    public void jobPostClosedEventListen(PostDeadlineEvent event) {
+        JobPost jobPost = event.getJobPost();
+        jobPost.close();
+        jobPostRepository.save(jobPost);
+    }
+
+    @EventListener
+    @Transactional
+    public void jobPostEmployedEventListen(PostEmployedEvent event) {
+        JobPost jobPost = event.getJobPost();
+        jobPost.employed();
+        jobPostRepository.save(jobPost);
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 00:00:00.000000에 실행
+//    @Scheduled(cron = "*/10 * * * * *")
+    public void checkAndCloseExpiredJobPosts() {
+        List<JobPost> expiredJobPosts = findExpiredJobPosts(LocalDate.now());
+        for (JobPost jobPost : expiredJobPosts) {
+            publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
+        }
+    }
+
+    @Transactional
+    public void postEarlyClosing(String username, Long id) {
+        JobPost jobPost = findByIdAndValidate(id);
+        if (!canEditPost(username, jobPost.getMember().getUsername())) {
+            throw new CustomException(NOT_ABLE);
+        }
+        jobPost.update();
+        publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
+    }
 }

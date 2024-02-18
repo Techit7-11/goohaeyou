@@ -6,50 +6,72 @@
 
 	const { children } = $props();
 
+	function handleAuthAction() {
+		if (rq.isLogin()) {
+			rq.logoutAndRedirect('/');
+		} else {
+			window.location.href = '/member/login';
+		}
+	}
+	function NavMyPage() {
+		window.location.href = '/member/me';
+	}
+	function NavHomepage() {
+		window.location.href = '/';
+	}
+	function NavAlert() {
+		window.location.href = '/notification/list';
+	}
+	function NavSearch() {
+		window.location.href = '/job-post/search';
+	}
+
 	onMount(() => {
 		rq.initAuth();
 	});
+
+	// 해당 부분은 읽지 않은 알림이 있을 경우 ui 변경 시도를 위해 작성했습니다.
+	// 논리 타입의 a는 변경이 잘 됩니다.
+	// 하지만 ui부분에서 a값 변경과 동시에 추가적인 ui변경은 안됩니다.
+	// let a: boolean = false;
+	// async function unreadNotification() {
+	// 	let result = false;
+	// 	if (rq.isLogin()) {
+	// 		const response = await rq.apiEndPoints().GET(`/api/notification/new`);
+	// 		console.log('데이터');
+	// 		console.log(response.data?.data);
+	// 		if (response.data?.data !== undefined) {
+	// 			a = response.data?.data;
+	// 			console.log(typeof response.data?.data);
+	// 		}
+	// 	}
+	// }
+
+	// function runMethodPeriodically() {
+	// 	// 30초마다 메소드를 실행하기 위해 setInterval 함수 사용
+	// 	setInterval(() => {
+	// 		unreadNotification();
+	// 		console.log('a 값, 타입');
+	// 		console.log(a);
+	// 		console.log(typeof a);
+	// 	}, 30000); // 30초를 밀리초 단위로 표현한 값
+	// }
+
+	// runMethodPeriodically();
 </script>
 
 <header>
 	<div class="navbar bg-base-100">
 		<div class="navbar-start">
-			<div class="dropdown">
-				<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						><path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 6h16M4 12h16M4 18h7"
-						/></svg
-					>
-				</div>
-				<ul
-					tabindex="0"
-					class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-				>
-					<li><a href="/job-post/list">구인공고목록</a></li>
-					<li><a href="/member/me">마이페이지</a></li>
-					<li><a href="/notification/list">알림</a></li>
-				</ul>
-			</div>
-		</div>
-		<div class="navbar-center">
 			<a class="btn btn-ghost text-xl" href="/">GooHaeYou</a>
 		</div>
+		<div class="navbar-center"></div>
 		<div class="navbar-end">
 			{#if rq.isLogout()}
-				<a class="btn btn-ghost mx-3" href="/member/login">로그인</a>
+				<a class="btn btn-ghost mx-3" href="/member/login">Login</a>
 			{/if}
 			{#if rq.isLogin()}
-				<button class="btn btn-ghost mx-3" on:click={() => rq.logoutAndRedirect('/')}
-					>로그아웃</button
+				<button class="btn btn-ghost mx-3" on:click={() => rq.logoutAndRedirect('/')}>Logout</button
 				>
 			{/if}
 		</div>
@@ -106,6 +128,89 @@
 		</div>
 	</nav>
 	<aside>
-		<p>© 2024 All Rights Reserved by Techit7-11번과_GooHaeYou</p>
+		<p class="mb-10">© 2024 All Rights Reserved by Techit7-11번과_GooHaeYou</p>
 	</aside>
 </footer>
+<div class="btm-nav">
+	<button on:click={NavSearch}>
+		<span class="btm-nav-label"></span>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-6 w-6"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			><path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="2"
+				d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+			/></svg
+		>
+	</button>
+	<button on:click={NavHomepage}>
+		<span class="btm-nav-label"></span>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-6 w-6"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			><path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="2"
+				d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+			/></svg
+		>
+	</button>
+
+	<!-- {#if a} -->
+	<!-- <button on:click={NavAlert}>
+			<span class="btm-nav-label"></span>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-6 w-6 rounded-full bg-blue-500 p-1"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+				><path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+				/></svg
+			>
+		</button>
+	{:else} -->
+	<button on:click={NavAlert}>
+		<span class="btm-nav-label"></span>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-6 w-6"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			><path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="2"
+				d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+			/></svg
+		>
+	</button>
+	<!-- {/if} -->
+
+	<button on:click={NavMyPage}>
+		<span class="btm-nav-label"></span>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 16 16"
+			fill="currentColor"
+			class="w-6 h-6 opacity-70"
+			><path
+				d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z"
+			/></svg
+		>
+	</button>
+</div>

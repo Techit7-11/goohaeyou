@@ -16,6 +16,7 @@ import com.ll.gooHaeYu.global.event.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.*;
-import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
-import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
+import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.*;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.NOTIFICATION_NOT_EXIST;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
 
@@ -90,6 +90,13 @@ public class NotificationService {
         makeNotification(jobPost.getMember(),application.getMember(), jobPost.getTitle(), event.getCauseTypeCode(), NOTICE, url);
     }
 
+    @Transactional
+    public void jobPostClosedNotificationEventListen(PostDeadlineEvent event) {
+        JobPost jobPost = event.getJobPost();
+        String url = "/job-post/"+jobPost.getId();
+        makeNotification(jobPost.getMember(),jobPost.getMember(), jobPost.getTitle(),POST_DEADLINE,APPROVE,url);
+    }
+
     private void makeNotification(Member toMember, Member fromMember, String jobPostTitle, CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {
         Notification notification = Notification.builder()
                 .createAt(LocalDateTime.now())
@@ -136,5 +143,10 @@ public class NotificationService {
     private Notification findByIdAndValidate (Long notificationId) {
         return notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new CustomException(NOTIFICATION_NOT_EXIST));
+    }
+
+    public Boolean unreadNotification(String username) {
+        Member toMember = memberService.getMember(username);
+        return notificationRepository.existsByToMemberAndSeenIsFalse(toMember);
     }
 }

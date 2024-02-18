@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @Tag(name = "Comment", description = "구인공고 댓글 API")
@@ -25,26 +24,26 @@ public class CommentController {
 
     @GetMapping
     @Operation(summary = "해당 공고에 달린 댓글 목록")
-    public RsData<List<CommentDto>> findByPostId(@PathVariable Long postId) {
+    public RsData<List<CommentDto>> findByPostId(@PathVariable("postId") Long postId) {
 
         return RsData.of(commentService.findByPostId(postId));
     }
 
     @PostMapping("/comment")
     @Operation(summary = "댓글 작성")
-    public RsData<URI> write (@AuthenticationPrincipal MemberDetails memberDetails,
-                                         @PathVariable("postId") Long postId,
-                                         @Valid @RequestBody CommentForm.Register form){
-        Long jobPostId = commentService.writeComment(postId,memberDetails.getUsername(),form);
+    public RsData<CommentForm.Register> write (@AuthenticationPrincipal MemberDetails memberDetails,
+                                               @PathVariable("postId") Long postId,
+                                               @Valid @RequestBody CommentForm.Register form){
+        CommentForm.Register jobPostForm = commentService.writeComment(postId,memberDetails.getUsername(),form);
 
-        return RsData.of("201", "CREATE", URI.create("/api/job-posts/" + jobPostId));
+        return RsData.of(jobPostForm);
     }
 
     @PutMapping("/comment/{commentId}")
     @Operation(summary = "댓글 수정")
     public ResponseEntity<Void> modify (@AuthenticationPrincipal MemberDetails memberDetails,
-                                        @PathVariable Long postId,
-                                        @PathVariable Long commentId,
+                                        @PathVariable("postId") Long postId,
+                                        @PathVariable("commentId") Long commentId,
                                         @Valid @RequestBody CommentForm.Register form) {
         commentService.modifyComment(memberDetails.getUsername(), postId, commentId, form);
 

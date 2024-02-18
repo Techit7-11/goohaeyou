@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,11 +72,11 @@ public class MemberController {
 
     @PutMapping
     @Operation(summary = "내 정보 수정")
-    public ResponseEntity<Void> modifyMember(@AuthenticationPrincipal MemberDetails memberDetails,
+    public RsData<Void> modifyMember(@AuthenticationPrincipal MemberDetails memberDetails,
                                              @Valid @RequestBody MemberForm.Modify form) {
         memberService.modifyMember(memberDetails.getUsername(), form);
 
-        return ResponseEntity.noContent().build();
+        return RsData.of("204", "NO_CONTENT");
     }
 
     @PutMapping("/social")
