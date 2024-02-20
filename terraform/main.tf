@@ -221,7 +221,7 @@ cd /docker_projects/gooHaeYou/source
 git clone https://github.com/Techit7-11/GooHaeYou .
 
 # 도커 이미지 생성
-docker build -t goohaeYou:latest .
+docker build -t goohaeyou:latest .
 
 # 생성된 이미지 실행
 docker run \
@@ -231,6 +231,6 @@ docker run \
     --restart unless-stopped \
     -e TZ=Asia/Seoul \
     -d \
-    goohaeYou:latest
+    goohaeyou:latest
 EOF
 }
