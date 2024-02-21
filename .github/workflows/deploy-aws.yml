@@ -88,4 +88,22 @@ jobs:
           working-directory: /
           comment: Deploy
           command: |
-            touch abc.txt
+            # 기존에 실행된 컨테이너 제거
+                        docker stop goohaeyou_1
+                        docker rm goohaeyou_1
+            
+                        # 새 도커 이미지 PULL
+                        docker pull ghcr.io/techit7-11/goohaeyou
+            
+                        # 생성된 이미지 실행
+                        docker run \
+                            --name=goohaeyou_1 \
+                            -p 8080:8080 \
+                            -v /docker_projects/goohaeyou/volumes/gen:/gen \
+                            --restart unless-stopped \
+                            -e TZ=Asia/Seoul \
+                            -d \
+                            ghcr.io/techit7-11/goohaeyou
+            
+                        # 태그가 none 인 이미지(예전에는 latest 였으니, docker pull 에 의해서 새로운 latest 태그를 가진 이미지가 생겨서, 더 이상 사용안되는 것들) 제거
+                        docker rmi $(docker images -f "dangling=true" -q)
