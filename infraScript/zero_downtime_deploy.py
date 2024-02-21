@@ -76,7 +76,6 @@ class ServiceManager:
 
         print("Switched service successfully!")
 
-
 if __name__ == "__main__":
     manager = ServiceManager()
     manager.update_service()

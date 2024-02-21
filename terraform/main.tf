@@ -191,7 +191,7 @@ END_OF_FILE
 
 # EC2 인스턴스 생성
 resource "aws_instance" "ec2_1" {
-  # 사용할 AMI ID
+  # 사용할 AMI ID (설정)
   ami                         = "ami-07eff2bc4837a9e01"
   # EC2 인스턴스 유형
   instance_type               = "t2.micro"
