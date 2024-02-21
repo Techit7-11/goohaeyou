@@ -10,6 +10,13 @@ on:
       - 'infraScript/**'
     branches:
       - 'feature/cicd2'
+
+permissions:
+  contents: write
+  packages: write
+  actions: write
+  deployments: write
+
 jobs:
   makeTagAndRelease:
     runs-on: ubuntu-latest
