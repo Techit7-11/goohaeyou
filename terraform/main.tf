@@ -225,7 +225,7 @@ docker build -t goohaeyou:latest .
 
 # 생성된 이미지 실행
 docker run \
-    --name=goohaeYou \
+    --name=goohaeyou \
     -p 8080:8080 \
     -v /docker_projects/gooHaeYou/volumes/gen:/gen \
     --restart unless-stopped \

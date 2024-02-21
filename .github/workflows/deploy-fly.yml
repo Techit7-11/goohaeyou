@@ -7,7 +7,7 @@ on:
       - src/**
       - fly.toml
       - Dockerfile
-      - .github/workflows/deploy.yml
+      - .github/workflows/deploy-fly.yml
     branches:
       - release
 

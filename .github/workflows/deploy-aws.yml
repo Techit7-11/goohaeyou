@@ -67,8 +67,25 @@ jobs:
       - name: 빌드 앤 푸시
         uses: docker/build-push-action@v3
         with:
+          instance-ids: "i-0e10a7925a6f2bac8"
           context: .
           push: true
           tags: |
             ghcr.io/${{ env.OWNER_LC }}/goohaeyou:${{ needs.makeTagAndRelease.outputs.tag_name }},
-            ghcr.io/${{ env.OWNER_LC }}/goohaeyou:latest
+            ghcr.io/${{ env.OWNER_LC }}/sb_2024_02_20:latest
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [ buildImageAndPush ]
+    steps:
+      - name: AWS SSM Send-Command
+        uses: peterkimzz/aws-ssm-send-command@master
+        id: ssm
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          instance-ids: "i-0e10a7925a6f2bac8"
+          working-directory: /
+          comment: Deploy
+          command: |
+            touch abc.txt
