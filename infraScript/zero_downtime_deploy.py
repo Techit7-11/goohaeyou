@@ -6,29 +6,18 @@ from typing import Dict, Optional
 
 
 class ServiceManager:
-    # 로그 파일 경로 추가
-    log_file_path = '/var/log/service_manager.log'  # 로그 파일 경로 지정
-
     # 초기화 함수
     def __init__(self, socat_port: int = 8080, sleep_duration: int = 20) -> None:
         self.socat_port: int = socat_port
         self.sleep_duration: int = sleep_duration
         self.services: Dict[str, int] = {
-            'gooheayou_1': 8081,
-            'gooheayou_2': 8082
+            'goohaeyou_1': 8081,
+            'goohaeyou_2': 8082
         }
         self.current_name: Optional[str] = None
         self.current_port: Optional[int] = None
         self.next_name: Optional[str] = None
         self.next_port: Optional[int] = None
-        # 로그 파일에 시작 메시지 기록
-        self._log("Service Manager started")
-
-    # 로그 기록 함수
-    def _log(self, message: str) -> None:
-        with open(self.log_file_path, 'a') as log_file:  # 'a' 모드로 파일 열기
-            log_file.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - {message}\n")
-
 
     # 현재 실행 중인 서비스를 찾는 함수
     def _find_current_service(self) -> None:
@@ -86,6 +75,7 @@ class ServiceManager:
             self._remove_container(self.current_name)
 
         print("Switched service successfully!")
+
 
 if __name__ == "__main__":
     manager = ServiceManager()
