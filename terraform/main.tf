@@ -187,7 +187,7 @@ curl -L https://github.com/docker/compose/releases/latest/download/docker-compos
 chmod +x /usr/local/bin/docker-compose
 
 docker run --name postgresql_ghy \
-    -e POSTGRES_PASSWORD=goohaeyou1 \
+    -e POSTGRES_PASSWORD=goohaeyou2 \
     -e TZ=Asia/Seoul \
     -d \
     -p 5432:5432 \
