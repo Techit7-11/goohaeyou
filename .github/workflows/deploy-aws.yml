@@ -67,7 +67,7 @@ jobs:
       - name: 빌드 앤 푸시
         uses: docker/build-push-action@v3
         with:
-          instance-ids: "i-0e10a7925a6f2bac8"
+          instance-ids: "i-0fabe827d5e6aebf0"
           context: .
           push: true
           tags: |

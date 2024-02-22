@@ -163,7 +163,7 @@ resource "aws_iam_instance_profile" "instance_profile_1" {
   role = aws_iam_role.ec2_role_1.name
 }
 
-# python, socat, docker, git 설치
+# python, socat, docker, git, mysql, redis 설치
 locals {
   ec2_user_data_base = <<-END_OF_FILE
 #!/bin/bash
@@ -178,6 +178,25 @@ systemctl start docker
 
 curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
+
+docker run --name postgresql_ghy \
+    -e POSTGRES_PASSWORD=goohaeyou1 \
+    -e TZ=Asia/Seoul \
+    -d \
+    -p 5432:5432 \
+    -v /path/to/init/scripts:/docker-entrypoint-initdb.d \
+    -v /docker_projects/postgresql_1/volumes/var/lib/postgresql/data:/var/lib/postgresql/data \
+    --restart unless-stopped \
+    postgres
+
+
+docker run \
+  --name=redis_ghy \
+  --restart unless-stopped \
+  -p 6379:6379 \
+  -e TZ=Asia/Seoul \
+  -d \
+  redis
 
 yum install git -y
 
@@ -222,21 +241,10 @@ resource "aws_instance" "ec2_1" {
   user_data = <<-EOF
 ${local.ec2_user_data_base}
 
-mkdir -p /docker_projects/gooHaeYou/source
-cd /docker_projects/gooHaeYou/source
-git clone https://github.com/Techit7-11/GooHaeYou .
+mkdir -p /docker_projects/goohaeyou
+curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/GooHaeYou/feature/cicd2/infraScript/zero_downtime_deploy.py
+chmod +x /docker_projects/goohaeyou/zero_downtime_deploy.py
+/docker_projects/goohaeyou/zero_downtime_deploy.py
 
-# 도커 이미지 생성
-docker build -t goohaeyou:latest .
-
-# 생성된 이미지 실행
-docker run \
-    --name=goohaeyou \
-    -p 8080:8080 \
-    -v /docker_projects/gooHaeYou/volumes/gen:/gen \
-    --restart unless-stopped \
-    -e TZ=Asia/Seoul \
-    -d \
-    goohaeyou:latest
 EOF
 }
