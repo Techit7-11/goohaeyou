@@ -7,10 +7,10 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
   datasource:
-    url: jdbc:postgresql://goohaeyou-db.internal:5432/goohaeyou_prod
-    username: postgres
-    password: LwojnN4RcbLoYwl
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:mysql://172.17.0.1:3306/goohaeyou_prod
+    username: root
+    password: ${custom.datasource.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update # `prod` 환경에서는 주로 validate 또는 none을 사용

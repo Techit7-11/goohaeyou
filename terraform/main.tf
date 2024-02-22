@@ -186,16 +186,15 @@ systemctl start docker
 curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-docker run --name postgresql_ghy \
-    -e POSTGRES_PASSWORD=goohaeyou2 \
+docker run --name mysql_ghy \
+    -e MYSQL_ROOT_PASSWORD=initial \
     -e TZ=Asia/Seoul \
     -d \
-    -p 5432:5432 \
-    -v /path/to/init/scripts:/docker-entrypoint-initdb.d \
-    -v /docker_projects/postgresql_1/volumes/var/lib/postgresql/data:/var/lib/postgresql/data \
+    -p 3306:3306 \
+    -v /docker_projects/mysql_ghy/volumns/var/lib/mysql:/var/lib/mysql \
     --restart unless-stopped \
-    postgres
-
+    mysql \
+    --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
 docker run \
   --name=redis_ghy \
