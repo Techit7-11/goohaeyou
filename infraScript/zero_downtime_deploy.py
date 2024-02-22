@@ -18,6 +18,9 @@ class ServiceManager:
         self.current_port: Optional[int] = None
         self.next_name: Optional[str] = None
         self.next_port: Optional[int] = None
+        # 로그 파일 초기화 (기존 내용을 삭제하고 새로 시작)
+        with open(self.log_file_path, 'w') as log_file:
+            log_file.write("Service Manager started\n")
 
     # 현재 실행 중인 서비스를 찾는 함수
     def _find_current_service(self) -> None:
