@@ -167,6 +167,13 @@ resource "aws_iam_instance_profile" "instance_profile_1" {
 locals {
   ec2_user_data_base = <<-END_OF_FILE
 #!/bin/bash
+sudo dd if=/dev/zero of=/swapfile bs=128M count=32
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+sudo swapon -s
+sudo sh -c 'echo "/swapfile swap swap defaults 0 0" >> /etc/fstab'
+
 yum install python -y
 yum install socat -y
 yum install pip -y
@@ -199,13 +206,6 @@ docker run \
   redis
 
 yum install git -y
-
-sudo dd if=/dev/zero of=/swapfile bs=128M count=32
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile
-sudo swapon /swapfile
-sudo swapon -s
-sudo sh -c 'echo "/swapfile swap swap defaults 0 0" >> /etc/fstab'
 
 END_OF_FILE
 }
