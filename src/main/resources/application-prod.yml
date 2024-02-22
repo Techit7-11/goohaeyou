@@ -22,6 +22,8 @@ spring:
   h2:
     console:
       enabled: false # H2 콘솔 비활성화
+  lifecycle:
+    timeout-per-shutdown-phase: 1h
 logging:   # 추후에 root: INFO or WARN 로 변경 (보안 및 성능 고려)
   level:
     root: DEBUG  # 애플리케이션 전체 로그 레벨을 DEBUG로 설정
