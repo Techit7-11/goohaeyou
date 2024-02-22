@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
 
 import os
+import requests  # HTTP 요청을 위한 모듈 추가
 import subprocess
 import time
 from typing import Dict, Optional
@@ -7,7 +9,7 @@ from typing import Dict, Optional
 
 class ServiceManager:
     # 초기화 함수
-    def __init__(self, socat_port: int = 8080, sleep_duration: int = 20) -> None:
+    def __init__(self, socat_port: int = 8080, sleep_duration: int = 3) -> None:
         self.socat_port: int = socat_port
         self.sleep_duration: int = sleep_duration
         self.services: Dict[str, int] = {
@@ -59,6 +61,18 @@ class ServiceManager:
         os.system(
             f"nohup socat -t0 TCP-LISTEN:{self.socat_port},fork,reuseaddr TCP:localhost:{self.next_port} &>/dev/null &")
 
+        # 서비스 상태를 확인하는 함수
+
+    def _is_service_up(self, port: int) -> bool:
+        url = f"http://127.0.0.1:{port}/actuator/health"
+        try:
+            response = requests.get(url, timeout=5)  # 5초 이내 응답 없으면 예외 발생
+            if response.status_code == 200 and response.json().get('status') == 'UP':
+                return True
+        except requests.RequestException:
+            pass
+        return False
+
     # 서비스를 업데이트하는 함수
     def update_service(self) -> None:
         self._find_current_service()
@@ -67,7 +81,10 @@ class ServiceManager:
         self._remove_container(self.next_name)
         self._run_container(self.next_name, self.next_port)
 
-        time.sleep(self.sleep_duration)
+        # 새 서비스가 'UP' 상태가 될 때까지 기다림
+        while not self._is_service_up(self.next_port):
+            print(f"Waiting for {self.next_name} to be 'UP'...")
+            time.sleep(self.sleep_duration)
 
         self._switch_port()
 
