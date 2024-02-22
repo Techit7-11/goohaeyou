@@ -67,7 +67,7 @@ jobs:
       - name: 빌드 앤 푸시
         uses: docker/build-push-action@v3
         with:
-          instance-ids: "i-0fabe827d5e6aebf0"
+          instance-ids: "i-0360abaa61e1d3ec4"
           context: .
           push: true
           tags: |
@@ -84,7 +84,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          instance-ids: "i-0fabe827d5e6aebf0"
+          instance-ids: "i-0360abaa61e1d3ec4"
           working-directory: /
           comment: Deploy-aws
           command: |
