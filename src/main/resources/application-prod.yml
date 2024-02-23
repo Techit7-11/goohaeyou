@@ -31,11 +31,13 @@ spring:
     timeout-per-shutdown-phase: 1h
   autoconfigure:
     exclude:
-logging:   # 추후에 root: INFO or WARN 로 변경 (보안 및 성능 고려)
+logging:
   level:
-    root: DEBUG  # 애플리케이션 전체 로그 레벨을 DEBUG로 설정
-    org.springframework.web: DEBUG  # Spring MVC 관련 로그를 DEBUG로 설정
-    org.hibernate: DEBUG  # Hibernate 관련 로그를 DEBUG로 설정
+    com.ll.gooHaeYu: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.orm.jdbc.bind: INFO
+    org.hibernate.orm.jdbc.extract: INFO
+    org.springframework.transaction.interceptor: INFO
 custom:
   site:
     cookieDomain: "${custom.prod.cookieDomain}"
