@@ -14,6 +14,8 @@ spring:
   data:
     redis:
       host: 172.17.0.1
+      port: 6379
+      password: ON_SECRET
   jpa:
     hibernate:
       ddl-auto: update # `prod` 환경에서는 주로 validate 또는 none을 사용
@@ -27,6 +29,8 @@ spring:
       enabled: false # H2 콘솔 비활성화
   lifecycle:
     timeout-per-shutdown-phase: 1h
+  autoconfigure:
+    exclude:
 logging:   # 추후에 root: INFO or WARN 로 변경 (보안 및 성능 고려)
   level:
     root: DEBUG  # 애플리케이션 전체 로그 레벨을 DEBUG로 설정
