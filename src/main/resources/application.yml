@@ -27,3 +27,7 @@ custom:
     frontUrl: "${custom.dev.frontUrl}"
     backUrl: "${custom.dev.backUrl}"
     name: goohaeyou
+  temp:
+    dirPath: c:\temp
+  gen:
+    dirPath: c:\temp\goohaeyou\gen
