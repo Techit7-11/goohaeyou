@@ -19,9 +19,9 @@ custom:
     frontUrl: "http://${custom.dev.cookieDomain}:5173"
     backUrl: "http://${custom.dev.cookieDomain}:${server.port}"
   prod:
-    cookieDomain: www.goohaeyou.site
-    frontUrl: "https://${custom.prod.cookieDomain}"
-    backUrl: "https://a.goohaeyou.site"
+    cookieDomain: goohaeyou.site
+    frontUrl: "https://www.${custom.prod.cookieDomain}"
+    backUrl: "https://a.${custom.prod.cookieDomain}"
   site:
     cookieDomain: "${custom.dev.cookieDomain}"
     frontUrl: "${custom.dev.frontUrl}"
