@@ -204,6 +204,17 @@ docker run \
   -d \
   redis
 
+docker run -d \
+    --name npm_1 \
+    -p 80:80 \
+    -p 443:443 \
+    -p 81:81 \
+    -e TZ=Asia/Seoul \
+    -v /docker_projects/npm_1/volumes/data:/data \
+    -v /docker_projects/npm_1/volumes/etc/letsencrypt:/etc/letsencrypt \
+    --restart unless-stopped \
+    jc21/nginx-proxy-manager:latest
+
 yum install git -y
 
 END_OF_FILE
