@@ -3,10 +3,15 @@ spring:
     ansi:
       enabled: always
   datasource:
-    url: jdbc:h2:./db_dev;MODE=PostgreSQL
+    url: jdbc:h2:./db_dev;MODE=MYSQL
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  data:
+    redis:
+      host: 3.38.153.248
+      port: 6379
+      password: ON_SECRET
   jpa:
     hibernate:
       ddl-auto: update

@@ -3,7 +3,7 @@ server:
   shutdown: graceful   # 스프링이 꺼질 때 이 전의 요청들을 모두 끝내고 꺼진다
 spring:
   servlet:
-    multipart:
+    multipart:  # 파일 업로드 관련
       max-file-size: 5MB
       max-request-size: 5MB
   datasource:
@@ -11,6 +11,9 @@ spring:
     username: root
     password: ${custom.datasource.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 172.17.0.1
   jpa:
     hibernate:
       ddl-auto: update # `prod` 환경에서는 주로 validate 또는 none을 사용
