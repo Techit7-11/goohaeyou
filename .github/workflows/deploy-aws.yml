@@ -1,15 +1,15 @@
-name: 'aws deploy'
+name: aws deploy
 on:
   push:
     paths:
-      - '.github/workflows/deploy-aws.yml'
-      - 'src/**'
-      - 'build.gradle'
-      - 'Dockerfile'
-      - 'readme.md'
-      - 'infraScript/**'
+      - .github/workflows/deploy-aws.yml
+      - src/**
+      - build.gradle
+      - Dockerfile
+      - readme.md
+      - infraScript/**
     branches:
-      - 'feature/cicd2'
+      - feature/cicd2
 
 permissions:
   contents: write
