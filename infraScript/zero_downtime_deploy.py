@@ -56,8 +56,6 @@ class ServiceManager:
         if pid:
             os.system(f"kill -9 {pid} 2>/dev/null")
 
-        time.sleep(5)
-
         os.system(
             f"nohup socat -t0 TCP-LISTEN:{self.socat_port},fork,reuseaddr TCP:localhost:{self.next_port} &>/dev/null &")
 
@@ -73,25 +71,42 @@ class ServiceManager:
             pass
         return False
 
+    def _is_service_ready(self, port: int) -> bool:
+        ready_url = f"http://127.0.0.1:{port}/ready"
+        for _ in range(12):  # 최대 1분(5초 간격으로 12번) 대기
+            try:
+                response = requests.get(ready_url, timeout=5)
+                if response.status_code == 200:
+                    return True
+            except requests.RequestException:
+                pass
+            time.sleep(5)
+        return False
+
     # 서비스를 업데이트하는 함수
     def update_service(self) -> None:
         self._find_current_service()
-        self._find_next_service()
+    self._find_next_service()
 
-        self._remove_container(self.next_name)
-        self._run_container(self.next_name, self.next_port)
+    self._remove_container(self.next_name)
+    self._run_container(self.next_name, self.next_port)
 
-        # 새 서비스가 'UP' 상태가 될 때까지 기다림
-        while not self._is_service_up(self.next_port):
-            print(f"Waiting for {self.next_name} to be 'UP'...")
-            time.sleep(self.sleep_duration)
+    # 새 서비스가 'UP' 상태가 될 때까지 기다림
+    while not self._is_service_up(self.next_port):
+        print(f"Waiting for {self.next_name} to be 'UP'...")
+        time.sleep(self.sleep_duration)
 
+    # 새 서비스가 완전히 준비될 때까지 추가로 기다림
+    if self._is_service_ready(self.next_port):
+        print(f"{self.next_name} is now ready.")
         self._switch_port()
 
         if self.current_name is not None:
             self._remove_container(self.current_name)
 
         print("Switched service successfully!")
+    else:
+        print(f"Failed to switch to {self.next_name}: Service not ready.")
 
 
 if __name__ == "__main__":
