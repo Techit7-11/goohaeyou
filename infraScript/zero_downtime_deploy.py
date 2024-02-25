@@ -64,16 +64,14 @@ class ServiceManager:
 
     # 서비스 상태를 확인하는 함수
     def _is_service_up(self, port: int) -> bool:
-        url = f"http://127.0.0.1:{port}/actuator/health"
-        try:
-            response = requests.get(url, timeout=5)
-            if response.status_code == 200 and response.json().get('status') == 'UP':
-                # 서비스가 준비되었는지 추가 확인
-                time.sleep(self.sleep_duration)  # 서비스가 완전히 준비될 때까지 추가 대기
-                return True
-        except requests.RequestException:
-            pass
-        return False
+        ready_url = f"http://127.0.0.1:{port}/ready"  # 준비 상태를 확인하는 엔드포인트
+    try:
+        response = requests.get(ready_url, timeout=5)
+        if response.status_code == 200 and response.json().get('status') == 'READY':
+            return True
+    except requests.RequestException:
+        pass
+    return False
 
     # 서비스를 업데이트하는 함수
     def update_service(self) -> None:
