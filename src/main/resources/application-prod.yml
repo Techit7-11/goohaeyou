@@ -1,7 +1,10 @@
 server:
   port: 8080
-  shutdown: graceful   # 스프링이 꺼질 때 이 전의 요청들을 모두 끝내고 꺼진다
+  shutdown: graceful   # 스프링부트가 꺼질 때 현재 하던일(요청응답, 배치작업)을 모두 마치고 꺼진다
 spring:
+  lifecycle:
+    # 스프링부트가 종료 요청을 받은 후 기다려줄 수 있는 최대한의 시간
+    timeout-per-shutdown-phase: 1h
   servlet:
     multipart:  # 파일 업로드 관련
       max-file-size: 5MB
@@ -27,8 +30,6 @@ spring:
   h2:
     console:
       enabled: false # H2 콘솔 비활성화
-  lifecycle:
-    timeout-per-shutdown-phase: 1h
   autoconfigure:
     exclude:
 logging:
