@@ -61,13 +61,15 @@ class ServiceManager:
         os.system(
             f"nohup socat -t0 TCP-LISTEN:{self.socat_port},fork,reuseaddr TCP:localhost:{self.next_port} &>/dev/null &")
 
-        # 서비스 상태를 확인하는 함수
 
+    # 서비스 상태를 확인하는 함수
     def _is_service_up(self, port: int) -> bool:
         url = f"http://127.0.0.1:{port}/actuator/health"
         try:
-            response = requests.get(url, timeout=5)  # 5초 이내 응답 없으면 예외 발생
+            response = requests.get(url, timeout=5)
             if response.status_code == 200 and response.json().get('status') == 'UP':
+                # 서비스가 준비되었는지 추가 확인
+                time.sleep(self.sleep_duration)  # 서비스가 완전히 준비될 때까지 추가 대기
                 return True
         except requests.RequestException:
             pass
