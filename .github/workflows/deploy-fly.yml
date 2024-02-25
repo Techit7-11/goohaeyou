@@ -9,7 +9,7 @@ on:
       - Dockerfile
       - .github/workflows/deploy-fly.yml
     branches:
-      - release
+      - release/1
 
 permissions:
   contents: write

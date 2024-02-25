@@ -9,7 +9,7 @@ on:
       - readme.md
       - infraScript/**
     branches:
-      - feature/cicd2
+      - dev
 
 permissions:
   contents: write
