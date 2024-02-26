@@ -79,6 +79,9 @@ export interface paths {
     /** 지원서 승인 */
     patch: operations["approve"];
   };
+  "/ready": {
+    get: operations["isReady"];
+  };
   "/member/socialLogin/{providerTypeCode}": {
     /** 소셜 로그인 */
     get: operations["socialLogin"];
@@ -778,6 +781,16 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
+  isReady: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": string;
         };
       };
     };

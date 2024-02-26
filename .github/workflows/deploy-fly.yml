@@ -7,9 +7,16 @@ on:
       - src/**
       - fly.toml
       - Dockerfile
-      - .github/workflows/deploy.yml
+      - .github/workflows/deploy-fly.yml
     branches:
-      - dev
+      - release/1
+
+permissions:
+  contents: write
+  packages: write
+  actions: write
+  deployments: write
+
 jobs:
   deploy:
     name: Deploy app
