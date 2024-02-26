@@ -33,6 +33,10 @@ export interface paths {
     /** 구인공고 삭제 */
     delete: operations["deleteJobPost"];
   };
+  "/api/job-posts/{id}/closing": {
+    /** 조기 마감 */
+    put: operations["postEarlyClosing"];
+  };
   "/api/applications/{id}": {
     /** 지원서 상세 내용 */
     get: operations["detailApplication"];
@@ -67,13 +71,16 @@ export interface paths {
   };
   "/api/job-posts/{id}/interest": {
     /** 구인공고 관심 등록 */
-    post: operations["increase"];
+    post: operations["interest"];
     /** 구인공고 관심 제거 */
     delete: operations["disinterest"];
   };
   "/api/employ/{postId}/{applicationIds}": {
     /** 지원서 승인 */
     patch: operations["approve"];
+  };
+  "/ready": {
+    get: operations["isReady"];
   };
   "/member/socialLogin/{providerTypeCode}": {
     /** 소셜 로그인 */
@@ -86,6 +93,10 @@ export interface paths {
   "/api/notification": {
     /** 유저 별 알림리스트 */
     get: operations["getList"];
+  };
+  "/api/notification/new": {
+    /** 읽지 않은 알림 유무 확인 */
+    get: operations["unreadNotification"];
   };
   "/api/member/myposts": {
     /** 내 공고 조회 */
@@ -102,6 +113,10 @@ export interface paths {
   "/api/member/myapplications": {
     /** 내 지원서 조회 */
     get: operations["detailMyApplications"];
+  };
+  "/api/job-posts/{id}/members/interest": {
+    /** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
+    get: operations["isInterested"];
   };
   "/api/job-posts/sort": {
     /** 구인공고 글 목록 정렬 */
@@ -143,6 +158,13 @@ export interface components {
       birth?: string;
       password?: string;
     };
+    RsDataVoid: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: Record<string, never>;
+    };
     SocialProfileForm: {
       name: string;
       phoneNumber: string;
@@ -177,13 +199,6 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["Modify"];
-    };
-    RsDataVoid: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: Record<string, never>;
     };
     RsDataRegister: {
       resultCode?: string;
@@ -251,7 +266,7 @@ export interface components {
       /** @enum {string} */
       causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE";
       /** @enum {string} */
-      resultTypeCode?: "NOTICE" | "DELETE" | "MODIFY";
+      resultTypeCode?: "NOTICE" | "DELETE" | "APPROVE";
       seen?: boolean;
       url?: string;
     };
@@ -261,6 +276,13 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["NotificationDto"][];
+    };
+    RsDataBoolean: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: boolean;
     };
     JobPostDto: {
       /** Format: int64 */
@@ -272,9 +294,12 @@ export interface components {
       commentsCount: number;
       /** Format: int64 */
       incrementViewCount: number;
+      /** Format: int64 */
+      interestsCount: number;
+      createdAt: string;
+      employed?: boolean;
       /** Format: date */
       deadLine?: string;
-      createdAt: string;
       closed?: boolean;
     };
     RsDataListJobPostDto: {
@@ -295,6 +320,7 @@ export interface components {
       /** Format: int64 */
       postId: number;
       body: string;
+      name: string;
       /** Format: date */
       birth: string;
       phone: string;
@@ -320,20 +346,21 @@ export interface components {
       commentsCount: number;
       /** Format: int64 */
       incrementViewCount: number;
+      /** Format: int64 */
+      interestsCount: number;
+      createdAt: string;
+      employed?: boolean;
       /** Format: date */
       deadLine?: string;
-      createdAt: string;
       body: string;
       /** Format: int64 */
       applicationCount?: number;
-      /** Format: int64 */
-      interestsCount?: number;
       /** Format: int32 */
       minAge?: number;
       /** @enum {string} */
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
       modifyAt?: string;
-      employed?: boolean;
+      interestedUsernames?: string[];
       closed?: boolean;
     };
     RsDataJobPostDetailDto: {
@@ -455,7 +482,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
       };
     };
   };
@@ -523,6 +552,22 @@ export interface operations {
       /** @description OK */
       200: {
         content: never;
+      };
+    };
+  };
+  /** 조기 마감 */
+  postEarlyClosing: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
       };
     };
   };
@@ -692,7 +737,7 @@ export interface operations {
     };
   };
   /** 구인공고 관심 등록 */
-  increase: {
+  interest: {
     parameters: {
       path: {
         id: number;
@@ -701,7 +746,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
       };
     };
   };
@@ -715,7 +762,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
       };
     };
   };
@@ -723,14 +772,26 @@ export interface operations {
   approve: {
     parameters: {
       path: {
-        arg1: number;
-        arg2: number[];
+        postId: number;
+        applicationIds: number[];
       };
     };
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
+  isReady: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": string;
+        };
       };
     };
   };
@@ -738,10 +799,10 @@ export interface operations {
   socialLogin: {
     parameters: {
       query: {
-        arg0: string;
+        redirectUrl: string;
       };
       path: {
-        arg1: string;
+        providerTypeCode: string;
       };
     };
     responses: {
@@ -776,6 +837,17 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListNotificationDto"];
+        };
+      };
+    };
+  };
+  /** 읽지 않은 알림 유무 확인 */
+  unreadNotification: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataBoolean"];
         };
       };
     };
@@ -824,6 +896,22 @@ export interface operations {
       };
     };
   };
+  /** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
+  isInterested: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataBoolean"];
+        };
+      };
+    };
+  };
   /** 구인공고 글 목록 정렬 */
   findAllPostSort: {
     parameters: {
@@ -864,7 +952,7 @@ export interface operations {
   getList_1: {
     parameters: {
       path: {
-        arg1: number;
+        postId: number;
       };
     };
     responses: {

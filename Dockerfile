@@ -31,5 +31,8 @@ WORKDIR /app
 # 첫 번째 스테이지에서 빌드된 JAR 파일 복사
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-# 실행할 JAR 파일 지정
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]
+# 서버 시간대를 아시아/서울로 설정
+ENV TZ=Asia/Seoul
+
+# 실행할 JAR 파일 지정 및 서버 시간대 설정
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "app.jar"]

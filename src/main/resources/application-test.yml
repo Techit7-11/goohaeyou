@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:db_test;MODE=PostgreSQL
+    url: jdbc:h2:mem:db_test;MODE=MYSQL
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -10,3 +10,6 @@ spring:
   h2:
     console:
       enabled: true
+custom:
+  gen:
+    dirPath: c:\temp\gooHaeYu\gen
