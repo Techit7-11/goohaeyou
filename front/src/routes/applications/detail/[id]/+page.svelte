@@ -36,21 +36,6 @@
 		return age;
 	}
 
-	async function approve(jobPostId, applicationId) {
-		const response = await rq.apiEndPoints().PATCH(`/api/employ/${jobPostId}/${applicationId}`, {
-			headers: { 'Content-Type': 'application/json' }
-		});
-
-		if (response.data?.statusCode === 204) {
-			alert('지원서가 승인되었습니다.');
-			location.reload();
-		} else if (response.data?.msg == 'CUSTOM_EXCEPTION') {
-			alert(response.data?.data?.message);
-		} else {
-			alert('지원서 승인에 실패했습니다. 다시 시도해주세요.');
-		}
-	}
-
 	async function deleteApplication(applicationId: number) {
 		try {
 			const response = await rq.apiEndPoints().DELETE(`/api/applications/${applicationId}`, {
@@ -145,23 +130,6 @@
 							>지원서 삭제</button
 						>
 					{/if}
-				</div>
-			{/if}
-
-			<!-- 승인 버튼 -->
-			{#if application.approve == null && application.jobPostAuthorUsername == rq.member.username}
-				<div class="text-center mt-2">
-					<button
-						class="btn btn-active btn-accent"
-						on:click={() => approve(application.jobPostId, application.id)}>승인하기</button
-					>
-				</div>
-			{/if}
-
-			<!-- 승인완료 버튼 -->
-			{#if application.approve == true && application.jobPostAuthorUsername == rq.member.username}
-				<div class="text-center mt-2">
-					<button class="btn btn-disabled" disabled>승인완료</button>
 				</div>
 			{/if}
 		</div>
