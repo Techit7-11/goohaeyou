@@ -75,6 +75,10 @@ export interface paths {
     /** 구인공고 관심 제거 */
     delete: operations["disinterest"];
   };
+  "/api/chat": {
+    /** 채팅방 생서 */
+    post: operations["createRoom"];
+  };
   "/api/employ/{postId}/{applicationIds}": {
     /** 지원서 승인 */
     patch: operations["approve"];
@@ -228,6 +232,10 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["JoinForm"];
+    };
+    CreateForm: {
+      /** Format: int64 */
+      memberId?: number;
     };
     RsDataURI: {
       resultCode?: string;
@@ -764,6 +772,22 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
+  /** 채팅방 생서 */
+  createRoom: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateForm"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataURI"];
         };
       };
     };
