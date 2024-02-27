@@ -40,7 +40,7 @@
 
 <div class="flex justify-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
-		<div class="container flex justify-center items-center">
+		<div class="container flex justify-center items-center my-4">
 			<select class="select max-w-xs text-center flex flex-1" name="kwType">
 				<option value="titleOrBody">제목 + 내용</option>
 				<option value="title">제목</option>
