@@ -51,7 +51,7 @@
 	}
 </script>
 
-<div class="flex items-center justify-center min-h-screen bg-base-100">
+<div class="flex justify-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
 		<div class="max-w-sm mx-auto my-10">
 			<div class="text-center">

@@ -99,20 +99,23 @@
 		<span class="loading loading-dots loading-lg"></span>
 	</div>
 {:then { data }}
-	<div class="flex justify-center mt-4">
-		<div class="join">
-			<button class="btn join-item btn-neutral" on:click={deleteAllNotifications}>
-				<span class="">모든 알림 삭제</span>
-			</button>
-
-			<button class="btn join-item btn-neutral" on:click={deleteReadNotifications}>
-				<span class="">읽은 알림 삭제</span>
-			</button>
-		</div>
-	</div>
 	<div class="flex justify-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
-			<div class="py-5">
+			<div class="w-full max-w-4xl mx-auto py-5">
+				<div class="flex flex-row justify-between items-center w-full mb-3">
+					<div class="invisible btn">알림</div>
+					<div class="text-lg font-bold">알림</div>
+					<div class="dropdown dropdown-hover dropdown-bottom dropdown-end">
+						<div tabindex="0" role="button" class="btn btn-ghost m-1">설정</div>
+						<ul
+							tabindex="0"
+							class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+						>
+							<li><a on:click={deleteReadNotifications}>읽은 알림 삭제</a></li>
+							<li><a on:click={deleteAllNotifications}>모든 알림 삭제</a></li>
+						</ul>
+					</div>
+				</div>
 				<ul>
 					{#each data ?? [] as notification, index}
 						<li>
