@@ -230,26 +230,29 @@
 					</div>
 				</div>
 				<div class="mt-4">
-					<div class="flex flex-col items-end text-gray-700 text-sm">
-						<div>등록 일자 : {jobPostDetailDto?.createdAt}</div>
+					<div class="flex flex-col text-gray-700 text-sm">
+						<div class="text-xs">등록 일자 : {jobPostDetailDto?.createdAt}</div>
 						{#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifiedAt}
-							<div class="text-sm">수정 일자 : {jobPostDetailDto?.modifiedAt}</div>
+							<div class="text-xs">수정 일자 : {jobPostDetailDto?.modifiedAt}</div>
 						{/if}
-						<div class="flex justify-center mt-4">
+						<div class="flex justify-end">
 							{#if jobPostDetailDto?.author === rq.member.username}
-								<button class="btn btn-primary btn-xs mx-1" on:click={editPost}>수정하기</button>
-								<button class="btn btn-xs mx-1" on:click={deletePost}>삭제하기</button>
-								{#if !jobPostDetailDto.closed}
-									<button class="btn btn-xs mx-1" on:click={() => postEarlyClosing()}
-										>조기마감</button
-									>
-								{/if}
-								{#if jobPostDetailDto?.author === rq.member.username}
-									<button
-										class="btn btn-primary btn-xs mx-1"
-										on:click={() => goToApplicationsList(jobPostDetailDto?.id)}>지원서 확인</button
-									>
-								{/if}
+								<div class="mt-4">
+									<button class="btn btn-primary btn-xs mx-1" on:click={editPost}>수정하기</button>
+									<button class="btn btn-xs mx-1" on:click={deletePost}>삭제하기</button>
+									{#if !jobPostDetailDto.closed}
+										<button class="btn btn-xs mx-1" on:click={() => postEarlyClosing()}
+											>조기마감</button
+										>
+									{/if}
+									{#if jobPostDetailDto?.author === rq.member.username}
+										<button
+											class="btn btn-primary btn-xs mx-1"
+											on:click={() => goToApplicationsList(jobPostDetailDto?.id)}
+											>지원서 확인</button
+										>
+									{/if}
+								</div>
 							{/if}
 						</div>
 					</div>
@@ -269,7 +272,7 @@
 						{#if jobPostDetailDto?.deadLine === null}
 							<div class="text-sm text-rose-600">조기 마감</div>
 						{:else}
-							<div class="text-sm">{jobPostDetailDto?.deadLine}</div>
+							<div class="text-xs sm:text-sm">{jobPostDetailDto?.deadLine}</div>
 						{/if}
 						<div class="text-sm">지원 나이 :</div>
 						<div class="text-sm">

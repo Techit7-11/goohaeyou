@@ -70,9 +70,7 @@
 		<div class="grid grid-cols-4 gap-4 my-4">
 			<div class="text-sm">모집 상태 :</div>
 			<div>
-				<span
-					class="text-sm {jobPostDetailDto?.closed ? 'text-rose-600' : 'text-emerald-700'}"
-				>
+				<span class="text-sm {jobPostDetailDto?.closed ? 'text-rose-600' : 'text-emerald-700'}">
 					{jobPostDetailDto?.closed ? '마감' : '구인중'}
 				</span>
 			</div>

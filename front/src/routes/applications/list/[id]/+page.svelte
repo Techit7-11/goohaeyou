@@ -126,7 +126,11 @@
 			{/if}
 		</div>
 	{:else}
-		<div class="text-center">해당 공고에 아직 지원자가 없습니다.</div>
+		<div class="flex justify-center items-center min-h-screen bg-base-100">
+			<div class="container mx-auto px-4">
+				<div class="font-bold text-center">해당 공고에 아직 지원자가 없습니다.</div>
+			</div>
+		</div>
 	{/if}
 {:catch error}
 	<p>Error loading applications: {error.message}</p>
