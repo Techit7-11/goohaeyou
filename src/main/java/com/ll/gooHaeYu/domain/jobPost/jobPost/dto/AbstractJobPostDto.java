@@ -27,5 +27,6 @@ public class AbstractJobPostDto {
     private String createdAt;
 
     private boolean employed;
+    private boolean isClosed;
     private LocalDate deadLine;
 }
