@@ -253,10 +253,10 @@
 			<div class="grid grid-cols-4 my-4">
 				<div class="text-sm">모집 상태 :</div>
 				<div>
-					{#if jobPostDetailDto.closed}
+					{#if jobPostDetailDto.employed}
+						<div class="text-sm text-blue-900">구인완료</div>
+					{:else if jobPostDetailDto.closed}
 						<div class="text-sm text-rose-600">마감</div>
-					{:else if jobPostDetailDto.employed}
-						<div class="text-sm">구인완료</div>
 					{:else}
 						<div class="text-sm text-emerald-700">구인중</div>
 					{/if}
