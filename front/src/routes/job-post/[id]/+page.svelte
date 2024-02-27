@@ -230,8 +230,8 @@
 		<div class="mt-4">
 			<div class="flex flex-col items-end text-gray-700 text-sm">
 				<div>등록 일자 : {jobPostDetailDto?.createdAt}</div>
-				{#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifyAt}
-					<div class="text-sm">수정 일자 : {jobPostDetailDto?.modifyAt}</div>
+				{#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifiedAt}
+					<div class="text-sm">수정 일자 : {jobPostDetailDto?.modifiedAt}</div>
 				{/if}
 				<div class="flex justify-center mt-4">
 					{#if jobPostDetailDto?.author === rq.member.username}
@@ -253,10 +253,10 @@
 			<div class="grid grid-cols-4 my-4">
 				<div class="text-sm">모집 상태 :</div>
 				<div>
-					{#if jobPostDetailDto.closed}
+					{#if jobPostDetailDto.employed}
+						<div class="text-sm text-blue-900">구인완료</div>
+					{:else if jobPostDetailDto.closed}
 						<div class="text-sm text-rose-600">마감</div>
-					{:else if jobPostDetailDto.employed}
-						<div class="text-sm">구인완료</div>
 					{:else}
 						<div class="text-sm text-emerald-700">구인중</div>
 					{/if}

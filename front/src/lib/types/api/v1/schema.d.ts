@@ -359,7 +359,7 @@ export interface components {
       minAge?: number;
       /** @enum {string} */
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      modifyAt?: string;
+      modifiedAt?: string;
       interestedUsernames?: string[];
       closed?: boolean;
     };

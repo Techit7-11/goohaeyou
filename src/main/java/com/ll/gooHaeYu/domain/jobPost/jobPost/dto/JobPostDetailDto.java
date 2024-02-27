@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -21,8 +22,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     private long applicationCount;
     private int minAge = 0;
     private Gender gender = Gender.UNDEFINED;
-    private boolean isClosed;
-    private String modifyAt;
+    private String modifiedAt;
     private List<String> interestedUsernames;
 
     public static JobPostDetailDto fromEntity(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential) {
@@ -31,6 +31,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .map(Interest::getMember)
                 .map(Member::getUsername)
                 .toList();
+        LocalDateTime mostRecentModifiedDate = jobPost.getModifiedAt().isAfter(jobPostDetail.getModifiedAt()) ? jobPost.getModifiedAt() : jobPostDetail.getModifiedAt();
 
         return JobPostDetailDto.builder()
                 .id(jobPost.getId())
@@ -49,7 +50,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .employed(jobPost.isEmployed())
                 .interestedUsernames(interestedUsernames)
                 .createdAt(jobPost.getCreatedAt().format(formatter))
-                .modifyAt(jobPost.getModifiedAt().format(formatter))
+                .modifiedAt(mostRecentModifiedDate.format(formatter))
                 .build();
     }
 }
