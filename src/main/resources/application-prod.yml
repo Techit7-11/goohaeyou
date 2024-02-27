@@ -44,7 +44,3 @@ custom:
     cookieDomain: "${custom.prod.cookieDomain}"
     frontUrl: "${custom.prod.frontUrl}"
     backUrl: "${custom.prod.backUrl}"
-  temp:
-    dirPath: /tmp
-  gen:
-    dirPath: /gen

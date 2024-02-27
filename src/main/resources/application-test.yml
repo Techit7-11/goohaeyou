@@ -10,6 +10,3 @@ spring:
   h2:
     console:
       enabled: true
-custom:
-  gen:
-    dirPath: c:\temp\gooHaeYu\gen
