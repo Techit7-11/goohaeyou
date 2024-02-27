@@ -38,5 +38,5 @@ public class Room {
     @ToString.Exclude
     @OrderBy("id DESC")
     @JsonIgnore
-    private List<Message> chatMessages = new ArrayList<>();
+    private List<Message> messages = new ArrayList<>();
 }

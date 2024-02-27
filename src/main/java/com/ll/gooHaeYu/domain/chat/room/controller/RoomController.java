@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.chat.room.controller;
 
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationForm;
 import com.ll.gooHaeYu.domain.chat.room.dto.CreateForm;
+import com.ll.gooHaeYu.domain.chat.room.dto.RoomDto;
 import com.ll.gooHaeYu.domain.chat.room.service.RoomService;
 import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
@@ -27,5 +28,12 @@ public class RoomController {
                                   @Valid @RequestBody CreateForm createForm) {
         Long roomId = roomService.createRoom(memberDetails.getId(),createForm.getMemberId());
         return RsData.of("201","CREATE",URI.create("/api/chat/" + roomId));
+    }
+
+    @GetMapping("/{roomId}")
+    @Operation(summary = "채팅방 입장")
+    public RsData<RoomDto> showRoom(@AuthenticationPrincipal MemberDetails memberDetails,
+                                    @PathVariable Long roomId) {
+        return RsData.of(roomService.findById(roomId));
     }
 }

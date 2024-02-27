@@ -134,6 +134,10 @@ export interface paths {
     /** 공고 별 지원리스트 */
     get: operations["getList_1"];
   };
+  "/api/chat/{roomId}": {
+    /** 채팅방 입장 */
+    get: operations["showRoom"];
+  };
   "/": {
     get: operations["showMain"];
   };
@@ -398,6 +402,54 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["GetPostsResponseBody"];
+    };
+    Member: {
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      modifiedAt?: string;
+      /** Format: int64 */
+      id?: number;
+      username?: string;
+      password?: string;
+      name?: string;
+      phoneNumber?: string;
+      /** @enum {string} */
+      role?: "ADMIN" | "USER" | "GUEST";
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location?: string;
+      /** Format: date */
+      birth?: string;
+    };
+    Message: {
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      modifiedAt?: string;
+      /** Format: int64 */
+      id?: number;
+      room?: components["schemas"]["Room"];
+      sender?: string;
+      content?: string;
+    };
+    Room: {
+      /** Format: int64 */
+      id?: number;
+      member1?: components["schemas"]["Member"];
+      member2?: components["schemas"]["Member"];
+    };
+    RoomDto: {
+      member1: components["schemas"]["Member"];
+      member2: components["schemas"]["Member"];
+      messages?: components["schemas"]["Message"][];
+    };
+    RsDataRoomDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["RoomDto"];
     };
     RsDataApplicationDto: {
       resultCode?: string;
@@ -984,6 +1036,22 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListApplicationDto"];
+        };
+      };
+    };
+  };
+  /** 채팅방 입장 */
+  showRoom: {
+    parameters: {
+      path: {
+        roomId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataRoomDto"];
         };
       };
     };
