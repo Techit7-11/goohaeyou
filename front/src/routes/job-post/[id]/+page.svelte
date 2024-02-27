@@ -179,7 +179,7 @@
 			<div class="p-6 max-w-4xl mx-auto my-10 bg-white rounded-box shadow-lg">
 				<div>{jobPostDetailDto?.author}</div>
 				<div class="flex justify-between items-center">
-					<div class="text-xl font-bold">{jobPostDetailDto?.title}</div>
+					<div class="text-xl font-bold break-words max-w-[55%]">{jobPostDetailDto?.title}</div>
 					<div class="flex items-center">
 						{#if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin && jobPostDetailDto?.author !== rq.member.username}
 							<div class="flex justify-center items-center mr-4">
@@ -267,7 +267,7 @@
 						</div>
 						<div class="text-sm">공고 마감 :</div>
 						{#if jobPostDetailDto?.deadLine === null}
-							<span class="badge badge-outline badge-error"> 조기마감 </span>
+							<div class="text-sm text-rose-600">조기 마감</div>
 						{:else}
 							<div class="text-sm">{jobPostDetailDto?.deadLine}</div>
 						{/if}
