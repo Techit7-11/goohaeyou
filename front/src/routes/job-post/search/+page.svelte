@@ -41,36 +41,38 @@
 <div class="flex justify-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
 		<div class="container flex justify-center items-center my-4">
-			<select class="select max-w-xs text-center flex flex-1" name="kwType">
-				<option value="titleOrBody">제목 + 내용</option>
-				<option value="title">제목</option>
-				<option value="body">내용</option>
-			</select>
-			<input
-				name="kw"
-				type="text"
-				placeholder="검색어"
-				class="input w-full max-w-xs"
-				on:keyup={handleKeyPress}
-			/>
-			<button class="btn btn-ghost btn-circle" on:click={loading}>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-5 w-5"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-					><path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-					/></svg
-				>
-			</button>
+			<div class="join">
+				<select class="join-item select max-w-xs text-center flex flex-1 mx-1" name="kwType">
+					<option value="titleOrBody">제목 + 내용</option>
+					<option value="title">제목</option>
+					<option value="body">내용</option>
+				</select>
+				<input
+					name="kw"
+					type="text"
+					placeholder="검색어"
+					class="join-item input w-full max-w-xs"
+					on:keyup={handleKeyPress}
+				/>
+				<button class="join-item btn btn-ghost btn-circle mx-1" on:click={loading}>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						><path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+						/></svg
+					>
+				</button>
+			</div>
 		</div>
 
-		<div>
+		<div class="w-full max-w-4xl mx-auto">
 			{#if dataLoaded}
 				<!-- 데이터가 로드되었는지 확인 -->
 				{#await load()}
@@ -86,8 +88,10 @@
 										<div class="flex items-center">
 											<div class="flex flex-col mr-10">
 												<div class="text-bold text-gray-500 mb-1">{post.author}</div>
-												<div class="flex flex-col">
-													<div class="font-bold">{post.title}</div>
+												<div
+													class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
+												>
+													<div class="font-bold truncate">{post.title}</div>
 													<div class="text-xs text-gray-500">{post.location}</div>
 													<div class="flex mt-2">
 														<div class="flex">
