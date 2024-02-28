@@ -9,7 +9,9 @@
 		minAge: '',
 		gender: 'UNDEFINED',
 		location: '',
-		deadLine: ''
+		deadLine: '',
+		workTime: '',
+    	cost: 0
 	};
 
 	onMount(async () => {
@@ -139,6 +141,29 @@
 						bind:value={newJobPostData.body}
 						placeholder="내용을 입력해주세요."
 					></textarea>
+				</div>
+				<div class="divider mt-10"></div>
+				<div class="form-group">
+					<label class="label" for="workTime">* 도움시간 또는 도움일수</label>
+					<input
+						type="text"
+						id="workTime"
+						class="input input-bordered w-full"
+						placeholder="예시) 2시간, 3일, 또는 헙의"
+						bind:value={newJobPostData.workTime}
+					/>
+				</div>
+				
+				<div class="form-group">
+					<label class="label" for="cost">* 급여</label>
+					<input
+						type="number"
+						id="cost"
+						class="input input-bordered w-full"
+						min="0"
+						step="10000" 
+						bind:value={newJobPostData.cost}
+					/>
 				</div>
 				<div class="form-group">
 					<button class="w-full btn btn-primary my-3" type="submit">글 작성</button>
