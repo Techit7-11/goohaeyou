@@ -1,10 +1,15 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.WageType;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -31,6 +36,16 @@ public class JobPostForm {
         @NotNull(message = "마감 기한은 필수입니다.")
         @FutureOrPresent
         private LocalDate deadLine;
+
+        @NotBlank(message = "도움시간 또는 도움일수 입력은 필수입니다.")
+        private String workTime;
+
+        @NotBlank(message = "급여 타입 선택은 필수입니다.")
+        private WageType wageType;
+
+        @NotBlank(message = "급여 입력은 필수 입니다.")
+        @Min(value = 0, message = "급여는 0원 이상 이여야 합니다.")
+        private int cost;
     }
 
     @Builder
@@ -54,5 +69,12 @@ public class JobPostForm {
         @NotNull(message = "마감 기한은 필수입니다.")
         @FutureOrPresent
         private LocalDate deadLine;
+
+        @NotNull(message = "도움시간 또는 도움일수 입력은 필수입니다.")
+        private String workTime;
+
+        @NotNull(message = "급여 입력은 필수 입니다.")
+        @Min(value = 0, message = "급여는 0원 이상 이여야 합니다.")
+        private int cost;
     }
 }
