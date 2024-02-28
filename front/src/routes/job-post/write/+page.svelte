@@ -144,12 +144,25 @@
 				</div>
 				<div class="divider mt-10"></div>
 				<div class="form-group">
+                    <label class="label" for="wageType">* 급여 타입</label>
+                    <select
+                        class="input input-bordered w-full"
+                        id="wageType"
+                        bind:value={newJobPostData.wageType}
+                    >
+                        <option value="UNDEFINED">미정</option>
+                        <option value="HOURLY">시급</option>
+                        <option value="SALARY">일급</option>
+                        <option value="PER_PROJECT">건당</option>
+                    </select>
+                </div>
+				<div class="form-group">
 					<label class="label" for="workTime">* 도움시간 또는 도움일수</label>
 					<input
 						type="text"
 						id="workTime"
 						class="input input-bordered w-full"
-						placeholder="예시) 2시간, 3일, 또는 헙의"
+						placeholder="예시) 2시간, 3일, 또는 협의"
 						bind:value={newJobPostData.workTime}
 					/>
 				</div>
