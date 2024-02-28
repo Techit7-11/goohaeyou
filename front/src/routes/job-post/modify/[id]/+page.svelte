@@ -9,7 +9,10 @@
 		minAge: '',
 		gender: 'UNDEFINED',
 		location: '',
-		deadLine: ''
+		deadLine: '',
+		wageType: '',
+		workTime: '',
+    	cost: 0
 	};
 	let postId;
 
@@ -85,7 +88,7 @@
 					<div class="form-group flex-1">
 						<label class="label" for="minAge">최소 나이</label>
 						<input
-							type="text"
+							type="number"
 							id="minAge"
 							class="input input-bordered w-full"
 							placeholder="나이를 입력해주세요."
@@ -144,6 +147,28 @@
 						placeholder="내용을 입력해주세요."
 					></textarea>
 				</div>
+
+				<div class="divider mt-10"></div>
+
+                <div class="form-group">
+                    <label class="label" for="wageType">* 급여 타입</label>
+                    <select class="input input-bordered w-full" id="wageType" bind:value={jobPostData.wageType}>
+                        <option value="" disabled selected>- 선택하세요 -</option>
+                        <option value="HOURLY">시급</option>
+                        <option value="SALARY">일급</option>
+                        <option value="PER_PROJECT">건당</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="label" for="workTime">* 도움시간 또는 도움일수</label>
+                    <input type="text" id="workTime" class="input input-bordered w-full" placeholder="예시) 2시간, 3일, 또는 협의" bind:value={jobPostData.workTime}/>
+                </div>
+
+                <div class="form-group">
+                    <label class="label" for="cost">* 급여</label>
+                    <input type="number" id="cost" class="input input-bordered w-full" min="0" bind:value={jobPostData.cost}/>
+                </div>
 				<div class="form-group">
 					<button class="w-full btn btn-primary my-3" type="submit">글 수정</button>
 				</div>
