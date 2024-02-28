@@ -37,6 +37,9 @@ public class JobPostDetail extends BaseTimeEntity {
     @OneToOne(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     private Essential essential;
 
+    @OneToOne(mappedBy = "jobPostDetail", cascade = ALL)
+    private Wage wage;
+
     @OneToMany(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     @ToString.Exclude
     @Builder.Default
