@@ -94,12 +94,22 @@
 												<p>지원자 ID :</p>
 												<p>지원 내용 :</p>
 												<p>지원일 :</p>
+												<p>승인여부 :</p>
 											</div>
 											<div class="flex-grow text-left">
 												<p>{application.id}</p>
 												<p>{application.author}</p>
 												<p>{summarizeBody(application.body)}</p>
 												<p>{formatDate(application.createdAt)}</p>
+												<p>
+													{#if application.approve === true}
+														<span class="text-sm text-blue-900">승인</span>
+													{:else if application.approve === false}
+														<span class="text-sm text-rose-600">미승인</span>
+													{:else}
+														<span class="text-sm text-orange-500">진행중</span>
+													{/if}
+												</p>
 											</div>
 										</div>
 									</a>
