@@ -90,88 +90,102 @@
 					<div class="font-bold">생년월일</div>
 					<div class="text-gray-500 flex-auto text-right">{rq.member.birth}</div>
 				</div>
-				<div class="pb-10">
+				<div>
 					<button class="w-full btn btn-ghost" on:click={navigateToModifyPage}
 						>회원 정보 수정</button
 					>
 				</div>
 			</div>
-			<div class="w-full flex justify-center">
-				<div role="tablist" class="tabs tabs-bordered">
-					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="작성공고" />
-					<div role="tabpanel" class="tab-content p-5 max-w-xs overflow-hidden">
-						{#await loadMyPosts()}
-							<div class="flex items-center justify-center min-h-screen">
-								<span class="loading loading-dots loading-lg"></span>
-							</div>
-						{:then { data: posts }}
-							{#each posts ?? [] as post, index}
-								<a href="/job-post/{post.id}" class="card-link">
-									<div class="card">
-										<div class="text-sm text-gray-500">no.{index + 1}</div>
-										<div class="text-lg font-bold truncate">{post.title}</div>
-									</div>
-								</a>
-								<button
-									class="btn btn-primary my-3 w-full"
-									on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
-								>
-								<div class="divider"></div>
-							{/each}
-						{/await}
-					</div>
-
-					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="지원현황" />
-					<div role="tabpanel" class="tab-content p-5 max-w-xs overflow-hidden">
-						{#await loadMyApplications()}
-							<p>loading...</p>
-						{:then { data: applicationDtoList }}
-							{#each applicationDtoList ?? [] as applicationDto}
-								<a href="/applications/detail/{applicationDto.id}" class="card-link">
-									<div class="card">
-										<div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
-										<div class="text-lg font-bold truncate">
-											{summarizeBody(applicationDto.body)}
+			<div class="divider"></div>
+			<div class="flex justify-center">
+				<div class="join">
+					<label for="my_modal_1" class="btn btn-ghost join-item">작성 공고</label>
+					<input type="checkbox" id="my_modal_1" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#await loadMyPosts()}
+								<div class="flex items-center justify-center min-h-screen">
+									<span class="loading loading-dots loading-lg"></span>
+								</div>
+							{:then { data: posts }}
+								{#each posts ?? [] as post, index}
+									<a href="/job-post/{post.id}" class="card-link">
+										<div class="card">
+											<div class="text-sm text-gray-500">no.{index + 1}</div>
+											<div class="text-lg font-bold truncate">{post.title}</div>
 										</div>
-										<div class="divider"></div>
-									</div>
-								</a>
-							{/each}
-						{/await}
+									</a>
+									<button
+										class="btn btn-primary my-3 w-full"
+										on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
+									>
+									<div class="divider"></div>
+								{/each}
+							{/await}
+						</div>
+						<label class="modal-backdrop" for="my_modal_1">Close</label>
 					</div>
-
-					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="작성댓글" />
-					<div role="tabpanel" class="tab-content p-5 max-w-xs overflow-hidden">
-						{#await loadMyComments()}
-							<p>loading...</p>
-						{:then { data: commentsDtoList }}
-							{#each commentsDtoList ?? [] as commentsDto}
-								<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
-									<div class="card">
-										<div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
-										<div class="text-lg font-bold truncate">{commentsDto.content}</div>
-										<div class="divider"></div>
-									</div>
-								</a>
-							{/each}
-						{/await}
+					<label for="my_modal_2" class="btn btn-ghost join-item">지원 현황</label>
+					<input type="checkbox" id="my_modal_2" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#await loadMyApplications()}
+								<p>loading...</p>
+							{:then { data: applicationDtoList }}
+								{#each applicationDtoList ?? [] as applicationDto}
+									<a href="/applications/detail/{applicationDto.id}" class="card-link">
+										<div class="card">
+											<div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
+											<div class="text-lg font-bold truncate">
+												{summarizeBody(applicationDto.body)}
+											</div>
+											<div class="divider"></div>
+										</div>
+									</a>
+								{/each}
+							{/await}
+						</div>
+						<label class="modal-backdrop" for="my_modal_2">Close</label>
 					</div>
-
-					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="관심공고" />
-					<div role="tabpanel" class="tab-content p-5 max-w-xs overflow-hidden">
-						{#await loadMyInterest()}
-							<p>loading...</p>
-						{:then { data: interestDtoList }}
-							{#each interestDtoList ?? [] as interestDto}
-								<a href="/job-post/{interestDto.id}" class="card-link">
-									<div class="card">
-										<div class="text-sm text-gray-500">{interestDto.id}번 공고</div>
-										<div class="text-lg font-bold truncate">{interestDto.title}</div>
-										<div class="divider"></div>
-									</div>
-								</a>
-							{/each}
-						{/await}
+					<label for="my_modal_3" class="btn btn-ghost join-item">작성 댓글</label>
+					<input type="checkbox" id="my_modal_3" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#await loadMyComments()}
+								<p>loading...</p>
+							{:then { data: commentsDtoList }}
+								{#each commentsDtoList ?? [] as commentsDto}
+									<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
+										<div class="card">
+											<div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
+											<div class="text-lg font-bold truncate">{commentsDto.content}</div>
+											<div class="divider"></div>
+										</div>
+									</a>
+								{/each}
+							{/await}
+						</div>
+						<label class="modal-backdrop" for="my_modal_3">Close</label>
+					</div>
+					<label for="my_modal_4" class="btn btn-ghost join-item">관심 공고</label>
+					<input type="checkbox" id="my_modal_4" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#await loadMyInterest()}
+								<p>loading...</p>
+							{:then { data: interestDtoList }}
+								{#each interestDtoList ?? [] as interestDto}
+									<a href="/job-post/{interestDto.id}" class="card-link">
+										<div class="card">
+											<div class="text-sm text-gray-500">{interestDto.id}번 공고</div>
+											<div class="text-lg font-bold truncate">{interestDto.title}</div>
+											<div class="divider"></div>
+										</div>
+									</a>
+								{/each}
+							{/await}
+						</div>
+						<label class="modal-backdrop" for="my_modal_4">Close</label>
 					</div>
 				</div>
 			</div>
