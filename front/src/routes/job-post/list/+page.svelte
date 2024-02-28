@@ -82,7 +82,7 @@
 	</div>
 {:then { data: { itemPage } }}
 	<div class="flex justify-center min-h-screen bg-base-100">
-		<div class="container mx-auto px-4">
+		<div class="container mx-auto mx-4">
 			<div class="w-full max-w-4xl mx-auto">
 				{#each posts ?? [] as post, index}
 					<a href="/job-post/{post.id}" class="block">

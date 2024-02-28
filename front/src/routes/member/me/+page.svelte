@@ -51,9 +51,9 @@
 	}
 </script>
 
-<div class="flex justify-center min-h-screen bg-base-100">
+<div class="flex justify-center items-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
-		<div class="max-w-sm mx-auto my-10">
+		<div class="w-full max-w-4xl mx-auto my-10">
 			<div class="text-center">
 				<div class="font-bold text-xl">내 정보</div>
 				<div class="mt-3 text-gray-500">현재 로그인한 회원의 정보입니다.</div>
@@ -98,14 +98,7 @@
 			</div>
 			<div class="w-full flex justify-center">
 				<div role="tablist" class="tabs tabs-bordered">
-					<input
-						type="radio"
-						name="my_tabs_2"
-						role="tab"
-						class="tab"
-						aria-label="작성공고"
-						checked
-					/>
+					<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="작성공고" />
 					<div role="tabpanel" class="tab-content p-5 max-w-xs overflow-hidden">
 						{#await loadMyPosts()}
 							<div class="flex items-center justify-center min-h-screen">

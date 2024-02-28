@@ -174,7 +174,7 @@
 		<span class="loading loading-dots loading-lg"></span>
 	</div>
 {:then { data: jobPostDetailDto }}
-	<div class="flex justify-center min-h-screen bg-base-100">
+	<div class="flex justify-center items-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
 			<div class="p-6 max-w-4xl mx-auto my-10 bg-white rounded-box shadow-lg">
 				<div>{jobPostDetailDto?.author}</div>

@@ -90,11 +90,11 @@
 									<a href={`/applications/detail/${application.id}`} class="flex-grow">
 										<div class="flex">
 											<div class="flex flex-col flex-grow max-w-40">
-												<p class="font-bold">지원서 번호 :</p>
-												<p>지원자 ID :</p>
-												<p>지원 내용 :</p>
-												<p>지원일 :</p>
-												<p>승인여부 :</p>
+												<p class="font-bold">지원서 번호</p>
+												<p>지원자 ID</p>
+												<p>지원 내용</p>
+												<p>지원일</p>
+												<p>승인여부</p>
 											</div>
 											<div class="flex-grow text-left">
 												<p>{application.id}</p>

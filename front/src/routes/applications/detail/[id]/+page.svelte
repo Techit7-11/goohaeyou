@@ -61,7 +61,7 @@
 </script>
 
 {#await loadApplication() then application}
-	<div class="flex justify-center min-h-screen bg-base-100">
+	<div class="flex justify-center items-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4 mt-5">
 			<div class="w-full max-w-4xl mx-auto">
 				<div class="card bg-base-100 shadow-xl rounded-lg p-5">
@@ -88,12 +88,12 @@
 							<h3 class="text-lg font-semibold mb-2">지원자 정보</h3>
 						</div>
 						<div class="flex">
-							<div class="mx-2 mt-4">
-								<p><strong>아이디 :</strong></p>
-								<p><strong>이름 :</strong></p>
-								<p><strong>나이 :</strong></p>
-								<p><strong>연락처 :</strong></p>
-								<p><strong>주소 :</strong></p>
+							<div class="mx-2 mt-4 flex-grow max-w-40">
+								<p><strong>아이디</strong></p>
+								<p><strong>이름</strong></p>
+								<p><strong>나이</strong></p>
+								<p><strong>연락처</strong></p>
+								<p><strong>주소</strong></p>
 							</div>
 							<div class="mx-2 mt-4">
 								<p>{application.author}</p>
@@ -106,10 +106,10 @@
 					</div>
 					<hr class="border-t border-gray-300 opacity-50" />
 					<div class="flex">
-						<div class="mx-2 mt-4">
-							<p><strong>지원서 번호 :</strong></p>
-							<p><strong>제출일 :</strong></p>
-							<p><strong>승인 상태 :</strong></p>
+						<div class="mx-2 mt-4 flex-grow max-w-40">
+							<p><strong>지원서 번호</strong></p>
+							<p><strong>제출일</strong></p>
+							<p><strong>승인 상태</strong></p>
 						</div>
 						<div class="mx-2 mt-4">
 							<p>{application.id}</p>
