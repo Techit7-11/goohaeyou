@@ -103,7 +103,7 @@
 												<p>{formatDate(application.createdAt)}</p>
 												<p>
 													{#if application.approve === true}
-														<span class="text-sm text-blue-900">승인</span>
+														<span class="text-sm text-emerald-700">승인</span>
 													{:else if application.approve === false}
 														<span class="text-sm text-rose-600">미승인</span>
 													{:else}
