@@ -107,7 +107,7 @@
 														<div class="text-xs mx-2">{post.commentsCount}</div>
 													</div>
 													<div class="flex">
-														<div class="text-xs text-gray-500">찜</div>
+														<div class="text-xs text-gray-500">관심등록</div>
 														<div class="text-xs mx-2">{post.interestsCount}</div>
 													</div>
 												</div>
