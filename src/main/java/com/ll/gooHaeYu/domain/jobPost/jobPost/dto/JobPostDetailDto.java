@@ -1,9 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Essential;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Interest;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.*;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.validation.constraints.NotNull;
@@ -20,12 +17,12 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     @NotNull
     private String body;
     private long applicationCount;
-    private int minAge = 0;
-    private Gender gender = Gender.UNDEFINED;
+    private int minAge;
+    private Gender gender;
     private String modifiedAt;
     private List<String> interestedUsernames;
 
-    public static JobPostDetailDto fromEntity(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential) {
+    public static JobPostDetailDto fromEntity(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential, Wage wage) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
         List<String> interestedUsernames = jobPostDetail.getInterests().stream()
                 .map(Interest::getMember)
@@ -43,12 +40,15 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .commentsCount(jobPost.getCommentsCount())
                 .applicationCount(jobPost.getApplicationCount())
                 .interestsCount(jobPost.getInterestsCount())
-                .gender(jobPostDetail.getEssential().getGender())
-                .minAge(jobPostDetail.getEssential().getMinAge())
+                .gender(essential.getGender())
+                .minAge(essential.getMinAge())
                 .deadLine(jobPost.getDeadline())
                 .isClosed(jobPost.isClosed())
                 .employed(jobPost.isEmployed())
                 .interestedUsernames(interestedUsernames)
+                .cost(wage.getCost())
+                .wageType(wage.getWageType())
+                .workTime(wage.getWorkTime())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .modifiedAt(mostRecentModifiedDate.format(formatter))
                 .build();
