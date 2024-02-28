@@ -80,50 +80,55 @@
 	</div>
 {:then applications}
 	{#if applications && applications.length > 0}
-		<div class="flex flex-col items-center">
-			<ul class="w-full max-w-4xl">
-				{#each applications as application}
-					<div class="flex items-center m-4">
-						{#if canApprove}
-							<input
-								type="checkbox"
-								id={`application-${application.id}`}
-								class="checkbox checkbox-primary mr-4"
-								on:change={(event) => {
-									event.stopPropagation();
-									toggleApplicationId(application.id, event.target.checked);
-								}}
-							/>
-						{/if}
-						<a href={`/applications/detail/${application.id}`} class="link link-hover flex-grow">
-							<li class="card bg-base-100 shadow-xl">
-								<div class="card-body">
-									<label for={`application-${application.id}`} class="font-bold"
-										>지원서 번호: {application.id}</label
-									>
-									<p>지원자 ID: {application.author}</p>
-									<p>지원내용: {summarizeBody(application.body)}</p>
-									<p>지원일: {formatDate(application.createdAt)}</p>
-									<p>
-										승인 여부:
-										{#if application.approve === true}
-											<span class="badge badge-success">승인</span>
-										{:else if application.approve === false}
-											<span class="badge badge-error">미승인</span>
-										{:else}
-											<span class="badge badge-warning">진행중</span>
+		<div class="flex flex-col min-h-screen items-center">
+			<div class="container mx-auto px-4 mt-5">
+				<ul class="w-full max-w-4xl mx-auto">
+					{#each applications as application}
+						<li class="card bg-base-100 shadow-xl">
+							<div class="card bg-base-100 shadow-xl">
+								<div class="card-body flex flex-row items-center justify-between">
+									<a href={`/applications/detail/${application.id}`} class="flex-grow">
+										<div class="flex">
+											<div class="flex flex-col flex-grow max-w-40">
+												<p class="font-bold">지원서 번호 :</p>
+												<p>지원자 ID :</p>
+												<p>지원 내용 :</p>
+												<p>지원일 :</p>
+											</div>
+											<div class="flex-grow text-left">
+												<p>{application.id}</p>
+												<p>{application.author}</p>
+												<p>{summarizeBody(application.body)}</p>
+												<p>{formatDate(application.createdAt)}</p>
+											</div>
+										</div>
+									</a>
+									<div>
+										{#if canApprove}
+											<input
+												type="checkbox"
+												id={`application-${application.id}`}
+												class="checkbox"
+												on:change={(event) => {
+													event.stopPropagation();
+													toggleApplicationId(application.id, event.target.checked);
+												}}
+											/>
 										{/if}
-									</p>
+									</div>
 								</div>
-							</li>
-						</a>
+							</div>
+						</li>
+					{/each}
+				</ul>
+				{#if canApprove}
+					<div class="max-w-4xl mx-auto my-5">
+						<button on:click={approveApplications} class="btn btn-primary w-full my-4"
+							>지원서 승인</button
+						>
 					</div>
-				{/each}
-			</ul>
-			{#if canApprove}
-				<button on:click={approveApplications} class="btn btn-primary mt-4 mb-4">지원서 승인</button
-				>
-			{/if}
+				{/if}
+			</div>
 		</div>
 	{:else}
 		<div class="flex justify-center items-center min-h-screen bg-base-100">
