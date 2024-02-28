@@ -80,7 +80,7 @@
 	</div>
 {:then applications}
 	{#if applications && applications.length > 0}
-		<div class="flex flex-col min-h-screen items-center">
+		<div class="flex flex-col min-h-screen items-center justify-center">
 			<div class="container mx-auto px-4 mt-5">
 				<ul class="w-full max-w-4xl mx-auto">
 					{#each applications as application}
