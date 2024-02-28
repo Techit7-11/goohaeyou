@@ -40,10 +40,10 @@ public class JobPostForm {
         @NotBlank(message = "도움시간 또는 도움일수 입력은 필수입니다.")
         private String workTime;
 
-        @NotBlank(message = "급여 타입 선택은 필수입니다.")
+        @NotNull(message = "급여 타입 선택은 필수입니다.")
         private WageType wageType;
 
-        @NotBlank(message = "급여 입력은 필수 입니다.")
+        @NotNull(message = "급여 입력은 필수 입니다.")
         @Min(value = 0, message = "급여는 0원 이상 이여야 합니다.")
         private int cost;
     }
@@ -70,8 +70,11 @@ public class JobPostForm {
         @FutureOrPresent
         private LocalDate deadLine;
 
-        @NotNull(message = "도움시간 또는 도움일수 입력은 필수입니다.")
+        @NotBlank(message = "도움시간 또는 도움일수 입력은 필수입니다.")
         private String workTime;
+
+        @NotNull(message = "급여 타입 선택은 필수입니다.")
+        private WageType wageType;
 
         @NotNull(message = "급여 입력은 필수 입니다.")
         @Min(value = 0, message = "급여는 0원 이상 이여야 합니다.")

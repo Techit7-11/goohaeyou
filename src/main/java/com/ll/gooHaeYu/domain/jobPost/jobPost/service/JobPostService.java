@@ -163,7 +163,7 @@ public class JobPostService {
     }
 
     @Transactional
-    public void Interest(String username, Long postId){
+    public void interest(String username, Long postId){
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
