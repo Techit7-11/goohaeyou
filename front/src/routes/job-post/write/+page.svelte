@@ -10,6 +10,7 @@
 		gender: 'UNDEFINED',
 		location: '',
 		deadLine: '',
+		wageType: '',
 		workTime: '',
     	cost: 0
 	};
@@ -31,6 +32,10 @@
 
 	// 글 작성 버튼을 클릭하면 실행될 함수
 	async function writeJobPost() {
+		if (newJobPostData.wageType === '') {
+        rq.msgError('급여 타입을 선택해주세요.');
+        return; 
+    }
 		const response = await rq.apiEndPoints().POST('/api/job-posts', { body: newJobPostData });
 
 		if (response.data?.statusCode === 200) {
@@ -84,7 +89,7 @@
 					<div class="form-group flex-1">
 						<label class="label" for="minAge">최소 나이</label>
 						<input
-							type="text"
+							type="number"
 							id="minAge"
 							class="input input-bordered w-full"
 							placeholder="나이를 입력해주세요."
@@ -151,7 +156,6 @@
                         bind:value={newJobPostData.wageType}
                     >
 						<option value="" disabled selected>- 선택하세요 -</option>
-                        <option value="UNDEFINED">미정</option>
                         <option value="HOURLY">시급</option>
                         <option value="SALARY">일급</option>
                         <option value="PER_PROJECT">건당</option>
@@ -175,7 +179,6 @@
 						id="cost"
 						class="input input-bordered w-full"
 						min="0"
-						step="10000" 
 						bind:value={newJobPostData.cost}
 					/>
 				</div>
