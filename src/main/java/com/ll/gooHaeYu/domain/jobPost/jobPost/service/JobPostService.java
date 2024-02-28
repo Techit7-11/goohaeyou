@@ -99,8 +99,9 @@ public class JobPostService {
             throw new CustomException(NOT_ABLE);
 
         postDetail.getJobPost().update(form.getTitle(),form.getDeadLine());
-        postDetail.update(form.getBody());
+        postDetail.updateBody(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
+        postDetail.getWage().updateWageInfo(form.getWorkTime(), form.getCost(), form.getWageType());
 
         // TODO : 삭제 후 알림 날리기
         List<Application> applicationsToRemove = new ArrayList<>();

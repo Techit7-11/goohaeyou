@@ -33,4 +33,10 @@ public class Wage {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_post_detail", nullable = false)
     private JobPostDetail jobPostDetail;
+
+    public void updateWageInfo(String workTime, int cost, WageType wageType) {
+        this.workTime = workTime;
+        this.cost = cost;
+        this.wageType = wageType;
+    }
 }

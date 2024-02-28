@@ -56,7 +56,7 @@ public class JobPostDetail extends BaseTimeEntity {
     @Builder.Default
     private List<Interest> interests = new ArrayList<>();
 
-    public void update(String body) {
+    public void updateBody(String body) {
         if (body != null && !body.isBlank()) {
             this.body = body;
         }
