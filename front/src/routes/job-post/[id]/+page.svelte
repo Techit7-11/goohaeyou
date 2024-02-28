@@ -174,7 +174,7 @@
 		<span class="loading loading-dots loading-lg"></span>
 	</div>
 {:then { data: jobPostDetailDto }}
-	<div class="flex justify-center min-h-screen bg-base-100">
+	<div class="flex justify-center items-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
 			<div class="p-6 max-w-4xl mx-auto my-10 bg-white rounded-box shadow-lg">
 				<div>{jobPostDetailDto?.author}</div>
@@ -188,18 +188,16 @@
 										class="btn btn-ghost px-1 py-1 text-xs text-gray-600"
 										on:click={() => removeInterest(postId)}
 									>
-										<div class="text-red-600">
+										<div>
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
-												class="h-6 w-6"
-												fill="none"
+												id="Layer_1"
+												data-name="Layer 1"
 												viewBox="0 0 24 24"
-												stroke="currentColor"
+												class="h-6 w-6"
 												><path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													stroke-width="2"
-													d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+													fill="red"
+													d="M17.5.917a6.4,6.4,0,0,0-5.5,3.3A6.4,6.4,0,0,0,6.5.917,6.8,6.8,0,0,0,0,7.967c0,6.775,10.956,14.6,11.422,14.932l.578.409.578-.409C13.044,22.569,24,14.742,24,7.967A6.8,6.8,0,0,0,17.5.917Z"
 												/></svg
 											>
 										</div>
@@ -209,18 +207,12 @@
 										class="btn btn-ghost px-1 py-1 text-xs text-gray-600"
 										on:click={() => registerInterest(postId)}
 									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-6 w-6"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											><path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="2"
-												d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-											/></svg
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6"
+											><g id="_01_align_center" data-name="01 align center"
+												><path
+													d="M17.5.917a6.4,6.4,0,0,0-5.5,3.3A6.4,6.4,0,0,0,6.5.917,6.8,6.8,0,0,0,0,7.967c0,6.775,10.956,14.6,11.422,14.932l.578.409.578-.409C13.044,22.569,24,14.742,24,7.967A6.8,6.8,0,0,0,17.5.917ZM12,20.846c-3.253-2.43-10-8.4-10-12.879a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,7.967h2a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,7.967C22,12.448,15.253,18.416,12,20.846Z"
+												/></g
+											></svg
 										>
 									</button>
 								{/if}
