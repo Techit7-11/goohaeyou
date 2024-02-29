@@ -5,11 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ReviewDto {
+public class ApplicantReviewDto {
     private Long id;
     private String body;
     private double score;
     private Long jobPostingId;
     private Long applicantId;
-    private Long recruiterId;
 }
