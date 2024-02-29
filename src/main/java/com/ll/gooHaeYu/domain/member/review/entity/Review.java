@@ -8,9 +8,9 @@ import jakarta.validation.constraints.Min;
 import lombok.*;
 
 @Entity
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
+@Setter
 @Table(name = "review")
 public class Review {
 
@@ -21,20 +21,18 @@ public class Review {
     @Column(nullable = false, length = 500)
     private String body;
 
-    @Min(1)
-    @Max(5)
     @Column(nullable = false)
     private double score;
 
     @ManyToOne
     @JoinColumn(name = "job_posting_id", nullable = false)
-    private JobPost jobPost;
+    private JobPost jobPostingId;
 
     @ManyToOne
-    @JoinColumn(name = "applicant_id", nullable = false)
-    private Member applicant;
+    @JoinColumn(name = "applicant_id")
+    private Member applicantId;
 
     @ManyToOne
-    @JoinColumn(name = "recruiter_id", nullable = false)
-    private Member recruiter;
+    @JoinColumn(name = "recruiter_id")
+    private Member recruiterId;
 }

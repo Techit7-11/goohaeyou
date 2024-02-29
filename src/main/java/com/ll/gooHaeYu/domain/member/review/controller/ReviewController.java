@@ -1,20 +1,12 @@
 package com.ll.gooHaeYu.domain.member.review.controller;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
-import com.ll.gooHaeYu.domain.member.review.dto.ReviewDto;
-import com.ll.gooHaeYu.domain.member.review.entity.Review;
+import com.ll.gooHaeYu.domain.member.review.dto.ApplicantReviewDto;
 import com.ll.gooHaeYu.domain.member.review.service.ReviewService;
 import com.ll.gooHaeYu.global.rsData.RsData;
-import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,20 +17,32 @@ import java.util.List;
 @RestController
 public class ReviewController {
 
-    private ReviewService reviewService;
+    private final ReviewService reviewService;
 
     @PostMapping
-    @Operation(summary = "리뷰 작성")
-    public RsData<ReviewDto> createReview(@AuthenticationPrincipal MemberDetails memberDetails,
-                                          @Valid @RequestBody ReviewDto reviewDto) {
-        ReviewDto savedReview = reviewService.saveReview(reviewDto);
+    @Operation(summary = "지원자 리뷰 작성")
+    public RsData<ApplicantReviewDto> createReview(@Valid @RequestBody ApplicantReviewDto applicantReviewDto) {
+        ApplicantReviewDto savedReview = reviewService.saveReview(applicantReviewDto);
         return RsData.of(savedReview);
     }
 
     @GetMapping
-    @Operation(summary = "리뷰 목록 가져오기")
-    public RsData<List<ReviewDto>> getAllReviews() {
-        List<ReviewDto> reviews = reviewService.findAllReviews();
+    @Operation(summary = "리뷰 전체 목록 가져오기")
+    public RsData<List<ApplicantReviewDto>> getAllReviews() {
+        List<ApplicantReviewDto> reviews = reviewService.findAllReviews();
         return RsData.of(reviews);
+    }
+
+    @GetMapping("/{id}")
+    public RsData<ApplicantReviewDto> getReviewById(@PathVariable Long id) {
+            ApplicantReviewDto applicantReviewDto = reviewService.findReviewById(id);
+            return RsData.of(applicantReviewDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "리뷰 삭제")
+    public RsData<Void> deleteReview(@PathVariable Long id) {
+        reviewService.deleteReview(id);
+        return RsData.of(null);
     }
 }
