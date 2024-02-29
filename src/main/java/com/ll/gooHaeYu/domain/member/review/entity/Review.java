@@ -21,18 +21,15 @@ public class Review {
 
     private double score;
 
-    private Long job_posting_id;
-
     @ManyToOne
     @JoinColumn(name = "job_posting_id", nullable = false)
     private JobPost jobPost;
 
     @ManyToOne
-    @JoinColumn(name = "apllicant_id", nullable = false)
-    private Member applicant_id;
+    @JoinColumn(name = "applicant_id", nullable = false)
+    private Member applicant;
 
     @ManyToOne
     @JoinColumn(name = "recruiter_id", nullable = false)
-    private Member recruiter_id;
+    private Member recruiter;
 }
-
