@@ -10,9 +10,7 @@ import com.ll.gooHaeYu.domain.member.review.entity.Review;
 import com.ll.gooHaeYu.domain.member.review.repository.ReviewRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,8 +34,7 @@ public class ReviewServiceImpl implements ReviewService {
         JobPost jobPostId = jobPostRepository.findById(applicantReviewDto.getJobPostingId())
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
 
-        String currentUsername = getCurrentUsername();
-        Member applicantId = memberRepository.findByUsername(currentUsername)
+        Member applicantId = memberRepository.findByUsername(getCurrentUsername())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         Review review = reviewMapper.toEntity(applicantReviewDto);
@@ -57,8 +54,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ApplicantReviewDto> findAllReviews() {
-        List<Review> reviews = reviewRepository.findAll();
+    public List<ApplicantReviewDto> findReviewsByCurrentUser() {
+        List<Review> reviews = reviewRepository.findByApplicantId_Username(getCurrentUsername());
         return reviews.stream()
                 .map(reviewMapper::toDto)
                 .collect(Collectors.toList());
@@ -70,9 +67,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_EXIST));
 
-        String currentUsername = getCurrentUsername();
-
-        if (!review.getApplicantId().getUsername().equals(currentUsername)) {
+        if (!review.getApplicantId().getUsername().equals(getCurrentUsername())) {
             throw new CustomException(ErrorCode.NOT_ABLE);
         }
 
