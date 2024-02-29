@@ -37,6 +37,12 @@ public class ReviewServiceImpl implements ReviewService {
         Member applicantId = memberRepository.findByUsername(getCurrentUsername())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
+        // TODO 지원서 승인한 것만 후기 작성 가능하도록 OR 정산 이후 후기 작성 api 요청 하도록
+        boolean exists = reviewRepository.existsByJobPostingId_IdAndApplicantId_Id(jobPostId.getId(), applicantId.getId());
+        if (exists) {
+            throw new CustomException(ErrorCode.REVIEW_ALREADY_EXISTS);
+        }
+
         Review review = reviewMapper.toEntity(applicantReviewDto);
 
         review.setJobPostingId(jobPostId);

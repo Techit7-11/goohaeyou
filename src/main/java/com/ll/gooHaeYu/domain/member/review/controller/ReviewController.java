@@ -19,9 +19,10 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping
+    @PostMapping("/{jobPostingId}")
     @Operation(summary = "지원자 리뷰 작성")
-    public RsData<ApplicantReviewDto> createReview(@Valid @RequestBody ApplicantReviewDto applicantReviewDto) {
+    public RsData<ApplicantReviewDto> createReview(@PathVariable Long jobPostingId, @Valid @RequestBody ApplicantReviewDto applicantReviewDto) {
+        applicantReviewDto.setJobPostingId(jobPostingId);
         ApplicantReviewDto savedReview = reviewService.saveReview(applicantReviewDto);
         return RsData.of(savedReview);
     }

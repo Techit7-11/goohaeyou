@@ -17,6 +17,8 @@ public enum ErrorCode {
 
     REVIEW_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 리뷰는 존재하지 않습니다."),
 
+    REVIEW_ALREADY_EXISTS(HttpStatus.NOT_FOUND, "이미 리뷰를 작성하셨습니다."),
+
     COMMENT_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 댓글은 존재하지 않습니다."),
 
     NOTIFICATION_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 알림은 존재하지 않습니다."),
