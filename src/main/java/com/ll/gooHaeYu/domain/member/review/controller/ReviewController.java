@@ -27,13 +27,14 @@ public class ReviewController {
     }
 
     @GetMapping
-    @Operation(summary = "리뷰 전체 목록 가져오기")
+    @Operation(summary = "리뷰 전체 목록 조회")
     public RsData<List<ApplicantReviewDto>> getAllReviews() {
         List<ApplicantReviewDto> reviews = reviewService.findAllReviews();
         return RsData.of(reviews);
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "리뷰 단건 조회")
     public RsData<ApplicantReviewDto> getReviewById(@PathVariable Long id) {
             ApplicantReviewDto applicantReviewDto = reviewService.findReviewById(id);
             return RsData.of(applicantReviewDto);
@@ -41,8 +42,8 @@ public class ReviewController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "리뷰 삭제")
-    public RsData<Void> deleteReview(@PathVariable Long id) {
+    public RsData<String> deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
-        return RsData.of(null);
+        return RsData.of("리뷰가 삭제되었습니다.");
     }
 }

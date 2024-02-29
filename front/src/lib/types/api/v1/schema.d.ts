@@ -52,7 +52,7 @@ export interface paths {
     post: operations["write"];
   };
   "/api/member/review": {
-    /** 리뷰 전체 목록 가져오기 */
+    /** 리뷰 전체 목록 조회 */
     get: operations["getAllReviews"];
     /** 지원자 리뷰 작성 */
     post: operations["createReview"];
@@ -105,6 +105,7 @@ export interface paths {
     get: operations["unreadNotification"];
   };
   "/api/member/review/{id}": {
+    /** 리뷰 단건 조회 */
     get: operations["getReviewById"];
     /** 리뷰 삭제 */
     delete: operations["deleteReview"];
@@ -434,6 +435,13 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["ApplicationDto"];
     };
+    RsDataString: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: string;
+    };
   };
   responses: never;
   parameters: never;
@@ -702,7 +710,7 @@ export interface operations {
       };
     };
   };
-  /** 리뷰 전체 목록 가져오기 */
+  /** 리뷰 전체 목록 조회 */
   getAllReviews: {
     responses: {
       /** @description OK */
@@ -915,6 +923,7 @@ export interface operations {
       };
     };
   };
+  /** 리뷰 단건 조회 */
   getReviewById: {
     parameters: {
       path: {
@@ -941,7 +950,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["RsDataString"];
         };
       };
     };
