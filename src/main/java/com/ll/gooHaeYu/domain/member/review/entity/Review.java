@@ -3,12 +3,13 @@ package com.ll.gooHaeYu.domain.member.review.entity;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 @Entity
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Getter
 @Table(name = "review")
 public class Review {
@@ -17,8 +18,12 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 500)
     private String body;
 
+    @Min(1)
+    @Max(5)
+    @Column(nullable = false)
     private double score;
 
     @ManyToOne
