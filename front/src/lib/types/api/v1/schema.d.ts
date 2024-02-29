@@ -52,7 +52,7 @@ export interface paths {
     post: operations["write"];
   };
   "/api/member/review": {
-    /** 리뷰 전체 목록 조회 */
+    /** 나의 전체 리뷰 조회 */
     get: operations["getAllReviews"];
     /** 지원자 리뷰 작성 */
     post: operations["createReview"];
@@ -710,7 +710,7 @@ export interface operations {
       };
     };
   };
-  /** 리뷰 전체 목록 조회 */
+  /** 나의 전체 리뷰 조회 */
   getAllReviews: {
     responses: {
       /** @description OK */

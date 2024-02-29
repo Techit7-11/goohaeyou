@@ -27,9 +27,9 @@ public class ReviewController {
     }
 
     @GetMapping
-    @Operation(summary = "리뷰 전체 목록 조회")
+    @Operation(summary = "나의 전체 리뷰 조회")
     public RsData<List<ApplicantReviewDto>> getAllReviews() {
-        List<ApplicantReviewDto> reviews = reviewService.findAllReviews();
+        List<ApplicantReviewDto> reviews = reviewService.findReviewsByCurrentUser();
         return RsData.of(reviews);
     }
 
