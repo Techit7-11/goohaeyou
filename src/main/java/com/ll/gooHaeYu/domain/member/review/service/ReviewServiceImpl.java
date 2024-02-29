@@ -33,16 +33,17 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public ApplicantReviewDto saveReview(ApplicantReviewDto applicantReviewDto) {
-        JobPost jobPost = jobPostRepository.findById(applicantReviewDto.getJobPostingId())
+        JobPost jobPostId = jobPostRepository.findById(applicantReviewDto.getJobPostingId())
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_EXIST));
-        Member applicant = memberRepository.findById(applicantReviewDto.getApplicantId())
+
+        String currentUsername = getCurrentUsername();
+        Member applicantId = memberRepository.findByUsername(currentUsername)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         Review review = reviewMapper.toEntity(applicantReviewDto);
 
-        review.setJobPostingId(jobPost);
-        review.setApplicantId(applicant);
-        review.setRecruiterId(null);
+        review.setJobPostingId(jobPostId);
+        review.setApplicantId(applicantId);
 
         review = reviewRepository.save(review);
         return reviewMapper.toDto(review);
@@ -67,15 +68,19 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public void deleteReview(Long id) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_ABLE));
+                .orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_EXIST));
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
+        String currentUsername = getCurrentUsername();
 
         if (!review.getApplicantId().getUsername().equals(currentUsername)) {
             throw new CustomException(ErrorCode.NOT_ABLE);
         }
 
         reviewRepository.deleteById(id);
+    }
+
+    public String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 }
