@@ -51,9 +51,7 @@ export interface paths {
     /** 댓글 작성 */
     post: operations["write"];
   };
-  "/api/member/review": {
-    /** 나의 전체 리뷰 조회 */
-    get: operations["getAllReviews"];
+  "/api/member/review/{jobPostingId}": {
     /** 지원자 리뷰 작성 */
     post: operations["createReview"];
   };
@@ -103,6 +101,10 @@ export interface paths {
   "/api/notification/new": {
     /** 읽지 않은 알림 유무 확인 */
     get: operations["unreadNotification"];
+  };
+  "/api/member/review": {
+    /** 나의 전체 리뷰 조회 */
+    get: operations["getAllReviews"];
   };
   "/api/member/review/{id}": {
     /** 리뷰 단건 조회 */
@@ -710,19 +712,13 @@ export interface operations {
       };
     };
   };
-  /** 나의 전체 리뷰 조회 */
-  getAllReviews: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["RsDataListApplicantReviewDto"];
-        };
-      };
-    };
-  };
   /** 지원자 리뷰 작성 */
   createReview: {
+    parameters: {
+      path: {
+        jobPostingId: number;
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["ApplicantReviewDto"];
@@ -919,6 +915,17 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataBoolean"];
+        };
+      };
+    };
+  };
+  /** 나의 전체 리뷰 조회 */
+  getAllReviews: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataListApplicantReviewDto"];
         };
       };
     };
