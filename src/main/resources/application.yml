@@ -27,3 +27,6 @@ custom:
     frontUrl: "${custom.dev.frontUrl}"
     backUrl: "${custom.dev.backUrl}"
     name: goohaeyou
+tossPayments:
+  clientKey: ${tossPayments.apiClientKey}
+  secretKey: ${tossPayments.apiSecretKey}
