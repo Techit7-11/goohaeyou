@@ -1,8 +1,8 @@
 package com.ll.gooHaeYu.domain.chat.room.controller;
 
-import com.ll.gooHaeYu.domain.application.application.dto.ApplicationForm;
 import com.ll.gooHaeYu.domain.chat.room.dto.CreateForm;
 import com.ll.gooHaeYu.domain.chat.room.dto.RoomDto;
+import com.ll.gooHaeYu.domain.chat.room.dto.RoomListDto;
 import com.ll.gooHaeYu.domain.chat.room.service.RoomService;
 import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @Tag(name = "Chatting", description = "채팅 API")
 @RestController
@@ -35,5 +36,11 @@ public class RoomController {
     public RsData<RoomDto> showRoom(@AuthenticationPrincipal MemberDetails memberDetails,
                                     @PathVariable Long roomId) {
         return RsData.of(roomService.findById(roomId));
+    }
+
+    @GetMapping
+    @Operation(summary = "채팅방 목록")
+    public RsData<List<RoomListDto>> showRoomList(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return RsData.of(roomService.getRoomList(memberDetails.getUsername()));
     }
 }

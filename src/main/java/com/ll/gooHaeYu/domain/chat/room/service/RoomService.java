@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.chat.room.service;
 
 import com.ll.gooHaeYu.domain.chat.room.dto.RoomDto;
+import com.ll.gooHaeYu.domain.chat.room.dto.RoomListDto;
 import com.ll.gooHaeYu.domain.chat.room.entity.Room;
 import com.ll.gooHaeYu.domain.chat.room.repository.RoomRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
 
 @Service
@@ -22,13 +25,14 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final MemberService memberService;
 
+    @Transactional
     public Long createRoom(Long memberId1, Long memberId2) {
         Member member1 = memberService.findById(memberId1);
         Member member2 = memberService.findById(memberId2);
 
         Room newRoom = Room.builder()
-                .member1(member1)
-                .member2(member2)
+                .username1(member1.getUsername())
+                .username2(member2.getUsername())
                 .build();
 
         roomRepository.save(newRoom);
@@ -40,23 +44,13 @@ public class RoomService {
         return RoomDto.fromEntity(findByIdAndValidate(roomId));
     }
 
-    private Room findByIdAndValidate(Long roomId) {
+    public Room findByIdAndValidate(Long roomId) {
         return roomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
     }
 
-//    public JobPost findByIdAndValidate(Long id) {
-//        return jobPostRepository.findById(id)
-//                .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
-//    }
-//    public JobPostDetailDto findById(Long id) {
-//        JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
-//        return JobPostDetailDto.fromEntity(postDetail.getJobPost(),postDetail,postDetail.getEssential());
-//    }
-
-//    public JobPostDetail findByJobPostAndNameAndValidate(Long postId) {
-//        JobPost post = findByIdAndValidate(postId);
-//        return jobPostdetailRepository.findByJobPostAndAuthor(post,post.getMember().getUsername())
-//                .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
-//    }
+    public List<RoomListDto> getRoomList(String username) {
+        List<Room> rooms = roomRepository.findByUsername1OrUsername2(username);
+        return RoomListDto.toDtoList(rooms);
+    }
 }

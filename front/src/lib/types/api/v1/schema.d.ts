@@ -76,8 +76,14 @@ export interface paths {
     delete: operations["disinterest"];
   };
   "/api/chat": {
+    /** 채팅방 목록 */
+    get: operations["showRoomList"];
     /** 채팅방 생서 */
     post: operations["createRoom"];
+  };
+  "/api/chat/{roomId}/message": {
+    /** 채팅 생성 */
+    post: operations["writeChat"];
   };
   "/api/employ/{postId}/{applicationIds}": {
     /** 지원서 승인 */
@@ -249,6 +255,21 @@ export interface components {
       /** Format: uri */
       data?: string;
     };
+    MessageDto: {
+      /** Format: int64 */
+      id?: number;
+      sender: string;
+      text: string;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    RsDataMessageDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["MessageDto"];
+    };
     CommentDto: {
       /** Format: int64 */
       id: number;
@@ -403,25 +424,6 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["GetPostsResponseBody"];
     };
-    Member: {
-      /** Format: date-time */
-      createdAt?: string;
-      /** Format: date-time */
-      modifiedAt?: string;
-      /** Format: int64 */
-      id?: number;
-      username?: string;
-      password?: string;
-      name?: string;
-      phoneNumber?: string;
-      /** @enum {string} */
-      role?: "ADMIN" | "USER" | "GUEST";
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location?: string;
-      /** Format: date */
-      birth?: string;
-    };
     Message: {
       /** Format: date-time */
       createdAt?: string;
@@ -436,12 +438,26 @@ export interface components {
     Room: {
       /** Format: int64 */
       id?: number;
-      member1?: components["schemas"]["Member"];
-      member2?: components["schemas"]["Member"];
+      username1?: string;
+      username2?: string;
+    };
+    RoomListDto: {
+      /** Format: int64 */
+      roomId?: number;
+      username1?: string;
+      username2?: string;
+      lastChat?: components["schemas"]["Message"];
+    };
+    RsDataListRoomListDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["RoomListDto"][];
     };
     RoomDto: {
-      member1: components["schemas"]["Member"];
-      member2: components["schemas"]["Member"];
+      username1: string;
+      username2: string;
       messages?: components["schemas"]["Message"][];
     };
     RsDataRoomDto: {
@@ -828,6 +844,17 @@ export interface operations {
       };
     };
   };
+  /** 채팅방 목록 */
+  showRoomList: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataListRoomListDto"];
+        };
+      };
+    };
+  };
   /** 채팅방 생서 */
   createRoom: {
     requestBody: {
@@ -840,6 +867,27 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataURI"];
+        };
+      };
+    };
+  };
+  /** 채팅 생성 */
+  writeChat: {
+    parameters: {
+      path: {
+        roomId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Register"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataMessageDto"];
         };
       };
     };

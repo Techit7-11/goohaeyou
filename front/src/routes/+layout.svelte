@@ -61,19 +61,22 @@
 </script>
 
 <header>
-	<div class="navbar bg-base-100">
-		<div class="navbar-start">
-			<a class="btn btn-ghost text-xl" href="/">GooHaeYou</a>
-		</div>
-		<div class="navbar-center"></div>
-		<div class="navbar-end">
-			{#if rq.isLogout()}
-				<a class="btn btn-ghost mx-3" href="/member/login">Login</a>
-			{/if}
-			{#if rq.isLogin()}
-				<button class="btn btn-ghost mx-3" on:click={() => rq.logoutAndRedirect('/')}>Logout</button
-				>
-			{/if}
+	<div class="fixed-div">
+		<div class="navbar bg-base-100">
+			<div class="navbar-start">
+				<a class="btn btn-ghost text-xl" href="/">GooHaeYou</a>
+			</div>
+			<div class="navbar-center"></div>
+			<div class="navbar-end">
+				{#if rq.isLogout()}
+					<a class="btn btn-ghost mx-3" href="/member/login">Login</a>
+				{/if}
+				{#if rq.isLogin()}
+					<button class="btn btn-ghost mx-3" on:click={() => rq.logoutAndRedirect('/')}
+						>Logout</button
+					>
+				{/if}
+			</div>
 		</div>
 	</div>
 	<div style="border-bottom: 1px solid #dedede;"></div>

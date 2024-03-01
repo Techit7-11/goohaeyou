@@ -110,6 +110,7 @@
 			const response = await rq.apiEndPoints().POST(`/api/post-comment/${postId}/comment`, {
 				body: { content: newComment }
 			});
+			console.log(response);
 			newComment = ''; // 입력 필드 초기화
 			loadComments(); // 댓글 목록 새로고침
 		} catch (error) {

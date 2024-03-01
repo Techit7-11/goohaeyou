@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 public class MessageDto {
 
+    private Long id;
     @NotNull
     private String sender;
     @NotNull
@@ -23,6 +24,7 @@ public class MessageDto {
 
     public static MessageDto fromEntity(Message message) {
         return MessageDto.builder()
+                .id(message.getId())
                 .sender(message.getSender())
                 .text(message.getContent())
                 .build();

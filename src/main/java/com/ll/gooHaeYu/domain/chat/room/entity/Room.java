@@ -25,13 +25,9 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member1_id", nullable = false)
-    private Member member1;
+    private String username1;
 
-    @ManyToOne
-    @JoinColumn(name = "member2_id", nullable = false)
-    private Member member2;
+    private String username2;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
