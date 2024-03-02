@@ -101,6 +101,17 @@
 		newContent = '';
 		lastMessageId = response.data?.data.id;
 	}
+
+	function formatMessageTime(createdAt) {
+		const date = new Date(createdAt);
+		const year = String(date.getFullYear()).slice(-2);
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		const seconds = String(date.getSeconds()).padStart(2, '0');
+		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	}
 </script>
 
 {#await load()}
@@ -125,7 +136,9 @@
 							<th:block>{message.sender}</th:block>
 						</div>
 						<div class="chat-bubble"><th:block>{message.content}</th:block></div>
-						<div class="chat-footer opacity-50"><th:block>{message.createdAt}</th:block></div>
+						<div class="chat-footer opacity-50">
+							<th:block>{formatMessageTime(message.createdAt)}</th:block>
+						</div>
 					</div>
 				{:else}
 					<div class="chat chat-start">
@@ -141,7 +154,9 @@
 							<th:block>{message.sender}</th:block>
 						</div>
 						<div class="chat-bubble"><th:block>{message.content}</th:block></div>
-						<div class="chat-footer opacity-50"><th:block>{message.createdAt}</th:block></div>
+						<div class="chat-footer opacity-50">
+							<th:block>{formatMessageTime(message.createdAt)}</th:block>
+						</div>
 					</div>
 				{/if}
 			{/each}

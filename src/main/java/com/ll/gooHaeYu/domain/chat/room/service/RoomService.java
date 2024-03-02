@@ -4,9 +4,6 @@ import com.ll.gooHaeYu.domain.chat.room.dto.RoomDto;
 import com.ll.gooHaeYu.domain.chat.room.dto.RoomListDto;
 import com.ll.gooHaeYu.domain.chat.room.entity.Room;
 import com.ll.gooHaeYu.domain.chat.room.repository.RoomRepository;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
@@ -16,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
 
 @Service
@@ -40,8 +38,12 @@ public class RoomService {
         return newRoom.getId();
     }
 
-    public RoomDto findById(Long roomId) {
-        return RoomDto.fromEntity(findByIdAndValidate(roomId));
+    public RoomDto findById(Long roomId, String username) {
+        Room room = findByIdAndValidate(roomId);
+        if (!username.equals(room.getUsername1())&&!username.equals(room.getUsername2())) {
+            throw new CustomException(NOT_ABLE);
+        }
+        return RoomDto.fromEntity(room);
     }
 
     public Room findByIdAndValidate(Long roomId) {

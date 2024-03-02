@@ -1,16 +1,10 @@
 package com.ll.gooHaeYu.domain.chat.message.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.gooHaeYu.domain.chat.room.entity.Room;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -32,4 +26,10 @@ public class Message extends BaseTimeEntity {
     private String sender;
 
     private String content;
+
+    public void update(String content) {
+        if (content != null && !content.isBlank()) {
+            this.content = content;
+        }
+    }
 }

@@ -2,10 +2,8 @@ package com.ll.gooHaeYu.domain.chat.room.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.gooHaeYu.domain.chat.message.entity.Message;
-import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

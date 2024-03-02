@@ -245,7 +245,7 @@ export interface components {
     };
     CreateForm: {
       /** Format: int64 */
-      memberId?: number;
+      memberId: number;
     };
     RsDataURI: {
       resultCode?: string;
@@ -254,21 +254,6 @@ export interface components {
       msg?: string;
       /** Format: uri */
       data?: string;
-    };
-    MessageDto: {
-      /** Format: int64 */
-      id?: number;
-      sender: string;
-      text: string;
-      /** Format: date-time */
-      createdAt?: string;
-    };
-    RsDataMessageDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["MessageDto"];
     };
     CommentDto: {
       /** Format: int64 */
@@ -424,6 +409,21 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["GetPostsResponseBody"];
     };
+    RoomListDto: {
+      /** Format: int64 */
+      roomId?: number;
+      username1?: string;
+      username2?: string;
+      lastChat?: string;
+      lastChatDate?: string;
+    };
+    RsDataListRoomListDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["RoomListDto"][];
+    };
     Message: {
       /** Format: date-time */
       createdAt?: string;
@@ -440,20 +440,6 @@ export interface components {
       id?: number;
       username1?: string;
       username2?: string;
-    };
-    RoomListDto: {
-      /** Format: int64 */
-      roomId?: number;
-      username1?: string;
-      username2?: string;
-      lastChat?: components["schemas"]["Message"];
-    };
-    RsDataListRoomListDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["RoomListDto"][];
     };
     RoomDto: {
       username1: string;
@@ -887,7 +873,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataMessageDto"];
+          "*/*": components["schemas"]["RsDataVoid"];
         };
       };
     };

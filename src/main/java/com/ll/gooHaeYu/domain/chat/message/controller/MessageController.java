@@ -23,13 +23,13 @@ public class MessageController {
 
     @PostMapping
     @Operation(summary = "채팅 생성")
-    public RsData<MessageDto> writeChat(@AuthenticationPrincipal MemberDetails memberDetails,
+    public RsData<Void> writeChat(@AuthenticationPrincipal MemberDetails memberDetails,
                                         @PathVariable(name = "roomId")Long roomId,
                                         @RequestBody MessageForm.Register form) {
         Message message = messageService.write(memberDetails.getUsername(), roomId, form);
 
-        messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage",MessageDto.fromEntity(message));
+        messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.fromEntity(message));
 
-        return RsData.of(MessageDto.fromEntity(message));
+        return RsData.of("204", "NO_CONTENT");
     }
 }

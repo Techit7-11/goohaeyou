@@ -1,13 +1,10 @@
 package com.ll.gooHaeYu.domain.chat.message.dto;
 
-import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
-import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.chat.message.entity.Message;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,6 +20,7 @@ public class MessageDto {
     private LocalDateTime createdAt;
 
     public static MessageDto fromEntity(Message message) {
+
         return MessageDto.builder()
                 .id(message.getId())
                 .sender(message.getSender())

@@ -1,16 +1,11 @@
 package com.ll.gooHaeYu.domain.chat.room.dto;
 
-import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
-import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.chat.message.entity.Message;
 import com.ll.gooHaeYu.domain.chat.room.entity.Room;
-import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter

@@ -35,7 +35,7 @@ public class RoomController {
     @Operation(summary = "채팅방 입장")
     public RsData<RoomDto> showRoom(@AuthenticationPrincipal MemberDetails memberDetails,
                                     @PathVariable Long roomId) {
-        return RsData.of(roomService.findById(roomId));
+        return RsData.of(roomService.findById(roomId, memberDetails.getUsername()));
     }
 
     @GetMapping

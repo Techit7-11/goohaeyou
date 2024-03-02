@@ -56,14 +56,14 @@
 											<th:block>{room.username1}</th:block>
 										{/if}
 									</p>
-									<p class="text-sm text-gray-500 truncate dark:text-gray-400">
-										<th:block>{room?.lastChat?.content}</th:block>
+									<p
+										class="inline-flex items-center text-base font-semibold dark:text-gray-400 text-gray-900 dark:text-white"
+									>
+										<th:block>{room?.lastChat}</th:block>
 									</p>
 								</div>
-								<div
-									class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white"
-								>
-									<th:block>{room?.lastChat?.createdAtt}</th:block>
+								<div class="text-sm text-gray-500 truncate">
+									<th:block>{room?.lastChatDate}</th:block>
 								</div>
 							</div>
 						</li>

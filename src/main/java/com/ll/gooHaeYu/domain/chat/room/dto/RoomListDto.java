@@ -1,12 +1,10 @@
 package com.ll.gooHaeYu.domain.chat.room.dto;
 
-import com.ll.gooHaeYu.domain.chat.message.entity.Message;
 import com.ll.gooHaeYu.domain.chat.room.entity.Room;
-import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -15,16 +13,18 @@ public class RoomListDto {
     private Long roomId;
     private String username1;
     private String username2;
-    private Message lastChat;
+    private String lastChat;
+    private String lastChatDate;
 
     public static RoomListDto fromEntity(Room room) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
         return RoomListDto.builder()
                 .roomId(room.getId())
                 .username1(room.getUsername1())
                 .username2(room.getUsername2())
-                // TODO : 채팅방에 채팅이 없을 경우 에러발생 처리
-//                .lastChat(room.getMessages().isEmpty()?room.getMessages().getLast():null)
-                .lastChat(room.getMessages().getLast())
+
+                .lastChat(room.getMessages().isEmpty() ? "메세지가 아직 없습니다." : room.getMessages().getLast().getContent())
+                .lastChatDate(room.getMessages().isEmpty() ? "" : room.getMessages().getLast().getCreatedAt().format(formatter))
                 .build();
     }
 

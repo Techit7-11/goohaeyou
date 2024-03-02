@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class CreateForm {
 
+    @NotBlank
     private Long memberId;
 
 }
