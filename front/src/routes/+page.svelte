@@ -83,7 +83,7 @@
 {:then { data: { itemPage } }}
 	<div class="flex justify-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
-			<div>
+			<div class="w-full max-w-4xl mx-auto">
 				{#each posts ?? [] as post, index}
 					<a href="/job-post/{post.id}" class="block">
 						<div class="card relative bg-base-100 shadow-xl my-4">
@@ -107,7 +107,7 @@
 														<div class="text-xs mx-2">{post.commentsCount}</div>
 													</div>
 													<div class="flex">
-														<div class="text-xs text-gray-500">찜</div>
+														<div class="text-xs text-gray-500">관심등록</div>
 														<div class="text-xs mx-2">{post.interestsCount}</div>
 													</div>
 												</div>
@@ -130,8 +130,7 @@
 						</div>
 					</a>
 				{/each}
-
-				<div class="max-w-sm mx-auto my-5">
+				<div class="max-w-4xl mx-auto my-5">
 					<button class="w-full btn btn-primary my-5" on:click={JobPostWritePage}>
 						글 작성하기
 					</button>

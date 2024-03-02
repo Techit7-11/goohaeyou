@@ -175,189 +175,191 @@
 		<span class="loading loading-dots loading-lg"></span>
 	</div>
 {:then { data: jobPostDetailDto }}
-	<div class="p-6 max-w-4xl mx-auto my-10 bg-white rounded-box shadow-lg">
-		<div>{jobPostDetailDto?.author}</div>
-		<div class="flex justify-between items-center">
-			<div class="text-xl font-bold">{jobPostDetailDto?.title}</div>
-			<div class="flex items-center">
-				{#if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin && jobPostDetailDto?.author !== rq.member.username}
-					<div class="flex justify-center items-center mr-4">
-						{#if interested}
-							<button
-								class="btn btn-ghost px-1 py-1 text-xs text-gray-600"
-								on:click={() => removeInterest(postId)}
-							>
-								<div class="text-red-600">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-6 w-6"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-										><path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-										/></svg
+	<div class="flex justify-center items-center min-h-screen bg-base-100">
+		<div class="container mx-auto px-4">
+			<div class="p-6 max-w-4xl mx-auto my-10 bg-white rounded-box shadow-lg">
+				<div>{jobPostDetailDto?.author}</div>
+				<div class="flex justify-between items-center">
+					<div class="text-xl font-bold break-words max-w-[55%]">{jobPostDetailDto?.title}</div>
+					<div class="flex items-center">
+						{#if !jobPostDetailDto?.closed && !jobPostDetailDto.employed && rq.isLogin && jobPostDetailDto?.author !== rq.member.username}
+							<div class="flex justify-center items-center mr-4">
+								{#if interested}
+									<button
+										class="btn btn-ghost px-1 py-1 text-xs text-gray-600"
+										on:click={() => removeInterest(postId)}
 									>
-								</div>
-							</button>
-						{:else}
-							<button
-								class="btn btn-ghost px-1 py-1 text-xs text-gray-600"
-								on:click={() => registerInterest(postId)}
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-6 w-6"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									><path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-									/></svg
-								>
-							</button>
-						{/if}
-					</div>
-					<button class="btn btn-neutral" on:click={apply}>지원하기</button>
-				{/if}
-			</div>
-		</div>
-		<div class="mt-4">
-			<div class="flex flex-col items-end text-gray-700 text-sm">
-				<div>등록 일자 : {jobPostDetailDto?.createdAt}</div>
-				{#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifiedAt}
-					<div class="text-sm">수정 일자 : {jobPostDetailDto?.modifiedAt}</div>
-				{/if}
-				<div class="flex justify-center mt-4">
-					{#if jobPostDetailDto?.author === rq.member.username}
-						<button class="btn btn-primary btn-xs mx-1" on:click={editPost}>수정하기</button>
-						<button class="btn btn-xs mx-1" on:click={deletePost}>삭제하기</button>
-						{#if !jobPostDetailDto.closed}
-							<button class="btn btn-xs mx-1" on:click={() => postEarlyClosing()}>조기마감</button>
-						{/if}
-						{#if jobPostDetailDto?.author === rq.member.username}
-							<button
-								class="btn btn-primary btn-xs mx-1"
-								on:click={() => goToApplicationsList(jobPostDetailDto?.id)}>지원서 확인</button
-							>
-						{/if}
-					{/if}
-				</div>
-			</div>
-			<div class="divider"></div>
-			<div class="grid grid-cols-4 my-4">
-				<div class="text-sm">모집 상태 :</div>
-				<div>
-					{#if jobPostDetailDto.employed}
-						<div class="text-sm text-blue-900">구인완료</div>
-					{:else if jobPostDetailDto.closed}
-						<div class="text-sm text-rose-600">마감</div>
-					{:else}
-						<div class="text-sm text-emerald-700">구인중</div>
-					{/if}
-				</div>
-				<div class="text-sm">공고 마감 :</div>
-				{#if jobPostDetailDto?.deadLine === null}
-					<span class="badge badge-outline badge-error"> 조기마감 </span>
-				{:else}
-					<div class="text-sm">{jobPostDetailDto?.deadLine}</div>
-				{/if}
-				<div class="text-sm">지원 나이 :</div>
-				<div class="text-sm">
-					{jobPostDetailDto?.minAge === 0 ? '없음' : jobPostDetailDto?.minAge ?? '없음'}
-				</div>
-				<div class="text-sm">성별 구분 :</div>
-				<div class="text-sm">
-					{jobPostDetailDto?.gender === 'MALE'
-						? '남'
-						: jobPostDetailDto?.gender === 'FEMALE'
-							? '여'
-							: '무관'}
-				</div>
-			</div>
-			<div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
-
-			<div class="divider"></div>
-			<div class="flex justify-end text-gray-700 text-sm">
-				<div class="flex">
-					<div class="text-sm">관심 등록 :</div>
-					<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
-					<div class="text-sm">조회 :</div>
-					<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
-				</div>
-			</div>
-			<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
-				<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="container mx-auto px-4 py-8">
-		<div class="w-full max-w-xl mx-auto">
-			<!-- 댓글 입력 폼 -->
-			<div class="flex justify-between items-center mb-4">
-				<textarea
-					class="textarea textarea-bordered w-full"
-					placeholder="댓글을 입력하세요."
-					bind:value={newComment}
-				></textarea>
-				<button class="btn btn-ghost mx-3" on:click={addComment}>댓글 달기</button>
-			</div>
-			<div class="divider"></div>
-			<!-- 댓글 목록 -->
-			<div class="space-y-4">
-				{#each comments as comment}
-					<div class="p-4 rounded-lg bg-base-100 shadow">
-						<div class="flex items-center justify-between mb-2">
-							<div class="flex items-center space-x-2">
-								<div class="avatar online placeholder">
-									<div class="bg-neutral text-neutral-content rounded-full w-8">
-										<span class="text-xs">{comment.author.slice(0, 3)}</span>
-									</div>
-								</div>
-								<div>
-									<div class="font-bold">{comment.author}</div>
-									<div class="text-xs text-gray-500">
-										작성 일자 : {formatDateTime(comment.createAt)}
-									</div>
-									{#if comment.createAt !== comment.modifyAt}
-										<div class="text-xs text-gray-500">
-											수정 일자 : {formatDateTime(comment.modifyAt)}
+										<div>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												id="Layer_1"
+												data-name="Layer 1"
+												viewBox="0 0 24 24"
+												class="h-6 w-6"
+												><path
+													fill="red"
+													d="M17.5.917a6.4,6.4,0,0,0-5.5,3.3A6.4,6.4,0,0,0,6.5.917,6.8,6.8,0,0,0,0,7.967c0,6.775,10.956,14.6,11.422,14.932l.578.409.578-.409C13.044,22.569,24,14.742,24,7.967A6.8,6.8,0,0,0,17.5.917Z"
+												/></svg
+											>
 										</div>
-									{/if}
-								</div>
-							</div>
-							<div>
-								{#if comment.author === rq.member.username}
-									{#if comment.isEditing}
-										<button class="btn btn-xs btn-ghost" on:click={() => submitEdit(comment.id)}
-											>수정 완료</button
-										>
-									{:else}
-										<button class="btn btn-xs btn-ghost" on:click={() => startEdit(comment.id)}
-											>수정</button
-										>
-									{/if}
-									<button class="btn btn-xs btn-ghost" on:click={() => deleteComment(comment.id)}
-										>삭제</button
+									</button>
+								{:else}
+									<button
+										class="btn btn-ghost px-1 py-1 text-xs text-gray-600"
+										on:click={() => registerInterest(postId)}
 									>
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6"
+											><g id="_01_align_center" data-name="01 align center"
+												><path
+													d="M17.5.917a6.4,6.4,0,0,0-5.5,3.3A6.4,6.4,0,0,0,6.5.917,6.8,6.8,0,0,0,0,7.967c0,6.775,10.956,14.6,11.422,14.932l.578.409.578-.409C13.044,22.569,24,14.742,24,7.967A6.8,6.8,0,0,0,17.5.917ZM12,20.846c-3.253-2.43-10-8.4-10-12.879a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,7.967h2a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,7.967C22,12.448,15.253,18.416,12,20.846Z"
+												/></g
+											></svg
+										>
+									</button>
 								{/if}
 							</div>
-						</div>
-						{#if comment.isEditing}
-							<textarea class="textarea textarea-bordered w-full" bind:value={editingContent}
-							></textarea>
-						{:else}
-							<div class="text-gray-700 ml-2">{comment.content}</div>
+							<button class="btn btn-neutral" on:click={apply}>지원하기</button>
 						{/if}
 					</div>
-				{/each}
+				</div>
+				<div class="mt-4">
+					<div class="flex flex-col text-gray-700 text-sm">
+						<div class="text-xs">등록 일자 : {jobPostDetailDto?.createdAt}</div>
+						{#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifiedAt}
+							<div class="text-xs">수정 일자 : {jobPostDetailDto?.modifiedAt}</div>
+						{/if}
+						<div class="flex justify-end">
+							{#if jobPostDetailDto?.author === rq.member.username}
+								<div class="mt-4">
+									<button class="btn btn-primary btn-xs mx-1" on:click={editPost}>수정하기</button>
+									<button class="btn btn-xs mx-1" on:click={deletePost}>삭제하기</button>
+									{#if !jobPostDetailDto.closed}
+										<button class="btn btn-xs mx-1" on:click={() => postEarlyClosing()}
+											>조기마감</button
+										>
+									{/if}
+									{#if jobPostDetailDto?.author === rq.member.username}
+										<button
+											class="btn btn-primary btn-xs mx-1"
+											on:click={() => goToApplicationsList(jobPostDetailDto?.id)}
+											>지원서 확인</button
+										>
+									{/if}
+								</div>
+							{/if}
+						</div>
+					</div>
+					<div class="divider"></div>
+					<div class="grid grid-cols-4 my-4">
+						<div class="text-sm">모집 상태 :</div>
+						<div>
+							{#if jobPostDetailDto.employed}
+								<div class="text-sm text-blue-900">구인완료</div>
+							{:else if jobPostDetailDto.closed}
+								<div class="text-sm text-rose-600">마감</div>
+							{:else}
+								<div class="text-sm text-emerald-700">구인중</div>
+							{/if}
+						</div>
+						<div class="text-sm">공고 마감 :</div>
+						{#if jobPostDetailDto?.deadLine === null}
+							<div class="text-sm text-rose-600">조기 마감</div>
+						{:else}
+							<div class="text-xs sm:text-sm">{jobPostDetailDto?.deadLine}</div>
+						{/if}
+						<div class="text-sm">지원 나이 :</div>
+						<div class="text-sm">
+							{jobPostDetailDto?.minAge === 0 ? '없음' : jobPostDetailDto?.minAge ?? '없음'}
+						</div>
+						<div class="text-sm">성별 구분 :</div>
+						<div class="text-sm">
+							{jobPostDetailDto?.gender === 'MALE'
+								? '남'
+								: jobPostDetailDto?.gender === 'FEMALE'
+									? '여'
+									: '무관'}
+						</div>
+					</div>
+					<div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
+
+					<div class="divider"></div>
+					<div class="flex justify-end text-gray-700 text-sm">
+						<div class="flex">
+							<div class="text-sm">관심 등록 :</div>
+							<div class="text-sm mx-2">{jobPostDetailDto?.interestsCount}</div>
+							<div class="text-sm">조회 :</div>
+							<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
+						</div>
+					</div>
+					<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
+						<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="container mx-auto px-4 py-8">
+				<div class="w-full max-w-4xl mx-auto">
+					<!-- 댓글 입력 폼 -->
+					<div class="flex justify-between items-center mb-4">
+						<textarea
+							class="textarea textarea-bordered w-full"
+							placeholder="댓글을 입력하세요."
+							bind:value={newComment}
+						></textarea>
+						<button class="btn btn-ghost mx-3" on:click={addComment}>댓글 달기</button>
+					</div>
+					<div class="divider"></div>
+					<!-- 댓글 목록 -->
+					<div class="space-y-4">
+						{#each comments as comment}
+							<div class="p-4 rounded-lg bg-base-100 shadow">
+								<div class="flex items-center justify-between mb-2">
+									<div class="flex items-center space-x-2">
+										<div class="avatar online placeholder">
+											<div class="bg-neutral text-neutral-content rounded-full w-8">
+												<span class="text-xs">{comment.author.slice(0, 3)}</span>
+											</div>
+										</div>
+										<div>
+											<div class="font-bold">{comment.author}</div>
+											<div class="text-xs text-gray-500">
+												작성 일자 : {formatDateTime(comment.createAt)}
+											</div>
+											{#if comment.createAt !== comment.modifyAt}
+												<div class="text-xs text-gray-500">
+													수정 일자 : {formatDateTime(comment.modifyAt)}
+												</div>
+											{/if}
+										</div>
+									</div>
+									<div>
+										{#if comment.author === rq.member.username}
+											{#if comment.isEditing}
+												<button class="btn btn-xs btn-ghost" on:click={() => submitEdit(comment.id)}
+													>수정 완료</button
+												>
+											{:else}
+												<button class="btn btn-xs btn-ghost" on:click={() => startEdit(comment.id)}
+													>수정</button
+												>
+											{/if}
+											<button
+												class="btn btn-xs btn-ghost"
+												on:click={() => deleteComment(comment.id)}>삭제</button
+											>
+										{/if}
+									</div>
+								</div>
+								{#if comment.isEditing}
+									<textarea class="textarea textarea-bordered w-full" bind:value={editingContent}
+									></textarea>
+								{:else}
+									<div class="text-gray-700 ml-2">{comment.content}</div>
+								{/if}
+							</div>
+						{/each}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
