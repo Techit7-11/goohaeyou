@@ -22,6 +22,8 @@ public class RoomListDto {
                 .roomId(room.getId())
                 .username1(room.getUsername1())
                 .username2(room.getUsername2())
+                // TODO : 채팅방에 채팅이 없을 경우 에러발생 처리
+//                .lastChat(room.getMessages().isEmpty()?room.getMessages().getLast():null)
                 .lastChat(room.getMessages().getLast())
                 .build();
     }
