@@ -21,6 +21,13 @@
 	function goToRoomDetail(roomId: Long) {
 		rq.goTo(`/chat/${roomId}`);
 	}
+
+	async function exitChatRoom(roomId: Long) {
+		console.log(roomId);
+		console.log(rq.apiEndPoints());
+		const response = await rq.apiEndPoints().PUT(`/api/chat/${roomId}`);
+		location.reload();
+	}
 </script>
 
 {#await load()}
@@ -67,15 +74,15 @@
 								</div>
 							</div>
 						</li>
-						<!-- <th:block>{room.roomId}</th:block>
-						{#if member.username === room.username1}
-							<th:block>{room.username2}</th:block>
-						{:else}
-							<th:block>{room.username1}</th:block>
-						{/if}
-
-						<th:block>{room?.lastChat.content}</th:block>
-						<th:block>{room?.lastChat.createdAtt}</th:block> -->
+					</div>
+					<div class="flex items-center justify-end pr-3">
+						<button
+							class="text-sm text-gray-500 truncate"
+							type="button"
+							on:click={() => exitChatRoom(room?.roomId)}
+						>
+							<div class="">나가기</div>
+						</button>
 					</div>
 				{/each}
 			</ul>

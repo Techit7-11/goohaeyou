@@ -37,6 +37,12 @@ export interface paths {
     /** 조기 마감 */
     put: operations["postEarlyClosing"];
   };
+  "/api/chat/{roomId}": {
+    /** 채팅방 입장 */
+    get: operations["showRoom"];
+    /** 채팅방 퇴장 */
+    put: operations["exitsRoom"];
+  };
   "/api/applications/{id}": {
     /** 지원서 상세 내용 */
     get: operations["detailApplication"];
@@ -139,10 +145,6 @@ export interface paths {
   "/api/employ/{postId}": {
     /** 공고 별 지원리스트 */
     get: operations["getList_1"];
-  };
-  "/api/chat/{roomId}": {
-    /** 채팅방 입장 */
-    get: operations["showRoom"];
   };
   "/": {
     get: operations["showMain"];
@@ -442,8 +444,8 @@ export interface components {
       username2?: string;
     };
     RoomDto: {
-      username1: string;
-      username2: string;
+      username1?: string;
+      username2?: string;
       messages?: components["schemas"]["Message"][];
     };
     RsDataRoomDto: {
@@ -622,6 +624,38 @@ export interface operations {
     parameters: {
       path: {
         id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
+  /** 채팅방 입장 */
+  showRoom: {
+    parameters: {
+      path: {
+        roomId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataRoomDto"];
+        };
+      };
+    };
+  };
+  /** 채팅방 퇴장 */
+  exitsRoom: {
+    parameters: {
+      path: {
+        roomId: number;
       };
     };
     responses: {
@@ -1070,22 +1104,6 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListApplicationDto"];
-        };
-      };
-    };
-  };
-  /** 채팅방 입장 */
-  showRoom: {
-    parameters: {
-      path: {
-        roomId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["RsDataRoomDto"];
         };
       };
     };

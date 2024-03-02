@@ -33,4 +33,12 @@ public class Room {
 
     @JsonIgnore
     private List<Message> messages = new ArrayList<>();
+
+    public void update(String username) {
+        if (username.equals(username1)) {
+            this.username1 = null;
+        }else if (username.equals(username2)) {
+            this.username2 = null;
+        }
+    }
 }

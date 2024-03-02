@@ -12,9 +12,7 @@ import java.util.List;
 @Builder
 public class RoomDto {
 
-    @NotNull
     private String username1;
-    @NotNull
     private String username2;
     private List<Message> messages;
 

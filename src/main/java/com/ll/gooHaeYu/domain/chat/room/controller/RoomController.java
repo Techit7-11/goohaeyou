@@ -43,4 +43,12 @@ public class RoomController {
     public RsData<List<RoomListDto>> showRoomList(@AuthenticationPrincipal MemberDetails memberDetails) {
         return RsData.of(roomService.getRoomList(memberDetails.getUsername()));
     }
+
+    @PutMapping("/{roomId}")
+    @Operation(summary = "채팅방 퇴장")
+    public RsData<Void> exitsRoom(@AuthenticationPrincipal MemberDetails memberDetails,
+                                    @PathVariable Long roomId) {
+        roomService.exitsRoom(memberDetails.getUsername(), roomId);
+        return RsData.of("204", "NO_CONTENT");
+    }
 }

@@ -122,7 +122,11 @@
 	<div class="p-1 max-w-4xl mx-auto bg-white rounded-box shadow-lg">
 		<ul class="__messages">
 			{#each roomDto.messages as message}
-				{#if message.sender === member.username}
+				{#if message.sender === 'admin'}
+					<div class="flex justify-center">
+						<th:block>{message.content}</th:block>
+					</div>
+				{:else if message.sender === member.username}
 					<div class="chat chat-end">
 						<div class="chat-image avatar">
 							<div class="w-10 rounded-full">
