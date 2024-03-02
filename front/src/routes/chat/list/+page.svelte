@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import rq from '$lib/rq/rq.svelte';
 
+	const member = rq.member;
+
 	onMount(async () => {
 		await rq.initAuth();
 		if (rq.isLogout()) {
@@ -35,8 +37,12 @@
 						on:click={() => goToRoomDetail(room.roomId)}
 					>
 						<th:block>{room.roomId}</th:block>
-						<th:block>{room.username1}</th:block>
-						<th:block>{room.username2}</th:block>
+						{#if member.username === room.username1}
+							<th:block>{room.username2}</th:block>
+						{:else}
+							<th:block>{room.username1}</th:block>
+						{/if}
+
 						<th:block>{room?.lastChat.content}</th:block>
 						<th:block>{room?.lastChat.createdAtt}</th:block>
 					</div>

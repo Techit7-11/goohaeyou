@@ -12,6 +12,7 @@
 	var socket = new SockJS(import.meta.env.VITE_CORE_API_BASE_URL + '/ws');
 	var stompClient = Stomp.over(socket);
 	let chatMessagesEl;
+	const member = rq.member;
 
 	onMount(async () => {
 		await rq.initAuth();
@@ -26,6 +27,8 @@
 			if (chatMessagesEl) {
 				clearInterval(waitForChatMessagesEl);
 			}
+			// 스크롤을 가장 아래로 이동합니다.
+			chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
 		}, 100);
 	});
 
@@ -46,11 +49,46 @@
 	function drawMoreMessage(message) {
 		lastMessageId = message.id;
 		const messageElement = document.createElement('li');
-		messageElement.innerHTML = `<li>${message.sender}</li><li>${message.text}</li>`;
-		chatMessagesEl.insertBefore(messageElement, chatMessagesEl.firstChild);
+		if (message.sender === member.username) {
+			messageElement.innerHTML = `<div class="chat chat-end">
+						<div class="chat-image avatar">
+							<div class="w-10 rounded-full">
+								<img
+									alt="Tailwind CSS chat bubble component"
+									src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+								/>
+							</div>
+						</div>
+						<div class="chat-header">
+							<th:block>${message.sender}</th:block>
+						</div>
+						<div class="chat-bubble"><th:block>${message.text}</th:block></div>
+						<div class="chat-footer opacity-50"><th:block>${message.createdAt}</th:block></div>
+					</div>`;
+		} else {
+			messageElement.innerHTML = `<div class="chat chat-start">
+						<div class="chat-image avatar">
+							<div class="w-10 rounded-full">
+								<img
+									alt="Tailwind CSS chat bubble component"
+									src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+								/>
+							</div>
+						</div>
+						<div class="chat-header">
+							<th:block>${message.sender}</th:block>
+						</div>
+						<div class="chat-bubble"><th:block>${message.text}</th:block></div>
+						<div class="chat-footer opacity-50"><th:block>${message.createdAt}</th:block></div>
+					</div>`;
+		}
+		chatMessagesEl.appendChild(messageElement);
+		// chatMessagesEl.insertBefore(messageElement, chatMessagesEl.firstChild);
+		chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
 	}
 
 	async function addContent() {
+		console.log(member.username);
 		newContent = newContent.trim();
 		if (newContent.length == 0) {
 			alert('내용을 입력 해주세요.');
@@ -70,21 +108,44 @@
 		<span class="loading loading-dots loading-lg"></span>
 	</div>
 {:then { data: roomDto }}
-	<div class="p-6 max-w-4xl mx-auto my-10 bg-white rounded-box shadow-lg">
-		<div>
-			<div>{roomDto?.username1}</div>
-			<div>{roomDto?.username2}</div>
-		</div>
-		<hr />
-		<div>
-			<ul class="__messages">
-				{#each roomDto.messages as message}
-					<hr />
-					<th:block>{message.sender}</th:block>
-					<th:block>{message.content}</th:block>
-				{/each}
-			</ul>
-		</div>
+	<div class="p-1 max-w-4xl mx-auto bg-white rounded-box shadow-lg">
+		<ul class="__messages">
+			{#each roomDto.messages as message}
+				{#if message.sender === member.username}
+					<div class="chat chat-end">
+						<div class="chat-image avatar">
+							<div class="w-10 rounded-full">
+								<img
+									alt="Tailwind CSS chat bubble component"
+									src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+								/>
+							</div>
+						</div>
+						<div class="chat-header">
+							<th:block>{message.sender}</th:block>
+						</div>
+						<div class="chat-bubble"><th:block>{message.content}</th:block></div>
+						<div class="chat-footer opacity-50"><th:block>{message.createdAt}</th:block></div>
+					</div>
+				{:else}
+					<div class="chat chat-start">
+						<div class="chat-image avatar">
+							<div class="w-10 rounded-full">
+								<img
+									alt="Tailwind CSS chat bubble component"
+									src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+								/>
+							</div>
+						</div>
+						<div class="chat-header">
+							<th:block>{message.sender}</th:block>
+						</div>
+						<div class="chat-bubble"><th:block>{message.content}</th:block></div>
+						<div class="chat-footer opacity-50"><th:block>{message.createdAt}</th:block></div>
+					</div>
+				{/if}
+			{/each}
+		</ul>
 
 		<div class="flex justify-between items-center mb-4">
 			<textarea
@@ -102,3 +163,10 @@
 		var global = window;
 	</script>
 </svelte:head>
+
+<style>
+	.__messages {
+		max-height: 455px; /* 화면의 최대 높이를 지정합니다. */
+		overflow-y: auto; /* 세로 스크롤이 필요할 때만 스크롤이 나타나도록 합니다. */
+	}
+</style>
