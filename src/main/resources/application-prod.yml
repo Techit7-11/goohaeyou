@@ -45,5 +45,5 @@ custom:
     frontUrl: "${custom.prod.frontUrl}"
     backUrl: "${custom.prod.backUrl}"
 tossPayments:
-  successUrl: "${custom.prod.backUrlUrl}" + "/payments/success"
-  failUrl: "${custom.prod.backUrl}" + "/payments/success"
+  successUrl: "https://a.goohaeyou.site/api/payments/success"
+  failUrl: "https://a.goohaeyou.site/api/payments/fail"
