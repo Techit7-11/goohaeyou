@@ -42,6 +42,11 @@
 		return data;
 	}
 
+	async function loadMyReview() {
+		const { data } = await rq.apiEndPoints().GET('/api/member/review', {});
+		return data;
+	}
+
 	function summarizeBody(body) {
 		return body.length > 10 ? `${body.slice(0, 10)}...` : body;
 	}
@@ -98,7 +103,7 @@
 			</div>
 			<div class="divider"></div>
 			<div class="flex justify-center">
-				<div class="join">
+				<div class="join flex flex-wrap gap-4 justify-around">
 					<label for="my_modal_1" class="btn btn-ghost join-item">작성 공고</label>
 					<input type="checkbox" id="my_modal_1" class="modal-toggle" />
 					<div class="modal" role="dialog">
@@ -186,6 +191,27 @@
 							{/await}
 						</div>
 						<label class="modal-backdrop" for="my_modal_4">Close</label>
+					</div>
+					<label for="my_modal_5" class="btn btn-ghost join-item">작성 리뷰</label>
+					<input type="checkbox" id="my_modal_5" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#await loadMyReview()}
+								<p>loading...</p>
+							{:then { data: ReviewDtoList }}
+								{#each ReviewDtoList ?? [] as ReviewDto}
+									<a href="/job-post/{ReviewDto.jobPostingId}" class="card-link">
+										<div class="card">
+											<div class="text-sm text-gray-500">{ReviewDto.jobPostingId}번 공고</div>
+											<div class="text-lg font-bold">{ReviewDto.score}</div>
+											<div class="text-lg font-bold truncate">{ReviewDto.body}</div>
+											<div class="divider"></div>
+										</div>
+									</a>
+								{/each}
+							{/await}
+						</div>
+						<label class="modal-backdrop" for="my_modal_5">Close</label>
 					</div>
 				</div>
 			</div>
