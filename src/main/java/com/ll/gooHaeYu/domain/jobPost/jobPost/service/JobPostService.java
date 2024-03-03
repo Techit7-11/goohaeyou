@@ -59,6 +59,7 @@ public class JobPostService {
                 .jobPost(newPost)
                 .author(username)
                 .body(form.getBody())
+                .deposit(form.getDeposit())
                 .build();
 
         Essential essential = Essential.builder()
@@ -99,9 +100,10 @@ public class JobPostService {
             throw new CustomException(NOT_ABLE);
 
         postDetail.getJobPost().update(form.getTitle(),form.getDeadLine());
-        postDetail.updateBody(form.getBody());
+        postDetail.updatePostDetail(form.getBody(), form.getDeposit());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
         postDetail.getWage().updateWageInfo(form.getWorkTime(), form.getCost(), form.getWageType());
+        postDetail.getDeposit();
 
         // TODO : 삭제 후 알림 날리기
         List<Application> applicationsToRemove = new ArrayList<>();

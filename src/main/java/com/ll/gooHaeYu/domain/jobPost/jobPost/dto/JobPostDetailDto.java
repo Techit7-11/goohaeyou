@@ -21,6 +21,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     private Gender gender;
     private String modifiedAt;
     private List<String> interestedUsernames;
+    private int deposit;
 
     public static JobPostDetailDto fromEntity(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential, Wage wage) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
@@ -49,6 +50,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .cost(wage.getCost())
                 .wageType(wage.getWageType())
                 .workTime(wage.getWorkTime())
+                .deposit(jobPostDetail.getDeposit())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .modifiedAt(mostRecentModifiedDate.format(formatter))
                 .build();
