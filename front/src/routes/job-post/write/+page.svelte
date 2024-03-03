@@ -12,7 +12,8 @@
 		deadLine: '',
 		wageType: '',
 		workTime: '',
-    	cost: 0
+		cost: 0,
+		deposit: 0
 	};
 
 	onMount(async () => {
@@ -33,9 +34,9 @@
 	// 글 작성 버튼을 클릭하면 실행될 함수
 	async function writeJobPost() {
 		if (newJobPostData.wageType === '') {
-        rq.msgError('급여 타입을 선택해주세요.');
-        return; 
-    }
+			rq.msgError('급여 타입을 선택해주세요.');
+			return;
+		}
 		const response = await rq.apiEndPoints().POST('/api/job-posts', { body: newJobPostData });
 
 		if (response.data?.statusCode === 200) {
@@ -149,18 +150,18 @@
 				</div>
 				<div class="divider mt-10"></div>
 				<div class="form-group">
-                    <label class="label" for="wageType">* 급여 타입</label>
-                    <select
-                        class="input input-bordered w-full"
-                        id="wageType"
-                        bind:value={newJobPostData.wageType}
-                    >
+					<label class="label" for="wageType">* 급여 타입</label>
+					<select
+						class="input input-bordered w-full"
+						id="wageType"
+						bind:value={newJobPostData.wageType}
+					>
 						<option value="" disabled selected>- 선택하세요 -</option>
-                        <option value="HOURLY">시급</option>
-                        <option value="SALARY">일급</option>
-                        <option value="PER_PROJECT">건당</option>
-                    </select>
-                </div>
+						<option value="HOURLY">시급</option>
+						<option value="SALARY">일급</option>
+						<option value="PER_PROJECT">건당</option>
+					</select>
+				</div>
 				<div class="form-group">
 					<label class="label" for="workTime">* 도움시간 또는 도움일수</label>
 					<input
@@ -171,7 +172,6 @@
 						bind:value={newJobPostData.workTime}
 					/>
 				</div>
-				
 				<div class="form-group">
 					<label class="label" for="cost">* 급여</label>
 					<input
@@ -180,6 +180,16 @@
 						class="input input-bordered w-full"
 						min="0"
 						bind:value={newJobPostData.cost}
+					/>
+				</div>
+				<div class="form-group">
+					<label class="label" for="cost">* 예치금</label>
+					<input
+						type="number"
+						id="deposit"
+						class="input input-bordered w-full"
+						min="0"
+						bind:value={newJobPostData.deposit}
 					/>
 				</div>
 				<div class="form-group">
