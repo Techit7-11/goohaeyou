@@ -6,6 +6,7 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.global.event.ChangeOfPostEvent;
+import com.ll.gooHaeYu.global.event.CreateChatRoomEvent;
 import com.ll.gooHaeYu.global.event.PostEmployedEvent;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class EmployService {
     public void approve(String username, Long postId, List<Long> applicationIds) {
         JobPost jobPost = jobPostService.findByIdAndValidate(postId);
         JobPostDetail postDetail = jobPost.getJobPostDetail();
+        Long postWriterId = jobPost.getMember().getId();
 
         if (!jobPost.isClosed()) throw new CustomException(NOT_POSSIBLE_TO_APPROVE_IT_YET);
         checkPermissions(username,postDetail.getAuthor());
@@ -49,9 +51,11 @@ public class EmployService {
 
         for (Application application : postDetail.getApplications()) {
             if(applicationIds.contains(application.getId())) {
-                // TODO : 승인 후 알림
+                Long receiverId = application.getMember().getId();
                 application.approve();
+                publisher.publishEvent(new CreateChatRoomEvent(this,postWriterId,receiverId));
                 publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
+
             }else {
                 application.reject();
                 applicationList.add(application);

@@ -27,18 +27,31 @@ public class Room {
 
     private String username2;
 
+    @Builder.Default
+    private boolean user1HasExit = false;
+
+    @Builder.Default
+    private boolean user2HasExit = false;
+
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @ToString.Exclude
-
     @JsonIgnore
     private List<Message> messages = new ArrayList<>();
 
-    public void update(String username) {
+    public void exit(String username) {
         if (username.equals(username1)) {
-            this.username1 = null;
+            this.user1HasExit = true;
         }else if (username.equals(username2)) {
-            this.username2 = null;
+            this.user2HasExit = true;
+        }
+    }
+
+    public void enter(String username) {
+        if (username.equals(username1)) {
+            this.user1HasExit = false;
+        }else if (username.equals(username2)) {
+            this.user2HasExit = false;
         }
     }
 }

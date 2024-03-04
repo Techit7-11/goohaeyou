@@ -23,13 +23,13 @@ import java.util.List;
 public class RoomController {
     private final RoomService roomService;
 
-    @PostMapping
-    @Operation(summary = "채팅방 생서")
-    public RsData<URI> createRoom(@AuthenticationPrincipal MemberDetails memberDetails,
-                                  @Valid @RequestBody CreateForm createForm) {
-        Long roomId = roomService.createRoom(memberDetails.getId(),createForm.getMemberId());
-        return RsData.of("201","CREATE",URI.create("/api/chat/" + roomId));
-    }
+//    @PostMapping
+//    @Operation(summary = "채팅방 생서")
+//    public RsData<URI> createRoom(@AuthenticationPrincipal MemberDetails memberDetails,
+//                                  @Valid @RequestBody CreateForm createForm) {
+//        Long roomId = roomService.createRoom(memberDetails.getId(),createForm.getMemberId());
+//        return RsData.of("201","CREATE",URI.create("/api/chat/" + roomId));
+//    }
 
     @GetMapping("/{roomId}")
     @Operation(summary = "채팅방 입장")

@@ -37,6 +37,8 @@
 				return '에서 지원서를 승인 되었습니다.';
 			case 'APPLICATION_UNAPPROVE':
 				return '에서 지원서가 승인 되지 않았습니다.';
+			case 'CHATROOM_CREATED':
+				return '새로운 채팅방이 생성되었습니다.';
 		}
 	}
 

@@ -81,12 +81,6 @@ export interface paths {
     /** 구인공고 관심 제거 */
     delete: operations["disinterest"];
   };
-  "/api/chat": {
-    /** 채팅방 목록 */
-    get: operations["showRoomList"];
-    /** 채팅방 생서 */
-    post: operations["createRoom"];
-  };
   "/api/chat/{roomId}/message": {
     /** 채팅 생성 */
     post: operations["writeChat"];
@@ -145,6 +139,10 @@ export interface paths {
   "/api/employ/{postId}": {
     /** 공고 별 지원리스트 */
     get: operations["getList_1"];
+  };
+  "/api/chat": {
+    /** 채팅방 목록 */
+    get: operations["showRoomList"];
   };
   "/": {
     get: operations["showMain"];
@@ -245,10 +243,6 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["JoinForm"];
     };
-    CreateForm: {
-      /** Format: int64 */
-      memberId: number;
-    };
     RsDataURI: {
       resultCode?: string;
       /** Format: int32 */
@@ -284,7 +278,7 @@ export interface components {
       fromMember?: string;
       relPostTitle?: string;
       /** @enum {string} */
-      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE";
+      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE" | "CHATROOM_CREATED";
       /** @enum {string} */
       resultTypeCode?: "NOTICE" | "DELETE" | "APPROVE";
       seen?: boolean;
@@ -442,6 +436,8 @@ export interface components {
       id?: number;
       username1?: string;
       username2?: string;
+      user1HasExit?: boolean;
+      user2HasExit?: boolean;
     };
     RoomDto: {
       username1?: string;
@@ -864,33 +860,6 @@ export interface operations {
       };
     };
   };
-  /** 채팅방 목록 */
-  showRoomList: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["RsDataListRoomListDto"];
-        };
-      };
-    };
-  };
-  /** 채팅방 생서 */
-  createRoom: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateForm"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["RsDataURI"];
-        };
-      };
-    };
-  };
   /** 채팅 생성 */
   writeChat: {
     parameters: {
@@ -1104,6 +1073,17 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListApplicationDto"];
+        };
+      };
+    };
+  };
+  /** 채팅방 목록 */
+  showRoomList: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataListRoomListDto"];
         };
       };
     };

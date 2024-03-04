@@ -10,18 +10,20 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
-import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class RoomService {
     private final RoomRepository roomRepository;
     private final MemberService memberService;
@@ -29,17 +31,34 @@ public class RoomService {
 
     @Transactional
     public Long createRoom(Long memberId1, Long memberId2) {
+
         Member member1 = memberService.findById(memberId1);
+        String member1Username = member1.getUsername();
         Member member2 = memberService.findById(memberId2);
+        String member2Username = member2.getUsername();
 
-        Room newRoom = Room.builder()
-                .username1(member1.getUsername())
-                .username2(member2.getUsername())
-                .build();
+        if(checkTheChatroom(member1.getUsername(),member2.getUsername())) {
+            Room room = findByUsername1AndUsername2(member1Username, member2Username);
 
-        roomRepository.save(newRoom);
+            room.enter(member1Username);
 
-        return newRoom.getId();
+            Message message = Message.builder()
+                    .room(room)
+                    .sender("admin")
+                    .content("\""+member1Username+"\" 님이 입장 하였습니다.").build();
+            room.getMessages().add(message);
+
+            return room.getId();
+        }else {
+            Room newRoom = Room.builder()
+                    .username1(member1.getUsername())
+                    .username2(member2.getUsername())
+                    .build();
+
+            roomRepository.save(newRoom);
+
+            return newRoom.getId();
+        }
     }
 
     public RoomDto findById(Long roomId, String username) {
@@ -52,23 +71,34 @@ public class RoomService {
 
     public Room findByIdAndValidate(Long roomId) {
         return roomRepository.findById(roomId)
-                .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
+                .orElseThrow(() -> new CustomException(CHATROOM_NOT_EXITS));
     }
 
     public List<RoomListDto> getRoomList(String username) {
-        List<Room> rooms = roomRepository.findByUsername1OrUsername2(username);
+        List<Room> rooms = roomRepository.findActiveRoomsByUsername(username);
         return RoomListDto.toDtoList(rooms);
     }
 
     @Transactional
     public void exitsRoom(String username, Long roomId) {
         Room room = findByIdAndValidate(roomId);
-        room.update(username);
+        room.exit(username);
         Message message = Message.builder()
                 .room(room)
                 .sender("admin")
                 .content("\""+username+"\" 님이 퇴장 하였습니다.").build();
         room.getMessages().add(message);
         messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.fromEntity(message));
+    }
+
+    public Room findByUsername1AndUsername2(String username1, String username2) {
+        Room room = roomRepository.findByUsername1AndUsername2(username1, username2)
+                .orElseThrow(() -> new CustomException(CHATROOM_NOT_EXITS));
+        return room;
+    }
+
+    public boolean checkTheChatroom(String username1, String username2) {
+        Optional<Room> roomOptional = roomRepository.findByUsername1AndUsername2(username1, username2);
+        return roomOptional.isPresent();
     }
 }
