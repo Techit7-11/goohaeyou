@@ -22,6 +22,8 @@ public class ApplicationDto {
     @NotNull
     private String jobPostName;
     @NotNull
+    private int deposit;
+    @NotNull
     private String author;
     @NotNull
     private Long postId;
@@ -35,6 +37,7 @@ public class ApplicationDto {
     private String phone;
     @NotNull
     private String location;
+
     private LocalDateTime createdAt;
     private Boolean approve;
 
@@ -44,6 +47,7 @@ public class ApplicationDto {
                 .jobPostId(application.getJobPostDetail().getJobPost().getId())
                 .jobPostAuthorUsername(application.getJobPostDetail().getAuthor())
                 .jobPostName(application.getJobPostDetail().getJobPost().getTitle())
+                .deposit(application.getJobPostDetail().getDeposit())
                 .author(application.getMember().getUsername())
                 .postId(application.getJobPostDetail().getJobPost().getId())
                 .body(application.getBody())

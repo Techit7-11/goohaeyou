@@ -3,6 +3,7 @@ package com.ll.gooHaeYu.domain.application.application.service;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationForm;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
 import com.ll.gooHaeYu.domain.application.application.repository.ApplicationRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -47,6 +48,7 @@ public class ApplicationService {
                 .jobPostDetail(postDetail)
                 .body(form.getBody())
                 .approve(null)
+                .depositStatus(DepositStatus.UNDEFINED)
                 .build();
 
         postDetail.getApplications().add(newApplication);
@@ -76,7 +78,7 @@ public class ApplicationService {
         if (!canEditApplication(username, application.getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
-        application.update(form.getBody());
+        application.updateBody(form.getBody());
         publisher.publishEvent(new ApplicationCreateAndChangedEvent(this, application, APPLICATION_MODIFICATION));
     }
 

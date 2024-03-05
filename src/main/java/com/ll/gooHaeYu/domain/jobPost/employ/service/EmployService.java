@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.jobPost.employ.service;
 
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -51,6 +52,7 @@ public class EmployService {
             if(applicationIds.contains(application.getId())) {
                 // TODO : 승인 후 알림
                 application.approve();
+                application.updateDepositStatus(DepositStatus.APPLICATION_APPROVED);
                 publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
             }else {
                 application.reject();
