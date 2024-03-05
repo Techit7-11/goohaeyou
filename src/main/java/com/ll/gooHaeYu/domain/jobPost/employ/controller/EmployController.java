@@ -21,15 +21,17 @@ public class EmployController {
     @GetMapping
     @Operation(summary = "공고 별 지원리스트")
     public RsData<List<ApplicationDto>> getList(Authentication authentication,
-                                                @PathVariable Long postId) {
+                                                @PathVariable (name = "postId") Long postId) {
         return RsData.of(employService.getList(authentication.getName(), postId));
     }
 
     @PatchMapping("/{applicationIds}")
     @Operation(summary = "지원서 승인")
     public RsData<Void> approve(Authentication authentication,
-                        @PathVariable Long postId,
-                        @PathVariable List<Long> applicationIds) {
+                                @PathVariable (name="postId") Long postId ,
+                                @PathVariable (name ="applicationIds") List<Long> applicationIds) {
+
+        System.out.println("test " + authentication.getName());
         employService.approve(authentication.getName(), postId, applicationIds);
 
         return RsData.of("204", "NO_CONTENT");

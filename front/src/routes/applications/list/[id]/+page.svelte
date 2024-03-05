@@ -84,8 +84,8 @@
 			<div class="container mx-auto px-4 mt-5">
 				<ul class="w-full max-w-4xl mx-auto">
 					{#each applications as application}
-						<li class="card bg-base-100 shadow-xl">
-							<div class="card bg-base-100 shadow-xl">
+						<li class="card bg-base-100 shadow-xl my-4">
+							<div>
 								<div class="card-body flex flex-row items-center justify-between">
 									<a href={`/applications/detail/${application.id}`} class="flex-grow">
 										<div class="flex">

@@ -57,6 +57,10 @@ export interface paths {
     /** 댓글 작성 */
     post: operations["write"];
   };
+  "/api/member/review/{jobPostingId}": {
+    /** 지원자 리뷰 작성 */
+    post: operations["createReview"];
+  };
   "/api/member/logout": {
     /** 로그아웃 처리 및 쿠키 삭제 */
     post: operations["logout"];
@@ -109,6 +113,16 @@ export interface paths {
   "/api/notification/new": {
     /** 읽지 않은 알림 유무 확인 */
     get: operations["unreadNotification"];
+  };
+  "/api/member/review": {
+    /** 나의 전체 리뷰 조회 */
+    get: operations["getAllReviews"];
+  };
+  "/api/member/review/{id}": {
+    /** 리뷰 단건 조회 */
+    get: operations["getReviewById"];
+    /** 리뷰 삭제 */
+    delete: operations["deleteReview"];
   };
   "/api/member/myposts": {
     /** 내 공고 조회 */
@@ -223,6 +237,24 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["Register"];
     };
+    ApplicantReviewDto: {
+      /** Format: int64 */
+      id?: number;
+      body?: string;
+      /** Format: double */
+      score?: number;
+      /** Format: int64 */
+      jobPostingId?: number;
+      /** Format: int64 */
+      applicantId?: number;
+    };
+    RsDataApplicantReviewDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["ApplicantReviewDto"];
+    };
     LoginForm: {
       username: string;
       password: string;
@@ -299,6 +331,13 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: boolean;
+    };
+    RsDataListApplicantReviewDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["ApplicantReviewDto"][];
     };
     JobPostDto: {
       /** Format: int64 */
@@ -475,6 +514,13 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"];
+    };
+    RsDataString: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: string;
     };
   };
   responses: never;
@@ -776,6 +822,27 @@ export interface operations {
       };
     };
   };
+  /** 지원자 리뷰 작성 */
+  createReview: {
+    parameters: {
+      path: {
+        jobPostingId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ApplicantReviewDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataApplicantReviewDto"];
+        };
+      };
+    };
+  };
   /** 로그아웃 처리 및 쿠키 삭제 */
   logout: {
     responses: {
@@ -995,6 +1062,49 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataBoolean"];
+        };
+      };
+    };
+  };
+  /** 나의 전체 리뷰 조회 */
+  getAllReviews: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataListApplicantReviewDto"];
+        };
+      };
+    };
+  };
+  /** 리뷰 단건 조회 */
+  getReviewById: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataApplicantReviewDto"];
+        };
+      };
+    };
+  };
+  /** 리뷰 삭제 */
+  deleteReview: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataString"];
         };
       };
     };
