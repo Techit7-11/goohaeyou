@@ -3,156 +3,157 @@
  * Do not make direct changes to the file.
  */
 
+
 export interface paths {
-	'/api/post-comment/{postId}/comment/{commentId}': {
+	"/api/post-comment/{postId}/comment/{commentId}": {
 		/** 댓글 수정 */
-		put: operations['modify'];
+		put: operations["modify"];
 		/** 댓글 삭제 */
-		delete: operations['delete'];
+		delete: operations["delete"];
 	};
-	'/api/notification/{id}': {
+	"/api/notification/{id}": {
 		/** 알림 읽음 처리 */
-		put: operations['read'];
+		put: operations["read"];
 	};
-	'/api/member': {
+	"/api/member": {
 		/** 내 정보 조회 */
-		get: operations['detailMember'];
+		get: operations["detailMember"];
 		/** 내 정보 수정 */
-		put: operations['modifyMember'];
+		put: operations["modifyMember"];
 	};
-	'/api/member/social': {
+	"/api/member/social": {
 		/** 최초 소셜로그인 - 필수 회원정보 입력 */
-		put: operations['updateSocialMember'];
+		put: operations["updateSocialMember"];
 	};
-	'/api/job-posts/{id}': {
+	"/api/job-posts/{id}": {
 		/** 구인공고 단건 조회 */
-		get: operations['showDetailPost'];
+		get: operations["showDetailPost"];
 		/** 구인공고 수정 */
-		put: operations['modifyPost'];
+		put: operations["modifyPost"];
 		/** 구인공고 삭제 */
-		delete: operations['deleteJobPost'];
+		delete: operations["deleteJobPost"];
 	};
-	'/api/job-posts/{id}/closing': {
+	"/api/job-posts/{id}/closing": {
 		/** 조기 마감 */
-		put: operations['postEarlyClosing'];
+		put: operations["postEarlyClosing"];
 	};
-	'/api/applications/{id}': {
+	"/api/applications/{id}": {
 		/** 지원서 상세 내용 */
-		get: operations['detailApplication'];
+		get: operations["detailApplication"];
 		/** 지원서 수정 */
-		put: operations['modifyApplication'];
+		put: operations["modifyApplication"];
 		/** 지원서 작성 */
-		post: operations['writeApplication'];
+		post: operations["writeApplication"];
 		/** 지원서 삭제 */
-		delete: operations['deleteApplication'];
+		delete: operations["deleteApplication"];
 	};
-	'/api/post-comment/{postId}/comment': {
+	"/api/post-comment/{postId}/comment": {
 		/** 댓글 작성 */
-		post: operations['write'];
+		post: operations["write"];
 	};
-	'/api/member/review/{jobPostingId}': {
+	"/api/member/review/{jobPostingId}": {
 		/** 지원자 리뷰 작성 */
-		post: operations['createReview'];
+		post: operations["createReview"];
 	};
-	'/api/member/logout': {
+	"/api/member/logout": {
 		/** 로그아웃 처리 및 쿠키 삭제 */
-		post: operations['logout'];
+		post: operations["logout"];
 	};
-	'/api/member/login': {
+	"/api/member/login": {
 		/** 로그인, accessToken, refreshToken 쿠키 생성됨 */
-		post: operations['login'];
+		post: operations["login"];
 	};
-	'/api/member/join': {
+	"/api/member/join": {
 		/** 회원가입 */
-		post: operations['join'];
+		post: operations["join"];
 	};
-	'/api/job-posts': {
+	"/api/job-posts": {
 		/** 구인공고 글 목록 가져오기 */
-		get: operations['findAllPost'];
+		get: operations["findAllPost"];
 		/** 구인공고 작성 */
-		post: operations['writePost'];
+		post: operations["writePost"];
 	};
-	'/api/job-posts/{id}/interest': {
+	"/api/job-posts/{id}/interest": {
 		/** 구인공고 관심 등록 */
-		post: operations['interest'];
+		post: operations["interest"];
 		/** 구인공고 관심 제거 */
-		delete: operations['disinterest'];
+		delete: operations["disinterest"];
 	};
-	'/api/employ/{postId}/{applicationIds}': {
+	"/api/employ/{postId}/{applicationIds}": {
 		/** 지원서 승인 */
-		patch: operations['approve'];
+		patch: operations["approve"];
 	};
-	'/ready': {
-		get: operations['isReady'];
+	"/ready": {
+		get: operations["isReady"];
 	};
-	'/member/socialLogin/{providerTypeCode}': {
+	"/member/socialLogin/{providerTypeCode}": {
 		/** 소셜 로그인 */
-		get: operations['socialLogin'];
+		get: operations["socialLogin"];
 	};
-	'/api/post-comment/{postId}': {
+	"/api/post-comment/{postId}": {
 		/** 해당 공고에 달린 댓글 목록 */
-		get: operations['findByPostId'];
+		get: operations["findByPostId"];
 	};
-	'/api/notification': {
+	"/api/notification": {
 		/** 유저 별 알림리스트 */
-		get: operations['getList'];
+		get: operations["getList"];
 	};
-	'/api/notification/new': {
+	"/api/notification/new": {
 		/** 읽지 않은 알림 유무 확인 */
-		get: operations['unreadNotification'];
+		get: operations["unreadNotification"];
 	};
-	'/api/member/review': {
+	"/api/member/review": {
 		/** 나의 전체 리뷰 조회 */
-		get: operations['getAllReviews'];
+		get: operations["getAllReviews"];
 	};
-	'/api/member/review/{id}': {
+	"/api/member/review/{id}": {
 		/** 리뷰 단건 조회 */
-		get: operations['getReviewById'];
+		get: operations["getReviewById"];
 		/** 리뷰 삭제 */
-		delete: operations['deleteReview'];
+		delete: operations["deleteReview"];
 	};
-	'/api/member/myposts': {
+	"/api/member/myposts": {
 		/** 내 공고 조회 */
-		get: operations['detailMyPosts'];
+		get: operations["detailMyPosts"];
 	};
-	'/api/member/myinterest': {
+	"/api/member/myinterest": {
 		/** 내 관심 공고 조회 */
-		get: operations['detailMyInterestingPosts'];
+		get: operations["detailMyInterestingPosts"];
 	};
-	'/api/member/mycomments': {
+	"/api/member/mycomments": {
 		/** 내 댓글 조회 */
-		get: operations['detailMyComments'];
+		get: operations["detailMyComments"];
 	};
-	'/api/member/myapplications': {
+	"/api/member/myapplications": {
 		/** 내 지원서 조회 */
-		get: operations['detailMyApplications'];
+		get: operations["detailMyApplications"];
 	};
-	'/api/job-posts/{id}/members/interest': {
+	"/api/job-posts/{id}/members/interest": {
 		/** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
-		get: operations['isInterested'];
+		get: operations["isInterested"];
 	};
-	'/api/job-posts/sort': {
+	"/api/job-posts/sort": {
 		/** 구인공고 글 목록 정렬 */
-		get: operations['findAllPostSort'];
+		get: operations["findAllPostSort"];
 	};
-	'/api/job-posts/search': {
+	"/api/job-posts/search": {
 		/** 게시물 검색 */
-		get: operations['searchJobPostsByTitleAndBody'];
+		get: operations["searchJobPostsByTitleAndBody"];
 	};
-	'/api/employ/{postId}': {
+	"/api/employ/{postId}": {
 		/** 공고 별 지원리스트 */
-		get: operations['getList_1'];
+		get: operations["getList_1"];
 	};
-	'/': {
-		get: operations['showMain'];
+	"/": {
+		get: operations["showMain"];
 	};
-	'/api/notification/read': {
+	"/api/notification/read": {
 		/** 읽은 알림 전부 삭제 */
-		delete: operations['deleteReadAll'];
+		delete: operations["deleteReadAll"];
 	};
-	'/api/notification/all': {
+	"/api/notification/all": {
 		/** 알림 전부 삭제 */
-		delete: operations['deleteAll'];
+		delete: operations["deleteAll"];
 	};
 }
 
@@ -165,7 +166,7 @@ export interface components {
 		};
 		Modify: {
 			/** @enum {string} */
-			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
+			gender?: "MALE" | "FEMALE" | "UNDEFINED";
 			location?: string;
 			/** Format: date */
 			birth?: string;
@@ -182,7 +183,7 @@ export interface components {
 			name: string;
 			phoneNumber: string;
 			/** @enum {string} */
-			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
+			gender?: "MALE" | "FEMALE" | "UNDEFINED";
 			location: string;
 			/** Format: date */
 			birth: string;
@@ -192,7 +193,7 @@ export interface components {
 			id: number;
 			username: string;
 			/** @enum {string} */
-			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
+			gender?: "MALE" | "FEMALE" | "UNDEFINED";
 			location?: string;
 			/** Format: date */
 			birth?: string;
@@ -204,21 +205,21 @@ export interface components {
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['MemberDto'];
+			data?: components["schemas"]["MemberDto"];
 		};
 		RsDataModify: {
 			resultCode?: string;
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['Modify'];
+			data?: components["schemas"]["Modify"];
 		};
 		RsDataRegister: {
 			resultCode?: string;
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['Register'];
+			data?: components["schemas"]["Register"];
 		};
 		ApplicantReviewDto: {
 			/** Format: int64 */
@@ -236,7 +237,7 @@ export interface components {
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['ApplicantReviewDto'];
+			data?: components["schemas"]["ApplicantReviewDto"];
 		};
 		LoginForm: {
 			username: string;
@@ -248,7 +249,7 @@ export interface components {
 			name: string;
 			phoneNumber: string;
 			/** @enum {string} */
-			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
+			gender?: "MALE" | "FEMALE" | "UNDEFINED";
 			location: string;
 			/** Format: date */
 			birth: string;
@@ -258,7 +259,7 @@ export interface components {
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['JoinForm'];
+			data?: components["schemas"]["JoinForm"];
 		};
 		RsDataURI: {
 			resultCode?: string;
@@ -285,7 +286,7 @@ export interface components {
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['CommentDto'][];
+			data?: components["schemas"]["CommentDto"][];
 		};
 		NotificationDto: {
 			/** Format: int64 */
@@ -295,18 +296,9 @@ export interface components {
 			fromMember?: string;
 			relPostTitle?: string;
 			/** @enum {string} */
-			causeTypeCode?:
-				| 'POST_MODIFICATION'
-				| 'POST_DELETED'
-				| 'POST_INTERESTED'
-				| 'POST_DEADLINE'
-				| 'COMMENT_CREATED'
-				| 'APPLICATION_CREATED'
-				| 'APPLICATION_MODIFICATION'
-				| 'APPLICATION_APPROVED'
-				| 'APPLICATION_UNAPPROVE';
+			causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE";
 			/** @enum {string} */
-			resultTypeCode?: 'NOTICE' | 'DELETE' | 'APPROVE';
+			resultTypeCode?: "NOTICE" | "DELETE" | "APPROVE";
 			seen?: boolean;
 			url?: string;
 		};
@@ -315,7 +307,7 @@ export interface components {
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['NotificationDto'][];
+			data?: components["schemas"]["NotificationDto"][];
 		};
 		RsDataBoolean: {
 			resultCode?: string;
@@ -329,7 +321,7 @@ export interface components {
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['ApplicantReviewDto'][];
+			data?: components["schemas"]["ApplicantReviewDto"][];
 		};
 		JobPostDto: {
 			/** Format: int64 */
@@ -354,7 +346,7 @@ export interface components {
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['JobPostDto'][];
+			data?: components["schemas"]["JobPostDto"][];
 		};
 		ApplicationDto: {
 			/** Format: int64 */
@@ -381,7 +373,7 @@ export interface components {
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['ApplicationDto'][];
+			data?: components["schemas"]["ApplicationDto"][];
 		};
 		JobPostDetailDto: {
 			/** Format: int64 */
@@ -405,7 +397,7 @@ export interface components {
 			/** Format: int32 */
 			minAge?: number;
 			/** @enum {string} */
-			gender?: 'MALE' | 'FEMALE' | 'UNDEFINED';
+			gender?: "MALE" | "FEMALE" | "UNDEFINED";
 			modifiedAt?: string;
 			interestedUsernames?: string[];
 			closed?: boolean;
@@ -415,10 +407,10 @@ export interface components {
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['JobPostDetailDto'];
+			data?: components["schemas"]["JobPostDetailDto"];
 		};
 		GetPostsResponseBody: {
-			itemPage: components['schemas']['PageDtoJobPostDto'];
+			itemPage: components["schemas"]["PageDtoJobPostDto"];
 		};
 		PageDtoJobPostDto: {
 			/** Format: int64 */
@@ -429,21 +421,21 @@ export interface components {
 			totalPagesCount: number;
 			/** Format: int32 */
 			number: number;
-			content: components['schemas']['JobPostDto'][];
+			content: components["schemas"]["JobPostDto"][];
 		};
 		RsDataGetPostsResponseBody: {
 			resultCode?: string;
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['GetPostsResponseBody'];
+			data?: components["schemas"]["GetPostsResponseBody"];
 		};
 		RsDataApplicationDto: {
 			resultCode?: string;
 			/** Format: int32 */
 			statusCode?: number;
 			msg?: string;
-			data?: components['schemas']['ApplicationDto'];
+			data?: components["schemas"]["ApplicationDto"];
 		};
 		RsDataString: {
 			resultCode?: string;
@@ -465,6 +457,7 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
+
 	/** 댓글 수정 */
 	modify: {
 		parameters: {
@@ -475,7 +468,7 @@ export interface operations {
 		};
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['Register'];
+				"application/json": components["schemas"]["Register"];
 			};
 		};
 		responses: {
@@ -520,7 +513,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataMemberDto'];
+					"*/*": components["schemas"]["RsDataMemberDto"];
 				};
 			};
 		};
@@ -529,14 +522,14 @@ export interface operations {
 	modifyMember: {
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['Modify'];
+				"application/json": components["schemas"]["Modify"];
 			};
 		};
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataVoid'];
+					"*/*": components["schemas"]["RsDataVoid"];
 				};
 			};
 		};
@@ -545,14 +538,14 @@ export interface operations {
 	updateSocialMember: {
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['SocialProfileForm'];
+				"application/json": components["schemas"]["SocialProfileForm"];
 			};
 		};
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataMemberDto'];
+					"*/*": components["schemas"]["RsDataMemberDto"];
 				};
 			};
 		};
@@ -568,7 +561,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataJobPostDetailDto'];
+					"*/*": components["schemas"]["RsDataJobPostDetailDto"];
 				};
 			};
 		};
@@ -582,14 +575,14 @@ export interface operations {
 		};
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['Modify'];
+				"application/json": components["schemas"]["Modify"];
 			};
 		};
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataModify'];
+					"*/*": components["schemas"]["RsDataModify"];
 				};
 			};
 		};
@@ -619,7 +612,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataVoid'];
+					"*/*": components["schemas"]["RsDataVoid"];
 				};
 			};
 		};
@@ -635,7 +628,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataApplicationDto'];
+					"*/*": components["schemas"]["RsDataApplicationDto"];
 				};
 			};
 		};
@@ -649,14 +642,14 @@ export interface operations {
 		};
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['Modify'];
+				"application/json": components["schemas"]["Modify"];
 			};
 		};
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataVoid'];
+					"*/*": components["schemas"]["RsDataVoid"];
 				};
 			};
 		};
@@ -670,14 +663,14 @@ export interface operations {
 		};
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['Register'];
+				"application/json": components["schemas"]["Register"];
 			};
 		};
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataURI'];
+					"*/*": components["schemas"]["RsDataURI"];
 				};
 			};
 		};
@@ -693,7 +686,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataVoid'];
+					"*/*": components["schemas"]["RsDataVoid"];
 				};
 			};
 		};
@@ -707,14 +700,14 @@ export interface operations {
 		};
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['Register'];
+				"application/json": components["schemas"]["Register"];
 			};
 		};
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataRegister'];
+					"*/*": components["schemas"]["RsDataRegister"];
 				};
 			};
 		};
@@ -728,14 +721,14 @@ export interface operations {
 		};
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['ApplicantReviewDto'];
+				"application/json": components["schemas"]["ApplicantReviewDto"];
 			};
 		};
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataApplicantReviewDto'];
+					"*/*": components["schemas"]["RsDataApplicantReviewDto"];
 				};
 			};
 		};
@@ -746,7 +739,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': Record<string, never>;
+					"*/*": Record<string, never>;
 				};
 			};
 		};
@@ -755,14 +748,14 @@ export interface operations {
 	login: {
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['LoginForm'];
+				"application/json": components["schemas"]["LoginForm"];
 			};
 		};
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataMemberDto'];
+					"*/*": components["schemas"]["RsDataMemberDto"];
 				};
 			};
 		};
@@ -771,14 +764,14 @@ export interface operations {
 	join: {
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['JoinForm'];
+				"application/json": components["schemas"]["JoinForm"];
 			};
 		};
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataJoinForm'];
+					"*/*": components["schemas"]["RsDataJoinForm"];
 				};
 			};
 		};
@@ -789,7 +782,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataListJobPostDto'];
+					"*/*": components["schemas"]["RsDataListJobPostDto"];
 				};
 			};
 		};
@@ -798,14 +791,14 @@ export interface operations {
 	writePost: {
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['Register'];
+				"application/json": components["schemas"]["Register"];
 			};
 		};
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataRegister'];
+					"*/*": components["schemas"]["RsDataRegister"];
 				};
 			};
 		};
@@ -821,7 +814,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataVoid'];
+					"*/*": components["schemas"]["RsDataVoid"];
 				};
 			};
 		};
@@ -837,7 +830,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataVoid'];
+					"*/*": components["schemas"]["RsDataVoid"];
 				};
 			};
 		};
@@ -854,7 +847,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataVoid'];
+					"*/*": components["schemas"]["RsDataVoid"];
 				};
 			};
 		};
@@ -864,7 +857,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': string;
+					"*/*": string;
 				};
 			};
 		};
@@ -883,7 +876,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': string;
+					"*/*": string;
 				};
 			};
 		};
@@ -899,7 +892,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataListCommentDto'];
+					"*/*": components["schemas"]["RsDataListCommentDto"];
 				};
 			};
 		};
@@ -910,7 +903,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataListNotificationDto'];
+					"*/*": components["schemas"]["RsDataListNotificationDto"];
 				};
 			};
 		};
@@ -921,7 +914,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataBoolean'];
+					"*/*": components["schemas"]["RsDataBoolean"];
 				};
 			};
 		};
@@ -932,7 +925,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataListApplicantReviewDto'];
+					"*/*": components["schemas"]["RsDataListApplicantReviewDto"];
 				};
 			};
 		};
@@ -948,7 +941,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataApplicantReviewDto'];
+					"*/*": components["schemas"]["RsDataApplicantReviewDto"];
 				};
 			};
 		};
@@ -964,7 +957,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataString'];
+					"*/*": components["schemas"]["RsDataString"];
 				};
 			};
 		};
@@ -975,7 +968,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataListJobPostDto'];
+					"*/*": components["schemas"]["RsDataListJobPostDto"];
 				};
 			};
 		};
@@ -986,7 +979,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataListJobPostDto'];
+					"*/*": components["schemas"]["RsDataListJobPostDto"];
 				};
 			};
 		};
@@ -997,7 +990,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataListCommentDto'];
+					"*/*": components["schemas"]["RsDataListCommentDto"];
 				};
 			};
 		};
@@ -1008,7 +1001,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataListApplicationDto'];
+					"*/*": components["schemas"]["RsDataListApplicationDto"];
 				};
 			};
 		};
@@ -1024,7 +1017,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataBoolean'];
+					"*/*": components["schemas"]["RsDataBoolean"];
 				};
 			};
 		};
@@ -1042,7 +1035,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataGetPostsResponseBody'];
+					"*/*": components["schemas"]["RsDataGetPostsResponseBody"];
 				};
 			};
 		};
@@ -1060,7 +1053,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataListJobPostDto'];
+					"*/*": components["schemas"]["RsDataListJobPostDto"];
 				};
 			};
 		};
@@ -1076,7 +1069,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': components['schemas']['RsDataListApplicationDto'];
+					"*/*": components["schemas"]["RsDataListApplicationDto"];
 				};
 			};
 		};
@@ -1086,7 +1079,7 @@ export interface operations {
 			/** @description OK */
 			200: {
 				content: {
-					'*/*': string;
+					"*/*": string;
 				};
 			};
 		};
