@@ -13,6 +13,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "Chatting", description = "채팅 API")
 @RestController
 @RequiredArgsConstructor
@@ -31,5 +33,13 @@ public class MessageController {
         messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.fromEntity(message));
 
         return RsData.of("204", "NO_CONTENT");
+    }
+
+    @GetMapping
+    @Operation(summary = "채팅 메세지 로드")
+    public RsData<List<MessageDto>> writeChat(@AuthenticationPrincipal MemberDetails memberDetails,
+                                              @PathVariable(name = "roomId")Long roomId) {
+
+        return RsData.of(messageService.findByPostId(memberDetails.getUsername(),roomId));
     }
 }

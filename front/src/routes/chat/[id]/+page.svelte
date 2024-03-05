@@ -10,7 +10,9 @@
 	let newContent = '';
 	let lastMessageId = 0;
 	var socket = new SockJS(import.meta.env.VITE_CORE_API_BASE_URL + '/ws');
-	var stompClient = Stomp.over(socket);
+	var stompClient = Stomp.over(function () {
+		return socket;
+	});
 	let chatMessagesEl;
 	const member = rq.member;
 
@@ -48,6 +50,7 @@
 
 	function drawMoreMessage(message) {
 		lastMessageId = message.id;
+		console.log(message);
 		const messageElement = document.createElement('li');
 		if (message.sender === member.username) {
 			messageElement.innerHTML = `<div class="chat chat-end">
@@ -83,7 +86,6 @@
 					</div>`;
 		}
 		chatMessagesEl.appendChild(messageElement);
-		// chatMessagesEl.insertBefore(messageElement, chatMessagesEl.firstChild);
 		chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
 	}
 
@@ -111,6 +113,35 @@
 		const minutes = String(date.getMinutes()).padStart(2, '0');
 		const seconds = String(date.getSeconds()).padStart(2, '0');
 		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	}
+
+	// async function loadComments() {
+	// 	try {
+	// 		const { data } = await rq.apiEndPoints().GET(`/api/post-comment/${postId}`);
+	// 		comments = data.data
+	// 			.map((comment) => ({
+	// 				...comment,
+	// 				isEditing: false // 모든 댓글에 isEditing 속성 추가
+	// 			}))
+	// 			.reverse();
+	// 	} catch (error) {
+	// 		console.error('댓글을 로드하는 중 오류가 발생했습니다.', error);
+	// 	}
+	// }
+
+	async function loadMessages() {
+		try {
+			const { data } = await rq.apiEndPoints().GET(`/api/chat/${roomId}/message`);
+			console.log(data);
+			messages = data.data
+				.map((comment) => ({
+					...comment,
+					isEditing: false // 모든 댓글에 isEditing 속성 추가
+				}))
+				.reverse();
+		} catch (error) {
+			console.error('메세지 로드하는 중 오류가 발생했습니다.', error);
+		}
 	}
 </script>
 

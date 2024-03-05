@@ -5,6 +5,7 @@ import com.ll.gooHaeYu.domain.chat.message.entity.Message;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,10 @@ public class Room {
 
     private String username2;
 
+    private LocalDateTime user1Enter;
+
+    private LocalDateTime user2Enter;
+
     @Builder.Default
     private boolean user1HasExit = false;
 
@@ -42,16 +47,15 @@ public class Room {
     public void exit(String username) {
         if (username.equals(username1)) {
             this.user1HasExit = true;
+            this.user1Enter = LocalDateTime.now();
         }else if (username.equals(username2)) {
             this.user2HasExit = true;
+            this.user2Enter = LocalDateTime.now();
         }
     }
 
-    public void enter(String username) {
-        if (username.equals(username1)) {
+    public void recreate() {
             this.user1HasExit = false;
-        }else if (username.equals(username2)) {
             this.user2HasExit = false;
-        }
     }
 }

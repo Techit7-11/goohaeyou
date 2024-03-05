@@ -82,6 +82,8 @@ export interface paths {
     delete: operations["disinterest"];
   };
   "/api/chat/{roomId}/message": {
+    /** 채팅 메세지 로드 */
+    get: operations["writeChat_1"];
     /** 채팅 생성 */
     post: operations["writeChat"];
   };
@@ -436,6 +438,10 @@ export interface components {
       id?: number;
       username1?: string;
       username2?: string;
+      /** Format: date-time */
+      user1Enter?: string;
+      /** Format: date-time */
+      user2Enter?: string;
       user1HasExit?: boolean;
       user2HasExit?: boolean;
     };
@@ -450,6 +456,21 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["RoomDto"];
+    };
+    MessageDto: {
+      /** Format: int64 */
+      id?: number;
+      sender: string;
+      text: string;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    RsDataListMessageDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["MessageDto"][];
     };
     RsDataApplicationDto: {
       resultCode?: string;
@@ -856,6 +877,22 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
+  /** 채팅 메세지 로드 */
+  writeChat_1: {
+    parameters: {
+      path: {
+        roomId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataListMessageDto"];
         };
       };
     };

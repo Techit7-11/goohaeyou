@@ -25,6 +25,7 @@ public class MessageDto {
                 .id(message.getId())
                 .sender(message.getSender())
                 .text(message.getContent())
+                .createdAt(message.getCreatedAt())
                 .build();
     }
 

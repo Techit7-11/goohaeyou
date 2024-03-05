@@ -15,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,19 +41,24 @@ public class RoomService {
         if(checkTheChatroom(member1.getUsername(),member2.getUsername())) {
             Room room = findByUsername1AndUsername2(member1Username, member2Username);
 
-            room.enter(member1Username);
+            String username = room.isUser1HasExit() ? member1Username :
+                    room.isUser2HasExit() ? member2Username : "";
 
             Message message = Message.builder()
                     .room(room)
                     .sender("admin")
-                    .content("\""+member1Username+"\" 님이 입장 하였습니다.").build();
+                    .content("\""+username+"\" 님이 입장 하였습니다.").build();
             room.getMessages().add(message);
+
+            room.recreate();
 
             return room.getId();
         }else {
             Room newRoom = Room.builder()
                     .username1(member1.getUsername())
                     .username2(member2.getUsername())
+                    .user1Enter(LocalDateTime.now())
+                    .user2Enter(LocalDateTime.now())
                     .build();
 
             roomRepository.save(newRoom);
@@ -92,13 +98,14 @@ public class RoomService {
     }
 
     public Room findByUsername1AndUsername2(String username1, String username2) {
-        Room room = roomRepository.findByUsername1AndUsername2(username1, username2)
-                .orElseThrow(() -> new CustomException(CHATROOM_NOT_EXITS));
-        return room;
+        return roomRepository.findByUsername1AndUsername2(username1, username2)
+                .orElseGet(() -> roomRepository.findByUsername1AndUsername2(username2, username1)
+                        .orElseThrow(() -> new CustomException(CHATROOM_NOT_EXITS)));
     }
 
     public boolean checkTheChatroom(String username1, String username2) {
-        Optional<Room> roomOptional = roomRepository.findByUsername1AndUsername2(username1, username2);
-        return roomOptional.isPresent();
+        Optional<Room> room = roomRepository.findByUsername1AndUsername2(username1, username2);
+        room = room.isPresent() ? room : roomRepository.findByUsername1AndUsername2(username2,username1);
+        return room.isPresent();
     }
 }
