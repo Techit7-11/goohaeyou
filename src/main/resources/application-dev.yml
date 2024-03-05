@@ -31,7 +31,7 @@ logging:
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
 tossPayments:
-  successUrl: "http://localhost:8090/api/payments/success"
-  failUrl: "http://localhost:8090/api/payments/fail"
+  successUrl: "http://localhost:5173/payment/success"
+  failUrl: "http://localhost:5173/payment/fail"
 app:
   init-run: false
