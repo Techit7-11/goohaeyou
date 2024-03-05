@@ -1,6 +1,5 @@
 package com.ll.gooHaeYu.domain.payment.payment.service;
 
-import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
@@ -45,33 +44,25 @@ public class PaymentService {
 
         PaymentResDto paymentResDto = paymentRepository.save(payment).toPaymentRespDto();
 
-        paymentResDto.setSuccessUrl(tossPaymentsConfig.getSuccessUrl());
-        paymentResDto.setFailUrl(tossPaymentsConfig.getFailUrl());
+        setRedirectUrls(paymentResDto);
 
         return paymentResDto;
+    }
+
+    private void setRedirectUrls(PaymentResDto paymentResDto) {
+        paymentResDto.setSuccessUrl(tossPaymentsConfig.getSuccessUrl());
+        paymentResDto.setFailUrl(tossPaymentsConfig.getFailUrl());
     }
 
     @Transactional
     public PaymentSuccessDto tossPaymentSuccess(String paymentKey, String orderId, Long amount) {
         Payment payment = verifyPayment(orderId, amount);
-
         PaymentSuccessDto successDto = requestPaymentAccept(paymentKey, orderId, amount);
 
-        payment.updatePaymentKey(paymentKey);
-        payment.markAsPaid();
-        payment.recordApprovedAt(successDto.getApprovedAt());
-
-        Application application = applicationService.findByIdAndValidate(payment.getApplicationId());
-        application.updateDepositStatus(DepositStatus.DEPOSIT_PAID);
-
-        updatePaymentType(payment, successDto.getMethod());
+        updatePaymentStatus(payment, successDto); // Payment 업데이트
+        applicationService.updateApplicationStatus(payment.getApplicationId(), DepositStatus.DEPOSIT_PAID); // Application 업데이트
 
         return successDto;
-    }
-
-    private void updatePaymentType(Payment payment, String method) {
-        PayType payType = PayType.findByMethod(method);
-        payment.updatePayType(payType);
     }
 
     public Payment verifyPayment(String orderId, Long amount) {
@@ -83,6 +74,18 @@ public class PaymentService {
         }
 
         return payment;
+    }
+
+    private void updatePaymentStatus(Payment payment, PaymentSuccessDto successDto) {
+        payment.updatePaymentKey(successDto.getPaymentKey());
+        payment.markAsPaid();
+        payment.recordApprovedAt(successDto.getApprovedAt());
+        updatePayTypeByPayment(payment, successDto.getMethod());
+    }
+
+    private void updatePayTypeByPayment(Payment payment, String method) {
+        PayType payType = PayType.findByMethod(method);
+        payment.updatePayType(payType);
     }
 
     @Transactional
@@ -120,16 +123,23 @@ public class PaymentService {
 
     @Transactional
     public PaymentFailDto tossPaymentFail(String code, String message, String orderId) {
-        Payment payment = paymentRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new CustomException(PAYMENT_NOT_FOUND));
-
-        payment.markAsUnpaid();
-        payment.recordFailReason(message);
+        handlePaymentFailure(orderId, message);
 
         return PaymentFailDto.builder()
                 .errorCode(code)
                 .errorMessage(message)
                 .orderId(orderId)
                 .build();
+    }
+
+    private void handlePaymentFailure(String orderId, String message) {
+        Payment payment = findPaymentByOrderId(orderId);
+        payment.markAsUnpaid();
+        payment.recordFailReason(message);
+    }
+
+    private Payment findPaymentByOrderId(String orderId) {
+        return paymentRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new CustomException(PAYMENT_NOT_FOUND));
     }
 }

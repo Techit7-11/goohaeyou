@@ -129,4 +129,9 @@ public class ApplicationService {
             }
         }
     }
+
+    public void updateApplicationStatus(Long applicationId, DepositStatus status) {
+        Application application = findByIdAndValidate(applicationId);
+        application.updateDepositStatus(status);
+    }
 }
