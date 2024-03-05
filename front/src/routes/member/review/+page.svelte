@@ -2,10 +2,9 @@
 	import { onMount } from 'svelte';
 	import rq from '$lib/rq/rq.svelte';
 
-	// 회원 정보 데이터
 	let newReviewData = {
 		score: '',
-		body: '',
+		body: ''
 	};
 
 	onMount(async () => {
@@ -53,61 +52,61 @@
 							<input
 								type="radio"
 								name="rating-10"
-								class="bg-red-500 mask mask-heart mask-half-1"
+								class="bg-green-500 mask mask-star-2 mask-half-1"
 								value="0.5"
 							/>
 							<input
 								type="radio"
 								name="rating-10"
-								class="bg-red-500 mask mask-heart mask-half-2"
+								class="bg-green-500 mask mask-star-2 mask-half-2"
 								value="1"
 							/>
 							<input
 								type="radio"
 								name="rating-10"
-								class="bg-red-500 mask mask-heart mask-half-1"
+								class="bg-green-500 mask mask-star-2 mask-half-1"
 								value="1.5"
 							/>
 							<input
 								type="radio"
 								name="rating-10"
-								class="bg-red-500 mask mask-heart mask-half-2"
+								class="bg-green-500 mask mask-star-2 mask-half-2"
 								value="2"
 							/>
 							<input
 								type="radio"
 								name="rating-10"
-								class="bg-red-500 mask mask-heart mask-half-1"
+								class="bg-green-500 mask mask-star-2 mask-half-1"
 								value="2.5"
 							/>
 							<input
 								type="radio"
 								name="rating-10"
-								class="bg-red-500 mask mask-heart mask-half-2"
+								class="bg-green-500 mask mask-star-2 mask-half-2"
 								value="3"
 							/>
 							<input
 								type="radio"
 								name="rating-10"
-								class="bg-red-500 mask mask-heart mask-half-1"
+								class="bg-green-500 mask mask-star-2 mask-half-1"
 								value="3.5"
 							/>
 							<input
 								type="radio"
 								name="rating-10"
-								class="bg-red-500 mask mask-heart mask-half-2"
+								class="bg-green-500 mask mask-star-2 mask-half-2"
 								value="4"
 							/>
 							<input
 								type="radio"
 								name="rating-10"
-								class="bg-red-500 mask mask-heart mask-half-1"
+								class="bg-green-500 mask mask-star-2 mask-half-1"
 								value="4.5"
 							/>
 							<input
 								type="radio"
 								name="rating-10"
-								class="bg-red-500 mask mask-heart mask-half-2"
+								class="bg-green-500 mask mask-star-2 mask-half-2"
 								value="5"
 							/>
 						</div>
