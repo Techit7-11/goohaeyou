@@ -32,7 +32,7 @@ public class Payment {
 
     private String payType;
 
-    private String status;
+    private String status;   // 상태 업데이트 구현 필요
 
     private String approvedAt;
 
@@ -79,7 +79,7 @@ public class Payment {
     }
 
     public PaymentResDto toPaymentRespDto() {
-        PayType payTypeEnum = PayType.findByDescription(payType);
+        PayType payTypeEnum = PayType.findPayTypeByDescription(payType);
 
         return PaymentResDto.builder()
                 .payType(payTypeEnum)

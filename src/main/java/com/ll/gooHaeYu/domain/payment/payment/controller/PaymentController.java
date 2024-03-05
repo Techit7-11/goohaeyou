@@ -1,11 +1,10 @@
 package com.ll.gooHaeYu.domain.payment.payment.controller;
 
-import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.PaymentReqDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.PaymentResDto;
+import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.gooHaeYu.domain.payment.payment.service.PaymentService;
-import com.ll.gooHaeYu.global.config.TossPaymentsConfig;
 import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,17 +20,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/payments")
 public class PaymentController {
     private final PaymentService paymentService;
-    private final TossPaymentsConfig tossPaymentsConfig;
 
     @PostMapping()
     @Operation(summary = "결제 요청")
     public RsData<PaymentResDto> requestTossPayments(@AuthenticationPrincipal MemberDetails memberDetails,
                                                      @Valid @RequestBody PaymentReqDto paymentReqDto) {
-        PaymentResDto respDto = paymentService.requestTossPayment(paymentReqDto, memberDetails.getUsername()).toPaymentRespDto();
-        respDto.setSuccessUrl(tossPaymentsConfig.getSuccessUrl());
-        respDto.setFailUrl(tossPaymentsConfig.getFailUrl());
 
-        return RsData.of(respDto);
+        PaymentResDto paymentResDto = paymentService.requestTossPayment(paymentReqDto, memberDetails.getUsername());
+
+        return RsData.of(paymentResDto);
     }
 
     @GetMapping("/success")

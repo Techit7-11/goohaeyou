@@ -1,7 +1,11 @@
 package com.ll.gooHaeYu.domain.payment.payment.service;
 
+import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
+import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.domain.payment.payment.dto.PaymentReqDto;
+import com.ll.gooHaeYu.domain.payment.payment.dto.PaymentResDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
@@ -32,13 +36,19 @@ public class PaymentService {
     private final TossPaymentsConfig tossPaymentsConfig;
     private final RestTemplate restTemplate;
     private final MemberService memberService;
+    private final ApplicationService applicationService;
 
     @Transactional
-    public Payment requestTossPayment(PaymentReqDto paymentReqDto, String username) {
+    public PaymentResDto requestTossPayment(PaymentReqDto paymentReqDto, String username) {
         Payment payment = paymentReqDto.toEntity();
         payment.updatePayer(memberService.getMember(username));
 
-        return paymentRepository.save(payment);
+        PaymentResDto paymentResDto = paymentRepository.save(payment).toPaymentRespDto();
+
+        paymentResDto.setSuccessUrl(tossPaymentsConfig.getSuccessUrl());
+        paymentResDto.setFailUrl(tossPaymentsConfig.getFailUrl());
+
+        return paymentResDto;
     }
 
     @Transactional
@@ -50,6 +60,10 @@ public class PaymentService {
         payment.updatePaymentKey(paymentKey);
         payment.markAsPaid();
         payment.recordApprovedAt(successDto.getApprovedAt());
+
+        Application application = applicationService.findByIdAndValidate(payment.getApplicationId());
+        application.updateDepositStatus(DepositStatus.DEPOSIT_PAID);
+
         updatePaymentType(payment, successDto.getMethod());
 
         return successDto;
@@ -88,6 +102,7 @@ public class PaymentService {
     private HttpHeaders createBasicAuthHeaders() {
         HttpHeaders headers = new HttpHeaders();
         String encodedAuthKey = Base64.getEncoder().encodeToString((tossPaymentsConfig.getTossSecretKey() + ":").getBytes(StandardCharsets.UTF_8));
+
         headers.setBasicAuth(encodedAuthKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

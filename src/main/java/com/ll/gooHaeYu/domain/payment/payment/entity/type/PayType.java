@@ -17,7 +17,7 @@ public enum PayType {
 
     private final String description;    // 결제타입 설명
 
-    public static PayType findByDescription(String description) {
+    public static PayType findPayTypeByDescription(String description) {
         return Arrays.stream(PayType.values())
                 .filter(type -> type.getDescription().equals(description))
                 .findFirst()
