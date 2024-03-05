@@ -58,6 +58,10 @@
 	function goToEditPage(applicationId: number) {
 		rq.goTo(`/applications/modify/${applicationId}`);
 	}
+
+	function goToPaymentPage(applicationId: number, deposit: number) {
+		rq.goTo(`/payment/pay/${$page.params.id}/${deposit}`);
+	}
 </script>
 
 {#await loadApplication() then application}
@@ -94,7 +98,7 @@
 					<p><strong>주소:</strong> {application.location}</p>
 				</div>
 			</div>
-			<hr class="my-4 border-t border-gray-300 opacity-50" />
+			<hr class="my-6 -mt-3 border-t border-gray-300 opacity-50" />
 			<div class="mb-2">
 				<strong>작성 내용</strong>
 				<div class="p-3 bg-gray-100 rounded overflow-auto mt-1" style="max-height: 200px;">
@@ -131,6 +135,14 @@
 						>
 					{/if}
 				</div>
+			{/if}
+			<!-- 로그인한 회원이 공고 작성자 && 승인 && 결제전 일 때만 보이도록 재설정 필요 -->
+			{#if application.approve && application.jobPostAuthorUsername == rq.member.username}
+				<button
+					class="btn btn-active btn-primary btn-sm mx-12 mt-6"
+					on:click={() => goToPaymentPage(application.id, application.deposit)}
+					>예치금 결제하기</button
+				>
 			{/if}
 		</div>
 	</div>
