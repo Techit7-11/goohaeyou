@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -17,15 +18,15 @@ public class MessageDto {
     private String sender;
     @NotNull
     private String text;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     public static MessageDto fromEntity(Message message) {
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
         return MessageDto.builder()
                 .id(message.getId())
                 .sender(message.getSender())
                 .text(message.getContent())
-                .createdAt(message.getCreatedAt())
+                .createdAt(message.getCreatedAt().format(formatter))
                 .build();
     }
 

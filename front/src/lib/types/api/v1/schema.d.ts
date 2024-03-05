@@ -423,15 +423,13 @@ export interface components {
       data?: components["schemas"]["RoomListDto"][];
     };
     Message: {
-      /** Format: date-time */
-      createdAt?: string;
-      /** Format: date-time */
-      modifiedAt?: string;
       /** Format: int64 */
       id?: number;
       room?: components["schemas"]["Room"];
       sender?: string;
       content?: string;
+      /** Format: date-time */
+      createdAt?: string;
     };
     Room: {
       /** Format: int64 */
@@ -462,7 +460,6 @@ export interface components {
       id?: number;
       sender: string;
       text: string;
-      /** Format: date-time */
       createdAt?: string;
     };
     RsDataListMessageDto: {

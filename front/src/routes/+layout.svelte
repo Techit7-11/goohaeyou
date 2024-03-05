@@ -237,3 +237,8 @@
 		</svg>
 	</button>
 </div>
+<svelte:head>
+	<script>
+		var global = window;
+	</script>
+</svelte:head>

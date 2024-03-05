@@ -41,14 +41,10 @@ public class RoomService {
         if(checkTheChatroom(member1.getUsername(),member2.getUsername())) {
             Room room = findByUsername1AndUsername2(member1Username, member2Username);
 
-            String username = room.isUser1HasExit() ? member1Username :
-                    room.isUser2HasExit() ? member2Username : "";
+            String content = room.isUser1HasExit() ? "\""+member1Username+"\" 님과 재매칭이 되었습니다." :
+                    room.isUser2HasExit() ? "\""+member1Username+"\" 님과 재매칭이 되었습니다." : "재매칭이 되었습니다.";
 
-            Message message = Message.builder()
-                    .room(room)
-                    .sender("admin")
-                    .content("\""+username+"\" 님이 입장 하였습니다.").build();
-            room.getMessages().add(message);
+            createInfoMessage(room, "admin", content);
 
             room.recreate();
 
@@ -72,6 +68,11 @@ public class RoomService {
         if (!username.equals(room.getUsername1())&&!username.equals(room.getUsername2())) {
             throw new CustomException(NOT_ABLE);
         }
+        if (username.equals(room.getUsername1()) && room.isUser1HasExit()) {
+            throw new CustomException(NOT_ABLE);
+        } else if (username.equals(room.getUsername2()) && room.isUser2HasExit()) {
+            throw new CustomException(NOT_ABLE);
+        }
         return RoomDto.fromEntity(room);
     }
 
@@ -88,13 +89,14 @@ public class RoomService {
     @Transactional
     public void exitsRoom(String username, Long roomId) {
         Room room = findByIdAndValidate(roomId);
+
+        if (room.isUser1HasExit() && room.isUser2HasExit()) {
+            roomRepository.delete(room);
+        }
+
+        createInfoMessage(room, "admin","\""+username+"\" 님이 퇴장 하였습니다.");
+
         room.exit(username);
-        Message message = Message.builder()
-                .room(room)
-                .sender("admin")
-                .content("\""+username+"\" 님이 퇴장 하였습니다.").build();
-        room.getMessages().add(message);
-        messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.fromEntity(message));
     }
 
     public Room findByUsername1AndUsername2(String username1, String username2) {
@@ -107,5 +109,18 @@ public class RoomService {
         Optional<Room> room = roomRepository.findByUsername1AndUsername2(username1, username2);
         room = room.isPresent() ? room : roomRepository.findByUsername1AndUsername2(username2,username1);
         return room.isPresent();
+    }
+
+    public void createInfoMessage(Room room, String username, String content) {
+        Message message = Message.builder()
+                .room(room)
+                .sender(username)
+                .content(content)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        room.getMessages().add(message);
+
+        messagingTemplate.convertAndSend("/queue/api/chat/"+room.getId()+ "/newMessage", MessageDto.fromEntity(message));
     }
 }

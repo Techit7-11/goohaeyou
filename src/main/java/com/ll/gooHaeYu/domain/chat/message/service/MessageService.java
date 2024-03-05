@@ -3,6 +3,7 @@ package com.ll.gooHaeYu.domain.chat.message.service;
 import com.ll.gooHaeYu.domain.chat.message.dto.MessageDto;
 import com.ll.gooHaeYu.domain.chat.message.dto.MessageForm;
 import com.ll.gooHaeYu.domain.chat.message.entity.Message;
+import com.ll.gooHaeYu.domain.chat.message.repository.MessageRepository;
 import com.ll.gooHaeYu.domain.chat.room.entity.Room;
 import com.ll.gooHaeYu.domain.chat.room.service.RoomService;
 import com.ll.gooHaeYu.global.exception.CustomException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +22,7 @@ import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class MessageService {
     private final RoomService roomService;
+    private final MessageRepository messageRepository;
 
     @Transactional
     public Message write(String username, Long roomId, MessageForm.Register form) {
@@ -33,6 +36,7 @@ public class MessageService {
                 .room(room)
                 .sender(username)
                 .content(form.getContent())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         room.getMessages().add(message);
@@ -44,9 +48,8 @@ public class MessageService {
         Room room = roomService.findByIdAndValidate(roomId);
         LocalDateTime enterDate = username.equals(room.getUsername1()) ? room.getUser1Enter() : room.getUser2Enter();
 
-        List<Message> messages = room.getMessages().stream()
-                .filter(message -> message.getCreatedAt().isAfter(enterDate))
-                .collect(Collectors.toList());
+        List<Message> messages = messageRepository.findByRoomIdAndCreatedAtAfter(roomId, enterDate);
+        Collections.reverse(messages);
 
         return MessageDto.toDtoList(messages);
     }

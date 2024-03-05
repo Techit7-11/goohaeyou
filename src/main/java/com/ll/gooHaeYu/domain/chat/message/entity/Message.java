@@ -5,6 +5,8 @@ import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -14,7 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Builder
 @ToString(callSuper = true)
-public class Message extends BaseTimeEntity {
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +28,8 @@ public class Message extends BaseTimeEntity {
     private String sender;
 
     private String content;
+
+    private LocalDateTime createdAt;
 
     public void update(String content) {
         if (content != null && !content.isBlank()) {

@@ -15,6 +15,7 @@
 	});
 	let chatMessagesEl;
 	const member = rq.member;
+	let messages = [];
 
 	onMount(async () => {
 		await rq.initAuth();
@@ -23,7 +24,7 @@
 			rq.goTo('/member/login');
 			return;
 		}
-
+		loadMessages();
 		const waitForChatMessagesEl = setInterval(() => {
 			chatMessagesEl = document.querySelector('.__messages');
 			if (chatMessagesEl) {
@@ -52,7 +53,11 @@
 		lastMessageId = message.id;
 		console.log(message);
 		const messageElement = document.createElement('li');
-		if (message.sender === member.username) {
+		if (message.sender === 'admin') {
+			`<div class="flex justify-center">
+				<th:block>${message.text}</th:block>
+			</div>`;
+		} else if (message.sender === member.username) {
 			messageElement.innerHTML = `<div class="chat chat-end">
 						<div class="chat-image avatar">
 							<div class="w-10 rounded-full">
@@ -90,7 +95,6 @@
 	}
 
 	async function addContent() {
-		console.log(member.username);
 		newContent = newContent.trim();
 		if (newContent.length == 0) {
 			alert('내용을 입력 해주세요.');
@@ -115,27 +119,13 @@
 		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 	}
 
-	// async function loadComments() {
-	// 	try {
-	// 		const { data } = await rq.apiEndPoints().GET(`/api/post-comment/${postId}`);
-	// 		comments = data.data
-	// 			.map((comment) => ({
-	// 				...comment,
-	// 				isEditing: false // 모든 댓글에 isEditing 속성 추가
-	// 			}))
-	// 			.reverse();
-	// 	} catch (error) {
-	// 		console.error('댓글을 로드하는 중 오류가 발생했습니다.', error);
-	// 	}
-	// }
-
 	async function loadMessages() {
 		try {
 			const { data } = await rq.apiEndPoints().GET(`/api/chat/${roomId}/message`);
 			console.log(data);
 			messages = data.data
-				.map((comment) => ({
-					...comment,
+				.map((message) => ({
+					...message,
 					isEditing: false // 모든 댓글에 isEditing 속성 추가
 				}))
 				.reverse();
@@ -152,10 +142,11 @@
 {:then { data: roomDto }}
 	<div class="p-1 max-w-4xl mx-auto bg-white rounded-box shadow-lg">
 		<ul class="__messages">
-			{#each roomDto.messages as message}
+			{#each messages as message}
+				<!-- {#each roomDto.messages as message} -->
 				{#if message.sender === 'admin'}
 					<div class="flex justify-center">
-						<th:block>{message.content}</th:block>
+						<th:block>{message.text}</th:block>
 					</div>
 				{:else if message.sender === member.username}
 					<div class="chat chat-end">
@@ -170,7 +161,7 @@
 						<div class="chat-header">
 							<th:block>{message.sender}</th:block>
 						</div>
-						<div class="chat-bubble"><th:block>{message.content}</th:block></div>
+						<div class="chat-bubble"><th:block>{message.text}</th:block></div>
 						<div class="chat-footer opacity-50">
 							<th:block>{formatMessageTime(message.createdAt)}</th:block>
 						</div>
@@ -188,7 +179,7 @@
 						<div class="chat-header">
 							<th:block>{message.sender}</th:block>
 						</div>
-						<div class="chat-bubble"><th:block>{message.content}</th:block></div>
+						<div class="chat-bubble"><th:block>{message.text}</th:block></div>
 						<div class="chat-footer opacity-50">
 							<th:block>{formatMessageTime(message.createdAt)}</th:block>
 						</div>
