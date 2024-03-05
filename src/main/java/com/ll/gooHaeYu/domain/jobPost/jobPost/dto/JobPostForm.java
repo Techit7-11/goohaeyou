@@ -48,7 +48,7 @@ public class JobPostForm {
         @Min(value = 1000, message = "예치금은 1000원 이상 이여야 합니다.")
         private int deposit;
 
-        @AssertTrue(message = "예치금은 급여보다 작거나 같아야 합니다.")
+        @AssertTrue(message = "예치금은 급여보다 적거나 같아야 합니다.")
         public boolean isDepositLessThanOrEqualToCost() {
             return deposit <= cost;
         }
@@ -90,7 +90,7 @@ public class JobPostForm {
         @Min(value = 1000, message = "예치금은 1000원 이상 이여야 합니다.")
         private int deposit;
 
-        @AssertTrue(message = "예치금은 급여보다 작거나 같아야 합니다.")
+        @AssertTrue(message = "예치금은 급여보다 적거나 같아야 합니다.")
         public boolean isDepositLessThanOrEqualToCost() {
             return deposit <= cost;
         }
