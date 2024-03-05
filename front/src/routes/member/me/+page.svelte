@@ -4,6 +4,10 @@
 
 	let reviews = [];
 
+	function navigateToChatRoomListPage() {
+		rq.goTo('/chat/list');
+	}
+
 	onMount(async () => {
 		try {
 			await rq.initAuth(); // 로그인 상태를 초기화
@@ -89,6 +93,9 @@
 	}
 </script>
 
+<div class="flex justify-center items-center mt-2">
+	<button class="font-bold" on:click={navigateToChatRoomListPage}>채팅방 이동</button>
+</div>
 <div class="flex justify-center items-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
 		<div class="w-full max-w-4xl mx-auto my-10">
