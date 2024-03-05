@@ -7,7 +7,7 @@
 		const container = document.getElementById('map');
 		const options = {
 			center: new kakao.maps.LatLng(33.450701, 126.570667),
-			level: 3
+			level: 4
 		};
 		var map = new kakao.maps.Map(container, options); //지도 생성
 
@@ -23,6 +23,9 @@
 					map: map,
 					position: coords
 				});
+
+				// 마커가 표시된 위치를 지도의 중심으로 설정합니다.
+				map.setCenter(coords);
 			}
 		};
 
@@ -38,6 +41,9 @@
 		} catch (error) {
 			console.error('Error fetching job posts:', error);
 		}
+
+		map.setMinLevel(3);
+		map.setMaxLevel(6);
 	});
 </script>
 
