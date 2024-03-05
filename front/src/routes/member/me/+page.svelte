@@ -2,9 +2,7 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { onMount } from 'svelte';
 
-	function navigateToModifyPage() {
-		rq.goTo('/member/social/modify');
-	}
+	let reviews = [];
 
 	onMount(async () => {
 		try {
@@ -14,6 +12,7 @@
 				rq.goTo('/member/login');
 				return;
 			}
+			loadMyReview();
 		} catch (error) {
 			console.error('인증 초기화 중 오류 발생:', error);
 			rq.msgError('인증 과정에서 오류가 발생했습니다.');
@@ -42,12 +41,51 @@
 		return data;
 	}
 
+	async function loadMyReview() {
+		try {
+			const { data } = await rq.apiEndPoints().GET('/api/member/review', {});
+			reviews = data.data;
+			console.log('로드된 리뷰 데이터:', reviews);
+		} catch (error) {
+			console.error('리뷰 로드 중 오류 발생:', error);
+		}
+	}
+	async function deleteReview(reviewId) {
+		try {
+			const confirmation = confirm('리뷰를 삭제하시겠습니까?');
+			if (!confirmation) {
+				return;
+			}
+			await rq.apiEndPoints().DELETE(`/api/member/review/${reviewId}`);
+			console.log(`리뷰 삭제됨: ${reviewId}`);
+			await loadMyReview();
+			alert('리뷰가 삭제되었습니다.');
+		} catch (error) {
+			console.error('리뷰 삭제 중 오류 발생:', error);
+			alert('리뷰 삭제 중 오류가 발생했습니다.');
+		}
+	}
+
 	function summarizeBody(body) {
 		return body.length > 10 ? `${body.slice(0, 10)}...` : body;
 	}
 
 	function goToApplicationsList(postId) {
 		window.location.href = `/applications/list/${postId}`;
+	}
+
+	function navigateToModifyPage() {
+		rq.goTo('/member/social/modify');
+	}
+
+	function generateStars(score) {
+		const totalStars = 10;
+		let stars = [];
+		for (let i = 1; i <= totalStars; i++) {
+			const starValue = i * 0.5;
+			stars.push({ value: starValue, checked: starValue <= score });
+		}
+		return stars;
 	}
 </script>
 
@@ -98,7 +136,7 @@
 			</div>
 			<div class="divider"></div>
 			<div class="flex justify-center">
-				<div class="join">
+				<div class="join flex flex-wrap gap-4 justify-around">
 					<label for="my_modal_1" class="btn btn-ghost join-item">작성 공고</label>
 					<input type="checkbox" id="my_modal_1" class="modal-toggle" />
 					<div class="modal" role="dialog">
@@ -186,6 +224,37 @@
 							{/await}
 						</div>
 						<label class="modal-backdrop" for="my_modal_4">Close</label>
+					</div>
+					<label for="my_modal_5" class="btn btn-ghost join-item">작성 리뷰</label>
+					<input type="checkbox" id="my_modal_5" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#each reviews ?? [] as ReviewDto}
+								<div class="card flex flex-row justify-between items-center">
+									<div>
+										<div class="flex items-center">
+											<div class="text-sm text-gray-500">{ReviewDto.jobPostingId}번 공고</div>
+											<div class="rating rating-md rating-half mx-2 mb-2">
+												{#each generateStars(ReviewDto.score) as star (star.value)}
+													<input
+														class={`mask mask-star-2 ${star.checked ? 'bg-green-500' : 'bg-gray-300'} ${star.value % 1 === 0.5 ? 'mask-half-1' : 'mask-half-2'}`}
+														disabled
+													/>
+												{/each}
+											</div>
+										</div>
+										<div class="text-lg font-bold truncate">{ReviewDto.body}</div>
+									</div>
+									<div>
+										<button class="btn btn-ghost" on:click={() => deleteReview(ReviewDto.id)}
+											>삭제</button
+										>
+									</div>
+								</div>
+								<div class="divider"></div>
+							{/each}
+						</div>
+						<label class="modal-backdrop" for="my_modal_5">Close</label>
 					</div>
 				</div>
 			</div>
