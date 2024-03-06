@@ -90,8 +90,10 @@
 		<hr class="border-t-2 border-gray-300 w-full max-w-md my-4" />
 
 		<div class="mt-6">
-			<button class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-				확인
+			<button
+				class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+				on:click={() => rq.goTo('/')}
+				>확인
 			</button>
 		</div>
 	</div>

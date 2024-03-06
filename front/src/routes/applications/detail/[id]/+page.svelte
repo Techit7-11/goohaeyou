@@ -136,13 +136,20 @@
 					{/if}
 				</div>
 			{/if}
-			<!-- 로그인한 회원이 공고 작성자 && 승인 && 결제전 일 때만 보이도록 재설정 필요 -->
-			{#if application.approve && application.jobPostAuthorUsername == rq.member.username}
-				<button
-					class="btn btn-active btn-primary btn-sm mx-12 mt-6"
-					on:click={() => goToPaymentPage(application.id, application.deposit)}
-					>예치금 결제하기</button
-				>
+
+			{#if application.jobPostAuthorUsername == rq.member.username && application.approve}
+				{#if application.depositStatus == '지원서 승인'}
+					<button
+						class="btn btn-active btn-primary btn-sm mx-12 mt-6"
+						on:click={() => goToPaymentPage(application.id, application.deposit)}
+						>예치금 결제하기</button
+					>
+				{:else}
+					<!-- TODO  {application.deposit} 값 + 내 결제조회 페이지로 이동 버튼 생성 -->
+					<button class="btn btn-disabled btn-sm mx-12 mt-6" disabled
+						>{application.depositStatus}</button
+					>
+				{/if}
 			{/if}
 		</div>
 	</div>
