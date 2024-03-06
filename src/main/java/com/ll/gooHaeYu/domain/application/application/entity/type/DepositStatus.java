@@ -11,8 +11,8 @@ public enum DepositStatus {
     DEPOSIT_PAID("예치금 결제 완료"),
     DEPOSIT_CANCELLATION_REQUESTED("예치금 취소 요청"),
     DEPOSIT_CANCELLED("예치금 취소 완료"),
-    SETTLEMENT_REQUESTED("정산 신청"),
-    SETTLEMENT_COMPLETED("정산 완료");
+    SETTLEMENT_REQUESTED("예치금 정산 신청"),
+    SETTLEMENT_COMPLETED("예치금 정산 완료");
 
     private final String description;
 }

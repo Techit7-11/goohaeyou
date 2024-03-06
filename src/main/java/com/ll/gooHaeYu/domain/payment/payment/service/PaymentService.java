@@ -59,7 +59,7 @@ public class PaymentService {
         Payment payment = verifyPayment(orderId, amount);
         PaymentSuccessDto successDto = requestPaymentAccept(paymentKey, orderId, amount);
 
-        updatePaymentStatus(payment, successDto); // Payment 업데이트
+        updatePaymentStatus(payment, successDto);
         applicationService.updateApplicationStatus(payment.getApplicationId(), DepositStatus.DEPOSIT_PAID); // Application 업데이트
 
         return successDto;
