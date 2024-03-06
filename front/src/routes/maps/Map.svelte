@@ -70,6 +70,11 @@
 									infoWindow.open(map, marker);
 								});
 
+								// 빈 지도를 클릭했을 때 인포윈도우가 닫히도록 이벤트 핸들러 추가
+								kakao.maps.event.addListener(map, 'click', function () {
+									infoWindows.forEach((window) => window.close());
+								});
+
 								infoWindows.push(infoWindow);
 							}
 						} else {
@@ -83,7 +88,10 @@
 		} catch (error) {
 			console.error('Error fetching job posts:', error);
 		}
+
+		map.setMinLevel(2);
+		map.setMaxLevel(5);
 	});
 </script>
 
-<div id="map" style="width:90%;height:400px;"></div>
+<div id="map" style="width:90%;height:500px;"></div>
