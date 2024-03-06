@@ -1,9 +1,10 @@
 package com.ll.gooHaeYu.domain.payment.payment.controller;
 
-import com.ll.gooHaeYu.domain.payment.payment.dto.PaymentReqDto;
-import com.ll.gooHaeYu.domain.payment.payment.dto.PaymentResDto;
+import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentReqDto;
+import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentResDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
+import com.ll.gooHaeYu.domain.payment.payment.service.PaymentCancelService;
 import com.ll.gooHaeYu.domain.payment.payment.service.PaymentService;
 import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.mapping.Map;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/payments")
 public class PaymentController {
     private final PaymentService paymentService;
+    private final PaymentCancelService paymentCancelService;
 
     @PostMapping()
     @Operation(summary = "결제 요청")
@@ -47,5 +50,15 @@ public class PaymentController {
                                                   @RequestParam String orderId) {
 
         return RsData.of(paymentService.tossPaymentFail(code, message, orderId));
+    }
+
+    @PostMapping("/cancel")
+    @Operation(summary = "결제 취소")
+    public RsData<Map> tossPaymentCancel(@AuthenticationPrincipal MemberDetails memberDetails,
+                                         @RequestParam String paymentKey,
+                                         @RequestParam String cancelReason) {
+        Map map = paymentCancelService.tossPaymentCancel(memberDetails.getUsername(), paymentKey, cancelReason);
+
+        return RsData.of(map);
     }
 }
