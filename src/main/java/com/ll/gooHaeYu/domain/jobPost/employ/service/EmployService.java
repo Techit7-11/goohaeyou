@@ -5,7 +5,10 @@ import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
+import com.ll.gooHaeYu.domain.member.member.entity.Member;
+import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.event.ChangeOfPostEvent;
+import com.ll.gooHaeYu.global.event.CreateChatRoomEvent;
 import com.ll.gooHaeYu.global.event.PostEmployedEvent;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +24,13 @@ import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.APPL
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_POSSIBLE_TO_APPROVE_IT_YET;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EmployService {
+
     private final JobPostService jobPostService;
     private final ApplicationEventPublisher publisher;
 
@@ -40,15 +45,24 @@ public class EmployService {
     public void approve(String username, Long postId, List<Long> applicationIds) {
         JobPost jobPost = jobPostService.findByIdAndValidate(postId);
         JobPostDetail postDetail = jobPost.getJobPostDetail();
+        Long postWriterId = jobPost.getMember().getId();
+
+        if (!jobPost.isClosed()) throw new CustomException(NOT_POSSIBLE_TO_APPROVE_IT_YET);
         checkPermissions(username,postDetail.getAuthor());
 
         List<Application> applicationList = new ArrayList<>();
 
         for (Application application : postDetail.getApplications()) {
             if(applicationIds.contains(application.getId())) {
-                // TODO : 승인 후 알림
+                Long receiverId = application.getMember().getId();
                 application.approve();
+
+                increaseApplicantTransactionCount(application);
+                increaseAuthorTransactionCount(jobPost);
+
                 publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
+                publisher.publishEvent(new CreateChatRoomEvent(this,postWriterId,receiverId));
+
             }else {
                 application.reject();
                 applicationList.add(application);
@@ -61,7 +75,30 @@ public class EmployService {
         publisher.publishEvent(new PostEmployedEvent(this, jobPost));
     }
 
+
+
     public void checkPermissions (String username, String author){
         if (!username.equals(author)) throw new CustomException(NOT_ABLE);
     }
+
+    private void increaseApplicantTransactionCount(Application application) {
+        if (isValidApplication(application)) {
+            application.getMember().increaseTransactionCount();
+        }
+    }
+
+    private void increaseAuthorTransactionCount(JobPost jobPost) {
+        if (isValidJobPost(jobPost)) {
+            jobPost.getMember().increaseTransactionCount();
+        }
+    }
+
+    private boolean isValidApplication(Application application) {
+        return application != null && application.getMember() != null;
+    }
+
+    private boolean isValidJobPost(JobPost jobPost) {
+        return jobPost != null && jobPost.getMember() != null;
+    }
+
 }

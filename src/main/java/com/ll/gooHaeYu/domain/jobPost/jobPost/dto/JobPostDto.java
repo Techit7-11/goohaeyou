@@ -13,7 +13,6 @@ import java.util.List;
 @SuperBuilder
 @Getter
 public class JobPostDto extends AbstractJobPostDto{
-    private boolean isClosed;
 
     public static JobPostDto fromEntity(JobPost jobPost) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
@@ -24,6 +23,8 @@ public class JobPostDto extends AbstractJobPostDto{
                 .location(jobPost.getLocation())
                 .commentsCount(jobPost.getCommentsCount())
                 .incrementViewCount(jobPost.getIncrementViewCount())
+                .interestsCount(jobPost.getInterestsCount())
+                .employed(jobPost.isEmployed())
                 .deadLine(jobPost.getDeadline())
                 .isClosed(jobPost.isClosed())
                 .createdAt(jobPost.getCreatedAt().format(formatter))

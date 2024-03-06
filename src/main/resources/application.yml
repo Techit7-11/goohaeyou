@@ -21,7 +21,7 @@ custom:
   prod:
     cookieDomain: www.goohaeyou.site
     frontUrl: "https://${custom.prod.cookieDomain}"
-    backUrl: "https://api.${custom.prod.cookieDomain}"
+    backUrl: "https://a.goohaeyou.site"
   site:
     cookieDomain: "${custom.dev.cookieDomain}"
     frontUrl: "${custom.dev.frontUrl}"

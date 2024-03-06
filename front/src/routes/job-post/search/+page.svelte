@@ -38,99 +38,96 @@
 	}
 </script>
 
-<div class="container">
-	<select class="select w-full max-w-xs" name="kwType">
-		<option value="titleOrBody">제목 + 내용</option>
-		<option value="title">제목</option>
-		<option value="body">내용</option>
-	</select>
-	<input
-		name="kw"
-		type="text"
-		placeholder="검색어"
-		class="input w-full max-w-xs"
-		on:keyup={handleKeyPress}
-	/>
-	<button class="btn" on:click={loading}>검색</button>
+<div class="flex justify-center min-h-screen bg-base-100">
+	<div class="container mx-auto px-4">
+		<div class="container flex justify-center items-center my-4">
+			<div class="join">
+				<select class="join-item select max-w-xs text-center flex flex-1 mx-1" name="kwType">
+					<option value="titleOrBody">제목 + 내용</option>
+					<option value="title">제목</option>
+					<option value="body">내용</option>
+				</select>
+				<input
+					name="kw"
+					type="text"
+					placeholder="검색어"
+					class="join-item input w-full max-w-xs"
+					on:keyup={handleKeyPress}
+				/>
+				<button class="join-item btn btn-ghost btn-circle mx-1" on:click={loading}>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						><path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+						/></svg
+					>
+				</button>
+			</div>
+		</div>
+
+		<div class="w-full max-w-4xl mx-auto">
+			{#if dataLoaded}
+				<!-- 데이터가 로드되었는지 확인 -->
+				{#await load()}
+					<div class="flex items-center justify-center min-h-screen">
+						<span class="loading loading-dots loading-lg"></span>
+					</div>
+				{:then { data: posts }}
+					{#each posts ?? [] as post, index}
+						<a href="/job-post/{post.id}" class="block">
+							<div class="card relative bg-base-100 shadow-xl my-4">
+								<div class="card-body">
+									<div class="flex items-center justify-between">
+										<div class="flex items-center">
+											<div class="flex flex-col mr-10">
+												<div class="text-bold text-gray-500 mb-1">{post.author}</div>
+												<div
+													class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
+												>
+													<div class="font-bold truncate">{post.title}</div>
+													<div class="text-xs text-gray-500">{post.location}</div>
+													<div class="flex mt-2">
+														<div class="flex">
+															<div class="text-xs text-gray-500">조회</div>
+															<div class="text-xs mx-2">{post.incrementViewCount}</div>
+														</div>
+														<div class="flex">
+															<div class="text-xs text-gray-500">댓글</div>
+															<div class="text-xs mx-2">{post.commentsCount}</div>
+														</div>
+														<div class="flex">
+															<div class="text-xs text-gray-500">찜</div>
+															<div class="text-xs mx-2">{post.interestsCount}</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="flex items-center justify-between">
+											<div class="flex flex-col items-center">
+												{#if post.closed}
+													<div class="badge badge-neutral">마감</div>
+												{:else}
+													<div class="badge badge-primary my-1">구인중</div>
+													<div class="text-xs text-gray-500">마감기한</div>
+													<div class="text-xs text-gray-500">{post.deadLine}</div>
+												{/if}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					{/each}
+				{/await}
+			{/if}
+		</div>
+	</div>
 </div>
-
-<div>
-	{#if dataLoaded}
-		<!-- 데이터가 로드되었는지 확인 -->
-		{#await load()}
-			<p>loading...</p>
-		{:then { data: jobPostDtoList }}
-			<ul>
-				{#each jobPostDtoList ?? [] as jobPostDto, index}
-					<li>
-						<a href="/job-post/{jobPostDto.id}">(No.{index + 1}) {jobPostDto.title}</a>
-					</li>
-				{/each}
-			</ul>
-		{/await}
-	{/if}
-</div>
-
-<style>
-	ul {
-		list-style-type: none;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	li {
-		background-color: #ffffff;
-		margin: 12px 0;
-		padding: 10px;
-		padding-left: 20px;
-		width: 80%; /* 화면 너비의 대부분을 차지 */
-		max-width: 600px; /* 최대 너비 설정 */
-		box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* 섬세한 그림자 효과 */
-		border-radius: 8px; /* 부드럽게 둥근 모서리 */
-		display: flex;
-		flex-direction: column; /* 세로 정렬 */
-		border: 1px solid #eee; /* 미세한 경계선 */
-	}
-
-	a {
-		color: #43404e;
-		text-decoration: none; /* 밑줄 제거 */
-		font-weight: bold; /* 글씨 굵게 */
-		margin-bottom: 5px; /* 요소 사이의 여백 */
-	}
-
-	a:hover {
-		color: #a5a5a5; /* 호버 시 색상 변경 */
-	}
-
-	footer {
-		width: 100%;
-		background-color: #f7f7f7; /* 밝은 회색 배경 */
-		color: #6f6d70;
-		text-align: center;
-		padding: 20px 0;
-		box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* 상단으로 그림자 효과 */
-		border-top: 2px solid #eee; /* 상단 경계선 */
-	}
-
-	.container {
-		display: flex;
-		width: 100%;
-		max-width: 600px; /* 최대 너비를 조절할 수 있습니다 */
-		margin: 0 auto; /* 화면 중앙 정렬 */
-	}
-
-	.select {
-		width: 35%; /* 40% 너비 */
-	}
-
-	.input {
-		width: 45%; /* 40% 너비 */
-	}
-
-	.btn {
-		width: 20%; /* 20% 너비 */
-	}
-</style>

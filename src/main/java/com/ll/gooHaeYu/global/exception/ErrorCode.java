@@ -15,6 +15,10 @@ public enum ErrorCode {
 
     POST_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 공고는 존재하지 않습니다."),
 
+    REVIEW_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 리뷰는 존재하지 않습니다."),
+
+    REVIEW_ALREADY_EXISTS(HttpStatus.NOT_FOUND, "이미 리뷰를 작성하셨습니다."),
+
     COMMENT_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 댓글은 존재하지 않습니다."),
 
     NOTIFICATION_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 알림은 존재하지 않습니다."),
@@ -34,7 +38,13 @@ public enum ErrorCode {
 
     UNSATISFIED_REQUIREMENTS(HttpStatus.FORBIDDEN, "지원 필수요건에 충족되지 못합니다."),
 
-    NOT_ELIGIBLE_FOR_OWN_JOB(HttpStatus.FORBIDDEN, "본인의 공고에는 지원이 불가능합니다.");
+    NOT_ELIGIBLE_FOR_OWN_JOB(HttpStatus.FORBIDDEN, "본인의 공고에는 지원이 불가능합니다."),
+
+    NOT_POSSIBLE_TO_APPROVE_IT_YET(HttpStatus.FORBIDDEN,"공고 마감 후 승인이 가능 합니다."),
+
+    CHATROOM_NOT_EXITS(HttpStatus.NOT_FOUND,"해당 채팅방은 존재하지 않습니다."),
+
+    MESSAGE_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 메세지는 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String message;

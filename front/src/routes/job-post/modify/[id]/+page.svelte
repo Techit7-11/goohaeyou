@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import rq from '$lib/rq/rq.svelte';
+
 	let jobPostData = {
 		title: '',
 		body: '',
@@ -11,15 +12,27 @@
 		deadLine: ''
 	};
 	let postId;
+
 	onMount(async () => {
 		postId = parseInt($page.params.id);
-		await loadJobPostDetail(postId);
+		console.log('Mounted - postId:', postId);
+		if (!isNaN(postId)) {
+			console.log('Valid postId, loading job post detail...');
+			await loadJobPostDetail(postId);
+		}
 	});
+
 	async function loadJobPostDetail(postId) {
-		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
-		if (data) {
-			// 로드된 데이터로 jobPostData를 업데이트
-			jobPostData = { ...jobPostData, ...data };
+		try {
+			console.log(`Loading job post detail for postId: ${postId}`);
+			const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
+			console.log('Job post data loaded:', data);
+			if (data) {
+				jobPostData = { ...jobPostData, ...data.data };
+				console.log('jobPostData updated:', jobPostData);
+			}
+		} catch (error) {
+			console.error('Error loading job post detail:', error);
 		}
 	}
 	// 공고 수정 제출 함수
@@ -29,10 +42,10 @@
 			rq.msgAndRedirect({ msg: '글 수정 완료' }, undefined, '/');
 		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
 			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage ?? '알 수 없는 오류가 발생했습니다.');
+			rq.msgError(customErrorMessage);
 		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
 			if (Array.isArray(response.data.data)) {
-				response.data.data.forEach((msg) => rq.msgError(msg));
+				rq.msgError(response.data.data[0]);
 			}
 		} else {
 			rq.msgError('글 수정 중 오류가 발생했습니다.');

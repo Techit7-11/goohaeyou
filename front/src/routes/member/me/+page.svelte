@@ -2,8 +2,10 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { onMount } from 'svelte';
 
-	function navigateToModifyPage() {
-		rq.goTo('/member/social/modify');
+	let reviews = [];
+
+	function navigateToChatRoomListPage() {
+		rq.goTo('/chat/list');
 	}
 
 	onMount(async () => {
@@ -14,6 +16,7 @@
 				rq.goTo('/member/login');
 				return;
 			}
+			loadMyReview();
 		} catch (error) {
 			console.error('인증 초기화 중 오류 발생:', error);
 			rq.msgError('인증 과정에서 오류가 발생했습니다.');
@@ -42,6 +45,31 @@
 		return data;
 	}
 
+	async function loadMyReview() {
+		try {
+			const { data } = await rq.apiEndPoints().GET('/api/member/review', {});
+			reviews = data.data;
+			console.log('로드된 리뷰 데이터:', reviews);
+		} catch (error) {
+			console.error('리뷰 로드 중 오류 발생:', error);
+		}
+	}
+	async function deleteReview(reviewId) {
+		try {
+			const confirmation = confirm('리뷰를 삭제하시겠습니까?');
+			if (!confirmation) {
+				return;
+			}
+			await rq.apiEndPoints().DELETE(`/api/member/review/${reviewId}`);
+			console.log(`리뷰 삭제됨: ${reviewId}`);
+			await loadMyReview();
+			alert('리뷰가 삭제되었습니다.');
+		} catch (error) {
+			console.error('리뷰 삭제 중 오류 발생:', error);
+			alert('리뷰 삭제 중 오류가 발생했습니다.');
+		}
+	}
+
 	function summarizeBody(body) {
 		return body.length > 10 ? `${body.slice(0, 10)}...` : body;
 	}
@@ -49,11 +77,28 @@
 	function goToApplicationsList(postId) {
 		window.location.href = `/applications/list/${postId}`;
 	}
+
+	function navigateToModifyPage() {
+		rq.goTo('/member/social/modify');
+	}
+
+	function generateStars(score) {
+		const totalStars = 10;
+		let stars = [];
+		for (let i = 1; i <= totalStars; i++) {
+			const starValue = i * 0.5;
+			stars.push({ value: starValue, checked: starValue <= score });
+		}
+		return stars;
+	}
 </script>
 
-<div class="flex items-center justify-center min-h-screen bg-base-100">
+<div class="flex justify-center items-center mt-2">
+	<button class="font-bold" on:click={navigateToChatRoomListPage}>채팅방 이동</button>
+</div>
+<div class="flex justify-center items-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
-		<div class="max-w-sm mx-auto my-10">
+		<div class="w-full max-w-4xl mx-auto my-10">
 			<div class="text-center">
 				<div class="font-bold text-xl">내 정보</div>
 				<div class="mt-3 text-gray-500">현재 로그인한 회원의 정보입니다.</div>
@@ -90,101 +135,133 @@
 					<div class="font-bold">생년월일</div>
 					<div class="text-gray-500 flex-auto text-right">{rq.member.birth}</div>
 				</div>
-				<div class="pb-10">
+				<div>
 					<button class="w-full btn btn-ghost" on:click={navigateToModifyPage}
 						>회원 정보 수정</button
 					>
 				</div>
 			</div>
-			<div class="w-full">
-				<div class="container mx-auto px-4">
-					<div class="max-w-sm mx-auto">
-						<div role="tablist" class="tabs tabs-bordered">
-							<input
-								type="radio"
-								name="my_tabs_2"
-								role="tab"
-								class="tab"
-								aria-label="내 공고"
-								checked
-							/>
-							<div role="tabpanel" class="tab-content p-5">
-								{#await loadMyPosts()}
-									<p>loading...</p>
-								{:then { data: posts }}
-									{#each posts ?? [] as post, index}
-										<a href="/job-post/{post.id}" class="card-link">
-											<div class="card">
-												<div class="text-sm text-gray-500">no.{index + 1}</div>
-												<div class="text-xl font-bold">{post.title}</div>
-											</div>
-										</a>
-										<button
-											class="btn btn-primary my-3 w-full"
-											on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
-										>
-										<div class="divider"></div>
-									{/each}
-								{/await}
-							</div>
-
-							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="나의 지원" />
-							<div role="tabpanel" class="tab-content p-5">
-								{#await loadMyApplications()}
-									<p>loading...</p>
-								{:then { data: applicationDtoList }}
-									{#each applicationDtoList ?? [] as applicationDto}
-										<a href="/applications/detail/{applicationDto.id}" class="card-link">
-											<div class="card">
-												<div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
-												<div class="text-xl font-bold">{summarizeBody(applicationDto.body)}</div>
-												<div class="divider"></div>
-											</div>
-										</a>
-									{/each}
-								{/await}
-							</div>
-
-							<input
-								type="radio"
-								name="my_tabs_2"
-								role="tab"
-								class="tab"
-								aria-label="내가 쓴 댓글"
-							/>
-							<div role="tabpanel" class="tab-content p-7">
-								{#await loadMyComments()}
-									<p>loading...</p>
-								{:then { data: commentsDtoList }}
-									{#each commentsDtoList ?? [] as commentsDto}
-										<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
-											<div class="card">
-												<div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
-												<div class="text-xl ont-bold">{commentsDto.content}</div>
-												<div class="divider"></div>
-											</div>
-										</a>
-									{/each}
-								{/await}
-							</div>
-
-							<input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="관심 공고" />
-							<div role="tabpanel" class="tab-content p-5">
-								{#await loadMyInterest()}
-									<p>loading...</p>
-								{:then { data: interestDtoList }}
-									{#each interestDtoList ?? [] as interestDto}
-										<a href="/job-post/{interestDto.id}" class="card-link">
-											<div class="card">
-												<div class="text-sm text-gray-500">{interestDto.id}번 공고</div>
-												<div class="text-xl ont-bold">{interestDto.title}</div>
-												<div class="divider"></div>
-											</div>
-										</a>
-									{/each}
-								{/await}
-							</div>
+			<div class="divider"></div>
+			<div class="flex justify-center">
+				<div class="join flex flex-wrap gap-4 justify-around">
+					<label for="my_modal_1" class="btn btn-ghost join-item">작성 공고</label>
+					<input type="checkbox" id="my_modal_1" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#await loadMyPosts()}
+								<div class="flex items-center justify-center min-h-screen">
+									<span class="loading loading-dots loading-lg"></span>
+								</div>
+							{:then { data: posts }}
+								{#each posts ?? [] as post, index}
+									<a href="/job-post/{post.id}" class="card-link">
+										<div class="card">
+											<div class="text-sm text-gray-500">no.{index + 1}</div>
+											<div class="text-lg font-bold truncate">{post.title}</div>
+										</div>
+									</a>
+									<button
+										class="btn btn-primary my-3 w-full"
+										on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
+									>
+									<div class="divider"></div>
+								{/each}
+							{/await}
 						</div>
+						<label class="modal-backdrop" for="my_modal_1">Close</label>
+					</div>
+					<label for="my_modal_2" class="btn btn-ghost join-item">지원 현황</label>
+					<input type="checkbox" id="my_modal_2" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#await loadMyApplications()}
+								<p>loading...</p>
+							{:then { data: applicationDtoList }}
+								{#each applicationDtoList ?? [] as applicationDto}
+									<a href="/applications/detail/{applicationDto.id}" class="card-link">
+										<div class="card">
+											<div class="text-sm text-gray-500">{applicationDto.jobPostName}</div>
+											<div class="text-lg font-bold truncate">
+												{summarizeBody(applicationDto.body)}
+											</div>
+											<div class="divider"></div>
+										</div>
+									</a>
+								{/each}
+							{/await}
+						</div>
+						<label class="modal-backdrop" for="my_modal_2">Close</label>
+					</div>
+					<label for="my_modal_3" class="btn btn-ghost join-item">작성 댓글</label>
+					<input type="checkbox" id="my_modal_3" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#await loadMyComments()}
+								<p>loading...</p>
+							{:then { data: commentsDtoList }}
+								{#each commentsDtoList ?? [] as commentsDto}
+									<a href="/job-post/{commentsDto.jobPostId}" class="card-link">
+										<div class="card">
+											<div class="text-sm text-gray-500">{commentsDto.jobPostId}번 공고</div>
+											<div class="text-lg font-bold truncate">{commentsDto.content}</div>
+											<div class="divider"></div>
+										</div>
+									</a>
+								{/each}
+							{/await}
+						</div>
+						<label class="modal-backdrop" for="my_modal_3">Close</label>
+					</div>
+					<label for="my_modal_4" class="btn btn-ghost join-item">관심 공고</label>
+					<input type="checkbox" id="my_modal_4" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#await loadMyInterest()}
+								<p>loading...</p>
+							{:then { data: interestDtoList }}
+								{#each interestDtoList ?? [] as interestDto}
+									<a href="/job-post/{interestDto.id}" class="card-link">
+										<div class="card">
+											<div class="text-sm text-gray-500">{interestDto.id}번 공고</div>
+											<div class="text-lg font-bold truncate">{interestDto.title}</div>
+											<div class="divider"></div>
+										</div>
+									</a>
+								{/each}
+							{/await}
+						</div>
+						<label class="modal-backdrop" for="my_modal_4">Close</label>
+					</div>
+					<label for="my_modal_5" class="btn btn-ghost join-item">작성 리뷰</label>
+					<input type="checkbox" id="my_modal_5" class="modal-toggle" />
+					<div class="modal" role="dialog">
+						<div class="modal-box">
+							{#each reviews ?? [] as ReviewDto}
+								<div class="card flex flex-row justify-between items-center">
+									<div>
+										<div class="flex items-center">
+											<div class="text-sm text-gray-500">{ReviewDto.jobPostingId}번 공고</div>
+											<div class="rating rating-md rating-half mx-2 mb-2">
+												{#each generateStars(ReviewDto.score) as star (star.value)}
+													<input
+														class={`mask mask-star-2 ${star.checked ? 'bg-green-500' : 'bg-gray-300'} ${star.value % 1 === 0.5 ? 'mask-half-1' : 'mask-half-2'}`}
+														disabled
+													/>
+												{/each}
+											</div>
+										</div>
+										<div class="text-lg font-bold truncate">{ReviewDto.body}</div>
+									</div>
+									<div>
+										<button class="btn btn-ghost" on:click={() => deleteReview(ReviewDto.id)}
+											>삭제</button
+										>
+									</div>
+								</div>
+								<div class="divider"></div>
+							{/each}
+						</div>
+						<label class="modal-backdrop" for="my_modal_5">Close</label>
 					</div>
 				</div>
 			</div>

@@ -45,7 +45,9 @@ public class CommentService {
                 .build();
         postDetail.getComments().add(comment);
         postDetail.getJobPost().increaseCommentsCount();
-        publisher.publishEvent(new CommentCreatedEvent(this,postDetail,comment));
+        if(!postDetail.getAuthor().equals(username)) {
+            publisher.publishEvent(new CommentCreatedEvent(this,postDetail,comment));
+        }
         return form;
     }
 

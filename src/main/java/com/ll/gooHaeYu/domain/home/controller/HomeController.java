@@ -9,6 +9,6 @@ public class HomeController {
     @GetMapping("/")
     @ResponseBody
     public String showMain() {
-        return "백엔드 서버 입니다.";
+        return "백엔드 서버입니다.";
     }
 }

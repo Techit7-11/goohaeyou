@@ -21,8 +21,12 @@ public class AbstractJobPostDto {
     private long commentsCount;
     @NotNull
     private long incrementViewCount;
-    private LocalDate deadLine;
+    @NotNull
+    private long interestsCount;
     @NotNull
     private String createdAt;
 
+    private boolean employed;
+    private boolean isClosed;
+    private LocalDate deadLine;
 }
