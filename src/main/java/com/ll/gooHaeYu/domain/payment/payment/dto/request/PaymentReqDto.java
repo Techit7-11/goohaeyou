@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.domain.payment.payment.dto;
+package com.ll.gooHaeYu.domain.payment.payment.dto.request;
 
 import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
 import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayType;
