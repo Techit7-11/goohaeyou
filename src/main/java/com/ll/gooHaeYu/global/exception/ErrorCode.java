@@ -15,6 +15,10 @@ public enum ErrorCode {
 
     POST_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 공고는 존재하지 않습니다."),
 
+    REVIEW_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 리뷰는 존재하지 않습니다."),
+
+    REVIEW_ALREADY_EXISTS(HttpStatus.NOT_FOUND, "이미 리뷰를 작성하셨습니다."),
+
     COMMENT_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 댓글은 존재하지 않습니다."),
 
     NOTIFICATION_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 알림은 존재하지 않습니다."),
@@ -50,7 +54,12 @@ public enum ErrorCode {
 
     ALREADY_CANCELED(HttpStatus.BAD_REQUEST, "이미 취소된 결제건 입니다."),
 
-    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "잔액이 부족합니다.");
+    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "잔액이 부족합니다."),
+
+    CHATROOM_NOT_EXITS(HttpStatus.NOT_FOUND,"해당 채팅방은 존재하지 않습니다."),
+
+    MESSAGE_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 메세지는 존재하지 않습니다.");
+
 
     private final HttpStatus status;
     private final String message;

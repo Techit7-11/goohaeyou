@@ -98,9 +98,7 @@
 						<a href={`/applications/detail/${application.id}`} class="link link-hover flex-grow">
 							<li class="card bg-base-100 shadow-xl">
 								<div class="card-body">
-									<label for={`application-${application.id}`} class="font-bold"
-										>지원서 번호: {application.id}</label
-									>
+									<label for={`application-${application.id}`} class="font-bold">지원서 번호: {application.id}</label>
 									<p>지원자 ID: {application.author}</p>
 									<p>지원내용: {summarizeBody(application.body)}</p>
 									<p>지원일: {formatDate(application.createdAt)}</p>
@@ -127,8 +125,7 @@
 				{/each}
 			</ul>
 			{#if canApprove}
-				<button on:click={approveApplications} class="btn btn-primary mt-4 mb-4">지원서 승인</button
-				>
+				<button on:click={approveApplications} class="btn btn-primary mt-4 mb-4">지원서 승인</button>
 			{/if}
 		</div>
 	{:else}

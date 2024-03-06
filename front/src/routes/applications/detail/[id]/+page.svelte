@@ -106,33 +106,71 @@
 				</div>
 			</div>
 
-			<p class="mb-2 mt-3"><strong>지원서 번호:</strong> {application.id}</p>
-			<p class="mb-2"><strong>제출일:</strong> {formatDate(application.createdAt)}</p>
+					<div class="bg-white rounded-md mb-4">
+						<div class="px-4 py-2 border-b border-gray-200">
+							<h3 class="text-lg font-semibold mb-2">지원자 정보</h3>
+						</div>
+						<div class="flex">
+							<div class="mx-2 mt-4 flex-grow max-w-40">
+								<p><strong>아이디</strong></p>
+								<p><strong>이름</strong></p>
+								<p><strong>나이</strong></p>
+								<p><strong>연락처</strong></p>
+								<p><strong>주소</strong></p>
+							</div>
+							<div class="mx-2 mt-4">
+								<p>{application.author}</p>
+								<p>{application.name}</p>
+								<p>{calculateAge(application.birth)}</p>
+								<p>{application.phone}</p>
+								<p>{application.location}</p>
+							</div>
+						</div>
+					</div>
+					<hr class="border-t border-gray-300 opacity-50" />
+					<div class="flex">
+						<div class="mx-2 mt-4 flex-grow max-w-40">
+							<p><strong>지원서 번호</strong></p>
+							<p><strong>제출일</strong></p>
+							<p><strong>승인 상태</strong></p>
+						</div>
+						<div class="mx-2 mt-4">
+							<p>{application.id}</p>
+							<p>{formatDate(application.createdAt)}</p>
+							<p>
+								{#if application.approve === true}
+									<span class="text-sm text-emerald-700">승인</span>
+								{:else if application.approve === false}
+									<span class="text-sm text-rose-600">미승인</span>
+								{:else}
+									<span class="text-sm text-orange-500">진행중</span>
+								{/if}
+							</p>
+						</div>
+					</div>
+					<div class="mx-2 my-2">
+						<strong>작성 내용</strong>
+						<div class="p-3 bg-gray-100 rounded overflow-auto mt-1" style="max-height: 200px;">
+							{application.body}
+						</div>
+					</div>
 
-			<p class="mb-2 mt-2">
-				<strong>승인 상태:</strong>
-				{#if application.approve === true}
-					<span class="badge badge-success">승인</span>
-				{:else if application.approve === false}
-					<span class="badge badge-error">미승인</span>
-				{:else}
-					<span class="badge badge-warning">진행중</span>
-				{/if}
-			</p>
+					{#if application.approve == null}
+						<div class="text-center mt-2 flex justify-center items-center space-x-2">
+							{#if application.author == rq.member.username}
+								<button
+									class="btn btn-active btn-primary btn-sm"
+									on:click={() => goToEditPage(application.id)}>지원서 수정</button
+								>
+							{/if}
 
-			{#if application.approve == null}
-				<div class="text-center mt-2 flex justify-center items-center space-x-2">
-					{#if application.author == rq.member.username}
-						<button
-							class="btn btn-active btn-primary btn-sm"
-							on:click={() => goToEditPage(application.id)}>지원서 수정</button
-						>
-					{/if}
-
-					{#if application.author == rq.member.username}
-						<button class="btn btn-active btn-sm" on:click={() => deleteApplication(application.id)}
-							>지원서 삭제</button
-						>
+							{#if application.author == rq.member.username}
+								<button
+									class="btn btn-active btn-sm"
+									on:click={() => deleteApplication(application.id)}>지원서 삭제</button
+								>
+							{/if}
+						</div>
 					{/if}
 				</div>
 			{/if}
@@ -151,6 +189,8 @@
 					>
 				{/if}
 			{/if}
+
+			</div>
 		</div>
 	</div>
 {:catch error}
