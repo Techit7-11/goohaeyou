@@ -46,7 +46,9 @@ public enum ErrorCode {
 
     INVALID_PAYMENT_STATUS(HttpStatus.BAD_REQUEST, "유효하지 않은 결제상태입니다."),
 
-    NO_ENUM_CONSTANT_FOUND(HttpStatus.NOT_FOUND, "해당 결제 타입에 해당하는 enum 상수가 없습니다.");
+    NO_ENUM_CONSTANT_FOUND(HttpStatus.NOT_FOUND, "해당 결제 타입에 해당하는 enum 상수가 없습니다."),
+
+    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "잔액이 부족합니다.");
 
     private final HttpStatus status;
     private final String message;

@@ -40,6 +40,8 @@ public class Member extends BaseTimeEntity {
 
     private LocalDate birth;  // yyyy-MM-dd
 
+    private long restCash;
+
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {
             this.location = location;
@@ -72,5 +74,9 @@ public class Member extends BaseTimeEntity {
         this.birth = form.getBirth();
 
         return this;
+    }
+
+    public void updateRestCash(long cash) {
+        this.restCash = cash;
     }
 }
