@@ -20,6 +20,8 @@ public class GlobalExceptionHandler {
                 .map(ObjectError::getDefaultMessage)
                 .toList();
 
+        log.error(errorMessages.toString());
+
         return RsData.of(
                 "400",
                 "VALIDATION_EXCEPTION",

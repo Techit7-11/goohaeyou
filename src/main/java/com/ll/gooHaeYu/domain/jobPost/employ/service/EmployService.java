@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.jobPost.employ.service;
 
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -56,6 +57,8 @@ public class EmployService {
             if(applicationIds.contains(application.getId())) {
                 Long receiverId = application.getMember().getId();
                 application.approve();
+
+                application.updateDepositStatus(DepositStatus.APPLICATION_APPROVED);
 
                 increaseApplicantTransactionCount(application);
                 increaseAuthorTransactionCount(jobPost);

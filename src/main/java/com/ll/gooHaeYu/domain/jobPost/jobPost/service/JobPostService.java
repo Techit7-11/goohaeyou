@@ -4,14 +4,8 @@ import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Essential;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Interest;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.EssentialRepository;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostDetailRepository;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostRepository;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostSpecifications;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.*;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.*;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
@@ -50,6 +44,7 @@ public class JobPostService {
     private final MemberRepository memberRepository;
     private final EssentialRepository essentialRepository;
     private final ApplicationEventPublisher publisher;
+    private final WageRepository wageRepository;
 
     @Transactional
     public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
@@ -64,6 +59,7 @@ public class JobPostService {
                 .jobPost(newPost)
                 .author(username)
                 .body(form.getBody())
+                .deposit(form.getDeposit())
                 .build();
 
         Essential essential = Essential.builder()
@@ -72,15 +68,24 @@ public class JobPostService {
                 .jobPostDetail(postDetail)
                 .build();
 
+        Wage wage = Wage.builder()
+                .cost(form.getCost())
+                .workTime(form.getWorkTime())
+                .wageType(form.getWageType())
+                .jobPostDetail(postDetail)
+                .build();
+
         jobPostRepository.save(newPost);
         jobPostdetailRepository.save(postDetail);
         essentialRepository.save(essential);
+        wageRepository.save(wage);
+
         return form;
     }
 
     public JobPostDetailDto findById(Long id) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
-        return JobPostDetailDto.fromEntity(postDetail.getJobPost(),postDetail,postDetail.getEssential());
+        return JobPostDetailDto.fromEntity(postDetail.getJobPost(), postDetail, postDetail.getEssential(), postDetail.getWage());
     }
 
     public List<JobPostDto> findAll() {
@@ -95,8 +100,10 @@ public class JobPostService {
             throw new CustomException(NOT_ABLE);
 
         postDetail.getJobPost().update(form.getTitle(),form.getDeadLine());
-        postDetail.update(form.getBody());
+        postDetail.updatePostDetail(form.getBody(), form.getDeposit());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
+        postDetail.getWage().updateWageInfo(form.getWorkTime(), form.getCost(), form.getWageType());
+        postDetail.getDeposit();
 
         // TODO : 삭제 후 알림 날리기
         List<Application> applicationsToRemove = new ArrayList<>();
@@ -159,7 +166,7 @@ public class JobPostService {
     }
 
     @Transactional
-    public void Interest(String username, Long postId){
+    public void interest(String username, Long postId){
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 

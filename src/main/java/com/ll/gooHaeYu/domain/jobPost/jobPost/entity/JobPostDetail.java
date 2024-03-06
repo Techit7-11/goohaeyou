@@ -34,8 +34,13 @@ public class JobPostDetail extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String body;
 
+    private int deposit;
+
     @OneToOne(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     private Essential essential;
+
+    @OneToOne(mappedBy = "jobPostDetail", cascade = ALL)
+    private Wage wage;
 
     @OneToMany(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     @ToString.Exclude
@@ -53,9 +58,10 @@ public class JobPostDetail extends BaseTimeEntity {
     @Builder.Default
     private List<Interest> interests = new ArrayList<>();
 
-    public void update(String body) {
+    public void updatePostDetail(String body, int deposit) {
         if (body != null && !body.isBlank()) {
             this.body = body;
         }
+        this.deposit = deposit;
     }
 }

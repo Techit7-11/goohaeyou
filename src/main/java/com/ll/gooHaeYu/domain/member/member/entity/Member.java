@@ -45,6 +45,8 @@ public class Member extends BaseTimeEntity {
 
     private LocalDate birth;  // yyyy-MM-dd
 
+    private long restCash;
+
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {
             this.location = location;
@@ -79,6 +81,10 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
+    public void updateRestCash(long cash) {
+        this.restCash = cash;
+    }
+
     public void increaseTransactionCount() {
         this.transactionCount += 1;
         updateLevel(this.transactionCount);
@@ -87,6 +93,5 @@ public class Member extends BaseTimeEntity {
     public void updateLevel(int transactionCount) {
         this.level = Level.getLevelByTransactionCount(transactionCount);
     }
-
 
 }

@@ -7,7 +7,7 @@
 	let posts: components['schemas']['JobPostDto'][] = $state([]);
 
 	function JobPostWritePage() {
-		rq.goTo('/job-post');
+		rq.goTo('/job-post/write');
 	}
 
 	let sortBy_: string = 'createdAt'; // 초기 정렬 기준

@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.application.application.dto;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,24 +18,29 @@ public class ApplicationDto {
     private Long id;
     @NotNull
     private Long jobPostId;
-    @NotNull
+    @NotBlank
     private String jobPostAuthorUsername;
-    @NotNull
+    @NotBlank
     private String jobPostName;
     @NotNull
+    private int deposit;
+    @NotBlank
     private String author;
     @NotNull
     private Long postId;
-    @NotNull
+    @NotBlank
     private String body;
-    @NotNull
+    @NotBlank
     private String name;
     @NotNull
     private LocalDate birth;
-    @NotNull
+    @NotBlank
     private String phone;
-    @NotNull
+    @NotBlank
     private String location;
+    @NotBlank
+    private String depositStatus;
+
     private LocalDateTime createdAt;
     private Boolean approve;
 
@@ -44,6 +50,7 @@ public class ApplicationDto {
                 .jobPostId(application.getJobPostDetail().getJobPost().getId())
                 .jobPostAuthorUsername(application.getJobPostDetail().getAuthor())
                 .jobPostName(application.getJobPostDetail().getJobPost().getTitle())
+                .deposit(application.getJobPostDetail().getDeposit())
                 .author(application.getMember().getUsername())
                 .postId(application.getJobPostDetail().getJobPost().getId())
                 .body(application.getBody())
@@ -53,6 +60,7 @@ public class ApplicationDto {
                 .location(application.getMember().getLocation())
                 .createdAt(application.getCreatedAt())
                 .approve(application.getApprove())
+                .depositStatus(application.getDepositStatus().getDescription())
                 .build();
     }
 
