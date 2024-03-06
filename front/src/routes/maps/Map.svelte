@@ -2,6 +2,34 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { onMount } from 'svelte';
 
+	// 현재 위치를 가져와서 지도를 보여주는 함수
+	async function showCurrentLocation(map) {
+		// HTML5의 geolocation을 사용할 수 있는지 확인
+		if (navigator.geolocation) {
+			// 현재 위치 가져오기
+			navigator.geolocation.getCurrentPosition(
+				async function (position) {
+					const lat = position.coords.latitude; // 위도
+					const lon = position.coords.longitude; // 경도
+
+					// 현재 위치를 중심으로 지도 보여주기
+					map.setCenter(new kakao.maps.LatLng(lat, lon));
+
+					// 현재 위치에 마커 표시
+					var marker = new kakao.maps.Marker({
+						map: map,
+						position: new kakao.maps.LatLng(lat, lon)
+					});
+				},
+				function (error) {
+					console.error('Error getting current location:', error);
+				}
+			);
+		} else {
+			console.error('Geolocation is not supported.');
+		}
+	}
+
 	onMount(async () => {
 		const container = document.getElementById('map');
 		const options = {
@@ -9,6 +37,9 @@
 			level: 3
 		};
 		var map = new kakao.maps.Map(container, options);
+
+		// 현재 위치 보여주기
+		await showCurrentLocation(map);
 
 		var geocoder = new kakao.maps.services.Geocoder();
 
