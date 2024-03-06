@@ -190,7 +190,6 @@
 				{/if}
 			{/if}
 
-			</div>
 		</div>
 	</div>
 {:catch error}
