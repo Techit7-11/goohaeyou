@@ -3,8 +3,8 @@ package com.ll.gooHaeYu.domain.payment.payment.service;
 import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.domain.payment.payment.dto.PaymentReqDto;
-import com.ll.gooHaeYu.domain.payment.payment.dto.PaymentResDto;
+import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentReqDto;
+import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentResDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
@@ -60,7 +60,8 @@ public class PaymentService {
         PaymentSuccessDto successDto = requestPaymentAccept(paymentKey, orderId, amount);
 
         updatePaymentStatus(payment, successDto);
-        applicationService.updateApplicationStatus(payment.getApplicationId(), DepositStatus.DEPOSIT_PAID); // Application 업데이트
+        applicationService.updateApplicationStatus(payment.getApplicationId(), DepositStatus.DEPOSIT_PAID);
+        // TODO 충전_토스페이먼츠, 사용_토스페이먼츠 로그 남기기
 
         return successDto;
     }

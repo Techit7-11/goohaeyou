@@ -7,6 +7,8 @@ import lombok.Getter;
 @Builder
 public class PaymentFailDto {
     private String errorCode;
+
     private String errorMessage;
+
     private String orderId;
 }
