@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.domain.payment.payment.entity;
 
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
-import com.ll.gooHaeYu.domain.payment.payment.dto.PaymentResDto;
+import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentResDto;
 import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -76,6 +76,11 @@ public class Payment {
 
     public void recordApprovedAt(String localDateTime) {
         this.approvedAt = localDateTime;
+    }
+
+    public void cancelPayment(String cancelReason) {
+        this.canceled = true;
+        this.cancelReason = cancelReason;
     }
 
     public PaymentResDto toPaymentRespDto() {

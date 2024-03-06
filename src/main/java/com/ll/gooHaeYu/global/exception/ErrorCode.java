@@ -48,6 +48,8 @@ public enum ErrorCode {
 
     NO_ENUM_CONSTANT_FOUND(HttpStatus.NOT_FOUND, "해당 결제 타입에 해당하는 enum 상수가 없습니다."),
 
+    ALREADY_CANCELED(HttpStatus.BAD_REQUEST, "이미 취소된 결제건 입니다."),
+
     INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "잔액이 부족합니다.");
 
     private final HttpStatus status;
