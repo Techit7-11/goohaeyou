@@ -3,27 +3,23 @@ package com.ll.gooHaeYu.domain.payment.payment.service;
 import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentReqDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentResDto;
-import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
 import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayType;
 import com.ll.gooHaeYu.domain.payment.payment.repository.PaymentRepository;
 import com.ll.gooHaeYu.global.config.TossPaymentsConfig;
 import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.standard.base.util.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Collections;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
@@ -36,6 +32,7 @@ public class PaymentService {
     private final RestTemplate restTemplate;
     private final MemberService memberService;
     private final ApplicationService applicationService;
+    private final TossPaymentUtil tossPaymentUtil;
 
     @Transactional
     public PaymentResDto requestTossPayment(PaymentReqDto paymentReqDto, String username) {
@@ -91,7 +88,7 @@ public class PaymentService {
 
     @Transactional
     public PaymentSuccessDto requestPaymentAccept(String paymentKey, String orderId, Long amount) {
-        HttpHeaders headers = createBasicAuthHeaders();
+        HttpHeaders headers = tossPaymentUtil.createBasicAuthHeaders();
         JSONObject params = createPaymentRequestParams(orderId, amount);
 
         try {
@@ -101,17 +98,6 @@ public class PaymentService {
         } catch (Exception e) {
             throw new CustomException(ALREADY_APPROVED);
         }
-    }
-
-    private HttpHeaders createBasicAuthHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        String encodedAuthKey = Base64.getEncoder().encodeToString((tossPaymentsConfig.getTossSecretKey() + ":").getBytes(StandardCharsets.UTF_8));
-
-        headers.setBasicAuth(encodedAuthKey);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-        return headers;
     }
 
     private JSONObject createPaymentRequestParams(String orderId, Long amount) {
