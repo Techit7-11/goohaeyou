@@ -451,11 +451,6 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
-      workTime: string;
-      /** Format: int32 */
-      cost: number;
-      /** @enum {string} */
-      wageType: "UNDEFINED" | "HOURLY" | "SALARY" | "PER_PROJECT";
       employed?: boolean;
       /** Format: date */
       deadLine?: string;
@@ -511,11 +506,6 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
-      workTime: string;
-      /** Format: int32 */
-      cost: number;
-      /** @enum {string} */
-      wageType: "UNDEFINED" | "HOURLY" | "SALARY" | "PER_PROJECT";
       employed?: boolean;
       /** Format: date */
       deadLine?: string;
@@ -530,6 +520,11 @@ export interface components {
       interestedUsernames?: string[];
       /** Format: int32 */
       deposit?: number;
+      workTime?: string;
+      /** Format: int32 */
+      cost?: number;
+      /** @enum {string} */
+      wageType?: "UNDEFINED" | "HOURLY" | "SALARY" | "PER_PROJECT";
       closed?: boolean;
     };
     RsDataJobPostDetailDto: {

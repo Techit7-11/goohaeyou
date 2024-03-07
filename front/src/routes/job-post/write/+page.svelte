@@ -37,7 +37,7 @@
 			rq.msgError('급여 타입을 선택해주세요.');
 			return;
 		}
-		const response = await rq.apiEndPoints().POST('/api/job-posts', { body: newJobPostData });
+		const response = await rq.apiEndPoints().GET('/api/job-posts', { body: newJobPostData });
 
 		if (response.data?.statusCode === 200) {
 			rq.msgAndRedirect({ msg: '글 작성 완료' }, undefined, '/');
@@ -49,7 +49,8 @@
 				rq.msgError(response.data.data[0]);
 			}
 		} else {
-			rq.msgError('글 작성 중 오류가 발생했습니다.');
+			const errorMessage = response.data?.msg || '글 작성 중 알 수 없는 오류가 발생했습니다.';
+			rq.msgError(errorMessage);
 		}
 	}
 	// 다음 주소 API 팝업 열기
