@@ -30,7 +30,7 @@ public class JobPostForm {
 
         private Gender gender = Gender.UNDEFINED;
 
-        @NotNull(message = "마감 기한은 필수입니다.")
+        @NotNull(message = "마감 기한은 설정은 필수입니다.")
         @FutureOrPresent
         private LocalDate deadLine;
 
