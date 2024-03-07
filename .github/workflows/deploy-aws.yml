@@ -9,7 +9,7 @@ on:
       - readme.md
       - infraScript/**
     branches:
-      - dev
+      - hotfix/front-jobPost-detail
 
 permissions:
   contents: write

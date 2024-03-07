@@ -44,7 +44,6 @@ custom:
     cookieDomain: "${custom.prod.cookieDomain}"
     frontUrl: "${custom.prod.frontUrl}"
     backUrl: "${custom.prod.backUrl}"
-  temp:
-    dirPath: /tmp
-  gen:
-    dirPath: /gen
+tossPayments:
+  successUrl: "https://goohaeyou.site/payment/success"
+  failUrl: "https://goohaeyou.site/payment/fail"

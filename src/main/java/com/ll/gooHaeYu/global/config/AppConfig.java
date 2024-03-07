@@ -69,22 +69,4 @@ public class AppConfig {
 
     @Getter
     public static int basePageSize = 10;   // 조정 필요
-
-
-    // 파일 업로드 관련
-    @Getter
-    public static String tempDirPath;
-
-    @Value("${custom.temp.dirPath}")
-    public void setTempDirPath(String tempDirPath) {
-        this.tempDirPath = tempDirPath;
-    }
-
-    @Getter
-    public static String genDirPath;
-
-    @Value("${custom.gen.dirPath}")
-    public void setGenDirPath(String genDirPath) {
-        this.genDirPath = genDirPath;
-    }
 }

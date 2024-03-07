@@ -37,6 +37,12 @@ export interface paths {
     /** 조기 마감 */
     put: operations["postEarlyClosing"];
   };
+  "/api/chat/{roomId}": {
+    /** 채팅방 입장 */
+    get: operations["showRoom"];
+    /** 채팅방 퇴장 */
+    put: operations["exitsRoom"];
+  };
   "/api/applications/{id}": {
     /** 지원서 상세 내용 */
     get: operations["detailApplication"];
@@ -50,6 +56,18 @@ export interface paths {
   "/api/post-comment/{postId}/comment": {
     /** 댓글 작성 */
     post: operations["write"];
+  };
+  "/api/payments": {
+    /** 결제 요청 */
+    post: operations["requestTossPayments"];
+  };
+  "/api/payments/cancel": {
+    /** 결제 취소 */
+    post: operations["tossPaymentCancel"];
+  };
+  "/api/member/review/{jobPostingId}": {
+    /** 지원자 리뷰 작성 */
+    post: operations["createReview"];
   };
   "/api/member/logout": {
     /** 로그아웃 처리 및 쿠키 삭제 */
@@ -75,6 +93,12 @@ export interface paths {
     /** 구인공고 관심 제거 */
     delete: operations["disinterest"];
   };
+  "/api/chat/{roomId}/message": {
+    /** 채팅 메세지 로드 */
+    get: operations["writeChat_1"];
+    /** 채팅 생성 */
+    post: operations["writeChat"];
+  };
   "/api/employ/{postId}/{applicationIds}": {
     /** 지원서 승인 */
     patch: operations["approve"];
@@ -90,6 +114,14 @@ export interface paths {
     /** 해당 공고에 달린 댓글 목록 */
     get: operations["findByPostId"];
   };
+  "/api/payments/success": {
+    /** 결제 성공 */
+    get: operations["tossPaymentSuccess"];
+  };
+  "/api/payments/fail": {
+    /** 결제 실패 */
+    get: operations["tossPaymentFail"];
+  };
   "/api/notification": {
     /** 유저 별 알림리스트 */
     get: operations["getList"];
@@ -97,6 +129,16 @@ export interface paths {
   "/api/notification/new": {
     /** 읽지 않은 알림 유무 확인 */
     get: operations["unreadNotification"];
+  };
+  "/api/member/review": {
+    /** 나의 전체 리뷰 조회 */
+    get: operations["getAllReviews"];
+  };
+  "/api/member/review/{id}": {
+    /** 리뷰 단건 조회 */
+    get: operations["getReviewById"];
+    /** 리뷰 삭제 */
+    delete: operations["deleteReview"];
   };
   "/api/member/myposts": {
     /** 내 공고 조회 */
@@ -129,6 +171,10 @@ export interface paths {
   "/api/employ/{postId}": {
     /** 공고 별 지원리스트 */
     get: operations["getList_1"];
+  };
+  "/api/chat": {
+    /** 채팅방 목록 */
+    get: operations["showRoomList"];
   };
   "/": {
     get: operations["showMain"];
@@ -207,6 +253,55 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["Register"];
     };
+    PaymentReqDto: {
+      /** @enum {string} */
+      payType: "CARD_REQUEST" | "CARD_CARD" | "CARD_EASY_PAY";
+      /** Format: int64 */
+      amount: number;
+      orderId?: string;
+      orderName?: string;
+      /** Format: int64 */
+      applicationId?: number;
+    };
+    PaymentResDto: {
+      /** @enum {string} */
+      payType: "CARD_REQUEST" | "CARD_CARD" | "CARD_EASY_PAY";
+      /** Format: int64 */
+      amount: number;
+      orderId: string;
+      orderName: string;
+      payer: string;
+      successUrl?: string;
+      failUrl?: string;
+      failReason?: string;
+      canceled?: boolean;
+      cancelReason?: string;
+    };
+    RsDataPaymentResDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["PaymentResDto"];
+    };
+    ApplicantReviewDto: {
+      /** Format: int64 */
+      id?: number;
+      body?: string;
+      /** Format: double */
+      score?: number;
+      /** Format: int64 */
+      jobPostingId?: number;
+      /** Format: int64 */
+      applicantId?: number;
+    };
+    RsDataApplicantReviewDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["ApplicantReviewDto"];
+    };
     LoginForm: {
       username: string;
       password: string;
@@ -256,6 +351,58 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["CommentDto"][];
     };
+    PaymentSuccessDto: {
+      paymentKey?: string;
+      orderId?: string;
+      orderName?: string;
+      method?: string;
+      /** Format: int32 */
+      totalAmount?: number;
+      /** Format: int32 */
+      vat?: number;
+      /** Format: int32 */
+      suppliedAmount?: number;
+      approvedAt?: string;
+      card?: components["schemas"]["SuccessCardDto"];
+      easyPay?: components["schemas"]["SuccessEasyPayDto"];
+      mid?: string;
+    };
+    RsDataPaymentSuccessDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["PaymentSuccessDto"];
+    };
+    SuccessCardDto: {
+      company?: string;
+      number?: string;
+      installmentPlanMonths?: string;
+      isInterestFree?: string;
+      approveNo?: string;
+      useCardPoint?: string;
+      cardType?: string;
+      acquireStatus?: string;
+    };
+    SuccessEasyPayDto: {
+      provider?: string;
+      /** Format: int32 */
+      amount?: number;
+      /** Format: int32 */
+      discountAmount?: number;
+    };
+    PaymentFailDto: {
+      errorCode?: string;
+      errorMessage?: string;
+      orderId?: string;
+    };
+    RsDataPaymentFailDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["PaymentFailDto"];
+    };
     NotificationDto: {
       /** Format: int64 */
       id?: number;
@@ -264,7 +411,7 @@ export interface components {
       fromMember?: string;
       relPostTitle?: string;
       /** @enum {string} */
-      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE";
+      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE" | "CHATROOM_CREATED";
       /** @enum {string} */
       resultTypeCode?: "NOTICE" | "DELETE" | "APPROVE";
       seen?: boolean;
@@ -284,6 +431,13 @@ export interface components {
       msg?: string;
       data?: boolean;
     };
+    RsDataListApplicantReviewDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["ApplicantReviewDto"][];
+    };
     JobPostDto: {
       /** Format: int64 */
       id: number;
@@ -297,6 +451,11 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
+      workTime: string;
+      /** Format: int32 */
+      cost: number;
+      /** @enum {string} */
+      wageType: "UNDEFINED" | "HOURLY" | "SALARY" | "PER_PROJECT";
       employed?: boolean;
       /** Format: date */
       deadLine?: string;
@@ -316,6 +475,8 @@ export interface components {
       jobPostId: number;
       jobPostAuthorUsername: string;
       jobPostName: string;
+      /** Format: int32 */
+      deposit: number;
       author: string;
       /** Format: int64 */
       postId: number;
@@ -325,6 +486,7 @@ export interface components {
       birth: string;
       phone: string;
       location: string;
+      depositStatus: string;
       /** Format: date-time */
       createdAt?: string;
       approve?: boolean;
@@ -349,6 +511,11 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
+      workTime: string;
+      /** Format: int32 */
+      cost: number;
+      /** @enum {string} */
+      wageType: "UNDEFINED" | "HOURLY" | "SALARY" | "PER_PROJECT";
       employed?: boolean;
       /** Format: date */
       deadLine?: string;
@@ -359,8 +526,10 @@ export interface components {
       minAge?: number;
       /** @enum {string} */
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      modifyAt?: string;
+      modifiedAt?: string;
       interestedUsernames?: string[];
+      /** Format: int32 */
+      deposit?: number;
       closed?: boolean;
     };
     RsDataJobPostDetailDto: {
@@ -391,12 +560,81 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["GetPostsResponseBody"];
     };
+    RoomListDto: {
+      /** Format: int64 */
+      roomId?: number;
+      username1?: string;
+      username2?: string;
+      lastChat?: string;
+      lastChatDate?: string;
+    };
+    RsDataListRoomListDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["RoomListDto"][];
+    };
+    Message: {
+      /** Format: int64 */
+      id?: number;
+      room?: components["schemas"]["Room"];
+      sender?: string;
+      content?: string;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    Room: {
+      /** Format: int64 */
+      id?: number;
+      username1?: string;
+      username2?: string;
+      /** Format: date-time */
+      user1Enter?: string;
+      /** Format: date-time */
+      user2Enter?: string;
+      user1HasExit?: boolean;
+      user2HasExit?: boolean;
+    };
+    RoomDto: {
+      username1?: string;
+      username2?: string;
+      messages?: components["schemas"]["Message"][];
+    };
+    RsDataRoomDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["RoomDto"];
+    };
+    MessageDto: {
+      /** Format: int64 */
+      id?: number;
+      sender: string;
+      text: string;
+      createdAt?: string;
+    };
+    RsDataListMessageDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["MessageDto"][];
+    };
     RsDataApplicationDto: {
       resultCode?: string;
       /** Format: int32 */
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["ApplicationDto"];
+    };
+    RsDataString: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: string;
     };
   };
   responses: never;
@@ -571,6 +809,38 @@ export interface operations {
       };
     };
   };
+  /** 채팅방 입장 */
+  showRoom: {
+    parameters: {
+      path: {
+        roomId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataRoomDto"];
+        };
+      };
+    };
+  };
+  /** 채팅방 퇴장 */
+  exitsRoom: {
+    parameters: {
+      path: {
+        roomId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
   /** 지원서 상세 내용 */
   detailApplication: {
     parameters: {
@@ -662,6 +932,59 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataRegister"];
+        };
+      };
+    };
+  };
+  /** 결제 요청 */
+  requestTossPayments: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PaymentReqDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataPaymentResDto"];
+        };
+      };
+    };
+  };
+  /** 결제 취소 */
+  tossPaymentCancel: {
+    parameters: {
+      query: {
+        paymentKey: string;
+        cancelReason: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+        };
+      };
+    };
+  };
+  /** 지원자 리뷰 작성 */
+  createReview: {
+    parameters: {
+      path: {
+        jobPostingId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ApplicantReviewDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataApplicantReviewDto"];
         };
       };
     };
@@ -768,6 +1091,43 @@ export interface operations {
       };
     };
   };
+  /** 채팅 메세지 로드 */
+  writeChat_1: {
+    parameters: {
+      path: {
+        roomId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataListMessageDto"];
+        };
+      };
+    };
+  };
+  /** 채팅 생성 */
+  writeChat: {
+    parameters: {
+      path: {
+        roomId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Register"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
   /** 지원서 승인 */
   approve: {
     parameters: {
@@ -830,6 +1190,42 @@ export interface operations {
       };
     };
   };
+  /** 결제 성공 */
+  tossPaymentSuccess: {
+    parameters: {
+      query: {
+        paymentKey: string;
+        orderId: string;
+        amount: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataPaymentSuccessDto"];
+        };
+      };
+    };
+  };
+  /** 결제 실패 */
+  tossPaymentFail: {
+    parameters: {
+      query: {
+        code: string;
+        message: string;
+        orderId: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataPaymentFailDto"];
+        };
+      };
+    };
+  };
   /** 유저 별 알림리스트 */
   getList: {
     responses: {
@@ -848,6 +1244,49 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataBoolean"];
+        };
+      };
+    };
+  };
+  /** 나의 전체 리뷰 조회 */
+  getAllReviews: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataListApplicantReviewDto"];
+        };
+      };
+    };
+  };
+  /** 리뷰 단건 조회 */
+  getReviewById: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataApplicantReviewDto"];
+        };
+      };
+    };
+  };
+  /** 리뷰 삭제 */
+  deleteReview: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataString"];
         };
       };
     };
@@ -960,6 +1399,17 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListApplicationDto"];
+        };
+      };
+    };
+  };
+  /** 채팅방 목록 */
+  showRoomList: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataListRoomListDto"];
         };
       };
     };
