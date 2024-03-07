@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import rq from '$lib/rq/rq.svelte';
 	import { format } from 'date-fns';
+	import Map from './Map.svelte';
 
 	let postId = parseInt($page.params.id);
 	let comments = [];
@@ -169,6 +170,14 @@
 		window.location.href = `/applications/list/${postId}`;
 	}
 </script>
+
+<svelte:head>
+	<title>Home</title>
+	<meta name="description" content="Svelte demo app" />
+	<script
+		src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=dbec7e19bbbe4a9e21a7b64b16dd537c&libraries=services"
+	></script>
+</svelte:head>
 
 {#await load()}
 	<div class="flex items-center justify-center min-h-screen">
@@ -402,6 +411,11 @@
 				</div>
 			</div>
 
+			<!-- 지도 표시를 위한 섹션 -->
+			<section>
+				<Map />
+			</section>
+
 			<div class="container mx-auto px-4 py-8">
 				<div class="w-full max-w-4xl mx-auto">
 					<!-- 댓글 입력 폼 -->
@@ -469,3 +483,14 @@
 		</div>
 	</div>
 {/await}
+
+<style>
+	section {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		flex: 0.6;
+		margin-top: 15px; /* 5px의 상단 여백 추가 */
+	}
+</style>
