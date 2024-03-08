@@ -157,7 +157,7 @@
 						id="wageType"
 						bind:value={newJobPostData.wageType}
 					>
-						<!-- <option value="" disabled selected>- 선택하세요 -</option> -->
+						<option value="" disabled selected>- 선택하세요 -</option>
 						<option value="HOURLY">시급</option>
 						<option value="SALARY">일급</option>
 						<option value="PER_PROJECT">건당</option>
