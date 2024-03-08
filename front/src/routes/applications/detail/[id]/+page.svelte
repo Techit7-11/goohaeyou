@@ -157,18 +157,19 @@
 			</div>
 
 			{#if application.jobPostAuthorUsername == rq.member.username && application.approve}
-				{#if application.depositStatus == '지원서 승인'}
-					<button
-						class="btn btn-active btn-primary btn-sm mx-12 mt-6"
-						on:click={() => goToPaymentPage(application.id, application.deposit)}
-						>예치금 결제하기</button
-					>
-				{:else}
-					<!-- TODO  {application.deposit} 값 + 내 결제조회 페이지로 이동 버튼 생성 -->
-					<button class="btn btn-disabled btn-sm mx-12 mt-6" disabled
-						>{application.depositStatus}</button
-					>
-				{/if}
+				<div class="flex justify-center">
+					{#if application.depositStatus == '지원서 승인'}
+						<button
+							class="btn btn-active btn-btn btn-sm mx-12 mt-6"
+							on:click={() => goToPaymentPage(application.id, application.deposit)}
+							>예치금 결제하기</button
+						>
+					{:else}
+						<button class="btn btn-disabled btn-sm mx-12 mt-6" disabled
+							>{application.depositStatus}</button
+						>
+					{/if}
+				</div>
 			{/if}
 		</div>
 	</div>
