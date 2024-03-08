@@ -21,7 +21,7 @@ spring:
       password: ${custom.data.redis.password}
   jpa:
     hibernate:
-      ddl-auto: none # `prod` 환경에서는 주로 validate 또는 none을 사용
+      ddl-auto: validate # `prod` 환경에서는 주로 validate 또는 none을 사용
     properties:
       hibernate: # 운영모드에서는 sql문이 필요없으니 모두 끈다
         format_sql: false
