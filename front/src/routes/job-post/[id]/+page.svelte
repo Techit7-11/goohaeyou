@@ -396,6 +396,11 @@
 					>
 					<span class="text-sm">{jobPostDetailDto?.location ?? '정보 없음'}</span>
 
+					<!-- 지도 표시를 위한 섹션 -->
+					<section>
+						<Map />
+					</section>
+
 					<div class="divider"></div>
 					<div class="flex justify-end text-gray-700 text-sm">
 						<div class="flex">
@@ -410,11 +415,6 @@
 					</div>
 				</div>
 			</div>
-
-			<!-- 지도 표시를 위한 섹션 -->
-			<section>
-				<Map />
-			</section>
 
 			<div class="container mx-auto px-4 py-8">
 				<div class="w-full max-w-4xl mx-auto">
@@ -491,6 +491,6 @@
 		justify-content: center;
 		align-items: center;
 		flex: 0.6;
-		margin-top: 15px; /* 5px의 상단 여백 추가 */
+		margin-top: 6px; /* 6px의 상단 여백 추가 */
 	}
 </style>

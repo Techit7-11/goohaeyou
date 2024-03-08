@@ -76,18 +76,18 @@
 
 								// 인포윈도우 내용을 동적으로 생성
 								const infoContent = `
-                                    <div style="padding:5px; max-height: 100px; overflow-y: auto;">
-                                        <ul>
-                                            ${response.data.data
-																							.filter((job) => job.location === location)
-																							.map(
-																								(job) =>
-																									`<li><a href="/job-post/${job.id}">${job.title}</a></li>`
-																							)
-																							.join('')}
-                                        </ul>
-                                    </div>
-                                `;
+									<div style="padding:5px; max-height: 100px; overflow-y: auto; max-width: 170px; white-space: nowrap; text-overflow: ellipsis;">
+										<ul>
+											${response.data.data
+												.filter((job) => job.location === location)
+												.map(
+													(job) =>
+														`<li style="max-height: 26px; "><a href="/job-post/${job.id}" style="overflow: hidden; text-overflow: ellipsis; display: inline-block; max-width: 100%;">${job.title}</a></li>`
+												)
+												.join('')}
+										</ul>
+									</div>
+								`;
 
 								// 인포윈도우 생성
 								const infoWindow = new kakao.maps.InfoWindow({
