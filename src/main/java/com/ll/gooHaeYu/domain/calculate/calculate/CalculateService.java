@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.calculate.calculate;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
@@ -45,35 +46,35 @@ public class CalculateService {
     @Bean
     public Step step1() {
         return new StepBuilder("step1", jobRepository)
-                .<Application, Application>chunk(10,ptm)
-                .reader(applicationReader())
-                .processor(applicationProcessor())
-                .writer(applicationWriter())
+                .<Payment, Payment>chunk(10,ptm)
+                .reader(paymentReader())
+                .processor(paymentProcessor())
+                .writer(paymentWriter())
                 .build();
     }
 
     @Bean
-    public ItemReader<Application> applicationReader() {
-        JpaPagingItemReader<Application> reader = new JpaPagingItemReader<>();
+    public ItemReader<Payment> paymentReader() {
+        JpaPagingItemReader<Payment> reader = new JpaPagingItemReader<>();
         reader.setEntityManagerFactory(entityManagerFactory);
-        reader.setQueryString("SELECT a FROM Application a WHERE a.depositStatus = 'APPLICATION_APPROVED'");
-        reader.setPageSize(1); // 페이지 크기 설정
+        reader.setQueryString("SELECT p FROM Payment p WHERE p.applicationId IN (SELECT a.id FROM Application a WHERE a.depositStatus = 'SETTLEMENT_REQUESTED') AND p.paid = true AND p.canceled = false");
+        reader.setPageSize(10);
         return reader;
     }
 
     @Bean
-    public ItemProcessor<Application, Application> applicationProcessor() {
+    public ItemProcessor<Payment, Payment> paymentProcessor() {
         // 처리할 작업이 없으므로 null을 반환하거나 아이템을 그대로 반환
-        return application -> application;
+        return Payment -> Payment;
     }
 
     @Bean
-    public ItemWriter<Application> applicationWriter() {
+    public ItemWriter<Payment> paymentWriter() {
         // 아이템을 출력하거나 처리하는 작업을 수행
         return items -> {
-            for (Application application : items) {
-                // UNDEFINED 값을 갖고있는 application의 Id 출력
-                System.out.println("Processed application: " + application.getId());
+            for (Payment payment : items) {
+
+                System.out.println("Processed Payment : " + payment.getId());
             }
         };
     }
