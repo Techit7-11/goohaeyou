@@ -37,7 +37,7 @@
 
 		// API 호출
 		const body = {
-			payType: 'CARD_REQUEST',
+			payStatus: 'REQUEST',
 			amount: totalAmount,
 			applicationId,
 			orderName

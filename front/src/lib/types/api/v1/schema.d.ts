@@ -255,7 +255,7 @@ export interface components {
     };
     PaymentReqDto: {
       /** @enum {string} */
-      payType: "CARD_REQUEST" | "CARD_CARD" | "CARD_EASY_PAY";
+      payStatus: "REQUEST" | "CARD" | "EASY_PAY";
       /** Format: int64 */
       amount: number;
       orderId?: string;
@@ -265,7 +265,7 @@ export interface components {
     };
     PaymentResDto: {
       /** @enum {string} */
-      payType: "CARD_REQUEST" | "CARD_CARD" | "CARD_EASY_PAY";
+      payStatus: "REQUEST" | "CARD" | "EASY_PAY";
       /** Format: int64 */
       amount: number;
       orderId: string;
@@ -365,7 +365,6 @@ export interface components {
       approvedAt?: string;
       card?: components["schemas"]["SuccessCardDto"];
       easyPay?: components["schemas"]["SuccessEasyPayDto"];
-      mid?: string;
     };
     RsDataPaymentSuccessDto: {
       resultCode?: string;
@@ -466,15 +465,13 @@ export interface components {
     ApplicationDto: {
       /** Format: int64 */
       id: number;
+      jobPostAuthorUsername: string;
       /** Format: int64 */
       jobPostId: number;
-      jobPostAuthorUsername: string;
       jobPostName: string;
       /** Format: int32 */
       deposit: number;
       author: string;
-      /** Format: int64 */
-      postId: number;
       body: string;
       name: string;
       /** Format: date */

@@ -158,9 +158,9 @@
 
 			{#if application.jobPostAuthorUsername == rq.member.username && application.approve}
 				<div class="flex justify-center">
-					{#if application.depositStatus == '지원서 승인'}
+					{#if application.depositStatus == '예치금 결제 전'}
 						<button
-							class="btn btn-active btn-btn btn-sm mx-12 mt-6"
+							class="btn btn-btn btn-sm mx-12 mt-6"
 							on:click={() => goToPaymentPage(application.id, application.deposit)}
 							>예치금 결제하기</button
 						>
