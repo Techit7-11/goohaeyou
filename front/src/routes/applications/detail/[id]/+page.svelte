@@ -14,6 +14,41 @@
 		return data!.data!;
 	}
 
+	async function deleteApplication(applicationId: number) {
+		try {
+			const response = await rq.apiEndPoints().DELETE(`/api/applications/${applicationId}`, {
+				headers: { 'Content-Type': 'application/json' }
+			});
+
+			if (response.data?.msg == 'CUSTOM_EXCEPTION') {
+				alert(response.data?.data?.message);
+			}
+
+			if (response.data?.statusCode === 204) {
+				alert('지원서가 삭제되었습니다.');
+				rq.goTo('/member/me');
+			}
+		} catch (error) {
+			alert('지원서 삭제에 실패했습니다. 다시 시도해주세요.');
+		}
+	}
+
+	async function completeJobManually(applicationId: number) {
+		const response = await rq
+			.apiEndPoints()
+			.PATCH(`/api/jobs/complete/${applicationId}/manually`, {});
+
+		if (response.data?.statusCode === 204) {
+			rq.msgInfo('예치금 정산이 진행됩니다.');
+			location.reload();
+		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
+			const customErrorMessage = response.data?.data?.message;
+			rq.msgError(customErrorMessage);
+		} else {
+			rq.msgError('요청 중 오류가 발생했습니다.');
+		}
+	}
+
 	function formatDate(dateString) {
 		const options = {
 			year: '2-digit',
@@ -34,25 +69,6 @@
 			age--;
 		}
 		return age;
-	}
-
-	async function deleteApplication(applicationId: number) {
-		try {
-			const response = await rq.apiEndPoints().DELETE(`/api/applications/${applicationId}`, {
-				headers: { 'Content-Type': 'application/json' }
-			});
-
-			if (response.data?.msg == 'CUSTOM_EXCEPTION') {
-				alert(response.data?.data?.message);
-			}
-
-			if (response.data?.statusCode === 204) {
-				alert('지원서가 삭제되었습니다.');
-				rq.goTo('/member/me');
-			}
-		} catch (error) {
-			alert('지원서 삭제에 실패했습니다. 다시 시도해주세요.');
-		}
 	}
 
 	function goToEditPage(applicationId: number) {
@@ -151,6 +167,14 @@
 									on:click={() => deleteApplication(application.id)}>지원서 삭제</button
 								>
 							{/if}
+						</div>
+					{/if}
+					{#if rq.member.username == application.jobPostAuthorUsername && application.depositStatus == '예치금 결제 완료'}
+						<div class="text-center mt-2 flex justify-center items-center space-x-2">
+							<button
+								class="btn btn-active btn-primary btn-sm"
+								on:click={() => completeJobManually(application.id)}>알바 완료</button
+							>
 						</div>
 					{/if}
 				</div>
