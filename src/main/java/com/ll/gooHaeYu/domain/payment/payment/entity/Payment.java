@@ -32,8 +32,6 @@ public class Payment {
 
     private String payStatus;
 
-    private String approvedAt;
-
     private String orderId;
 
     private String orderName;
@@ -70,10 +68,6 @@ public class Payment {
 
     public void recordFailReason(String failReason) {
         this.failReason = failReason;
-    }
-
-    public void recordApprovedAt(String localDateTime) {
-        this.approvedAt = localDateTime;
     }
 
     public void cancelPayment(String cancelReason) {

@@ -36,14 +36,19 @@ public class PaymentService {
 
     @Transactional
     public PaymentResDto requestTossPayment(PaymentReqDto paymentReqDto, String username) {
-        Payment payment = paymentReqDto.toEntity();
-        payment.updatePayer(memberService.getMember(username));
+        Payment payment = createPaymentEntity(paymentReqDto, username);
 
         PaymentResDto paymentResDto = paymentRepository.save(payment).toPaymentRespDto();
-
         setRedirectUrls(paymentResDto);
 
         return paymentResDto;
+    }
+
+    private Payment createPaymentEntity(PaymentReqDto paymentReqDto, String username) {
+        Payment payment = paymentReqDto.toEntity();
+        payment.updatePayer(memberService.getMember(username));
+
+        return payment;
     }
 
     private void setRedirectUrls(PaymentResDto paymentResDto) {
@@ -99,7 +104,6 @@ public class PaymentService {
     private void updatePayment(Payment payment, PaymentSuccessDto successDto) {
         payment.updatePaymentKey(successDto.getPaymentKey());
         payment.markAsPaid();
-        payment.recordApprovedAt(successDto.getApprovedAt());
         updatePayStatusByPayment(payment, successDto.getMethod());
     }
 
