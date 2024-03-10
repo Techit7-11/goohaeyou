@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.domain.payment.payment.dto.request;
 
 import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
-import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayType;
+import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.UUID;
 public class PaymentReqDto {
 
     @NotNull
-    private PayType payType;
+    private PayStatus payStatus;
 
     @NotNull
     private Long amount;
@@ -26,7 +26,7 @@ public class PaymentReqDto {
 
     public Payment toEntity() {
         return Payment.builder()
-                .payType(payType.getDescription())
+                .payStatus(payStatus.getDescription())
                 .orderId(UUID.randomUUID().toString())
                 .orderName(orderName)
                 .applicationId(applicationId)
