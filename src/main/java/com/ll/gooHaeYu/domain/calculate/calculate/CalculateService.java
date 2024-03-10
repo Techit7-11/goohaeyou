@@ -28,6 +28,7 @@ public class CalculateService {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager ptm;
+    private final JobListener jobListener;
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
@@ -36,7 +37,7 @@ public class CalculateService {
     public Job batchJob1() {
         return new JobBuilder("batchJob1", jobRepository)
                 .start(step1())
-                .next(step2())
+                .listener(jobListener)
                 .build();
 
     }
@@ -55,7 +56,7 @@ public class CalculateService {
     public ItemReader<Application> applicationReader() {
         JpaPagingItemReader<Application> reader = new JpaPagingItemReader<>();
         reader.setEntityManagerFactory(entityManagerFactory);
-        reader.setQueryString("SELECT a FROM Application a WHERE a.depositStatus = 'UNDEFINED'");
+        reader.setQueryString("SELECT a FROM Application a WHERE a.depositStatus = 'APPLICATION_APPROVED'");
         reader.setPageSize(1); // 페이지 크기 설정
         return reader;
     }
@@ -75,15 +76,5 @@ public class CalculateService {
                 System.out.println("Processed application: " + application.getId());
             }
         };
-    }
-
-    @Bean
-    public Step step2() {
-        return new StepBuilder("step2", jobRepository)
-                .tasklet((contribution, chunkContext) -> {
-                    System.out.println("step2 was executed");
-                    return RepeatStatus.FINISHED;
-                }, ptm)
-                .build();
     }
 }

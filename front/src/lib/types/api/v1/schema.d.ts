@@ -53,6 +53,9 @@ export interface paths {
     /** 지원서 삭제 */
     delete: operations["deleteApplication"];
   };
+  "/batch": {
+    post: operations["runBatch"];
+  };
   "/api/post-comment/{postId}/comment": {
     /** 댓글 작성 */
     post: operations["write"];
@@ -911,6 +914,16 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
+  runBatch: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": string;
         };
       };
     };
