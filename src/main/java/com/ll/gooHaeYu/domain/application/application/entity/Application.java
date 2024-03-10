@@ -37,6 +37,12 @@ public class Application extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private DepositStatus depositStatus = DepositStatus.UNDEFINED;
 
+    private int earn = 0;
+
+    private boolean receive = false;
+
+    private Boolean jobCompleted = null;
+
     public void updateBody(String body) {
         if (body != null && !body.isBlank()) {
             this.body = body;
