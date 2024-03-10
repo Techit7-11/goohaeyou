@@ -99,6 +99,9 @@ export interface paths {
     /** 채팅 생성 */
     post: operations["writeChat"];
   };
+  "/api/jobs/complete/{applicationId}/manually": {
+    patch: operations["completeJobManually"];
+  };
   "/api/employ/{postId}/{applicationIds}": {
     /** 지원서 승인 */
     patch: operations["approve"];
@@ -1109,6 +1112,21 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["Register"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
+  completeJobManually: {
+    parameters: {
+      path: {
+        applicationId: number;
       };
     };
     responses: {
