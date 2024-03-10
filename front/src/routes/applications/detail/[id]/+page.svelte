@@ -14,6 +14,41 @@
 		return data!.data!;
 	}
 
+	async function deleteApplication(applicationId: number) {
+		try {
+			const response = await rq.apiEndPoints().DELETE(`/api/applications/${applicationId}`, {
+				headers: { 'Content-Type': 'application/json' }
+			});
+
+			if (response.data?.msg == 'CUSTOM_EXCEPTION') {
+				alert(response.data?.data?.message);
+			}
+
+			if (response.data?.statusCode === 204) {
+				alert('지원서가 삭제되었습니다.');
+				rq.goTo('/member/me');
+			}
+		} catch (error) {
+			alert('지원서 삭제에 실패했습니다. 다시 시도해주세요.');
+		}
+	}
+
+	async function completeJobManually(applicationId: number) {
+		const response = await rq
+			.apiEndPoints()
+			.PATCH(`/api/jobs/complete/${applicationId}/manually`, {});
+
+		if (response.data?.statusCode === 204) {
+			rq.msgInfo('예치금 정산이 진행됩니다.');
+			location.reload();
+		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
+			const customErrorMessage = response.data?.data?.message;
+			rq.msgError(customErrorMessage);
+		} else {
+			rq.msgError('요청 중 오류가 발생했습니다.');
+		}
+	}
+
 	function formatDate(dateString) {
 		const options = {
 			year: '2-digit',
@@ -34,25 +69,6 @@
 			age--;
 		}
 		return age;
-	}
-
-	async function deleteApplication(applicationId: number) {
-		try {
-			const response = await rq.apiEndPoints().DELETE(`/api/applications/${applicationId}`, {
-				headers: { 'Content-Type': 'application/json' }
-			});
-
-			if (response.data?.msg == 'CUSTOM_EXCEPTION') {
-				alert(response.data?.data?.message);
-			}
-
-			if (response.data?.statusCode === 204) {
-				alert('지원서가 삭제되었습니다.');
-				rq.goTo('/member/me');
-			}
-		} catch (error) {
-			alert('지원서 삭제에 실패했습니다. 다시 시도해주세요.');
-		}
 	}
 
 	function goToEditPage(applicationId: number) {
@@ -153,22 +169,31 @@
 							{/if}
 						</div>
 					{/if}
+					{#if rq.member.username == application.jobPostAuthorUsername && application.depositStatus == '예치금 결제 완료'}
+						<div class="text-center mt-2 flex justify-center items-center space-x-2">
+							<button
+								class="btn btn-active btn-primary btn-sm"
+								on:click={() => completeJobManually(application.id)}>알바 완료</button
+							>
+						</div>
+					{/if}
 				</div>
 			</div>
 
 			{#if application.jobPostAuthorUsername == rq.member.username && application.approve}
-				{#if application.depositStatus == '지원서 승인'}
-					<button
-						class="btn btn-active btn-primary btn-sm mx-12 mt-6"
-						on:click={() => goToPaymentPage(application.id, application.deposit)}
-						>예치금 결제하기</button
-					>
-				{:else}
-					<!-- TODO  {application.deposit} 값 + 내 결제조회 페이지로 이동 버튼 생성 -->
-					<button class="btn btn-disabled btn-sm mx-12 mt-6" disabled
-						>{application.depositStatus}</button
-					>
-				{/if}
+				<div class="flex justify-center">
+					{#if application.depositStatus == '예치금 결제 전'}
+						<button
+							class="btn btn-btn btn-sm mx-12 mt-6"
+							on:click={() => goToPaymentPage(application.id, application.deposit)}
+							>예치금 결제하기</button
+						>
+					{:else}
+						<button class="btn btn-disabled btn-sm mx-12 mt-6" disabled
+							>{application.depositStatus}</button
+						>
+					{/if}
+				</div>
 			{/if}
 		</div>
 	</div>

@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.payment.payment.dto.request;
 
-import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayType;
+import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 public class PaymentResDto {
     @NotNull
-    private PayType payType;
+    private PayStatus payStatus;
 
     @NotNull
     private Long amount;

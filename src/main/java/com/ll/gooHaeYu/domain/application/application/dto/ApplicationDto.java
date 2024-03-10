@@ -16,18 +16,16 @@ public class ApplicationDto {
 
     @NotNull
     private Long id;
-    @NotNull
-    private Long jobPostId;
     @NotBlank
     private String jobPostAuthorUsername;
+    @NotNull
+    private Long jobPostId;
     @NotBlank
     private String jobPostName;
     @NotNull
     private int deposit;
     @NotBlank
     private String author;
-    @NotNull
-    private Long postId;
     @NotBlank
     private String body;
     @NotBlank
@@ -52,7 +50,6 @@ public class ApplicationDto {
                 .jobPostName(application.getJobPostDetail().getJobPost().getTitle())
                 .deposit(application.getJobPostDetail().getDeposit())
                 .author(application.getMember().getUsername())
-                .postId(application.getJobPostDetail().getJobPost().getId())
                 .body(application.getBody())
                 .name(application.getMember().getName())
                 .birth(application.getMember().getBirth())

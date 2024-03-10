@@ -99,6 +99,9 @@ export interface paths {
     /** 채팅 생성 */
     post: operations["writeChat"];
   };
+  "/api/jobs/complete/{applicationId}/manually": {
+    patch: operations["completeJobManually"];
+  };
   "/api/employ/{postId}/{applicationIds}": {
     /** 지원서 승인 */
     patch: operations["approve"];
@@ -255,7 +258,7 @@ export interface components {
     };
     PaymentReqDto: {
       /** @enum {string} */
-      payType: "CARD_REQUEST" | "CARD_CARD" | "CARD_EASY_PAY";
+      payStatus: "REQUEST" | "CARD" | "EASY_PAY";
       /** Format: int64 */
       amount: number;
       orderId?: string;
@@ -265,7 +268,7 @@ export interface components {
     };
     PaymentResDto: {
       /** @enum {string} */
-      payType: "CARD_REQUEST" | "CARD_CARD" | "CARD_EASY_PAY";
+      payStatus: "REQUEST" | "CARD" | "EASY_PAY";
       /** Format: int64 */
       amount: number;
       orderId: string;
@@ -365,7 +368,6 @@ export interface components {
       approvedAt?: string;
       card?: components["schemas"]["SuccessCardDto"];
       easyPay?: components["schemas"]["SuccessEasyPayDto"];
-      mid?: string;
     };
     RsDataPaymentSuccessDto: {
       resultCode?: string;
@@ -451,12 +453,7 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
-      workTime: string;
-      /** Format: int32 */
-      cost: number;
-      /** @enum {string} */
-      wageType: "UNDEFINED" | "HOURLY" | "SALARY" | "PER_PROJECT";
-      employed?: boolean;
+      employed: boolean;
       /** Format: date */
       deadLine?: string;
       closed?: boolean;
@@ -471,15 +468,13 @@ export interface components {
     ApplicationDto: {
       /** Format: int64 */
       id: number;
+      jobPostAuthorUsername: string;
       /** Format: int64 */
       jobPostId: number;
-      jobPostAuthorUsername: string;
       jobPostName: string;
       /** Format: int32 */
       deposit: number;
       author: string;
-      /** Format: int64 */
-      postId: number;
       body: string;
       name: string;
       /** Format: date */
@@ -511,12 +506,7 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
-      workTime: string;
-      /** Format: int32 */
-      cost: number;
-      /** @enum {string} */
-      wageType: "UNDEFINED" | "HOURLY" | "SALARY" | "PER_PROJECT";
-      employed?: boolean;
+      employed: boolean;
       /** Format: date */
       deadLine?: string;
       body: string;
@@ -530,6 +520,11 @@ export interface components {
       interestedUsernames?: string[];
       /** Format: int32 */
       deposit?: number;
+      workTime?: string;
+      /** Format: int32 */
+      cost?: number;
+      /** @enum {string} */
+      wageType?: "UNDEFINED" | "HOURLY" | "SALARY" | "PER_PROJECT";
       closed?: boolean;
     };
     RsDataJobPostDetailDto: {
@@ -1117,6 +1112,21 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["Register"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
+  completeJobManually: {
+    parameters: {
+      path: {
+        applicationId: number;
       };
     };
     responses: {

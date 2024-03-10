@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PaymentSuccessDto {
-    private String mId;
     private String paymentKey;
     private String orderId;
     private String orderName;
