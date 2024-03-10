@@ -2,7 +2,7 @@ package com.ll.gooHaeYu.domain.payment.payment.entity;
 
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentResDto;
-import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayType;
+import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,9 +30,7 @@ public class Payment {
 
     private Long totalAmount;
 
-    private String payType;
-
-    private String status;   // 상태 업데이트 구현 필요
+    private String payStatus;
 
     private String approvedAt;
 
@@ -54,8 +52,8 @@ public class Payment {
         this.member = member;
     }
 
-    public void updatePayType(PayType payType) {
-        this.payType = payType.getDescription();
+    public void updatePayStatus(PayStatus payStatus) {
+        this.payStatus = payStatus.getDescription();
     }
 
     public void updatePaymentKey(String paymentKey) {
@@ -84,10 +82,10 @@ public class Payment {
     }
 
     public PaymentResDto toPaymentRespDto() {
-        PayType payTypeEnum = PayType.findPayTypeByDescription(payType);
+        PayStatus payStatusEnum = PayStatus.findPayTypeByDescription(payStatus);
 
         return PaymentResDto.builder()
-                .payType(payTypeEnum)
+                .payStatus(payStatusEnum)
                 .amount(totalAmount)
                 .orderId(orderId)
                 .orderName(orderName)

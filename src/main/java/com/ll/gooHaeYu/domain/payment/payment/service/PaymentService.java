@@ -8,7 +8,7 @@ import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentReqDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentResDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
-import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayType;
+import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayStatus;
 import com.ll.gooHaeYu.domain.payment.payment.repository.PaymentRepository;
 import com.ll.gooHaeYu.global.config.TossPaymentsConfig;
 import com.ll.gooHaeYu.global.exception.CustomException;
@@ -56,8 +56,8 @@ public class PaymentService {
         Payment payment = verifyPayment(orderId, amount);
         PaymentSuccessDto successDto = requestPaymentAccept(paymentKey, orderId, amount);
 
-        updatePaymentStatus(payment, successDto);
-        applicationService.updateApplicationStatus(payment.getApplicationId(), DepositStatus.DEPOSIT_PAID);
+        updatePayment(payment, successDto);
+        applicationService.updateDepositStatus(payment.getApplicationId(), DepositStatus.DEPOSIT_PAID);
         // TODO 충전_토스페이먼츠, 사용_토스페이먼츠 로그 남기기
 
         return successDto;
@@ -72,18 +72,6 @@ public class PaymentService {
         }
 
         return payment;
-    }
-
-    private void updatePaymentStatus(Payment payment, PaymentSuccessDto successDto) {
-        payment.updatePaymentKey(successDto.getPaymentKey());
-        payment.markAsPaid();
-        payment.recordApprovedAt(successDto.getApprovedAt());
-        updatePayTypeByPayment(payment, successDto.getMethod());
-    }
-
-    private void updatePayTypeByPayment(Payment payment, String method) {
-        PayType payType = PayType.findByMethod(method);
-        payment.updatePayType(payType);
     }
 
     @Transactional
@@ -106,6 +94,18 @@ public class PaymentService {
         params.put("amount", amount);
 
         return params;
+    }
+
+    private void updatePayment(Payment payment, PaymentSuccessDto successDto) {
+        payment.updatePaymentKey(successDto.getPaymentKey());
+        payment.markAsPaid();
+        payment.recordApprovedAt(successDto.getApprovedAt());
+        updatePayStatusByPayment(payment, successDto.getMethod());
+    }
+
+    private void updatePayStatusByPayment(Payment payment, String method) {
+        PayStatus payStatus = PayStatus.findByMethod(method);
+        payment.updatePayStatus(payStatus);
     }
 
     @Transactional

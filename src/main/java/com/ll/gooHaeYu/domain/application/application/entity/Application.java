@@ -32,6 +32,8 @@ public class Application extends BaseTimeEntity {
 
     private String body;
 
+    private boolean completed;
+
     @Enumerated(EnumType.STRING)
     private DepositStatus depositStatus = DepositStatus.UNDEFINED;
 
@@ -53,5 +55,9 @@ public class Application extends BaseTimeEntity {
         if (newStatus != null) {
             this.depositStatus = newStatus;
         }
+    }
+
+    public void changeToCompleted() {
+        this.completed = true;
     }
 }
