@@ -100,6 +100,7 @@ export interface paths {
     post: operations["writeChat"];
   };
   "/api/jobs/complete/{applicationId}/manually": {
+    /** 구인자가 수동으로 알바완료 처리 */
     patch: operations["completeJobManually"];
   };
   "/api/employ/{postId}/{applicationIds}": {
@@ -1123,6 +1124,7 @@ export interface operations {
       };
     };
   };
+  /** 구인자가 수동으로 알바완료 처리 */
   completeJobManually: {
     parameters: {
       path: {
