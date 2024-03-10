@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.*;
+import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.POST_MODIFICATION;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
