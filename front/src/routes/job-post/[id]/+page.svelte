@@ -303,7 +303,7 @@
 										>
 										<span class="font-medium">급여 타입:</span>
 										<span class="ml-2 text-gray-600">
-											{#if jobPostDetailDto?.wageType === 'HOURLY'}시급{:else if jobPostDetailDto?.wageType === 'SALARY'}일급{:else if jobPostDetailDto?.wageType === 'PER_PROJECT'}건당{:else if jobPostDetailDto?.wageType === 'UNDEFINED'}미정{:else}'정보
+											{#if jobPostDetailDto?.payBasis === 'HOURLY'}시급{:else if jobPostDetailDto?.payBasis === 'SALARY'}일급{:else if jobPostDetailDto?.payBasis === 'PER_PROJECT'}건당{:else if jobPostDetailDto?.payBasis === 'UNDEFINED'}미정{:else}'정보
 												없음'{/if}
 										</span>
 									</div>

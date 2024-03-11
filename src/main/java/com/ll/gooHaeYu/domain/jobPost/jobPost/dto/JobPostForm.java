@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.WageType;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.PayBasis;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -38,7 +38,7 @@ public class JobPostForm {
         private String workTime;
 
         @NotNull(message = "급여 타입 선택은 필수입니다.")
-        private WageType wageType;
+        private PayBasis payBasis;
 
         @NotNull(message = "급여 입력은 필수 입니다.")
         @Min(value = 0, message = "급여는 0원 이상 이여야 합니다.")
@@ -80,7 +80,7 @@ public class JobPostForm {
         private String workTime;
 
         @NotNull(message = "급여 타입 선택은 필수입니다.")
-        private WageType wageType;
+        private PayBasis payBasis;
 
         @NotNull(message = "급여 입력은 필수 입니다.")
         @Min(value = 0, message = "급여는 0원 이상 이여야 합니다.")
