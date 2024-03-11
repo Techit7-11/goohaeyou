@@ -71,7 +71,7 @@ public class JobPostService {
         Wage wage = Wage.builder()
                 .cost(form.getCost())
                 .workTime(form.getWorkTime())
-                .wageType(form.getWageType())
+                .payBasis(form.getPayBasis())
                 .jobPostDetail(postDetail)
                 .build();
 
@@ -102,7 +102,7 @@ public class JobPostService {
         postDetail.getJobPost().update(form.getTitle(),form.getDeadLine());
         postDetail.updatePostDetail(form.getBody(), form.getDeposit());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
-        postDetail.getWage().updateWageInfo(form.getWorkTime(), form.getCost(), form.getWageType());
+        postDetail.getWage().updateWageInfo(form.getWorkTime(), form.getCost(), form.getPayBasis());
         postDetail.getDeposit();
 
         // TODO : 삭제 후 알림 날리기

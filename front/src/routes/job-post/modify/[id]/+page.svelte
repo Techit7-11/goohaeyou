@@ -10,10 +10,10 @@
 		gender: 'UNDEFINED',
 		location: '',
 		deadLine: '',
-		wageType: '',
+		payBasis: '',
 		workTime: '',
 		cost: 0,
-        deposit: 0
+		deposit: 0
 	};
 	let postId;
 
@@ -152,16 +152,16 @@
 				<div class="divider mt-10"></div>
 
 				<div class="form-group">
-					<label class="label" for="wageType">* 급여 타입</label>
+					<label class="label" for="payBasis">* 급여 지급 기준</label>
 					<select
 						class="input input-bordered w-full"
-						id="wageType"
-						bind:value={jobPostData.wageType}
+						id="payBasis"
+						bind:value={jobPostData.payBasis}
 					>
 						<option value="" disabled selected>- 선택하세요 -</option>
-						<option value="HOURLY">시급</option>
-						<option value="SALARY">일급</option>
-						<option value="PER_PROJECT">건당</option>
+						<option value="TOTAL_HOURS">총 시간</option>
+						<option value="TOTAL_DAYS">총 일수</option>
+						<option value="TOTAL_PROJECTS">총 건수</option>
 					</select>
 				</div>
 
