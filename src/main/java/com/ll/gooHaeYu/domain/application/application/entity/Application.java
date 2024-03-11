@@ -66,4 +66,12 @@ public class Application extends BaseTimeEntity {
     public void changeToCompleted() {
         this.completed = true;
     }
+
+    public void setEarn(int earn) {
+        this.earn = earn;
+    }
+
+    public void setReceive(boolean receive) {
+        this.receive = receive;
+    }
 }
