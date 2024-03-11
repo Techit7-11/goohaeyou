@@ -82,9 +82,6 @@
 				<span class="font-semibold">결제 금액:</span>
 				{formatAmount(data.totalAmount)}원
 			</div>
-			<div class="text-gray-700 text-sm">
-				(VAT:{formatAmount(data.vat)}원)
-			</div>
 		</div>
 
 		<hr class="border-t-2 border-gray-300 w-full max-w-md my-4" />

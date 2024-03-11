@@ -365,10 +365,6 @@ export interface components {
       method?: string;
       /** Format: int32 */
       totalAmount?: number;
-      /** Format: int32 */
-      vat?: number;
-      /** Format: int32 */
-      suppliedAmount?: number;
       approvedAt?: string;
       card?: components["schemas"]["SuccessCardDto"];
       easyPay?: components["schemas"]["SuccessEasyPayDto"];
@@ -528,7 +524,7 @@ export interface components {
       /** Format: int32 */
       cost?: number;
       /** @enum {string} */
-      wageType?: "UNDEFINED" | "HOURLY" | "SALARY" | "PER_PROJECT";
+      payBasis?: "UNDEFINED" | "TOTAL_HOURS" | "TOTAL_DAYS" | "TOTAL_PROJECTS";
       closed?: boolean;
     };
     RsDataJobPostDetailDto: {

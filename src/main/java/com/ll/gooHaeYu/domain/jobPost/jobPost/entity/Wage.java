@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.WageType;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.PayBasis;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,15 +28,15 @@ public class Wage {
     private boolean paid;
 
     @Enumerated(EnumType.STRING)
-    private WageType wageType = WageType.UNDEFINED;
+    private PayBasis payBasis = PayBasis.UNDEFINED;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_post_detail", nullable = false)
     private JobPostDetail jobPostDetail;
 
-    public void updateWageInfo(String workTime, int cost, WageType wageType) {
+    public void updateWageInfo(String workTime, int cost, PayBasis payBasis) {
         this.workTime = workTime;
         this.cost = cost;
-        this.wageType = wageType;
+        this.payBasis = payBasis;
     }
 }
