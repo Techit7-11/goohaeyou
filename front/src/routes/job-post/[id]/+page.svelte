@@ -260,7 +260,7 @@
 					</div>
 					<div class="divider"></div>
 					<div class="my-5">
-						<div class="bg-white p-5 rounded-lg shadow-lg">
+						<div class="bg-white p-5 rounded-md shadow-lg">
 							<h3 class="text-md font-medium text-gray-800 mb-3">조건</h3>
 							<ul class="list-disc space-y-2 text-sm">
 								<li class="flex items-center text-gray-700">
