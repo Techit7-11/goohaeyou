@@ -40,6 +40,7 @@ public class ApplicationDto {
     private String wageStatus;
     @NotBlank
     private String wagePaymentMethod;
+    @NotNull int wages = 0;
 
     private LocalDateTime createdAt;
     private Boolean approve;
@@ -63,6 +64,7 @@ public class ApplicationDto {
                 .approve(application.getApprove())
                 .wageStatus(application.getWageStatus().getDescription())
                 .wagePaymentMethod(jobPostDetail.getWage().getWagePaymentMethod().getDescription())
+                .wages(jobPostDetail.getWage().getCost())
                 .build();
     }
 
