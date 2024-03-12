@@ -46,6 +46,7 @@ public class WorkCompletionService {
                 break;
             case APPLICATION_APPROVED:
                 application.updateWageStatus(WageStatus.WAGE_PAID);
+                application.setReceive(true);
                 break;
             default:
                 throw new CustomException(COMPLETION_NOT_POSSIBLE);
