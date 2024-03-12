@@ -37,6 +37,10 @@
 			rq.msgError('급여 지급 기준을 선택해주세요.');
 			return;
 		}
+		if (newJobPostData.wagePaymentMethod === '') {
+			rq.msgError('급여 지금 방법 선택은 필수입니다.');
+			return;
+		}
 		const response = await rq.apiEndPoints().POST('/api/job-posts', { body: newJobPostData });
 
 		if (response.data?.statusCode === 200) {
@@ -181,6 +185,18 @@
 						min="0"
 						bind:value={newJobPostData.cost}
 					/>
+				</div>
+				<div class="form-group">
+					<label class="label" for="wagePaymentMethod">* 급여 지급 방법</label>
+					<select
+						class="input input-bordered w-full"
+						id="wagePaymentMethod"
+						bind:value={newJobPostData.wagePaymentMethod}
+					>
+						<option value="" disabled selected>- 선택하세요 -</option>
+						<option value="SERVICE_PAYMENT">서비스 결제</option>
+						<option value="INDIVIDUAL_PAYMENT">개인 지급</option>
+					</select>
 				</div>
 				<div class="form-group">
 					<button class="w-full btn btn-primary my-3" type="submit">글 작성</button>
