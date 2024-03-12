@@ -469,8 +469,6 @@ export interface components {
       /** Format: int64 */
       jobPostId: number;
       jobPostName: string;
-      /** Format: int32 */
-      deposit: number;
       author: string;
       body: string;
       name: string;
@@ -478,7 +476,7 @@ export interface components {
       birth: string;
       phone: string;
       location: string;
-      depositStatus: string;
+      wageStatus: string;
       /** Format: date-time */
       createdAt?: string;
       approve?: boolean;
@@ -515,8 +513,6 @@ export interface components {
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
       modifiedAt?: string;
       interestedUsernames?: string[];
-      /** Format: int32 */
-      deposit?: number;
       workTime?: string;
       /** Format: int32 */
       cost?: number;

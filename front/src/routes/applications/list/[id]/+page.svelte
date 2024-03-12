@@ -96,7 +96,7 @@
 												<p>지원일</p>
 												<p>승인여부</p>
 												{#if application.approve === true && application.jobPostAuthorUsername === rq.member.username}
-													<p>예치금 상태</p>
+													<p>급여 결제 상태</p>
 												{/if}
 											</div>
 											<div class="flex-grow text-left">
@@ -115,7 +115,7 @@
 												</p>
 												<p>
 													{#if application.approve === true && application.jobPostAuthorUsername === rq.member.username}
-														<span class="text-sm text-gray-600">{application.depositStatus}</span>
+														<span class="text-sm text-gray-600">{application.wageStatus}</span>
 													{/if}
 												</p>
 											</div>

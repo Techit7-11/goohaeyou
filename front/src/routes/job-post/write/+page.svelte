@@ -183,16 +183,6 @@
 					/>
 				</div>
 				<div class="form-group">
-					<label class="label" for="cost">* 예치금</label>
-					<input
-						type="number"
-						id="deposit"
-						class="input input-bordered w-full"
-						min="0"
-						bind:value={newJobPostData.deposit}
-					/>
-				</div>
-				<div class="form-group">
 					<button class="w-full btn btn-primary my-3" type="submit">글 작성</button>
 				</div>
 			</form>
