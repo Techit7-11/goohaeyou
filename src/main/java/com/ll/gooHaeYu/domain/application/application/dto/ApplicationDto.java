@@ -1,6 +1,8 @@
 package com.ll.gooHaeYu.domain.application.application.dto;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
+import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -43,21 +45,24 @@ public class ApplicationDto {
     private Boolean approve;
 
     public static ApplicationDto fromEntity(Application application) {
+        JobPostDetail jobPostDetail = application.getJobPostDetail();
+        Member member = application.getMember();
+
         return ApplicationDto.builder()
                 .id(application.getId())
-                .jobPostId(application.getJobPostDetail().getJobPost().getId())
-                .jobPostAuthorUsername(application.getJobPostDetail().getAuthor())
-                .jobPostName(application.getJobPostDetail().getJobPost().getTitle())
-                .author(application.getMember().getUsername())
+                .jobPostId(jobPostDetail.getJobPost().getId())
+                .jobPostAuthorUsername(jobPostDetail.getAuthor())
+                .jobPostName(jobPostDetail.getJobPost().getTitle())
+                .author(member.getUsername())
                 .body(application.getBody())
-                .name(application.getMember().getName())
-                .birth(application.getMember().getBirth())
-                .phone(application.getMember().getPhoneNumber())
-                .location(application.getMember().getLocation())
+                .name(member.getName())
+                .birth(member.getBirth())
+                .phone(member.getPhoneNumber())
+                .location(member.getLocation())
                 .createdAt(application.getCreatedAt())
                 .approve(application.getApprove())
                 .wageStatus(application.getWageStatus().getDescription())
-                .wagePaymentMethod(application.getJobPostDetail().getWage().getWagePaymentMethod().getDescription())
+                .wagePaymentMethod(jobPostDetail.getWage().getWagePaymentMethod().getDescription())
                 .build();
     }
 
