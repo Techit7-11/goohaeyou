@@ -1,6 +1,8 @@
 package com.ll.gooHaeYu.domain.application.application.dto;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
+import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -22,8 +24,6 @@ public class ApplicationDto {
     private Long jobPostId;
     @NotBlank
     private String jobPostName;
-    @NotNull
-    private int deposit;
     @NotBlank
     private String author;
     @NotBlank
@@ -37,27 +37,34 @@ public class ApplicationDto {
     @NotBlank
     private String location;
     @NotBlank
-    private String depositStatus;
+    private String wageStatus;
+    @NotBlank
+    private String wagePaymentMethod;
+    @NotNull int wages = 0;
 
     private LocalDateTime createdAt;
     private Boolean approve;
 
     public static ApplicationDto fromEntity(Application application) {
+        JobPostDetail jobPostDetail = application.getJobPostDetail();
+        Member member = application.getMember();
+
         return ApplicationDto.builder()
                 .id(application.getId())
-                .jobPostId(application.getJobPostDetail().getJobPost().getId())
-                .jobPostAuthorUsername(application.getJobPostDetail().getAuthor())
-                .jobPostName(application.getJobPostDetail().getJobPost().getTitle())
-                .deposit(application.getJobPostDetail().getDeposit())
-                .author(application.getMember().getUsername())
+                .jobPostId(jobPostDetail.getJobPost().getId())
+                .jobPostAuthorUsername(jobPostDetail.getAuthor())
+                .jobPostName(jobPostDetail.getJobPost().getTitle())
+                .author(member.getUsername())
                 .body(application.getBody())
-                .name(application.getMember().getName())
-                .birth(application.getMember().getBirth())
-                .phone(application.getMember().getPhoneNumber())
-                .location(application.getMember().getLocation())
+                .name(member.getName())
+                .birth(member.getBirth())
+                .phone(member.getPhoneNumber())
+                .location(member.getLocation())
                 .createdAt(application.getCreatedAt())
                 .approve(application.getApprove())
-                .depositStatus(application.getDepositStatus().getDescription())
+                .wageStatus(application.getWageStatus().getDescription())
+                .wagePaymentMethod(jobPostDetail.getWage().getWagePaymentMethod().getDescription())
+                .wages(jobPostDetail.getWage().getCost())
                 .build();
     }
 

@@ -3,7 +3,7 @@ package com.ll.gooHaeYu.domain.application.application.service;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationForm;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
-import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
+import com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus;
 import com.ll.gooHaeYu.domain.application.application.repository.ApplicationRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -48,7 +48,7 @@ public class ApplicationService {
                 .jobPostDetail(postDetail)
                 .body(form.getBody())
                 .approve(null)
-                .depositStatus(DepositStatus.UNDEFINED)
+                .wageStatus(WageStatus.UNDEFINED)
                 .build();
 
         postDetail.getApplications().add(newApplication);
@@ -130,8 +130,8 @@ public class ApplicationService {
         }
     }
 
-    public void updateDepositStatus(Long applicationId, DepositStatus status) {
+    public void updateWageStatus(Long applicationId, WageStatus status) {
         Application application = findByIdAndValidate(applicationId);
-        application.updateDepositStatus(status);
+        application.updateWageStatus(status);
     }
 }

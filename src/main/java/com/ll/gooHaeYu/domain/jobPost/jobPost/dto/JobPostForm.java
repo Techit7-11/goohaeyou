@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.PayBasis;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.WagePaymentMethod;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -37,21 +38,13 @@ public class JobPostForm {
         @NotBlank(message = "도움시간 또는 도움일수 입력은 필수입니다.")
         private String workTime;
 
-        @NotNull(message = "급여 타입 선택은 필수입니다.")
         private PayBasis payBasis;
 
         @NotNull(message = "급여 입력은 필수 입니다.")
         @Min(value = 0, message = "급여는 0원 이상 이여야 합니다.")
         private int cost;
 
-        @NotNull(message = "예치금 입력은 필수 입니다.")
-        @Min(value = 1000, message = "예치금은 1000원 이상 이여야 합니다.")
-        private int deposit;
-
-        @AssertTrue(message = "예치금은 급여보다 적거나 같아야 합니다.")
-        public boolean isDepositLessThanOrEqualToCost() {
-            return deposit <= cost;
-        }
+        private WagePaymentMethod wagePaymentMethod;
     }
 
     @Builder
@@ -79,20 +72,11 @@ public class JobPostForm {
         @NotBlank(message = "도움시간 또는 도움일수 입력은 필수입니다.")
         private String workTime;
 
-        @NotNull(message = "급여 타입 선택은 필수입니다.")
         private PayBasis payBasis;
 
         @NotNull(message = "급여 입력은 필수 입니다.")
         @Min(value = 0, message = "급여는 0원 이상 이여야 합니다.")
         private int cost;
 
-        @NotNull(message = "예치금 입력은 필수 입니다.")
-        @Min(value = 1000, message = "예치금은 1000원 이상 이여야 합니다.")
-        private int deposit;
-
-        @AssertTrue(message = "예치금은 급여보다 적거나 같아야 합니다.")
-        public boolean isDepositLessThanOrEqualToCost() {
-            return deposit <= cost;
-        }
     }
 }

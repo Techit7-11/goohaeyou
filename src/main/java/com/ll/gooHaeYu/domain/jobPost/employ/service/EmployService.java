@@ -2,12 +2,11 @@ package com.ll.gooHaeYu.domain.jobPost.employ.service;
 
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
-import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
+import com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.WagePaymentMethod;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
-import com.ll.gooHaeYu.domain.member.member.entity.Member;
-import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.event.ChangeOfPostEvent;
 import com.ll.gooHaeYu.global.event.CreateChatRoomEvent;
 import com.ll.gooHaeYu.global.event.PostEmployedEvent;
@@ -48,6 +47,8 @@ public class EmployService {
         JobPostDetail postDetail = jobPost.getJobPostDetail();
         Long postWriterId = jobPost.getMember().getId();
 
+        WageStatus updateWageStatus = determineWageStatus(postDetail.getWage().getWagePaymentMethod());
+
         if (!jobPost.isClosed()) throw new CustomException(NOT_POSSIBLE_TO_APPROVE_IT_YET);
         checkPermissions(username,postDetail.getAuthor());
 
@@ -58,7 +59,7 @@ public class EmployService {
                 Long receiverId = application.getMember().getId();
                 application.approve();
 
-                application.updateDepositStatus(DepositStatus.APPLICATION_APPROVED);
+                application.updateWageStatus(updateWageStatus);
 
                 increaseApplicantTransactionCount(application);
                 increaseAuthorTransactionCount(jobPost);
@@ -78,10 +79,17 @@ public class EmployService {
         publisher.publishEvent(new PostEmployedEvent(this, jobPost));
     }
 
-
-
     public void checkPermissions (String username, String author){
         if (!username.equals(author)) throw new CustomException(NOT_ABLE);
+    }
+
+    private WageStatus determineWageStatus(WagePaymentMethod wagePaymentMethod) {
+        if (wagePaymentMethod == WagePaymentMethod.SERVICE_PAYMENT) {
+            return WageStatus.PAYMENT_PENDING;
+        } else if (wagePaymentMethod == WagePaymentMethod.INDIVIDUAL_PAYMENT) {
+            return WageStatus.APPLICATION_APPROVED;
+        }
+        return WageStatus.UNDEFINED;
     }
 
     private void increaseApplicantTransactionCount(Application application) {
