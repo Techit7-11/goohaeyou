@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.PayBasis;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.WagePaymentMethod;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,8 @@ public class JobPostForm {
         @Min(value = 0, message = "급여는 0원 이상 이여야 합니다.")
         private int cost;
 
+        @NotNull(message = "급여 지금 방법 선택은 필수입니다.")
+        private WagePaymentMethod wagePaymentMethod;
     }
 
     @Builder
