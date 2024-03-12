@@ -75,14 +75,14 @@ public class ApplicationService {
     public void modifyApplication(String username, Long id, ApplicationForm.Modify form) {
         Application application = findByIdAndValidate(id);
 
-        if (!canEditApplication(username, application.getMember().getUsername()))
+        if (!isApplicationAuthor(username, application.getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
         application.updateBody(form.getBody());
         publisher.publishEvent(new ApplicationCreateAndChangedEvent(this, application, APPLICATION_MODIFICATION));
     }
 
-    public boolean canEditApplication(String username, String author) {
+    public boolean isApplicationAuthor(String username, String author) {
         return username.equals(author);
     }
 
@@ -90,11 +90,20 @@ public class ApplicationService {
     public void deleteApplication(String username, Long id) {
         Application application = findByIdAndValidate(id);
 
-        if (!canEditApplication(username, application.getMember().getUsername()))
-            throw new CustomException(NOT_ABLE);
+        canEditApplication(username, application);
 
         application.getJobPostDetail().getJobPost().decreaseApplicationsCount();
         applicationRepository.deleteById(id);
+    }
+
+    public boolean canEditApplication(String username, Application application) {
+        if (application.getApprove()) {
+            throw new CustomException(NOT_ABLE);
+        }
+        if (!isApplicationAuthor(username, application.getMember().getUsername()))
+            throw new CustomException(NOT_ABLE);
+
+        return true;
     }
 
     public List<ApplicationDto> findByUsername(String username) {
