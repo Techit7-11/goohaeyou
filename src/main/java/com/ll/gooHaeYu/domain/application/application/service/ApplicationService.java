@@ -140,4 +140,11 @@ public class ApplicationService {
             }
         }
     }
+
+    @Transactional
+    public void updateApplicationOnPaymentSuccess(Long applicationId, Long amount) {
+        Application application = findByIdAndValidate(applicationId);
+        application.updateWageStatus(WageStatus.PAYMENT_COMPLETED);
+        application.setEarn(Math.toIntExact(amount));    // 지원서의 earn에 급여 추가
+    }
 }
