@@ -41,15 +41,12 @@ public class WorkCompletionService {
 
     private void updateApplicationStatus(Application application) {
         switch (application.getWageStatus()) {
-            case PAYMENT_COMPLETED:
-                application.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
-                break;
-            case APPLICATION_APPROVED:
+            case PAYMENT_COMPLETED -> application.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
+            case APPLICATION_APPROVED -> {
                 application.updateWageStatus(WageStatus.WAGE_PAID);
                 application.setReceive(true);
-                break;
-            default:
-                throw new CustomException(COMPLETION_NOT_POSSIBLE);
+            }
+            default -> throw new CustomException(COMPLETION_NOT_POSSIBLE);
         }
     }
 
