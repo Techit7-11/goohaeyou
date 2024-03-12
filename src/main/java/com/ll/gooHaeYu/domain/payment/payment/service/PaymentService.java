@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.payment.payment.service;
 
+import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
@@ -66,7 +67,8 @@ public class PaymentService {
         PaymentSuccessDto successDto = requestPaymentAccept(paymentKey, orderId, amount);
 
         updatePayment(payment, successDto);
-        applicationService.updateWageStatus(payment.getApplicationId(), WageStatus.PAYMENT_COMPLETED);
+
+        updateApplicationOnPaymentSuccess(payment.getApplicationId(), amount);
 
         addCashLogOnSuccess(successDto, payment);
 
@@ -115,6 +117,12 @@ public class PaymentService {
     private void updatePayStatusByPayment(Payment payment, String method) {
         PayStatus payStatus = PayStatus.findByMethod(method);
         payment.updatePayStatus(payStatus);
+    }
+
+    private void updateApplicationOnPaymentSuccess(Long applicationId, Long amount) {
+        Application application = applicationService.findByIdAndValidate(applicationId);
+        application.updateWageStatus(WageStatus.PAYMENT_COMPLETED);
+        application.setEarn(Math.toIntExact(amount));    // 지원서의 earn에 급여 추가
     }
 
     @Transactional

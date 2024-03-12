@@ -64,4 +64,8 @@ public class Application extends BaseTimeEntity {
     public void changeToCompleted() {
         this.jobCompleted = true;
     }
+
+    public void setEarn(int earn) {
+        this.earn = earn;
+    }
 }
