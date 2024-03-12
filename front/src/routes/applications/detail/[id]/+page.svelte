@@ -84,13 +84,13 @@
 		<div class="container mx-auto px-4 mt-5">
 			<div class="w-full max-w-4xl mx-auto">
 				<div class="card bg-base-100 shadow-lg rounded-lg p-5">
-					<div class="flex items-center mb-4">
-						<h2 class="px-1 card-title text-xl font-bold">지원서 상세</h2>
+					<div class="flex items-center mb-6">
+						<p class="text-2xl font-semibold">지원서 상세</p>
 					</div>
 
 					<div class="bg-white rounded-md mb-4">
-						<div class="px-2 py-2 border-b border-gray-200">
-							<p class="font-semibold">지원자 정보</p>
+						<div class="px-1 py-2 border-b border-gray-300">
+							<p class="text-lg font-semibold">지원자 정보</p>
 						</div>
 						<div class="flex">
 							<div class="mx-2 mt-4 flex-grow max-w-40">
@@ -131,9 +131,11 @@
 						</div>
 					</div>
 					<div class="mx-2 my-6 mt-12">
-						<p class="font-semibold">작성 내용</p>
+						<div class="px-1 py-2 border-b border-gray-300">
+							<p class="text-lg font-semibold">작성 내용</p>
+						</div>
 						<div
-							class="bg-white rounded-md shadow p-3 overflow-auto mt-1"
+							class="bg-white rounded-md shadow p-3 overflow-auto mt-4"
 							style="max-height: 200px;"
 						>
 							<p>{application.body}</p>
@@ -179,7 +181,7 @@
 					{:else}
 						<button
 							class="btn btn-sm mx-12 mt-6 cursor-not-allowed"
-							style="background-color: #f7f7f7; color: #4b5563;"
+							style="background-color: #fafafa; color: #4b5563;"
 							disabled
 						>
 							{application.wageStatus}
