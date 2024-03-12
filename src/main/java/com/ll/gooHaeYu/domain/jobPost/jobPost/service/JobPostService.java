@@ -71,6 +71,7 @@ public class JobPostService {
                 .cost(form.getCost())
                 .workTime(form.getWorkTime())
                 .payBasis(form.getPayBasis())
+                .wagePaymentMethod(form.getWagePaymentMethod())
                 .jobPostDetail(postDetail)
                 .build();
 
@@ -102,6 +103,7 @@ public class JobPostService {
         postDetail.updatePostDetail(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
         postDetail.getWage().updateWageInfo(form.getWorkTime(), form.getCost(), form.getPayBasis());
+
 
         // TODO : 삭제 후 알림 날리기
         List<Application> applicationsToRemove = new ArrayList<>();

@@ -36,6 +36,8 @@ public class ApplicationDto {
     private String location;
     @NotBlank
     private String wageStatus;
+    @NotBlank
+    private String wagePaymentMethod;
 
     private LocalDateTime createdAt;
     private Boolean approve;
@@ -55,6 +57,7 @@ public class ApplicationDto {
                 .createdAt(application.getCreatedAt())
                 .approve(application.getApprove())
                 .wageStatus(application.getWageStatus().getDescription())
+                .wagePaymentMethod(application.getJobPostDetail().getWage().getWagePaymentMethod().getDescription())
                 .build();
     }
 
