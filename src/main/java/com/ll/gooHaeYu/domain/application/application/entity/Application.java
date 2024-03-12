@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.application.application.entity;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
@@ -32,7 +32,16 @@ public class Application extends BaseTimeEntity {
 
     private String body;
 
-    public void update(String body) {
+    @Enumerated(EnumType.STRING)
+    private WageStatus wageStatus = WageStatus.UNDEFINED;
+
+    private int earn = 0;
+
+    private boolean receive = false;
+
+    private Boolean jobCompleted = null;
+
+    public void updateBody(String body) {
         if (body != null && !body.isBlank()) {
             this.body = body;
         }
@@ -44,5 +53,23 @@ public class Application extends BaseTimeEntity {
 
     public void reject() {
         this.approve = false;
+    }
+
+    public void updateWageStatus(WageStatus newStatus) {
+        if (newStatus != null) {
+            this.wageStatus = newStatus;
+        }
+    }
+
+    public void changeToCompleted() {
+        this.jobCompleted = true;
+    }
+
+    public void setEarn(int earn) {
+        this.earn = earn;
+    }
+
+    public void setReceive(boolean receive) {
+        this.receive = receive;
     }
 }

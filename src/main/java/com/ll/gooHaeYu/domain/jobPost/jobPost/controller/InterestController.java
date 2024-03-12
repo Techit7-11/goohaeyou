@@ -21,7 +21,7 @@ public class InterestController {
     @Operation(summary = "구인공고 관심 등록")
     public RsData<Void> interest(@AuthenticationPrincipal MemberDetails memberDetails,
                                  @PathVariable(name = "id") Long id) {
-        jobPostService.Interest(memberDetails.getUsername(), id);
+        jobPostService.interest(memberDetails.getUsername(), id);
 
         return RsData.of("204", "NO_CONTENT");
     }

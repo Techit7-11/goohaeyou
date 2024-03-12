@@ -3,7 +3,7 @@ spring:
     ansi:
       enabled: always
   datasource:
-    url: jdbc:h2:./db_dev;MODE=PostgreSQL
+    url: jdbc:h2:./db_dev;MODE=MYSQL
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -19,6 +19,10 @@ spring:
   h2:
     console:
       enabled: true
+  autoconfigure:   # 운영환경에서만 redis를 사용하도록 설정
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      #- org.springframework.boot.autoconfigure.session.SessionAutoConfiguration   # 세션을 redis에 저장
 logging:
   level:
     com.ll.gooHaeYu: DEBUG
@@ -26,5 +30,8 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
+tossPayments:
+  successUrl: "http://localhost:5173/payment/success"
+  failUrl: "http://localhost:5173/payment/fail"
 app:
   init-run: false

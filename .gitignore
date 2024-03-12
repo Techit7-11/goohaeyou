@@ -41,5 +41,12 @@ db_dev.mv.db
 db_dev.trace.db
 src/main/generated
 
-### security
+### security ###
 */application-secret.yml
+
+### terraform ###
+.terraform
+terraform/main.tf
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/.terraform.lock.hcl

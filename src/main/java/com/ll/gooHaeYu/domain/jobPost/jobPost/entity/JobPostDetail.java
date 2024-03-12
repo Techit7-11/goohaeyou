@@ -2,11 +2,12 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
-import com.nimbusds.jose.Requirement;
+import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
@@ -18,7 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @Getter
 @Table(name = "job_post_detail",uniqueConstraints = {@UniqueConstraint(columnNames = {"jobPost_id","author"})})
-public class JobPostDetail {
+public class JobPostDetail extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +37,9 @@ public class JobPostDetail {
     @OneToOne(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     private Essential essential;
 
+    @OneToOne(mappedBy = "jobPostDetail", cascade = ALL)
+    private Wage wage;
+
     @OneToMany(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     @ToString.Exclude
     @Builder.Default
@@ -52,7 +56,7 @@ public class JobPostDetail {
     @Builder.Default
     private List<Interest> interests = new ArrayList<>();
 
-    public void update(String body) {
+    public void updatePostDetail(String body) {
         if (body != null && !body.isBlank()) {
             this.body = body;
         }

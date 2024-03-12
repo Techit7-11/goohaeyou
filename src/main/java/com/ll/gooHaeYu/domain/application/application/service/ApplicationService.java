@@ -3,6 +3,7 @@ package com.ll.gooHaeYu.domain.application.application.service;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationForm;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus;
 import com.ll.gooHaeYu.domain.application.application.repository.ApplicationRepository;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -37,17 +38,10 @@ public class ApplicationService {
     @Transactional
     public Long writeApplication(String username, Long id, ApplicationForm.Register form) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(id);
-
         Member member = memberService.getMember(username);
-
         canWrite(postDetail, member);
 
-        Application newApplication = Application.builder()
-                .member(member)
-                .jobPostDetail(postDetail)
-                .body(form.getBody())
-                .approve(null)
-                .build();
+        Application newApplication = createNewApplication(member, postDetail, form);
 
         postDetail.getApplications().add(newApplication);
         postDetail.getJobPost().increaseApplicationsCount();
@@ -56,6 +50,16 @@ public class ApplicationService {
         publisher.publishEvent(new ApplicationCreateAndChangedEvent(this, postDetail, newApplication, APPLICATION_CREATED));
 
         return newApplication.getId();
+    }
+
+    private Application createNewApplication(Member member, JobPostDetail postDetail, ApplicationForm.Register form) {
+        return Application.builder()
+                .member(member)
+                .jobPostDetail(postDetail)
+                .body(form.getBody())
+                .approve(null)
+                .wageStatus(WageStatus.UNDEFINED)
+                .build();
     }
 
     public ApplicationDto findById(Long id) {
@@ -73,14 +77,14 @@ public class ApplicationService {
     public void modifyApplication(String username, Long id, ApplicationForm.Modify form) {
         Application application = findByIdAndValidate(id);
 
-        if (!canEditApplication(username, application.getMember().getUsername()))
+        if (!isApplicationAuthor(username, application.getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
-        application.update(form.getBody());
+        application.updateBody(form.getBody());
         publisher.publishEvent(new ApplicationCreateAndChangedEvent(this, application, APPLICATION_MODIFICATION));
     }
 
-    public boolean canEditApplication(String username, String author) {
+    public boolean isApplicationAuthor(String username, String author) {
         return username.equals(author);
     }
 
@@ -88,11 +92,20 @@ public class ApplicationService {
     public void deleteApplication(String username, Long id) {
         Application application = findByIdAndValidate(id);
 
-        if (!canEditApplication(username, application.getMember().getUsername()))
-            throw new CustomException(NOT_ABLE);
+        canDelete(username, application);
 
         application.getJobPostDetail().getJobPost().decreaseApplicationsCount();
         applicationRepository.deleteById(id);
+    }
+
+    public boolean canDelete(String username, Application application) {
+        if (application.getApprove()) {
+            throw new CustomException(NOT_ABLE);
+        }
+        if (!isApplicationAuthor(username, application.getMember().getUsername()))
+            throw new CustomException(NOT_ABLE);
+
+        return true;
     }
 
     public List<ApplicationDto> findByUsername(String username) {
@@ -126,5 +139,12 @@ public class ApplicationService {
                 throw new CustomException(ErrorCode.DUPLICATE_SUBMISSION);
             }
         }
+    }
+
+    @Transactional
+    public void updateApplicationOnPaymentSuccess(Long applicationId, Long amount) {
+        Application application = findByIdAndValidate(applicationId);
+        application.updateWageStatus(WageStatus.PAYMENT_COMPLETED);
+        application.setEarn(Math.toIntExact(amount));    // 지원서의 earn에 급여 추가
     }
 }

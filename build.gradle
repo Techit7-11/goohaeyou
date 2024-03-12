@@ -23,11 +23,21 @@ repositories {
 
 dependencies {
 
+	// WebSocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 	// JPA & DataBase
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	runtimeOnly 'org.postgresql:postgresql'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'com.h2database:h2'
+
+	// JPA QueryDSL
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
 	// Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -48,10 +58,8 @@ dependencies {
 	// Oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-	// Thymeleaf
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
 	// Thymeleaf and Security
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
 	// Web
@@ -67,11 +75,12 @@ dependencies {
 	// Valid
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	// JPA QueryDSL
-	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+	// Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	//MapStruct
+	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 }
 
 tasks.named('test') {

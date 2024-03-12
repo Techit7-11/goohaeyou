@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.member.member.entity;
 
 import com.ll.gooHaeYu.domain.member.member.dto.SocialProfileForm;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
+import com.ll.gooHaeYu.domain.member.member.entity.type.Level;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -36,9 +37,15 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender = Gender.UNDEFINED;
 
+    @Enumerated(EnumType.STRING)
+    private Level level = Level.LV1;
+
+    private int transactionCount = 0;
     private String location;
 
     private LocalDate birth;  // yyyy-MM-dd
+
+    private long restCash;
 
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {
@@ -73,4 +80,18 @@ public class Member extends BaseTimeEntity {
 
         return this;
     }
+
+    public void updateRestCash(long cash) {
+        this.restCash = cash;
+    }
+
+    public void increaseTransactionCount() {
+        this.transactionCount += 1;
+        updateLevel(this.transactionCount);
+    }
+
+    public void updateLevel(int transactionCount) {
+        this.level = Level.getLevelByTransactionCount(transactionCount);
+    }
+
 }

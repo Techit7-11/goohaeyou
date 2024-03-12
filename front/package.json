@@ -21,6 +21,7 @@
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/eslint": "8.56.0",
+		"@types/sockjs-client": "^1.5.4",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "^10.4.17",
@@ -42,8 +43,14 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@tosspayments/payment-widget-sdk": "^0.10.2",
+		"@stomp/stompjs": "^7.0.0",
 		"date-fns": "^3.3.1",
 		"openapi-fetch": "^0.8.2",
-		"sweetalert2": "^11.10.5"
+		"socket.io-client": "^4.7.4",
+		"sockjs-client": "^1.6.1",
+		"stompjs": "^2.3.3",
+		"sweetalert2": "^11.10.5",
+		"ws": "^8.16.0"
 	}
 }

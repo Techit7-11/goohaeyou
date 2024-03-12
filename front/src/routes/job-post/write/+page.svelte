@@ -9,7 +9,11 @@
 		minAge: '',
 		gender: 'UNDEFINED',
 		location: '',
-		deadLine: ''
+		deadLine: '',
+		wageType: '',
+		workTime: '',
+		cost: 0,
+		deposit: 0
 	};
 
 	onMount(async () => {
@@ -29,6 +33,14 @@
 
 	// 글 작성 버튼을 클릭하면 실행될 함수
 	async function writeJobPost() {
+		if (newJobPostData.payBasis === '') {
+			rq.msgError('급여 지급 기준을 선택해주세요.');
+			return;
+		}
+		if (newJobPostData.wagePaymentMethod === '') {
+			rq.msgError('급여 지금 방법 선택은 필수입니다.');
+			return;
+		}
 		const response = await rq.apiEndPoints().POST('/api/job-posts', { body: newJobPostData });
 
 		if (response.data?.statusCode === 200) {
@@ -82,7 +94,7 @@
 					<div class="form-group flex-1">
 						<label class="label" for="minAge">최소 나이</label>
 						<input
-							type="text"
+							type="number"
 							id="minAge"
 							class="input input-bordered w-full"
 							placeholder="나이를 입력해주세요."
@@ -139,6 +151,52 @@
 						bind:value={newJobPostData.body}
 						placeholder="내용을 입력해주세요."
 					></textarea>
+				</div>
+				<div class="divider mt-10"></div>
+				<div class="form-group">
+					<label class="label" for="payBasis">* 급여 지급 기준</label>
+					<select
+						class="input input-bordered w-full"
+						id="payBasis"
+						bind:value={newJobPostData.payBasis}
+					>
+						<option value="" disabled selected>- 선택하세요 -</option>
+						<option value="TOTAL_HOURS">총 시간</option>
+						<option value="TOTAL_DAYS">총 일수</option>
+						<option value="TOTAL_PROJECTS">총 건수</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label class="label" for="workTime">* 도움시간 또는 도움일수</label>
+					<input
+						type="text"
+						id="workTime"
+						class="input input-bordered w-full"
+						placeholder="예시) 2시간, 3일, 또는 협의"
+						bind:value={newJobPostData.workTime}
+					/>
+				</div>
+				<div class="form-group">
+					<label class="label" for="cost">* 급여</label>
+					<input
+						type="number"
+						id="cost"
+						class="input input-bordered w-full"
+						min="0"
+						bind:value={newJobPostData.cost}
+					/>
+				</div>
+				<div class="form-group">
+					<label class="label" for="wagePaymentMethod">* 급여 지급 방법</label>
+					<select
+						class="input input-bordered w-full"
+						id="wagePaymentMethod"
+						bind:value={newJobPostData.wagePaymentMethod}
+					>
+						<option value="" disabled selected>- 선택하세요 -</option>
+						<option value="SERVICE_PAYMENT">서비스 결제</option>
+						<option value="INDIVIDUAL_PAYMENT">개인 지급</option>
+					</select>
 				</div>
 				<div class="form-group">
 					<button class="w-full btn btn-primary my-3" type="submit">글 작성</button>

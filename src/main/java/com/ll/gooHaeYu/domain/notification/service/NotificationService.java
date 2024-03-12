@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.notification.service;
 
 import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.chat.room.service.RoomService;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
@@ -16,6 +17,7 @@ import com.ll.gooHaeYu.global.event.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +37,10 @@ import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final MemberService memberService;
+    private final RoomService roomService;
 
     @Transactional
     public void notifyApplicantsAboutPost(ChangeOfPostEvent event) {
-        log.debug("이벤트 로직 실행");
         JobPost jobPost = event.getJobPost();
         Application application = event.getApplication();
         String url = "/job-post/"+jobPost.getId();
@@ -47,7 +49,6 @@ public class NotificationService {
 
     @Transactional
     public void deleteApplicationNotification(ChangeOfPostEvent event) {
-        log.debug("이벤트 로직 실행");
         JobPost jobPost = event.getJobPost();
         Application application = event.getApplication();
         String url = "/job-post/"+jobPost.getId();
@@ -56,7 +57,6 @@ public class NotificationService {
 
     @Transactional
     public void postDeletedNotification(PostDeletedEvent event) {
-        log.debug("이벤트 로직 실행");
         JobPost jobPost = event.getJobPost();
         Member fromMember = event.getMember();
         String url = "/";
@@ -97,6 +97,22 @@ public class NotificationService {
         makeNotification(jobPost.getMember(),jobPost.getMember(), jobPost.getTitle(),POST_DEADLINE,APPROVE,url);
     }
 
+//    @Transactional
+//    public void notifyAboutChatRoom(CreateChatRoomEvent event) {
+//        log.info("알림 생성 중");
+//        Member member1 = memberService.findById(event.getMemberId1());
+//
+//        Member member2Proxy = memberService.findById(event.getMemberId2());
+//        Hibernate.initialize(member2Proxy); // 프록시 초기화
+//        Member member2 = member2Proxy;
+//
+//        Long roomId = roomService.findByUsername1AndUsername2(member1.getUsername(), member2.getUsername());
+//
+//        String url = "/chat/"+roomId;
+//        makeNotification(member1,member2," ",CHATROOM_CREATED,NOTICE, url);
+//        log.info("알림 생성 완료");
+//    }
+
     private void makeNotification(Member toMember, Member fromMember, String jobPostTitle, CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {
         Notification notification = Notification.builder()
                 .createAt(LocalDateTime.now())
@@ -110,7 +126,6 @@ public class NotificationService {
                 .build();
 
         notificationRepository.save(notification);
-        log.debug("알림 생성");
     }
 
     public List<NotificationDto> getList(String username) {

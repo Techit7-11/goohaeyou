@@ -1,7 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.standard.base.util.Ut;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.domain.Page;
@@ -14,7 +13,6 @@ import java.util.List;
 @SuperBuilder
 @Getter
 public class JobPostDto extends AbstractJobPostDto{
-    private boolean isClosed;
 
     public static JobPostDto fromEntity(JobPost jobPost) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
@@ -22,7 +20,7 @@ public class JobPostDto extends AbstractJobPostDto{
                 .id(jobPost.getId())
                 .author(jobPost.getMember().getUsername())
                 .title(jobPost.getTitle())
-                .location(Ut.addr.simplifyLocation(jobPost.getLocation()))
+                .location(jobPost.getLocation())
                 .commentsCount(jobPost.getCommentsCount())
                 .incrementViewCount(jobPost.getIncrementViewCount())
                 .interestsCount(jobPost.getInterestsCount())
