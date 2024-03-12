@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.employ.service;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
-import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
+import com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -27,7 +27,7 @@ public class WorkCompletionService {
 
         checkPermissions(username, jobPost);
 
-        application.updateDepositStatus(DepositStatus.SETTLEMENT_REQUESTED);
+        application.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
         application.changeToCompleted();
     }
 

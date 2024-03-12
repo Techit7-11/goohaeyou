@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.payment.payment.service;
 
-import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
+import com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.domain.payment.cashLog.entity.CashLog;
@@ -66,7 +66,7 @@ public class PaymentService {
         PaymentSuccessDto successDto = requestPaymentAccept(paymentKey, orderId, amount);
 
         updatePayment(payment, successDto);
-        applicationService.updateDepositStatus(payment.getApplicationId(), DepositStatus.DEPOSIT_PAID);
+        applicationService.updateWageStatus(payment.getApplicationId(), WageStatus.PAYMENT_COMPLETED);
 
         addCashLogOnSuccess(successDto, payment);
 

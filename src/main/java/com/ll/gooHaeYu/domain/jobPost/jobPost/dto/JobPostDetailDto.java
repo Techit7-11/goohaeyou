@@ -22,7 +22,6 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     private Gender gender;
     private String modifiedAt;
     private List<String> interestedUsernames;
-    private int deposit;
     private String workTime;
     private int cost;
     private PayBasis payBasis;
@@ -54,7 +53,6 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .cost(wage.getCost())
                 .payBasis(wage.getPayBasis())
                 .workTime(wage.getWorkTime())
-                .deposit(jobPostDetail.getDeposit())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .modifiedAt(mostRecentModifiedDate.format(formatter))
                 .build();

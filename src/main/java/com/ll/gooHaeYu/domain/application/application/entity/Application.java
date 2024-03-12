@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.application.application.entity;
 
-import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
+import com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
@@ -33,7 +33,7 @@ public class Application extends BaseTimeEntity {
     private String body;
 
     @Enumerated(EnumType.STRING)
-    private DepositStatus depositStatus = DepositStatus.UNDEFINED;
+    private WageStatus wageStatus = WageStatus.UNDEFINED;
 
     private int earn = 0;
 
@@ -55,9 +55,9 @@ public class Application extends BaseTimeEntity {
         this.approve = false;
     }
 
-    public void updateDepositStatus(DepositStatus newStatus) {
+    public void updateWageStatus(WageStatus newStatus) {
         if (newStatus != null) {
-            this.depositStatus = newStatus;
+            this.wageStatus = newStatus;
         }
     }
 

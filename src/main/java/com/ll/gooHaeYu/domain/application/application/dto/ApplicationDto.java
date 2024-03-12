@@ -22,8 +22,6 @@ public class ApplicationDto {
     private Long jobPostId;
     @NotBlank
     private String jobPostName;
-    @NotNull
-    private int deposit;
     @NotBlank
     private String author;
     @NotBlank
@@ -37,7 +35,7 @@ public class ApplicationDto {
     @NotBlank
     private String location;
     @NotBlank
-    private String depositStatus;
+    private String wageStatus;
 
     private LocalDateTime createdAt;
     private Boolean approve;
@@ -48,7 +46,6 @@ public class ApplicationDto {
                 .jobPostId(application.getJobPostDetail().getJobPost().getId())
                 .jobPostAuthorUsername(application.getJobPostDetail().getAuthor())
                 .jobPostName(application.getJobPostDetail().getJobPost().getTitle())
-                .deposit(application.getJobPostDetail().getDeposit())
                 .author(application.getMember().getUsername())
                 .body(application.getBody())
                 .name(application.getMember().getName())
@@ -57,7 +54,7 @@ public class ApplicationDto {
                 .location(application.getMember().getLocation())
                 .createdAt(application.getCreatedAt())
                 .approve(application.getApprove())
-                .depositStatus(application.getDepositStatus().getDescription())
+                .wageStatus(application.getWageStatus().getDescription())
                 .build();
     }
 
