@@ -95,8 +95,14 @@
 												<p>지원 내용</p>
 												<p>지원일</p>
 												<p>승인여부</p>
-												{#if application.approve === true && application.jobPostAuthorUsername === rq.member.username}
-													<p>급여 결제 상태</p>
+												{#if application.approve === true && (application.jobPostAuthorUsername === rq.member.username || application.author === rq.member.username)}
+													<p>
+														{#if application.wagePaymentMethod === '개인 지급'}
+															진행 상태
+														{:else if application.wagePaymentMethod === '서비스 결제'}
+															급여 현황
+														{/if}
+													</p>
 												{/if}
 											</div>
 											<div class="flex-grow text-left">
@@ -114,8 +120,12 @@
 													{/if}
 												</p>
 												<p>
-													{#if application.approve === true && application.jobPostAuthorUsername === rq.member.username}
-														<span class="text-sm text-gray-600">{application.wageStatus}</span>
+													{#if application.approve === true && (application.jobPostAuthorUsername === rq.member.username || application.author === rq.member.username)}
+														{#if application.wagePaymentMethod === '개인 지급'}
+															<span class="text-sm text-gray-600">{application.wageStatus}</span>
+														{:else if application.wagePaymentMethod === '서비스 결제'}
+															<span class="text-sm text-gray-600">{application.wageStatus}</span>
+														{/if}
 													{/if}
 												</p>
 											</div>
