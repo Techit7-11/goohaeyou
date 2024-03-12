@@ -10,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ll.gooHaeYu.global.exception.ErrorCode.BAD_REQUEST;
-import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class WorkCompletionService {
 
         checkPermissions(username, jobPost);
 
-        application.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
+        updateApplicationStatus(application);
         application.changeToCompleted();
     }
 
@@ -39,4 +38,18 @@ public class WorkCompletionService {
             throw new CustomException(BAD_REQUEST);
         }
     }
+
+    private void updateApplicationStatus(Application application) {
+        switch (application.getWageStatus()) {
+            case PAYMENT_COMPLETED:
+                application.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
+                break;
+            case APPLICATION_APPROVED:
+                application.updateWageStatus(WageStatus.WAGE_PAID);
+                break;
+            default:
+                throw new CustomException(COMPLETION_NOT_POSSIBLE);
+        }
+    }
+
 }

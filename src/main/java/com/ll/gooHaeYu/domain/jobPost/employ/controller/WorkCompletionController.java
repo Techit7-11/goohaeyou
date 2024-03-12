@@ -6,9 +6,11 @@ import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Tag(name = "WorkCompletion", description = "알바완료 처리 API")
 @RestController
 @RequiredArgsConstructor

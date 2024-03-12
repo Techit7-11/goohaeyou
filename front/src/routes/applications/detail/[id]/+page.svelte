@@ -39,7 +39,6 @@
 			.PATCH(`/api/jobs/complete/${applicationId}/manually`, {});
 
 		if (response.data?.statusCode === 204) {
-			rq.msgInfo('예치금 정산이 진행됩니다.');
 			location.reload();
 		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
 			const customErrorMessage = response.data?.data?.message;

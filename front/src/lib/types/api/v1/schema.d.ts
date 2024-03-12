@@ -477,6 +477,9 @@ export interface components {
       phone: string;
       location: string;
       wageStatus: string;
+      wagePaymentMethod: string;
+      /** Format: int32 */
+      wages: number;
       /** Format: date-time */
       createdAt?: string;
       approve?: boolean;
@@ -518,6 +521,8 @@ export interface components {
       cost?: number;
       /** @enum {string} */
       payBasis?: "UNDEFINED" | "TOTAL_HOURS" | "TOTAL_DAYS" | "TOTAL_PROJECTS";
+      /** @enum {string} */
+      wagePaymentMethod?: "UNDEFINED" | "INDIVIDUAL_PAYMENT" | "SERVICE_PAYMENT";
       closed?: boolean;
     };
     RsDataJobPostDetailDto: {
