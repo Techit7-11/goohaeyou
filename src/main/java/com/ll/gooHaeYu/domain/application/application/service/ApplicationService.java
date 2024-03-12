@@ -38,18 +38,10 @@ public class ApplicationService {
     @Transactional
     public Long writeApplication(String username, Long id, ApplicationForm.Register form) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(id);
-
         Member member = memberService.getMember(username);
-
         canWrite(postDetail, member);
 
-        Application newApplication = Application.builder()
-                .member(member)
-                .jobPostDetail(postDetail)
-                .body(form.getBody())
-                .approve(null)
-                .wageStatus(WageStatus.UNDEFINED)
-                .build();
+        Application newApplication = createNewApplication(member, postDetail, form);
 
         postDetail.getApplications().add(newApplication);
         postDetail.getJobPost().increaseApplicationsCount();
@@ -58,6 +50,16 @@ public class ApplicationService {
         publisher.publishEvent(new ApplicationCreateAndChangedEvent(this, postDetail, newApplication, APPLICATION_CREATED));
 
         return newApplication.getId();
+    }
+
+    private Application createNewApplication(Member member, JobPostDetail postDetail, ApplicationForm.Register form) {
+        return Application.builder()
+                .member(member)
+                .jobPostDetail(postDetail)
+                .body(form.getBody())
+                .approve(null)
+                .wageStatus(WageStatus.UNDEFINED)
+                .build();
     }
 
     public ApplicationDto findById(Long id) {
@@ -90,13 +92,13 @@ public class ApplicationService {
     public void deleteApplication(String username, Long id) {
         Application application = findByIdAndValidate(id);
 
-        canEditApplication(username, application);
+        canDelete(username, application);
 
         application.getJobPostDetail().getJobPost().decreaseApplicationsCount();
         applicationRepository.deleteById(id);
     }
 
-    public boolean canEditApplication(String username, Application application) {
+    public boolean canDelete(String username, Application application) {
         if (application.getApprove()) {
             throw new CustomException(NOT_ABLE);
         }
@@ -137,10 +139,5 @@ public class ApplicationService {
                 throw new CustomException(ErrorCode.DUPLICATE_SUBMISSION);
             }
         }
-    }
-
-    public void updateWageStatus(Long applicationId, WageStatus status) {
-        Application application = findByIdAndValidate(applicationId);
-        application.updateWageStatus(status);
     }
 }
