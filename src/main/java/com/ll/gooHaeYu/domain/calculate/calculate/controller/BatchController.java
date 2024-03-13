@@ -18,6 +18,7 @@ public class BatchController {
     private final JobLauncher jobLauncher;
 
     @PostMapping("/batch")
+    // 개발과정에서 확인을 위해 작성
     public ResponseEntity<String> runBatch() {
         try {
             JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();

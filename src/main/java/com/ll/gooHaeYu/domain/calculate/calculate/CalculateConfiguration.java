@@ -1,6 +1,9 @@
 package com.ll.gooHaeYu.domain.calculate.calculate;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.calculate.calculate.itemProcessor.ApplicationProcessor;
+import com.ll.gooHaeYu.domain.calculate.calculate.itemReader.ApplicationReader;
+import com.ll.gooHaeYu.domain.calculate.calculate.itemWriter.ApplicationWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

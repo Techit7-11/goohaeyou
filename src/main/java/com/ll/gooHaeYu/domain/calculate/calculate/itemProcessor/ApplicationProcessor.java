@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.domain.calculate.calculate;
+package com.ll.gooHaeYu.domain.calculate.calculate.itemProcessor;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.Wage;
