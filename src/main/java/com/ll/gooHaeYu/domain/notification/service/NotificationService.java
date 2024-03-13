@@ -1,11 +1,9 @@
 package com.ll.gooHaeYu.domain.notification.service;
 
-import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.chat.room.service.RoomService;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.domain.notification.dto.NotificationDto;
@@ -13,12 +11,10 @@ import com.ll.gooHaeYu.domain.notification.entity.Notification;
 import com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode;
 import com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode;
 import com.ll.gooHaeYu.domain.notification.repository.NotificationRepository;
-import com.ll.gooHaeYu.global.event.*;
+import com.ll.gooHaeYu.global.event.notification.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +24,6 @@ import java.util.List;
 import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.*;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.*;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.NOTIFICATION_NOT_EXIST;
-import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor

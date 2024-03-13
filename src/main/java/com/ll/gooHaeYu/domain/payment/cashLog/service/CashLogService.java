@@ -1,21 +1,32 @@
 package com.ll.gooHaeYu.domain.payment.cashLog.service;
 
+import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
+import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.member.member.entity.Member;
+import com.ll.gooHaeYu.domain.payment.cashLog.dto.CashLogDto;
 import com.ll.gooHaeYu.domain.payment.cashLog.entity.CashLog;
+import com.ll.gooHaeYu.domain.payment.cashLog.entity.type.EventType;
 import com.ll.gooHaeYu.domain.payment.cashLog.repository.CashLogRepository;
+import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
+import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
 import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayStatus;
 import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayTypeFee;
+import com.ll.gooHaeYu.global.event.cashLog.CashLogEvent;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.NO_ENUM_CONSTANT_FOUND;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class CashLogService {
     private final CashLogRepository cashLogRepository;
 
@@ -54,5 +65,31 @@ public class CashLogService {
     @Transactional
     public void addCashLog(CashLog cashLog) {
         cashLogRepository.save(cashLog);
+    }
+
+    public CashLogDto findByApplicationId(Long id) {
+        CashLog cashLog = findByApplicationIdAndValidate(id);
+
+        return CashLogDto.fromEntity(cashLog);
+    }
+
+    public CashLog findByApplicationIdAndValidate(Long id) {
+        return cashLogRepository.findByApplicationId(id)
+                .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
+    }
+
+    public void createCashLog(Application application) {
+        long earn = application.getEarn();
+        System.out.println("-----------------------------");
+        CashLog newCashLog =  CashLog.builder()
+                .member(application.getMember())
+                .description("지원서_1_대금_결제")
+                .eventType(EventType.대금_이전)
+                .totalAmount(earn)
+                .vat(getVat(earn))
+                .paymentFee(getPaymentFee(PayStatus.EASY_PAY,earn))
+                .netAmount(getNetAmount(PayStatus.EASY_PAY,earn))
+                .build();
+     cashLogRepository.save(newCashLog);
     }
 }

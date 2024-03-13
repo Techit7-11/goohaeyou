@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.global.event;
+package com.ll.gooHaeYu.global.event.notification;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;

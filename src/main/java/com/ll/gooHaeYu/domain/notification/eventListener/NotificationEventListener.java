@@ -1,17 +1,13 @@
 package com.ll.gooHaeYu.domain.notification.eventListener;
 
-import com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode;
 import com.ll.gooHaeYu.domain.notification.service.NotificationService;
-import com.ll.gooHaeYu.global.event.*;
+import com.ll.gooHaeYu.global.event.notification.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.APPLICATION_APPROVED;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.*;
 
 @Component

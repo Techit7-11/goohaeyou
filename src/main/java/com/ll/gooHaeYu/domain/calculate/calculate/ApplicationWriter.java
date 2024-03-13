@@ -15,11 +15,9 @@ public class ApplicationWriter implements ItemWriter<Application> {
     private EntityManager entityManager;
 
     @Override
-
     public void write(Chunk<? extends Application> items) throws Exception {
         for (Application application : items) {
-            System.out.println("------WRITER------");
-            entityManager.merge(application); // 엔티티 저장
+            entityManager.merge(application);
         }
     }
 }
