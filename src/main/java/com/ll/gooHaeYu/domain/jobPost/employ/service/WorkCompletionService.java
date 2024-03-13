@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.employ.service;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
-import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
+import com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
@@ -10,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ll.gooHaeYu.global.exception.ErrorCode.BAD_REQUEST;
-import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class WorkCompletionService {
 
         checkPermissions(username, jobPost);
 
-        application.updateDepositStatus(DepositStatus.SETTLEMENT_REQUESTED);
+        updateApplicationStatus(application);
         application.changeToCompleted();
     }
 
@@ -39,4 +38,16 @@ public class WorkCompletionService {
             throw new CustomException(BAD_REQUEST);
         }
     }
+
+    private void updateApplicationStatus(Application application) {
+        switch (application.getWageStatus()) {
+            case PAYMENT_COMPLETED -> application.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
+            case APPLICATION_APPROVED -> {
+                application.updateWageStatus(WageStatus.WAGE_PAID);
+                application.setReceive(true);
+            }
+            default -> throw new CustomException(COMPLETION_NOT_POSSIBLE);
+        }
+    }
+
 }

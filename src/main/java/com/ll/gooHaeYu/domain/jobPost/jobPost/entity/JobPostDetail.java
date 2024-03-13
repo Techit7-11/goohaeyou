@@ -34,8 +34,6 @@ public class JobPostDetail extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String body;
 
-    private int deposit;
-
     @OneToOne(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     private Essential essential;
 
@@ -58,10 +56,9 @@ public class JobPostDetail extends BaseTimeEntity {
     @Builder.Default
     private List<Interest> interests = new ArrayList<>();
 
-    public void updatePostDetail(String body, int deposit) {
+    public void updatePostDetail(String body) {
         if (body != null && !body.isBlank()) {
             this.body = body;
         }
-        this.deposit = deposit;
     }
 }

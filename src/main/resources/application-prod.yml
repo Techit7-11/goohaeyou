@@ -34,16 +34,16 @@ spring:
     exclude:
 logging:
   level:
-    com.ll.gooHaeYu: INFO
-    org.hibernate.SQL: INFO
-    org.hibernate.orm.jdbc.bind: INFO
-    org.hibernate.orm.jdbc.extract: INFO
-    org.springframework.transaction.interceptor: INFO
+    com.ll.gooHaeYu: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: DEBUG
+    org.hibernate.orm.jdbc.extract: DEBUG
+    org.springframework.transaction.interceptor: DEBUG
 custom:
   site:
     cookieDomain: "${custom.prod.cookieDomain}"
     frontUrl: "${custom.prod.frontUrl}"
     backUrl: "${custom.prod.backUrl}"
 tossPayments:
-  successUrl: "https://goohaeyou.site/payment/success"
-  failUrl: "https://goohaeyou.site/payment/fail"
+  successUrl: "https://www.goohaeyou.site/payment/success"
+  failUrl: "https://www.goohaeyou.site/payment/fail"

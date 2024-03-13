@@ -58,7 +58,9 @@ public enum ErrorCode {
 
     MESSAGE_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 메세지는 존재하지 않습니다."),
 
-    BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+
+    COMPLETION_NOT_POSSIBLE(HttpStatus.BAD_REQUEST, "현재 상태 에서는 완료 처리가 불가능 합니다.");
 
 
     private final HttpStatus status;

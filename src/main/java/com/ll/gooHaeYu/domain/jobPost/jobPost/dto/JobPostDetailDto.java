@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.*;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.PayBasis;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.WagePaymentMethod;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.validation.constraints.NotNull;
@@ -22,10 +23,10 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     private Gender gender;
     private String modifiedAt;
     private List<String> interestedUsernames;
-    private int deposit;
     private String workTime;
     private int cost;
     private PayBasis payBasis;
+    private WagePaymentMethod wagePaymentMethod;
 
     public static JobPostDetailDto fromEntity(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential, Wage wage) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
@@ -54,7 +55,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .cost(wage.getCost())
                 .payBasis(wage.getPayBasis())
                 .workTime(wage.getWorkTime())
-                .deposit(jobPostDetail.getDeposit())
+                .wagePaymentMethod(wage.getWagePaymentMethod())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .modifiedAt(mostRecentModifiedDate.format(formatter))
                 .build();

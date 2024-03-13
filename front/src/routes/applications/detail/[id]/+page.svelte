@@ -39,7 +39,6 @@
 			.PATCH(`/api/jobs/complete/${applicationId}/manually`, {});
 
 		if (response.data?.statusCode === 204) {
-			rq.msgInfo('예치금 정산이 진행됩니다.');
 			location.reload();
 		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
 			const customErrorMessage = response.data?.data?.message;
@@ -75,8 +74,8 @@
 		rq.goTo(`/applications/modify/${applicationId}`);
 	}
 
-	function goToPaymentPage(applicationId: number, deposit: number) {
-		rq.goTo(`/payment/pay/${$page.params.id}/${deposit}`);
+	function goToPaymentPage(applicationId: number, wages: number) {
+		rq.goTo(`/payment/pay/${$page.params.id}/${wages}`);
 	}
 </script>
 
@@ -169,7 +168,7 @@
 							{/if}
 						</div>
 					{/if}
-					{#if rq.member.username == application.jobPostAuthorUsername && application.depositStatus == '예치금 결제 완료'}
+					{#if rq.member.username == application.jobPostAuthorUsername && (application.wageStatus == '지원서 승인' || application.wageStatus == '급여 결제 완료')}
 						<div class="text-center mt-2 flex justify-center items-center space-x-2">
 							<button
 								class="btn btn-active btn-primary btn-sm"
@@ -180,17 +179,17 @@
 				</div>
 			</div>
 
-			{#if application.jobPostAuthorUsername == rq.member.username && application.approve}
+			{#if application.jobPostAuthorUsername == rq.member.username && application.approve == true}
 				<div class="flex justify-center">
-					{#if application.depositStatus == '예치금 결제 전'}
+					{#if application.wageStatus == '급여 결제 전'}
 						<button
 							class="btn btn-btn btn-sm mx-12 mt-6"
-							on:click={() => goToPaymentPage(application.id, application.deposit)}
-							>예치금 결제하기</button
+							on:click={() => goToPaymentPage(application.id, application.wages)}
+							>급여 결제하기</button
 						>
 					{:else}
 						<button class="btn btn-disabled btn-sm mx-12 mt-6" disabled
-							>{application.depositStatus}</button
+							>{application.wageStatus}</button
 						>
 					{/if}
 				</div>

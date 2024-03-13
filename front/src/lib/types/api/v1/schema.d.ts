@@ -472,8 +472,6 @@ export interface components {
       /** Format: int64 */
       jobPostId: number;
       jobPostName: string;
-      /** Format: int32 */
-      deposit: number;
       author: string;
       body: string;
       name: string;
@@ -481,7 +479,10 @@ export interface components {
       birth: string;
       phone: string;
       location: string;
-      depositStatus: string;
+      wageStatus: string;
+      wagePaymentMethod: string;
+      /** Format: int32 */
+      wages: number;
       /** Format: date-time */
       createdAt?: string;
       approve?: boolean;
@@ -518,13 +519,13 @@ export interface components {
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
       modifiedAt?: string;
       interestedUsernames?: string[];
-      /** Format: int32 */
-      deposit?: number;
       workTime?: string;
       /** Format: int32 */
       cost?: number;
       /** @enum {string} */
       payBasis?: "UNDEFINED" | "TOTAL_HOURS" | "TOTAL_DAYS" | "TOTAL_PROJECTS";
+      /** @enum {string} */
+      wagePaymentMethod?: "UNDEFINED" | "INDIVIDUAL_PAYMENT" | "SERVICE_PAYMENT";
       closed?: boolean;
     };
     RsDataJobPostDetailDto: {

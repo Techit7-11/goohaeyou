@@ -40,7 +40,7 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Level level = Level.LV1;
 
-    private Integer transactionCount = 0;
+    private int transactionCount = 0;
     private String location;
 
     private LocalDate birth;  // yyyy-MM-dd
