@@ -7,6 +7,8 @@ import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,6 +43,8 @@ public class Application extends BaseTimeEntity {
 
     private Boolean jobCompleted = null;
 
+    private LocalDate jobStartDate;
+
     public void updateBody(String body) {
         if (body != null && !body.isBlank()) {
             this.body = body;
@@ -61,6 +65,7 @@ public class Application extends BaseTimeEntity {
         }
     }
 
+
     public void changeToCompleted() {
         this.jobCompleted = true;
     }
@@ -71,5 +76,9 @@ public class Application extends BaseTimeEntity {
 
     public void setReceive(boolean receive) {
         this.receive = receive;
+    }
+
+    public void setJobStartDate(LocalDate jobStartDate) {
+        this.jobStartDate = jobStartDate;
     }
 }
