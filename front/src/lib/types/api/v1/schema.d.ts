@@ -413,7 +413,7 @@ export interface components {
       fromMember?: string;
       relPostTitle?: string;
       /** @enum {string} */
-      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE" | "CHATROOM_CREATED";
+      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE" | "CHATROOM_CREATED" | "CALCULATE_PAYMENT";
       /** @enum {string} */
       resultTypeCode?: "NOTICE" | "DELETE" | "APPROVE";
       seen?: boolean;

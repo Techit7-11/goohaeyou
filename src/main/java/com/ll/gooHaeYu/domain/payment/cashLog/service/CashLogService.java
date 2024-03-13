@@ -80,7 +80,6 @@ public class CashLogService {
 
     public void createCashLog(Application application) {
         long earn = application.getEarn();
-        System.out.println("-----------------------------");
         CashLog newCashLog =  CashLog.builder()
                 .member(application.getMember())
                 .description("지원서_1_대금_결제")

@@ -67,4 +67,10 @@ public class NotificationEventListener {
 //
 //        notificationService.notifyAboutChatRoom(event);
 //    }
+
+    @EventListener
+    public void calculateEventListen(CalculateNotificationEvent event) {
+        log.debug("정산 완료시 지원자에게 알림");
+        notificationService.calculateNotificationEventListen(event.getApplication());
+    }
 }

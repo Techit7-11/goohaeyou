@@ -8,14 +8,15 @@ import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.payment.cashLog.entity.CashLog;
 import com.ll.gooHaeYu.domain.payment.cashLog.service.CashLogService;
 import com.ll.gooHaeYu.global.event.cashLog.CashLogEvent;
-import com.ll.gooHaeYu.global.event.notification.ApplicationCreateAndChangedEvent;
+import com.ll.gooHaeYu.global.event.notification.CalculateNotificationEvent;
+import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.APPLICATION_CREATED;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.AMOUNT_MISMATCH;
 
 @Component
 @RequiredArgsConstructor
@@ -40,11 +41,12 @@ public class ApplicationProcessor implements ItemProcessor<Application, Applicat
 
         if (wage.getCost() == application.getEarn()) {
             member.addRestCash(cost);
+            publisher.publishEvent(new CashLogEvent(this, application));
             application.setEarn(0);
             application.setReceive(true);
             memberRepository.save(member);
-        }
-        publisher.publishEvent(new CashLogEvent(this, application));
+            publisher.publishEvent(new CalculateNotificationEvent(this, application));
+        }else throw new CustomException(AMOUNT_MISMATCH);
         return application;
     }
 }

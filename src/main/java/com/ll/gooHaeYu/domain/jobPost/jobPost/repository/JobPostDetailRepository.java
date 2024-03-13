@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.repository;
 
+import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,6 @@ public interface JobPostDetailRepository extends JpaRepository<JobPostDetail, Lo
     Optional<JobPostDetail> findByJobPostAndAuthor(JobPost post, String author);
 
     List<JobPostDetail> findByInterestsMemberId(Long memberId);
+
+//    Optional<JobPostDetail> findByApplication(Application application);
 }

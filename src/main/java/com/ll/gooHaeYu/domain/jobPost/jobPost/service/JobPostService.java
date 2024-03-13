@@ -333,4 +333,9 @@ public class JobPostService {
         jobPost.update();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
+
+//    public JobPostDetail getJobPostDetailByApplication(Application application) {
+//
+//        return jobPostdetailRepository.findByApplication(application).orElseThrow(() -> new CustomException(POST_NOT_EXIST));
+//    }
 }

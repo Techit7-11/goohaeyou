@@ -4,6 +4,8 @@ import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.chat.room.service.RoomService;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.domain.notification.dto.NotificationDto;
@@ -33,6 +35,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final MemberService memberService;
     private final RoomService roomService;
+    private final JobPostService jobPostService;
 
     @Transactional
     public void notifyApplicantsAboutPost(ChangeOfPostEvent event) {
@@ -90,6 +93,14 @@ public class NotificationService {
         JobPost jobPost = event.getJobPost();
         String url = "/job-post/"+jobPost.getId();
         makeNotification(jobPost.getMember(),jobPost.getMember(), jobPost.getTitle(),POST_DEADLINE,APPROVE,url);
+    }
+
+    @Transactional
+    public void calculateNotificationEventListen(Application application) {
+        Member member = application.getMember();
+        JobPost jobPost = jobPostService.findByIdAndValidate(application.getJobPostDetail().getId());
+        String url = "/applications/detail/"+application.getId();
+        makeNotification(application.getMember(), jobPost.getMember(), jobPost.getTitle(),CALCULATE_PAYMENT, NOTICE, url);
     }
 
 //    @Transactional

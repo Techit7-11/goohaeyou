@@ -39,6 +39,8 @@
 				return '에서 지원서가 승인 되지 않았습니다.';
 			case 'CHATROOM_CREATED':
 				return '새로운 채팅방이 생성되었습니다.';
+			case 'CALCULATE_PAYMENT':
+				return '에 대한 정산이 되었습니다.';
 		}
 	}
 
