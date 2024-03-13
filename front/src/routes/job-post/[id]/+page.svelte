@@ -382,7 +382,7 @@
 									? '여'
 									: '무관'}
 						</div>
-						<div class="text-sm">시작일자 :</div>
+						<div class="text-sm">시작 일자 :</div>
 						<div class="text-xs">{jobPostDetailDto.jobStartDate}</div>
 					</div>
 					<svg
