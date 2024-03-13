@@ -16,7 +16,7 @@ public class ApplicationReader {
     public ItemReader<Application> applicationReader() {
         JpaPagingItemReader<Application> reader = new JpaPagingItemReader<>();
         reader.setEntityManagerFactory(entityManagerFactory);
-        reader.setQueryString("SELECT a FROM Application a WHERE a.receive = false AND a.jobCompleted = true AND a.depositStatus = 'SETTLEMENT_REQUESTED'");
+        reader.setQueryString("SELECT a FROM Application a WHERE a.receive = false AND a.jobCompleted = true AND a.wageStatus = 'SETTLEMENT_REQUESTED'");
         reader.setPageSize(10);
         return reader;
     }

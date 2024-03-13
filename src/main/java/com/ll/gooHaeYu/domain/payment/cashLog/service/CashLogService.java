@@ -84,11 +84,12 @@ public class CashLogService {
         CashLog newCashLog =  CashLog.builder()
                 .member(application.getMember())
                 .description("지원서_1_대금_결제")
-                .eventType(EventType.대금_이전)
+                .eventType(EventType.정산_급여)
                 .totalAmount(earn)
                 .vat(getVat(earn))
                 .paymentFee(getPaymentFee(PayStatus.EASY_PAY,earn))
                 .netAmount(getNetAmount(PayStatus.EASY_PAY,earn))
+                .applicationId(application.getId())
                 .build();
      cashLogRepository.save(newCashLog);
     }
