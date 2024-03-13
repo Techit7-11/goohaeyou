@@ -53,6 +53,9 @@ export interface paths {
     /** 지원서 삭제 */
     delete: operations["deleteApplication"];
   };
+  "/batch": {
+    post: operations["runBatch"];
+  };
   "/api/post-comment/{postId}/comment": {
     /** 댓글 작성 */
     post: operations["write"];
@@ -410,7 +413,7 @@ export interface components {
       fromMember?: string;
       relPostTitle?: string;
       /** @enum {string} */
-      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE" | "CHATROOM_CREATED";
+      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE" | "CHATROOM_CREATED" | "CALCULATE_PAYMENT";
       /** @enum {string} */
       resultTypeCode?: "NOTICE" | "DELETE" | "APPROVE";
       seen?: boolean;
@@ -904,6 +907,16 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
+  runBatch: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": string;
         };
       };
     };

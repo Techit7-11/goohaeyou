@@ -129,6 +129,7 @@ public class PaymentService {
                 .vat(cashLogService.getVat(payment.getTotalAmount()))
                 .paymentFee(cashLogService.getPaymentFee(payStatus, payment.getTotalAmount()))
                 .netAmount(cashLogService.getNetAmount(payStatus, payment.getTotalAmount()))
+                .applicationId(payment.getApplicationId())
                 .build();
 
         cashLogService.addCashLog(cashLog);

@@ -1,6 +1,5 @@
-package com.ll.gooHaeYu.global.event;
+package com.ll.gooHaeYu.global.event.notification;
 
-import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
@@ -9,13 +8,13 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class CommentCreatedEvent extends ApplicationEvent {
+public class PostGetInterestedEvent extends ApplicationEvent {
     private final JobPostDetail jobPostDetail;
-    private final Comment comment;
+    private final Member member;
 
-    public CommentCreatedEvent(Object object, JobPostDetail jobPostDetail, Comment comment) {
+    public PostGetInterestedEvent(Object object, JobPostDetail jobPostDetail, Member member) {
         super(object);
         this.jobPostDetail = jobPostDetail;
-        this.comment = comment;
+        this.member = member;
     }
 }

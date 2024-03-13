@@ -1,11 +1,11 @@
 package com.ll.gooHaeYu.domain.notification.service;
 
-import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.chat.room.service.RoomService;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.domain.notification.dto.NotificationDto;
@@ -13,12 +13,10 @@ import com.ll.gooHaeYu.domain.notification.entity.Notification;
 import com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode;
 import com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode;
 import com.ll.gooHaeYu.domain.notification.repository.NotificationRepository;
-import com.ll.gooHaeYu.global.event.*;
+import com.ll.gooHaeYu.global.event.notification.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +26,6 @@ import java.util.List;
 import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.*;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.*;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.NOTIFICATION_NOT_EXIST;
-import static com.ll.gooHaeYu.global.exception.ErrorCode.POST_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +35,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final MemberService memberService;
     private final RoomService roomService;
+    private final JobPostService jobPostService;
 
     @Transactional
     public void notifyApplicantsAboutPost(ChangeOfPostEvent event) {
@@ -95,6 +93,14 @@ public class NotificationService {
         JobPost jobPost = event.getJobPost();
         String url = "/job-post/"+jobPost.getId();
         makeNotification(jobPost.getMember(),jobPost.getMember(), jobPost.getTitle(),POST_DEADLINE,APPROVE,url);
+    }
+
+    @Transactional
+    public void calculateNotificationEventListen(Application application) {
+        Member member = application.getMember();
+        JobPost jobPost = jobPostService.findByIdAndValidate(application.getJobPostDetail().getId());
+        String url = "/applications/detail/"+application.getId();
+        makeNotification(application.getMember(), jobPost.getMember(), jobPost.getTitle(),CALCULATE_PAYMENT, NOTICE, url);
     }
 
 //    @Transactional

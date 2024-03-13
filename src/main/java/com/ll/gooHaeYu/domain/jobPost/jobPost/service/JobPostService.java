@@ -10,7 +10,7 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.global.event.*;
+import com.ll.gooHaeYu.global.event.notification.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -333,4 +333,9 @@ public class JobPostService {
         jobPost.update();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
+
+//    public JobPostDetail getJobPostDetailByApplication(Application application) {
+//
+//        return jobPostdetailRepository.findByApplication(application).orElseThrow(() -> new CustomException(POST_NOT_EXIST));
+//    }
 }

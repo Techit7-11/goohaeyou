@@ -94,4 +94,7 @@ public class Member extends BaseTimeEntity {
         this.level = Level.getLevelByTransactionCount(transactionCount);
     }
 
+    public void addRestCash(int earn) {
+        this.restCash += earn;
+    }
 }
