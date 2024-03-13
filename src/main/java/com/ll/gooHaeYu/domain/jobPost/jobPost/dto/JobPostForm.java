@@ -35,6 +35,10 @@ public class JobPostForm {
         @FutureOrPresent
         private LocalDate deadLine;
 
+        @NotNull(message = "시작 일자 설정은 필수입니다.")
+        @FutureOrPresent
+        private LocalDate jobStartDate;
+
         @NotBlank(message = "도움시간 또는 도움일수 입력은 필수입니다.")
         private String workTime;
 
@@ -68,6 +72,10 @@ public class JobPostForm {
         @NotNull(message = "마감 기한은 필수입니다.")
         @FutureOrPresent
         private LocalDate deadLine;
+
+        @NotNull(message = "시작 일자 설정은 필수입니다.")
+        @FutureOrPresent
+        private LocalDate jobStartDate;
 
         @NotBlank(message = "도움시간 또는 도움일수 입력은 필수입니다.")
         private String workTime;

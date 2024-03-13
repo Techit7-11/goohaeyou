@@ -30,4 +30,5 @@ public class AbstractJobPostDto {
     private boolean employed;
     private boolean isClosed;
     private LocalDate deadLine;
+    private LocalDate jobStartDate;
 }

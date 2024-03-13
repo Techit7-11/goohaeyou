@@ -456,6 +456,8 @@ export interface components {
       employed: boolean;
       /** Format: date */
       deadLine?: string;
+      /** Format: date */
+      jobStartDate?: string;
       closed?: boolean;
     };
     RsDataListJobPostDto: {
@@ -510,6 +512,8 @@ export interface components {
       employed: boolean;
       /** Format: date */
       deadLine?: string;
+      /** Format: date */
+      jobStartDate?: string;
       body: string;
       /** Format: int64 */
       applicationCount?: number;

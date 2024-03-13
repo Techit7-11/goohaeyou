@@ -49,6 +49,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .gender(essential.getGender())
                 .minAge(essential.getMinAge())
                 .deadLine(jobPost.getDeadline())
+                .jobStartDate(jobPost.getJobStartDate())
                 .isClosed(jobPost.isClosed())
                 .employed(jobPost.isEmployed())
                 .interestedUsernames(interestedUsernames)

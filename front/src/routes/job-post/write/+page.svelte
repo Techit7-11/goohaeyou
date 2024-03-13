@@ -152,7 +152,19 @@
 						placeholder="내용을 입력해주세요."
 					></textarea>
 				</div>
+
+				<div class="form-group">
+					<label class="label" for="jobStartDate">* 시작 일자</label>
+					<input
+						type="date"
+						id="jobStartDate"
+						class="input input-bordered w-full"
+						bind:value={newJobPostData.jobStartDate}
+					/>
+				</div>
+
 				<div class="divider mt-10"></div>
+
 				<div class="form-group">
 					<label class="label" for="payBasis">* 급여 지급 기준</label>
 					<select
