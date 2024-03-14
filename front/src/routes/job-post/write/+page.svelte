@@ -11,9 +11,9 @@
 		location: '',
 		deadLine: '',
 		wageType: '',
-		workTime: '',
-		cost: 0,
-		deposit: 0
+		workTime: '0',
+		workDays: '',
+		cost: 0
 	};
 
 	onMount(async () => {
@@ -33,6 +33,12 @@
 
 	// 글 작성 버튼을 클릭하면 실행될 함수
 	async function writeJobPost() {
+		if (newJobPostData.payBasis === 'TOTAL_HOURS') {
+			newJobPostData.workDays = '1'; // 총 시간 선택 시, 일수 기본값 1로 설정
+		} else if (newJobPostData.payBasis === 'TOTAL_DAYS') {
+			newJobPostData.workTime = '0'; // 총 일수 선택 시, 시간 기본값 0으로 설정
+		}
+
 		if (newJobPostData.payBasis === '') {
 			rq.msgError('급여 지급 기준을 선택해주세요.');
 			return;
@@ -41,6 +47,11 @@
 			rq.msgError('급여 지금 방법 선택은 필수입니다.');
 			return;
 		}
+		if (newJobPostData.payBasis === 'TOTAL_DAYS' && newJobPostData.workDays === '') {
+			rq.msgError('총 일수를 선택해주세요.');
+			return;
+		}
+
 		const response = await rq.apiEndPoints().POST('/api/job-posts', { body: newJobPostData });
 
 		if (response.data?.statusCode === 200) {
@@ -175,19 +186,37 @@
 						<option value="" disabled selected>- 선택하세요 -</option>
 						<option value="TOTAL_HOURS">총 시간</option>
 						<option value="TOTAL_DAYS">총 일수</option>
-						<option value="TOTAL_PROJECTS">총 건수</option>
 					</select>
 				</div>
-				<div class="form-group">
-					<label class="label" for="workTime">* 도움시간 또는 도움일수</label>
-					<input
-						type="text"
-						id="workTime"
-						class="input input-bordered w-full"
-						placeholder="예시) 2시간, 3일, 또는 협의"
-						bind:value={newJobPostData.workTime}
-					/>
-				</div>
+
+				{#if newJobPostData.payBasis === 'TOTAL_HOURS'}
+					<div class="form-group">
+						<label class="label" for="workTime">* 총 시간 (시간 단위)</label>
+						<input
+							type="number"
+							id="workTime"
+							class="input input-bordered w-full"
+							min="1"
+							max="24"
+							placeholder="예: 8"
+							bind:value={newJobPostData.workTime}
+						/>
+					</div>
+				{:else if newJobPostData.payBasis === 'TOTAL_DAYS'}
+					<div class="form-group">
+						<label class="label" for="workDays">* 총 일수</label>
+						<select
+							class="input input-bordered w-full"
+							id="workDays"
+							bind:value={newJobPostData.workDays}
+						>
+							<option value="" disabled selected>- 선택하세요 -</option>
+							{#each Array(7) as _, i}
+								<option value={i + 1}>{i + 1}일</option>
+							{/each}
+						</select>
+					</div>
+				{/if}
 				<div class="form-group">
 					<label class="label" for="cost">* 급여</label>
 					<input

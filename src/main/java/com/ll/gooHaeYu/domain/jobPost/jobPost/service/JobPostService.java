@@ -71,6 +71,7 @@ public class JobPostService {
         Wage wage = Wage.builder()
                 .cost(form.getCost())
                 .workTime(form.getWorkTime())
+                .workDays(form.getWorkDays())
                 .payBasis(form.getPayBasis())
                 .wagePaymentMethod(form.getWagePaymentMethod())
                 .jobPostDetail(postDetail)
