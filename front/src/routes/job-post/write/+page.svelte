@@ -11,9 +11,10 @@
 		location: '',
 		deadLine: '',
 		wageType: '',
-		workTime: '0',
-		workDays: '1',
-		cost: 0
+		workTime: '',
+		workDays: '',
+		cost: '',
+		payBasis: ''
 	};
 
 	onMount(async () => {
@@ -33,16 +34,25 @@
 
 	// 글 작성 버튼을 클릭하면 실행될 함수
 	async function writeJobPost() {
-		if (newJobPostData.payBasis === '') {
-			rq.msgError('급여 지급 기준을 선택해주세요.');
-			return;
-		}
 		if (newJobPostData.wagePaymentMethod === '') {
 			rq.msgError('급여 지금 방법 선택은 필수입니다.');
 			return;
 		}
 		if (newJobPostData.payBasis === 'TOTAL_DAYS' && newJobPostData.workDays === '') {
 			rq.msgError('총 일수를 선택해주세요.');
+			return;
+		}
+		if (newJobPostData.payBasis === 'TOTAL_HOURS' && newJobPostData.workTime === '') {
+			rq.msgError('총 시간을 입력해주세요.');
+			return;
+		}
+
+		if (newJobPostData.payBasis === 'TOTAL_HOURS') {
+			newJobPostData.workDays = '1'; // 총 시간 선택 시, 일수 기본값 1로 설정
+		} else if (newJobPostData.payBasis === 'TOTAL_DAYS') {
+			newJobPostData.workTime = '0'; // 총 일수 선택 시, 시간 기본값 0으로 설정
+		} else {
+			rq.msgError('급여 지급 기준을 선택해주세요.');
 			return;
 		}
 
@@ -171,34 +181,51 @@
 				<div class="divider mt-10"></div>
 
 				<div class="form-group">
-					<label class="label" for="payBasis">* 급여 지급 기준</label>
-					<select
-						class="input input-bordered w-full"
-						id="payBasis"
-						bind:value={newJobPostData.payBasis}
-					>
-						<option value="" disabled selected>- 선택하세요 -</option>
-						<option value="TOTAL_HOURS">총 시간</option>
-						<option value="TOTAL_DAYS">총 일수</option>
-					</select>
+					<span class="label">* 급여 지급 기준</span>
+					<div class="flex items-center justify-start space-x-4">
+						<div class="form-control">
+							<label class="label cursor-pointer flex items-center space-x-2">
+								<input
+									type="radio"
+									value="TOTAL_HOURS"
+									bind:group={newJobPostData.payBasis}
+									name="payBasis"
+									class="radio checked:bg-blue-500"
+								/>
+								<span class="label-text">총 시간</span>
+							</label>
+						</div>
+						<div class="form-control">
+							<label class="label cursor-pointer flex items-center space-x-2">
+								<input
+									type="radio"
+									value="TOTAL_DAYS"
+									bind:group={newJobPostData.payBasis}
+									name="payBasis"
+									class="radio checked:bg-blue-500"
+								/>
+								<span class="label-text">총 일수</span>
+							</label>
+						</div>
+					</div>
 				</div>
 
 				{#if newJobPostData.payBasis === 'TOTAL_HOURS'}
 					<div class="form-group">
-						<label class="label" for="workTime">* 총 시간 (시간 단위)</label>
+						<label class="label" for="workTime">* 총 시간 입력</label>
 						<input
 							type="number"
 							id="workTime"
 							class="input input-bordered w-full"
 							min="1"
 							max="24"
-							placeholder="예: 8"
+							placeholder="예) 3"
 							bind:value={newJobPostData.workTime}
 						/>
 					</div>
 				{:else if newJobPostData.payBasis === 'TOTAL_DAYS'}
 					<div class="form-group">
-						<label class="label" for="workDays">* 총 일수</label>
+						<label class="label" for="workDays">* 총 일수 선택 </label>
 						<select
 							class="input input-bordered w-full"
 							id="workDays"
@@ -218,6 +245,7 @@
 						id="cost"
 						class="input input-bordered w-full"
 						min="0"
+						placeholder="예) 30000"
 						bind:value={newJobPostData.cost}
 					/>
 				</div>
