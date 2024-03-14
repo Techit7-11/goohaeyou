@@ -83,36 +83,22 @@
 	<div class="flex justify-center items-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4 mt-5">
 			<div class="w-full max-w-4xl mx-auto">
-				<div class="card bg-base-100 shadow-xl rounded-lg p-5">
-					<div class="flex items-center mb-4">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="w-6 h-6 mr-2"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-							/>
-						</svg>
-						<h2 class="card-title text-xl font-bold">지원서 상세 정보</h2>
+				<div class="card bg-base-100 shadow-lg rounded-lg p-5">
+					<div class="flex items-center mb-6">
+						<p class="text-2xl font-semibold">지원서 상세</p>
 					</div>
 
 					<div class="bg-white rounded-md mb-4">
-						<div class="px-4 py-2 border-b border-gray-200">
-							<h3 class="text-lg font-semibold mb-2">지원자 정보</h3>
+						<div class="px-1 py-2 border-b border-gray-300">
+							<p class="text-lg font-semibold">지원자 정보</p>
 						</div>
 						<div class="flex">
 							<div class="mx-2 mt-4 flex-grow max-w-40">
-								<p><strong>아이디</strong></p>
-								<p><strong>이름</strong></p>
-								<p><strong>나이</strong></p>
-								<p><strong>연락처</strong></p>
-								<p><strong>주소</strong></p>
+								<p class="text-gray-700">ID</p>
+								<p class="text-gray-700">이름</p>
+								<p class="text-gray-700">나이</p>
+								<p class="text-gray-700">연락처</p>
+								<p class="text-gray-700">주소</p>
 							</div>
 							<div class="mx-2 mt-4">
 								<p>{application.author}</p>
@@ -126,9 +112,9 @@
 					<hr class="border-t border-gray-300 opacity-50" />
 					<div class="flex">
 						<div class="mx-2 mt-4 flex-grow max-w-40">
-							<p><strong>지원서 번호</strong></p>
-							<p><strong>제출일</strong></p>
-							<p><strong>승인 상태</strong></p>
+							<p class="text-gray-700">지원서 번호</p>
+							<p class="text-gray-700">제출일</p>
+							<p class="text-gray-700">승인 상태</p>
 						</div>
 						<div class="mx-2 mt-4">
 							<p>{application.id}</p>
@@ -144,10 +130,15 @@
 							</p>
 						</div>
 					</div>
-					<div class="mx-2 my-2">
-						<strong>작성 내용</strong>
-						<div class="p-3 bg-gray-100 rounded overflow-auto mt-1" style="max-height: 200px;">
-							{application.body}
+					<div class="mx-2 my-6 mt-12">
+						<div class="px-1 py-2 border-b border-gray-300">
+							<p class="text-lg font-semibold">작성 내용</p>
+						</div>
+						<div
+							class="bg-white rounded-md shadow p-3 overflow-auto mt-4"
+							style="max-height: 200px;"
+						>
+							<p>{application.body}</p>
 						</div>
 					</div>
 
@@ -188,9 +179,13 @@
 							>급여 결제하기</button
 						>
 					{:else}
-						<button class="btn btn-disabled btn-sm mx-12 mt-6" disabled
-							>{application.wageStatus}</button
+						<button
+							class="btn btn-sm mx-12 mt-6 cursor-not-allowed"
+							style="background-color: #fafafa; color: #4b5563;"
+							disabled
 						>
+							{application.wageStatus}
+						</button>
 					{/if}
 				</div>
 			{/if}

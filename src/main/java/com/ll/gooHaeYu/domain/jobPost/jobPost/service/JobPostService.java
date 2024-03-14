@@ -53,6 +53,7 @@ public class JobPostService {
                 .title(form.getTitle())
                 .location(form.getLocation())
                 .deadline(form.getDeadLine())
+                .jobStartDate(form.getJobStartDate())
                 .build();
 
         JobPostDetail postDetail = JobPostDetail.builder()
@@ -99,10 +100,11 @@ public class JobPostService {
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
-        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine());
+        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate());
         postDetail.updatePostDetail(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
         postDetail.getWage().updateWageInfo(form.getWorkTime(), form.getCost(), form.getPayBasis());
+
 
 
         // TODO : 삭제 후 알림 날리기

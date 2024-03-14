@@ -60,6 +60,7 @@ public class EmployService {
                 application.approve();
 
                 application.updateWageStatus(updateWageStatus);
+                application.setJobStartDate(jobPost.getJobStartDate());
 
                 increaseApplicantTransactionCount(application);
                 increaseAuthorTransactionCount(jobPost);
