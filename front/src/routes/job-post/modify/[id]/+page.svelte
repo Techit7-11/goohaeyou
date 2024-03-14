@@ -12,9 +12,9 @@
 		deadLine: '',
 		jobStartDate: '',
 		payBasis: '',
-		workTime: '0',
-		workDays: '1',
-		cost: 0
+		workTime: '',
+		workDays: '',
+		cost: ''
 	};
 	let postId;
 
@@ -158,28 +158,33 @@
 				</div>
 
 				<div class="form-group">
-					<label class="label" for="jobStartDate">* 시작 일자</label>
-					<input
-						type="date"
-						id="jobStartDate"
-						class="input input-bordered w-full"
-						bind:value={jobPostData.jobStartDate}
-					/>
-				</div>
-
-				<div class="divider mt-10"></div>
-
-				<div class="form-group">
-					<label class="label" for="payBasis">* 급여 지급 기준</label>
-					<select
-						class="input input-bordered w-full"
-						id="payBasis"
-						bind:value={jobPostData.payBasis}
-					>
-						<option value="" disabled selected>- 선택하세요 -</option>
-						<option value="TOTAL_HOURS">총 시간</option>
-						<option value="TOTAL_DAYS">총 일수</option>
-					</select>
+					<span class="label">* 급여 지급 기준</span>
+					<div class="flex items-center justify-start space-x-4">
+						<div class="form-control">
+							<label class="label cursor-pointer flex items-center space-x-2">
+								<input
+									type="radio"
+									value="TOTAL_HOURS"
+									bind:group={jobPostData.payBasis}
+									name="payBasis"
+									class="radio checked:bg-blue-500"
+								/>
+								<span class="label-text">총 시간</span>
+							</label>
+						</div>
+						<div class="form-control">
+							<label class="label cursor-pointer flex items-center space-x-2">
+								<input
+									type="radio"
+									value="TOTAL_DAYS"
+									bind:group={jobPostData.payBasis}
+									name="payBasis"
+									class="radio checked:bg-blue-500"
+								/>
+								<span class="label-text">총 일수</span>
+							</label>
+						</div>
+					</div>
 				</div>
 
 				{#if jobPostData.payBasis === 'TOTAL_HOURS'}
@@ -191,7 +196,7 @@
 							class="input input-bordered w-full"
 							min="1"
 							max="24"
-							placeholder="예: 8"
+							placeholder="예) 3"
 							bind:value={jobPostData.workTime}
 						/>
 					</div>
