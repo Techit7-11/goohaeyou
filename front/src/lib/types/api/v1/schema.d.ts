@@ -246,6 +246,8 @@ export interface components {
       location: string;
       /** Format: date */
       birth: string;
+      /** Format: binary */
+      image?: string;
     };
     ApiResponseMemberDto: {
       /** Format: int32 */
@@ -825,9 +827,9 @@ export interface operations {
   };
   /** 최초 소셜로그인 - 필수 회원정보 입력 */
   updateSocialMember: {
-    requestBody: {
+    requestBody?: {
       content: {
-        "application/json": components["schemas"]["SocialProfileForm"];
+        "multipart/form-data": components["schemas"]["SocialProfileForm"];
       };
     };
     responses: {
