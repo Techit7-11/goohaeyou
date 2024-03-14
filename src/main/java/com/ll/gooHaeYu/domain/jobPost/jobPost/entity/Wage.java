@@ -22,11 +22,13 @@ public class Wage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String workTime;
-
-    private int cost;
+    private int cost = 0;
 
     private boolean paid;
+
+    private int workTime = 0;
+
+    private int workDays = 0;
 
     @Enumerated(EnumType.STRING)
     private PayBasis payBasis = PayBasis.UNDEFINED;
@@ -38,9 +40,10 @@ public class Wage {
     @JoinColumn(name = "job_post_detail", nullable = false)
     private JobPostDetail jobPostDetail;
 
-    public void updateWageInfo(String workTime, int cost, PayBasis payBasis) {
-        this.workTime = workTime;
+    public void updateWageInfo(int cost, PayBasis payBasis, int workTime, int workDays) {
         this.cost = cost;
         this.payBasis = payBasis;
+        this.workTime = workTime;
+        this.workDays = workDays;
     }
 }
