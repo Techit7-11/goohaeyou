@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.global.event;
+package com.ll.gooHaeYu.global.event.notification;
 
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;

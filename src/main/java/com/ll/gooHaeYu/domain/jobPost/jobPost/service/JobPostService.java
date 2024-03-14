@@ -10,7 +10,7 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.global.event.*;
+import com.ll.gooHaeYu.global.event.notification.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.*;
+import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.POST_MODIFICATION;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
@@ -53,13 +53,13 @@ public class JobPostService {
                 .title(form.getTitle())
                 .location(form.getLocation())
                 .deadline(form.getDeadLine())
+                .jobStartDate(form.getJobStartDate())
                 .build();
 
         JobPostDetail postDetail = JobPostDetail.builder()
                 .jobPost(newPost)
                 .author(username)
                 .body(form.getBody())
-                .deposit(form.getDeposit())
                 .build();
 
         Essential essential = Essential.builder()
@@ -71,7 +71,8 @@ public class JobPostService {
         Wage wage = Wage.builder()
                 .cost(form.getCost())
                 .workTime(form.getWorkTime())
-                .wageType(form.getWageType())
+                .payBasis(form.getPayBasis())
+                .wagePaymentMethod(form.getWagePaymentMethod())
                 .jobPostDetail(postDetail)
                 .build();
 
@@ -99,11 +100,12 @@ public class JobPostService {
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
-        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine());
-        postDetail.updatePostDetail(form.getBody(), form.getDeposit());
+        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate());
+        postDetail.updatePostDetail(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
-        postDetail.getWage().updateWageInfo(form.getWorkTime(), form.getCost(), form.getWageType());
-        postDetail.getDeposit();
+        postDetail.getWage().updateWageInfo(form.getWorkTime(), form.getCost(), form.getPayBasis());
+
+
 
         // TODO : 삭제 후 알림 날리기
         List<Application> applicationsToRemove = new ArrayList<>();
@@ -333,4 +335,9 @@ public class JobPostService {
         jobPost.update();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
+
+//    public JobPostDetail getJobPostDetailByApplication(Application application) {
+//
+//        return jobPostdetailRepository.findByApplication(application).orElseThrow(() -> new CustomException(POST_NOT_EXIST));
+//    }
 }

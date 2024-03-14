@@ -20,7 +20,7 @@
 		applicationId = urlParams[urlParams.length - 2] || '';
 		totalAmount = parseInt(urlParams[urlParams.length - 1] || '0', 10);
 
-		orderName = `지원서_${applicationId}_예치금_결제`;
+		orderName = `지원서_${applicationId}_급여_결제`;
 
 		console.log(
 			`Application ID: ${applicationId}, Total Amount: ${totalAmount}, Order Name: ${orderName}`
@@ -37,7 +37,7 @@
 
 		// API 호출
 		const body = {
-			payType: 'CARD_REQUEST',
+			payStatus: 'REQUEST',
 			amount: totalAmount,
 			applicationId,
 			orderName

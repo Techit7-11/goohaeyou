@@ -10,10 +10,10 @@
 		gender: 'UNDEFINED',
 		location: '',
 		deadLine: '',
-		wageType: '',
+		jobStartDate: '',
+		payBasis: '',
 		workTime: '',
-		cost: 0,
-        deposit: 0
+		cost: 0
 	};
 	let postId;
 
@@ -149,19 +149,29 @@
 					></textarea>
 				</div>
 
+				<div class="form-group">
+					<label class="label" for="jobStartDate">* 시작 일자</label>
+					<input
+						type="date"
+						id="jobStartDate"
+						class="input input-bordered w-full"
+						bind:value={jobPostData.jobStartDate}
+					/>
+				</div>
+
 				<div class="divider mt-10"></div>
 
 				<div class="form-group">
-					<label class="label" for="wageType">* 급여 타입</label>
+					<label class="label" for="payBasis">* 급여 지급 기준</label>
 					<select
 						class="input input-bordered w-full"
-						id="wageType"
-						bind:value={jobPostData.wageType}
+						id="payBasis"
+						bind:value={jobPostData.payBasis}
 					>
 						<option value="" disabled selected>- 선택하세요 -</option>
-						<option value="HOURLY">시급</option>
-						<option value="SALARY">일급</option>
-						<option value="PER_PROJECT">건당</option>
+						<option value="TOTAL_HOURS">총 시간</option>
+						<option value="TOTAL_DAYS">총 일수</option>
+						<option value="TOTAL_PROJECTS">총 건수</option>
 					</select>
 				</div>
 
@@ -187,16 +197,6 @@
 					/>
 				</div>
 
-				<div class="form-group">
-					<label class="label" for="cost">* 예치금</label>
-					<input
-						type="number"
-						id="deposit"
-						class="input input-bordered w-full"
-						min="0"
-						bind:value={jobPostData.deposit}
-					/>
-				</div>
 				<div class="form-group">
 					<button class="w-full btn btn-primary my-3" type="submit">글 수정</button>
 				</div>

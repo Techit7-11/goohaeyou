@@ -175,7 +175,7 @@
 	<title>Home</title>
 	<meta name="description" content="Svelte demo app" />
 	<script
-		src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=dbec7e19bbbe4a9e21a7b64b16dd537c&libraries=services"
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dbec7e19bbbe4a9e21a7b64b16dd537c&libraries=services"
 	></script>
 </svelte:head>
 
@@ -261,7 +261,7 @@
 					<div class="divider"></div>
 					<div class="my-5">
 						<div class="bg-white p-5 rounded-lg shadow-lg">
-							<h3 class="text-md font-medium text-gray-800 mb-3">근무 조건</h3>
+							<h3 class="text-md font-medium text-gray-800 mb-3">조건</h3>
 							<ul class="list-disc space-y-2 text-sm">
 								<li class="flex items-center text-gray-700">
 									<div class="flex items-center">
@@ -303,7 +303,8 @@
 										>
 										<span class="font-medium">급여 타입:</span>
 										<span class="ml-2 text-gray-600">
-											{#if jobPostDetailDto?.wageType === 'HOURLY'}시급{:else if jobPostDetailDto?.wageType === 'SALARY'}일급{:else if jobPostDetailDto?.wageType === 'PER_PROJECT'}건당{:else if jobPostDetailDto?.wageType === 'UNDEFINED'}미정{:else}'정보
+											{#if jobPostDetailDto?.payBasis === 'TOTAL_HOURS'}총 시간{:else if jobPostDetailDto?.payBasis === 'TOTAL_DAYS'}총
+												일수{:else if jobPostDetailDto?.payBasis === 'TOTAL_PROJECTS'}총 건수{:else if jobPostDetailDto?.payBasis === 'UNDEFINED'}미정{:else}'정보
 												없음'{/if}
 										</span>
 									</div>
@@ -341,10 +342,11 @@
 												d="M23.18,9.65c-.5-.45-1.14-.69-1.81-.65-.67,.03-1.29,.32-1.74,.82l-3.73,4.1c-.31-1.11-1.33-1.92-2.54-1.92H3.5c-1.93,0-3.5,1.57-3.5,3.5v5c0,1.93,1.57,3.5,3.5,3.5h5.96c2.71,0,5.29-1.16,7.09-3.18l6.81-7.64c.91-1.02,.83-2.6-.18-3.53Zm-.56,2.86l-6.81,7.64c-1.61,1.81-3.92,2.85-6.35,2.85H3.5c-1.38,0-2.5-1.12-2.5-2.5v-5c0-1.38,1.12-2.5,2.5-2.5H13.36c.91,0,1.64,.74,1.64,1.64,0,.81-.61,1.51-1.4,1.62l-6.16,.74c-.27,.03-.47,.28-.44,.56,.03,.27,.27,.48,.56,.44l6.17-.74c1.02-.15,1.85-.88,2.15-1.82l4.49-4.94c.27-.3,.64-.47,1.05-.49,.4-.02,.79,.12,1.09,.39,.61,.56,.66,1.51,.11,2.12ZM5,3.24c0-1.24,1.01-2.24,2.24-2.24h.76V.5c0-.28,.22-.5,.5-.5s.5,.22,.5,.5v.5h.55c.98,0,1.89,.53,2.38,1.38,.14,.24,.06,.54-.18,.68-.24,.14-.55,.06-.68-.18-.31-.54-.89-.88-1.52-.88h-2.31c-.69,0-1.24,.56-1.24,1.24,0,.54,.34,1.01,.85,1.18l3.62,1.21c.92,.31,1.53,1.16,1.53,2.13,0,1.24-1.01,2.24-2.24,2.24h-.76v.5c0,.28-.22,.5-.5,.5s-.5-.22-.5-.5v-.5h-.55c-.98,0-1.89-.53-2.38-1.38-.14-.24-.06-.54,.18-.68,.24-.14,.55-.06,.68,.18,.31,.54,.89,.88,1.52,.88h2.31c.69,0,1.24-.56,1.24-1.24,0-.54-.34-1.01-.85-1.18l-3.62-1.21c-.92-.31-1.53-1.16-1.53-2.13Z"
 											/></svg
 										>
-										<span class="font-medium">예치금:</span>
-										<span class="ml-2 text-gray-600"
-											>{jobPostDetailDto?.deposit.toLocaleString()}원</span
-										>
+										<span class="font-medium">급여 지급 방법:</span>
+										<span class="ml-2 text-gray-600">
+											{#if jobPostDetailDto?.wagePaymentMethod === 'INDIVIDUAL_PAYMENT'}개인 지급{:else if jobPostDetailDto?.wagePaymentMethod === 'SERVICE_PAYMENT'}서비스
+												결제{:else}정보 없음{/if}
+										</span>
 									</div>
 								</li>
 							</ul>
@@ -380,6 +382,8 @@
 									? '여'
 									: '무관'}
 						</div>
+						<div class="text-sm">시작 일자 :</div>
+						<div class="text-xs">{jobPostDetailDto.jobStartDate}</div>
 					</div>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -396,6 +400,11 @@
 					>
 					<span class="text-sm">{jobPostDetailDto?.location ?? '정보 없음'}</span>
 
+					<!-- 지도 표시를 위한 섹션 -->
+					<section>
+						<Map />
+					</section>
+
 					<div class="divider"></div>
 					<div class="flex justify-end text-gray-700 text-sm">
 						<div class="flex">
@@ -410,11 +419,6 @@
 					</div>
 				</div>
 			</div>
-
-			<!-- 지도 표시를 위한 섹션 -->
-			<section>
-				<Map />
-			</section>
 
 			<div class="container mx-auto px-4 py-8">
 				<div class="w-full max-w-4xl mx-auto">
@@ -491,6 +495,6 @@
 		justify-content: center;
 		align-items: center;
 		flex: 0.6;
-		margin-top: 15px; /* 5px의 상단 여백 추가 */
+		margin-top: 6px; /* 6px의 상단 여백 추가 */
 	}
 </style>

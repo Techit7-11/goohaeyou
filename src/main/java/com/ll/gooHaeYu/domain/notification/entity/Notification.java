@@ -1,6 +1,5 @@
 package com.ll.gooHaeYu.domain.notification.entity;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode;
 import com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode;

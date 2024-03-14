@@ -61,29 +61,30 @@
 			</div>
 
 			<div class="text-gray-700 font-basic">
-				<span class="text-black">결제 내역: </span>{data.orderName}
+				<span class="text-black">결제 내역: </span>
+				{data.orderName}
 			</div>
 
 			{#if data.method == '카드'}
 				<div class="text-gray-700 font-basic">
-					<span class="text-black">결제 수단: </span>{data.card.cardType} 카드
+					<span class="text-black">결제 수단: </span>
+					{data.card.cardType}카드
 				</div>
 			{/if}
 			{#if data.method == '간편결제'}
 				<div class="text-gray-700 font-basic">
-					<span class="text-black">결제 수단: </span>{data.easyPay.provider}
+					<span class="text-black">결제 수단: </span>
+					{data.easyPay.provider}
 				</div>
 			{/if}
 			<div class="text-gray-700 font-basic">
-				<span class="text-black">결제 일시: </span>{formatDateTime(data.approvedAt)}
+				<span class="text-black">결제 일시: </span>
+				{formatDateTime(data.approvedAt)}
 			</div>
 			<hr class="my-3" />
-			<div class="text-gray-700">
+			<div class="text-gray-700" style="margin-top: 1rem;">
 				<span class="font-semibold">결제 금액:</span>
 				{formatAmount(data.totalAmount)}원
-			</div>
-			<div class="text-gray-700 text-sm">
-				(VAT:{formatAmount(data.vat)}원)
 			</div>
 		</div>
 

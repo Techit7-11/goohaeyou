@@ -1,11 +1,13 @@
 package com.ll.gooHaeYu.domain.application.application.entity;
 
-import com.ll.gooHaeYu.domain.application.application.entity.type.DepositStatus;
+import com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Entity
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,7 +35,15 @@ public class Application extends BaseTimeEntity {
     private String body;
 
     @Enumerated(EnumType.STRING)
-    private DepositStatus depositStatus = DepositStatus.UNDEFINED;
+    private WageStatus wageStatus = WageStatus.UNDEFINED;
+
+    private int earn = 0;
+
+    private boolean receive = false;
+
+    private Boolean jobCompleted = null;
+
+    private LocalDate jobStartDate;
 
     public void updateBody(String body) {
         if (body != null && !body.isBlank()) {
@@ -49,9 +59,26 @@ public class Application extends BaseTimeEntity {
         this.approve = false;
     }
 
-    public void updateDepositStatus(DepositStatus newStatus) {
+    public void updateWageStatus(WageStatus newStatus) {
         if (newStatus != null) {
-            this.depositStatus = newStatus;
+            this.wageStatus = newStatus;
         }
+    }
+
+
+    public void changeToCompleted() {
+        this.jobCompleted = true;
+    }
+
+    public void setEarn(int earn) {
+        this.earn = earn;
+    }
+
+    public void setReceive(boolean receive) {
+        this.receive = receive;
+    }
+
+    public void setJobStartDate(LocalDate jobStartDate) {
+        this.jobStartDate = jobStartDate;
     }
 }

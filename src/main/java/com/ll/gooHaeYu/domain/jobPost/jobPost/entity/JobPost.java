@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -47,17 +46,20 @@ public class JobPost extends BaseTimeEntity {
 
     private LocalDate deadline;
 
+    private LocalDate jobStartDate;
+
     @Column(nullable = false)
     private boolean employed;
 
     @OneToOne(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private JobPostDetail jobPostDetail;
 
-    public void update(String title,LocalDate deadline) {
+    public void update(String title, LocalDate deadline, LocalDate jobStartDate) {
         if (title != null && !title.isBlank()) {
             this.title = title;
         }
         this.deadline = deadline;
+        this.jobStartDate = jobStartDate;
     }
 
     public void update() {

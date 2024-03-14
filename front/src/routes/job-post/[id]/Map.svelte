@@ -7,7 +7,7 @@
 		const container = document.getElementById('map');
 		const options = {
 			center: new kakao.maps.LatLng(33.450701, 126.570667),
-			level: 4
+			level: 3
 		};
 		var map = new kakao.maps.Map(container, options); //지도 생성
 
@@ -47,4 +47,4 @@
 	});
 </script>
 
-<div id="map" style="width:100%;height:220px;"></div>
+<div id="map" style="width:100%;height:160px;  z-index: 0;"></div>

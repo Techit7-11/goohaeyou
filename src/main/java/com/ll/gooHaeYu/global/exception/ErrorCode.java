@@ -48,8 +48,6 @@ public enum ErrorCode {
 
     ALREADY_APPROVED(HttpStatus.BAD_REQUEST, "이미 승인된 결제건 입니다."),
 
-    INVALID_PAYMENT_STATUS(HttpStatus.BAD_REQUEST, "유효하지 않은 결제상태입니다."),
-
     NO_ENUM_CONSTANT_FOUND(HttpStatus.NOT_FOUND, "해당 결제 타입에 해당하는 enum 상수가 없습니다."),
 
     ALREADY_CANCELED(HttpStatus.BAD_REQUEST, "이미 취소된 결제건 입니다."),
@@ -58,7 +56,12 @@ public enum ErrorCode {
 
     CHATROOM_NOT_EXITS(HttpStatus.NOT_FOUND,"해당 채팅방은 존재하지 않습니다."),
 
-    MESSAGE_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 메세지는 존재하지 않습니다.");
+    MESSAGE_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 메세지는 존재하지 않습니다."),
+
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+
+    COMPLETION_NOT_POSSIBLE(HttpStatus.BAD_REQUEST, "현재 상태 에서는 완료 처리가 불가능 합니다."),
+    AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "금액이 일치하지 않습니다.");
 
 
     private final HttpStatus status;
