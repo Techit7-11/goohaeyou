@@ -1,6 +1,9 @@
 server:
   port: 8090
 spring:
+  batch:
+    job:
+      enabled: false
   profiles:
     active: dev
     include: secret

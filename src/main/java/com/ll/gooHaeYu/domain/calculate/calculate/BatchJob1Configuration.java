@@ -9,44 +9,40 @@ import com.ll.gooHaeYu.domain.calculate.calculate.itemWriter.ApplicationWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @RequiredArgsConstructor
-public class CalculateConfiguration {
+public class BatchJob1Configuration {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager ptm;
     private final JobListener jobListener;
-    private final ApplicationReader applicationReader;
-    private final ApplicationProcessor applicationProcessor;
     private final ApplicationWriter applicationWriter;
+    private final Reader1 reader1;
+    private final Processor1 processor1;
 
-    @Bean(name ="calculateJob" )
-    public Job calculateJob() {
-        return new JobBuilder("calculateJob", jobRepository)
-                .start(calculateStep1())
+    @Bean(name = "batchJob1")
+    public Job batchJob1() {
+        return new JobBuilder("batchJob1", jobRepository)
+                .start(step1())
                 .listener(jobListener)
                 .build();
-
     }
 
-    @JobScope
+
     @Bean
-    public Step calculateStep1() {
-        return new StepBuilder("calculateStep1", jobRepository)
+    public Step step1() {
+        return new StepBuilder("step1", jobRepository)
                 .<Application, Application>chunk(10,ptm)
-                .reader(applicationReader.applicationReader())
-                .processor(applicationProcessor)
+                .reader(reader1.reader1())
+                .processor(processor1)
                 .writer(applicationWriter)
                 .build();
     }
-
 }

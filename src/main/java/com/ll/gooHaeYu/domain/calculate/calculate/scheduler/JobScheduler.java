@@ -1,24 +1,23 @@
 package com.ll.gooHaeYu.domain.calculate.calculate.scheduler;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class JobScheduler {
 
     private final JobLauncher jobLauncher;
+    @Qualifier("calculateJob")
     private final Job calculateJob;
 
     private boolean isFirstDay = true;
-
-    public JobScheduler(JobLauncher jobLauncher, Job calculateJob) {
-        this.jobLauncher = jobLauncher;
-        this.calculateJob = calculateJob;
-    }
 
     // 매일 00시에 실행
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
