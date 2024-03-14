@@ -12,7 +12,8 @@
 		deadLine: '',
 		jobStartDate: '',
 		payBasis: '',
-		workTime: '',
+		workTime: '0',
+		workDays: '1',
 		cost: 0
 	};
 	let postId;
@@ -39,8 +40,15 @@
 			console.error('Error loading job post detail:', error);
 		}
 	}
+
 	// 공고 수정 제출 함수
 	async function submitForm() {
+		if (jobPostData.payBasis === 'TOTAL_HOURS') {
+			jobPostData.workDays = '1'; // 총 시간 선택 시, 일수 기본값 1로 설정
+		} else if (jobPostData.payBasis === 'TOTAL_DAYS') {
+			jobPostData.workTime = '0'; // 총 일수 선택 시, 시간 기본값 0으로 설정
+		}
+
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}`, { body: jobPostData });
 		if (response.data?.statusCode === 200) {
 			rq.msgAndRedirect({ msg: '글 수정 완료' }, undefined, '/');
@@ -171,20 +179,37 @@
 						<option value="" disabled selected>- 선택하세요 -</option>
 						<option value="TOTAL_HOURS">총 시간</option>
 						<option value="TOTAL_DAYS">총 일수</option>
-						<option value="TOTAL_PROJECTS">총 건수</option>
 					</select>
 				</div>
 
-				<div class="form-group">
-					<label class="label" for="workTime">* 도움시간 또는 도움일수</label>
-					<input
-						type="text"
-						id="workTime"
-						class="input input-bordered w-full"
-						placeholder="예시) 2시간, 3일, 또는 협의"
-						bind:value={jobPostData.workTime}
-					/>
-				</div>
+				{#if jobPostData.payBasis === 'TOTAL_HOURS'}
+					<div class="form-group">
+						<label class="label" for="workTime">* 총 시간 입력</label>
+						<input
+							type="number"
+							id="workTime"
+							class="input input-bordered w-full"
+							min="1"
+							max="24"
+							placeholder="예: 8"
+							bind:value={jobPostData.workTime}
+						/>
+					</div>
+				{:else if jobPostData.payBasis === 'TOTAL_DAYS'}
+					<div class="form-group">
+						<label class="label" for="workDays">* 총 일수 선택 </label>
+						<select
+							class="input input-bordered w-full"
+							id="workDays"
+							bind:value={jobPostData.workDays}
+						>
+							<option value="" disabled selected>- 선택하세요 -</option>
+							{#each Array(7) as _, i}
+								<option value={i + 1}>{i + 1}일</option>
+							{/each}
+						</select>
+					</div>
+				{/if}
 
 				<div class="form-group">
 					<label class="label" for="cost">* 급여</label>

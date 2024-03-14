@@ -39,8 +39,9 @@ public class JobPostForm {
         @FutureOrPresent
         private LocalDate jobStartDate;
 
-        @NotBlank(message = "도움시간 또는 도움일수 입력은 필수입니다.")
-        private String workTime;
+        // 프론트에서 유효성 검사
+        private int workTime;
+        private int workDays;
 
         private PayBasis payBasis;
 
@@ -77,8 +78,9 @@ public class JobPostForm {
         @FutureOrPresent
         private LocalDate jobStartDate;
 
-        @NotBlank(message = "도움시간 또는 도움일수 입력은 필수입니다.")
-        private String workTime;
+        // 프론트에서 유효성 검사
+        private int workTime;
+        private int workDays;
 
         private PayBasis payBasis;
 
