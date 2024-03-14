@@ -523,11 +523,14 @@ export interface components {
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
       modifiedAt?: string;
       interestedUsernames?: string[];
-      workTime?: string;
+      /** Format: int32 */
+      workTime?: number;
+      /** Format: int32 */
+      workDays?: number;
       /** Format: int32 */
       cost?: number;
       /** @enum {string} */
-      payBasis?: "UNDEFINED" | "TOTAL_HOURS" | "TOTAL_DAYS" | "TOTAL_PROJECTS";
+      payBasis?: "UNDEFINED" | "TOTAL_HOURS" | "TOTAL_DAYS";
       /** @enum {string} */
       wagePaymentMethod?: "UNDEFINED" | "INDIVIDUAL_PAYMENT" | "SERVICE_PAYMENT";
       closed?: boolean;
