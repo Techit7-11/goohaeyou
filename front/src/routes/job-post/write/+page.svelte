@@ -12,7 +12,7 @@
 		deadLine: '',
 		wageType: '',
 		workTime: '0',
-		workDays: '',
+		workDays: '1',
 		cost: 0
 	};
 
@@ -33,12 +33,6 @@
 
 	// 글 작성 버튼을 클릭하면 실행될 함수
 	async function writeJobPost() {
-		if (newJobPostData.payBasis === 'TOTAL_HOURS') {
-			newJobPostData.workDays = '1'; // 총 시간 선택 시, 일수 기본값 1로 설정
-		} else if (newJobPostData.payBasis === 'TOTAL_DAYS') {
-			newJobPostData.workTime = '0'; // 총 일수 선택 시, 시간 기본값 0으로 설정
-		}
-
 		if (newJobPostData.payBasis === '') {
 			rq.msgError('급여 지급 기준을 선택해주세요.');
 			return;
