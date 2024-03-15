@@ -51,10 +51,11 @@
 
 	function drawMoreMessage(message) {
 		lastMessageId = message.id;
+		console.log('aaaaaaaaaa');
 		console.log(message);
 		const messageElement = document.createElement('li');
 		if (message.sender === 'admin') {
-			`<div class="flex justify-center">
+			messageElement.innerHTML = `<div class="flex justify-center">
 				<th:block>${message.text}</th:block>
 			</div>`;
 		} else if (message.sender === member.username) {

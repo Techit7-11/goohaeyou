@@ -93,9 +93,16 @@ public class RoomService {
         if (room.isUser1HasExit() && room.isUser2HasExit()) {
             roomRepository.delete(room);
         }
+        Message message = Message.builder()
+                .room(room)
+                .sender("admin")
+                .content("\""+username+"\" 님이 퇴장 하였습니다.")
+                .createdAt(LocalDateTime.now())
+                .build();
 
-        createInfoMessage(room, "admin","\""+username+"\" 님이 퇴장 하였습니다.");
-
+        room.getMessages().add(message);
+//        createInfoMessage(room, "admin","\""+username+"\" 님이 퇴장 하였습니다.");
+        messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.fromEntity(message));
         room.exit(username);
     }
 
