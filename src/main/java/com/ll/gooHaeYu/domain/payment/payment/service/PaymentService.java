@@ -119,6 +119,9 @@ public class PaymentService {
     public PaymentFailDto tossPaymentFail(String code, String message, String orderId) {
         handlePaymentFailure(orderId, message);
 
+        Payment payment = findPaymentByOrderId(orderId);
+        paymentRepository.delete(payment);
+
         return PaymentFailDto.builder()
                 .errorCode(code)
                 .errorMessage(message)
