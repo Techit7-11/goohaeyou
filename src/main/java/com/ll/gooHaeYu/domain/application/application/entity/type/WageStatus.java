@@ -15,7 +15,6 @@ public enum WageStatus {
     // 서비스 결제
     PAYMENT_PENDING("급여 결제 전"),
     PAYMENT_COMPLETED("급여 결제 완료"),
-    PAYMENT_CANCELLATION_REQUESTED("급여 취소 요청"),
     PAYMENT_CANCELLED("급여 취소 완료"),
     SETTLEMENT_REQUESTED("급여 정산 신청"),
     SETTLEMENT_COMPLETED("급여 정산 완료");

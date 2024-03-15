@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.payment.payment.service;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
+import com.ll.gooHaeYu.domain.payment.cashLog.service.CashLogService;
 import com.ll.gooHaeYu.domain.payment.payment.dto.cancel.PaymentCancelResDto;
 import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
 import com.ll.gooHaeYu.domain.payment.payment.repository.PaymentRepository;
@@ -26,6 +27,7 @@ public class PaymentCancelService {
     private final RestTemplate restTemplate;
     private final TossPaymentUtil tossPaymentUtil;
     private final ApplicationService applicationService;
+    private final CashLogService cashLogService;
 
     @Transactional
     public PaymentCancelResDto tossPaymentCancel(String username, String paymentKey, String cancelReason) {
@@ -43,11 +45,15 @@ public class PaymentCancelService {
 
         UpdatePaymentAndApplication(payment, cancelReason);
 
-        // TossPayments 결제 취소 API를 호출하고, 응답 값을 DTO 객체로 매핑 후 반환
-        return restTemplate.postForObject(
+        // TossPayments 결제 취소 API를 호출하고, 응답 값을 DTO 객체로 매핑
+        PaymentCancelResDto paymentCancelResDto = restTemplate.postForObject(
                 TossPaymentsConfig.URL + paymentKey + "/cancel",
                 new HttpEntity<>(params, headers),
                 PaymentCancelResDto.class);
+
+        cashLogService.addCashLogOnCancel(payment);
+
+        return paymentCancelResDto;
     }
 
     private void checkPaymentCancelable(String username, Payment payment) {
