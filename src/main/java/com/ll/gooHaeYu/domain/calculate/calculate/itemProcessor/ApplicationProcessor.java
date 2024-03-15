@@ -10,7 +10,6 @@ import com.ll.gooHaeYu.domain.payment.cashLog.service.CashLogService;
 import com.ll.gooHaeYu.global.event.cashLog.CashLogEvent;
 import com.ll.gooHaeYu.global.event.notification.CalculateNotificationEvent;
 import com.ll.gooHaeYu.global.exception.CustomException;
-import com.ll.gooHaeYu.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.ApplicationEventPublisher;
