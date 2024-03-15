@@ -67,7 +67,7 @@ public class EmployService {
                 increaseAuthorTransactionCount(jobPost);
 
                 publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
-                publisher.publishEvent(new CreateChatRoomEvent(this,postWriterId,receiverId));
+                publisher.publishEvent(new CreateChatRoomEvent(this,postWriterId,receiverId,jobPost.getTitle()));
 
             }else {
                 application.reject();

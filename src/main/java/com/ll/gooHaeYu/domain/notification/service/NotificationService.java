@@ -17,6 +17,7 @@ import com.ll.gooHaeYu.global.event.notification.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,21 +104,19 @@ public class NotificationService {
         makeNotification(application.getMember(), jobPost.getMember(), jobPost.getTitle(),CALCULATE_PAYMENT, NOTICE, url);
     }
 
-//    @Transactional
-//    public void notifyAboutChatRoom(CreateChatRoomEvent event) {
-//        log.info("알림 생성 중");
-//        Member member1 = memberService.findById(event.getMemberId1());
-//
-//        Member member2Proxy = memberService.findById(event.getMemberId2());
-//        Hibernate.initialize(member2Proxy); // 프록시 초기화
-//        Member member2 = member2Proxy;
-//
-//        Long roomId = roomService.findByUsername1AndUsername2(member1.getUsername(), member2.getUsername());
-//
-//        String url = "/chat/"+roomId;
-//        makeNotification(member1,member2," ",CHATROOM_CREATED,NOTICE, url);
-//        log.info("알림 생성 완료");
-//    }
+    @Transactional
+    public void notifyAboutChatRoom(CreateChatRoomEvent event) {
+        log.info("알림 생성 중");
+        Member member1 = memberService.findById(event.getMemberId1());
+        Member member2 = memberService.findById(event.getMemberId2());
+        String title = event.getPostTitle();
+        Long roomId = roomService.findByUsername1AndUsername2(member1.getUsername(), member2.getUsername()).getId();
+
+        String url = "/chat/"+roomId;
+        makeNotification(member1,member2,title,CHATROOM_CREATED,NOTICE, url);
+        makeNotification(member2,member1,title,CHATROOM_CREATED,NOTICE, url);
+        log.info("알림 생성 완료");
+    }
 
     private void makeNotification(Member toMember, Member fromMember, String jobPostTitle, CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {
         Notification notification = Notification.builder()
