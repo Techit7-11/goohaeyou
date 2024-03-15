@@ -60,6 +60,14 @@ export interface paths {
     /** 댓글 작성 */
     post: operations["write"];
   };
+  "/api/payments": {
+    /** 결제 요청 */
+    post: operations["requestTossPayments"];
+  };
+  "/api/payments/cancel": {
+    /** 결제 취소 */
+    post: operations["tossPaymentCancel"];
+  };
   "/api/member/review/{jobPostingId}": {
     /** 지원자 리뷰 작성 */
     post: operations["createReview"];
@@ -94,6 +102,10 @@ export interface paths {
     /** 채팅 생성 */
     post: operations["writeChat"];
   };
+  "/api/jobs/individual/no-work/{applicationId}": {
+    /** 개인 지급 알바 미완료 처리 */
+    patch: operations["cancelIndividualNoWork"];
+  };
   "/api/jobs/complete/{applicationId}/manually": {
     /** 구인자가 수동으로 알바완료 처리 */
     patch: operations["completeJobManually"];
@@ -112,6 +124,18 @@ export interface paths {
   "/api/post-comment/{postId}": {
     /** 해당 공고에 달린 댓글 목록 */
     get: operations["findByPostId"];
+  };
+  "/api/payments/{applicationId}": {
+    /** 결제정보 가져오기 */
+    get: operations["getPaymentKey"];
+  };
+  "/api/payments/success": {
+    /** 결제 성공 */
+    get: operations["tossPaymentSuccess"];
+  };
+  "/api/payments/fail": {
+    /** 결제 실패 */
+    get: operations["tossPaymentFail"];
   };
   "/api/notification": {
     /** 유저 별 알림리스트 */
@@ -244,6 +268,50 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["Register"];
     };
+    PaymentReqDto: {
+      /** @enum {string} */
+      payStatus: "REQUEST" | "CARD" | "EASY_PAY";
+      /** Format: int64 */
+      amount: number;
+      orderId?: string;
+      orderName?: string;
+      /** Format: int64 */
+      applicationId?: number;
+    };
+    PaymentResDto: {
+      /** @enum {string} */
+      payStatus: "REQUEST" | "CARD" | "EASY_PAY";
+      /** Format: int64 */
+      amount: number;
+      orderId: string;
+      orderName: string;
+      payer: string;
+      successUrl?: string;
+      failUrl?: string;
+      failReason?: string;
+      canceled?: boolean;
+      cancelReason?: string;
+    };
+    RsDataPaymentResDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["PaymentResDto"];
+    };
+    PaymentCancelResDto: {
+      /** Format: int32 */
+      cancelAmount?: number;
+      transactionKey?: string;
+      canceledAt?: string;
+    };
+    RsDataPaymentCancelResDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["PaymentCancelResDto"];
+    };
     ApplicantReviewDto: {
       /** Format: int64 */
       id?: number;
@@ -310,6 +378,71 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["CommentDto"][];
+    };
+    PaymentDto: {
+      paymentKey?: string;
+      /** Format: int64 */
+      totalAmount?: number;
+      orderName?: string;
+      paid?: boolean;
+      canceled?: boolean;
+      /** Format: int64 */
+      applicationId?: number;
+      payStatus?: string;
+    };
+    RsDataPaymentDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["PaymentDto"];
+    };
+    PaymentSuccessDto: {
+      paymentKey?: string;
+      orderId?: string;
+      orderName?: string;
+      method?: string;
+      /** Format: int32 */
+      totalAmount?: number;
+      approvedAt?: string;
+      card?: components["schemas"]["SuccessCardDto"];
+      easyPay?: components["schemas"]["SuccessEasyPayDto"];
+    };
+    RsDataPaymentSuccessDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["PaymentSuccessDto"];
+    };
+    SuccessCardDto: {
+      company?: string;
+      number?: string;
+      installmentPlanMonths?: string;
+      isInterestFree?: string;
+      approveNo?: string;
+      useCardPoint?: string;
+      cardType?: string;
+      acquireStatus?: string;
+    };
+    SuccessEasyPayDto: {
+      provider?: string;
+      /** Format: int32 */
+      amount?: number;
+      /** Format: int32 */
+      discountAmount?: number;
+    };
+    PaymentFailDto: {
+      errorCode?: string;
+      errorMessage?: string;
+      orderId?: string;
+    };
+    RsDataPaymentFailDto: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: components["schemas"]["PaymentFailDto"];
     };
     NotificationDto: {
       /** Format: int64 */
@@ -855,6 +988,39 @@ export interface operations {
       };
     };
   };
+  /** 결제 요청 */
+  requestTossPayments: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PaymentReqDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataPaymentResDto"];
+        };
+      };
+    };
+  };
+  /** 결제 취소 */
+  tossPaymentCancel: {
+    parameters: {
+      query: {
+        paymentKey: string;
+        cancelReason: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataPaymentCancelResDto"];
+        };
+      };
+    };
+  };
   /** 지원자 리뷰 작성 */
   createReview: {
     parameters: {
@@ -1015,6 +1181,22 @@ export interface operations {
       };
     };
   };
+  /** 개인 지급 알바 미완료 처리 */
+  cancelIndividualNoWork: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataVoid"];
+        };
+      };
+    };
+  };
   /** 구인자가 수동으로 알바완료 처리 */
   completeJobManually: {
     parameters: {
@@ -1089,6 +1271,58 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListCommentDto"];
+        };
+      };
+    };
+  };
+  /** 결제정보 가져오기 */
+  getPaymentKey: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataPaymentDto"];
+        };
+      };
+    };
+  };
+  /** 결제 성공 */
+  tossPaymentSuccess: {
+    parameters: {
+      query: {
+        paymentKey: string;
+        orderId: string;
+        amount: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataPaymentSuccessDto"];
+        };
+      };
+    };
+  };
+  /** 결제 실패 */
+  tossPaymentFail: {
+    parameters: {
+      query: {
+        code: string;
+        message: string;
+        orderId: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataPaymentFailDto"];
         };
       };
     };

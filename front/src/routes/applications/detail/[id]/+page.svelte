@@ -48,6 +48,22 @@
 		}
 	}
 
+	async function cancelRequest(applicationId: number) {
+		const response = await rq
+			.apiEndPoints()
+			.PATCH(`/api/jobs/individual/no-work/${applicationId}`, {});
+
+		if (response.data?.statusCode === 204) {
+			rq.msgInfo('취소 완료되었습니다.');
+			location.reload();
+		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
+			const customErrorMessage = response.data?.data?.message;
+			rq.msgError(customErrorMessage);
+		} else {
+			rq.msgError('요청 중 오류가 발생했습니다.');
+		}
+	}
+
 	function formatDate(dateString) {
 		const options = {
 			year: '2-digit',
@@ -78,7 +94,7 @@
 		rq.goTo(`/payment/pay/${$page.params.id}/${wages}`);
 	}
 
-	function goToCancelPage() {
+	function goToPayCancelPage() {
 		rq.goTo(`/payment/cancel/${$page.params.id}`);
 	}
 </script>
@@ -169,7 +185,16 @@
 								class="btn btn-active btn-primary btn-sm"
 								on:click={() => completeJobManually(application.id)}>알바 완료</button
 							>
-							<button class="btn btn-sm" on:click={() => goToCancelPage()}>급여 결제 취소</button>
+							{#if application.wageStatus == '급여 결제 완료'}
+								<button class="btn btn-sm" on:click={() => goToPayCancelPage()}
+									>급여 결제 취소</button
+								>
+							{/if}
+							{#if application.wageStatus == '지원서 승인'}
+								<button class="btn btn-sm" on:click={() => cancelRequest(application.id)}
+									>취소 요청</button
+								>
+							{/if}
 						</div>
 					{/if}
 				</div>
