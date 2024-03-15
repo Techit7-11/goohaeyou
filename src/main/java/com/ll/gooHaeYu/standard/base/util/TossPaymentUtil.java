@@ -17,7 +17,8 @@ public class TossPaymentUtil {
 
     public HttpHeaders createBasicAuthHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        String encodedAuthKey = Base64.getEncoder().encodeToString((tossPaymentsConfig.getTossSecretKey() + ":").getBytes(StandardCharsets.UTF_8));
+        String encodedAuthKey = Base64.getEncoder()
+                .encodeToString((tossPaymentsConfig.getTossSecretKey() + ":").getBytes(StandardCharsets.UTF_8));
 
         headers.setBasicAuth(encodedAuthKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
