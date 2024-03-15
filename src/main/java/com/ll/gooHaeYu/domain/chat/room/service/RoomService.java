@@ -41,8 +41,7 @@ public class RoomService {
         if(checkTheChatroom(member1.getUsername(),member2.getUsername())) {
             Room room = findByUsername1AndUsername2(member1Username, member2Username);
 
-            String content = room.isUser1HasExit() ? "\""+member1Username+"\" 님과 재매칭이 되었습니다." :
-                    room.isUser2HasExit() ? "\""+member1Username+"\" 님과 재매칭이 되었습니다." : "재매칭이 되었습니다.";
+            String content = "매칭이 되었습니다.";
 
             createInfoMessage(room, "admin", content);
 
@@ -93,16 +92,7 @@ public class RoomService {
         if (room.isUser1HasExit() && room.isUser2HasExit()) {
             roomRepository.delete(room);
         }
-        Message message = Message.builder()
-                .room(room)
-                .sender("admin")
-                .content("\""+username+"\" 님이 퇴장 하였습니다.")
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        room.getMessages().add(message);
-//        createInfoMessage(room, "admin","\""+username+"\" 님이 퇴장 하였습니다.");
-        messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.fromEntity(message));
+        createInfoMessage(room, "admin","\""+username+"\" 님이 퇴장 하였습니다.");
         room.exit(username);
     }
 
