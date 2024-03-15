@@ -70,12 +70,16 @@
 		return age;
 	}
 
-	function goToEditPage(applicationId: number) {
-		rq.goTo(`/applications/modify/${applicationId}`);
+	function goToEditPage() {
+		rq.goTo(`/applications/modify/${$page.params.id}`);
 	}
 
-	function goToPaymentPage(applicationId: number, wages: number) {
+	function goToPaymentPage(wages: number) {
 		rq.goTo(`/payment/pay/${$page.params.id}/${wages}`);
+	}
+
+	function goToCancelPage() {
+		rq.goTo(`/payment/cancel/${$page.params.id}`);
 	}
 </script>
 
@@ -159,12 +163,13 @@
 							{/if}
 						</div>
 					{/if}
-					{#if rq.member.username == application.jobPostAuthorUsername && (application.wageStatus == '지원서 승인' || application.wageStatus == '급여 결제 완료')}
-						<div class="text-center mt-2 flex justify-center items-center space-x-2">
+					{#if application.jobPostAuthorUsername == rq.member.username && (application.wageStatus == '급여 결제 완료' || application.wageStatus == '지원서 승인')}
+						<div class="text-center mt-2 flex justify-center items-center space-x-8">
 							<button
 								class="btn btn-active btn-primary btn-sm"
 								on:click={() => completeJobManually(application.id)}>알바 완료</button
 							>
+							<button class="btn btn-sm" on:click={() => goToCancelPage()}>급여 결제 취소</button>
 						</div>
 					{/if}
 				</div>
@@ -175,8 +180,7 @@
 					{#if application.wageStatus == '급여 결제 전'}
 						<button
 							class="btn btn-btn btn-sm mx-12 mt-6"
-							on:click={() => goToPaymentPage(application.id, application.wages)}
-							>급여 결제하기</button
+							on:click={() => goToPaymentPage(application.wages)}>급여 결제하기</button
 						>
 					{:else}
 						<button
@@ -184,7 +188,7 @@
 							style="background-color: #fafafa; color: #4b5563;"
 							disabled
 						>
-							{application.wageStatus}
+							진행 단계: {application.wageStatus}
 						</button>
 					{/if}
 				</div>
