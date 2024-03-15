@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class BatchController {
 
-    private final Job batchJob1;
+    private final Job exceeded3DaysJob;
     private final JobLauncher jobLauncher;
 
     @PostMapping("/batch")
@@ -27,7 +27,7 @@ public class BatchController {
                     .addLong("time", System.currentTimeMillis())
                     .toJobParameters();
 
-            JobExecution jobExecution = jobLauncher.run(batchJob1, jobParameters);
+            JobExecution jobExecution = jobLauncher.run(exceeded3DaysJob, jobParameters);
 
             return ResponseEntity.ok("Batch job started with ID: " + jobExecution.getId());
         } catch (Exception e) {

@@ -1,10 +1,9 @@
-package com.ll.gooHaeYu.domain.calculate.calculate;
+package com.ll.gooHaeYu.domain.calculate.calculate.configuration;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
-import com.ll.gooHaeYu.domain.calculate.calculate.itemProcessor.ApplicationProcessor;
-import com.ll.gooHaeYu.domain.calculate.calculate.itemProcessor.Processor1;
+import com.ll.gooHaeYu.domain.calculate.calculate.JobListener;
+import com.ll.gooHaeYu.domain.calculate.calculate.itemProcessor.Exceeded3DaysProcessor;
 import com.ll.gooHaeYu.domain.calculate.calculate.itemReader.ApplicationReader;
-import com.ll.gooHaeYu.domain.calculate.calculate.itemReader.Reader1;
 import com.ll.gooHaeYu.domain.calculate.calculate.itemWriter.ApplicationWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -18,18 +17,18 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @RequiredArgsConstructor
-public class BatchJob1Configuration {
+public class Exceeded3DaysConfiguration {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager ptm;
     private final JobListener jobListener;
     private final ApplicationWriter applicationWriter;
-    private final Reader1 reader1;
-    private final Processor1 processor1;
+    private final ApplicationReader applicationReader;
+    private final Exceeded3DaysProcessor processor1;
 
-    @Bean(name = "batchJob1")
+    @Bean(name = "exceeded3DaysJob")
     public Job batchJob1() {
-        return new JobBuilder("batchJob1", jobRepository)
+        return new JobBuilder("exceeded3DaysJob", jobRepository)
                 .start(step1())
                 .listener(jobListener)
                 .build();
@@ -38,9 +37,9 @@ public class BatchJob1Configuration {
 
     @Bean
     public Step step1() {
-        return new StepBuilder("step1", jobRepository)
+        return new StepBuilder("exceeded3DaysStep1", jobRepository)
                 .<Application, Application>chunk(10,ptm)
-                .reader(reader1.reader1())
+                .reader(applicationReader.exceeded3DaysApplication())
                 .processor(processor1)
                 .writer(applicationWriter)
                 .build();

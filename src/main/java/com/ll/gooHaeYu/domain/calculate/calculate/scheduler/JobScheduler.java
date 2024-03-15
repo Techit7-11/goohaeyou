@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 public class JobScheduler {
 
     private final JobLauncher jobLauncher;
-    @Qualifier("calculateJob")
     private final Job calculateJob;
+    private final Job exceeded3DaysJob;
 
     private boolean isFirstDay = true;
 
@@ -43,17 +43,13 @@ public class JobScheduler {
             jobLauncher.run(calculateJob, jobParameters);
         }
     }
+
+        @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
+//    @Scheduled(fixedRate = 5000) 5초마다 테스트
+    public void exceeded3DaysJob() throws Exception {
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addLong("time", System.currentTimeMillis())
+                .toJobParameters();
+        jobLauncher.run(exceeded3DaysJob, jobParameters);
+    }
 }
-//      첫 날:
-//            00:00: runJob() 실행
-//            06:00: runJobEvery6Hours() 실행
-//            12:00: runJobEvery6Hours() 실행
-//            18:00: runJobEvery6Hours() 실행
-//    둘째 날:
-//            00:00: runJobEvery6Hours() 실행
-//            06:00: runJobEvery6Hours() 실행
-//            12:00: runJobEvery6Hours() 실행
-//            18:00: runJobEvery6Hours() 실행
-//    셋째 날:
-//            00:00: runJobEvery6Hours() 실행
-//            06:00: runJobEvery6Hours() 실행 ...
