@@ -16,4 +16,5 @@ public class PaymentCancelResDto {
 
     private String canceledAt;     // 결제 취소 날짜
 
+    private String payStatus;     // 결제 수단
 }
