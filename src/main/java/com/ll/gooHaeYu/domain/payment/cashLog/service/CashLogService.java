@@ -5,6 +5,7 @@ import com.ll.gooHaeYu.domain.payment.cashLog.dto.CashLogDto;
 import com.ll.gooHaeYu.domain.payment.cashLog.entity.CashLog;
 import com.ll.gooHaeYu.domain.payment.cashLog.entity.type.EventType;
 import com.ll.gooHaeYu.domain.payment.cashLog.repository.CashLogRepository;
+import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
 import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayStatus;
 import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayTypeFee;
@@ -58,11 +59,6 @@ public class CashLogService {
         return totalAmount - getTotalTaxAndFees(payStatus, totalAmount);
     }
 
-    @Transactional
-    public void addCashLog(CashLog cashLog) {
-        cashLogRepository.save(cashLog);
-    }
-
     public CashLogDto findByApplicationId(Long id) {
         CashLog cashLog = findByApplicationIdAndValidate(id);
 
@@ -72,6 +68,11 @@ public class CashLogService {
     public CashLog findByApplicationIdAndValidate(Long id) {
         return cashLogRepository.findByApplicationId(id)
                 .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
+    }
+
+    @Transactional
+    public void addCashLog(CashLog cashLog) {
+        cashLogRepository.save(cashLog);
     }
 
     public void createCashLog(Application application) {
@@ -86,21 +87,40 @@ public class CashLogService {
                 .netAmount(getNetAmount(PayStatus.EASY_PAY,earn))
                 .applicationId(application.getId())
                 .build();
-     cashLogRepository.save(newCashLog);
+
+        addCashLog(newCashLog);
     }
 
-    public void addCashLogOnCancel(Payment payment) {
-        CashLog cashLog = CashLog.builder()
+    @Transactional
+    public void createCashLogOnPaid(PaymentSuccessDto successDto, Payment payment) {
+        PayStatus payStatus = PayStatus.findByMethod(successDto.getMethod());
+
+        CashLog newCashLog =  CashLog.builder()
                 .member(payment.getMember())
-                .description("지원서_" + payment.getApplicationId() + "_급여_결제취소")
-                .paymentFee(0)
-                .vat(0)
-                .totalAmount(payment.getTotalAmount())
-                .netAmount(payment.getTotalAmount())
+                .description(successDto.getOrderName())
+                .eventType(EventType.결제_토스페이먼츠)
+                .totalAmount(successDto.getTotalAmount())
+                .vat(getVat(payment.getTotalAmount()))
+                .paymentFee(getPaymentFee(payStatus, payment.getTotalAmount()))
+                .netAmount(getNetAmount(payStatus, payment.getTotalAmount()))
                 .applicationId(payment.getApplicationId())
-                .eventType(EventType.취소_토스페이먼츠)
                 .build();
 
-        cashLogRepository.save(cashLog);
+        addCashLog(newCashLog);
+    }
+
+    public void createCashLogOnCancel(Payment payment) {
+        CashLog newCashLog = CashLog.builder()
+                .member(payment.getMember())
+                .description("지원서_" + payment.getApplicationId() + "_급여_결제취소")
+                .eventType(EventType.취소_토스페이먼츠)
+                .totalAmount(payment.getTotalAmount())
+                .vat(0)
+                .paymentFee(0)
+                .netAmount(payment.getTotalAmount())
+                .applicationId(payment.getApplicationId())
+                .build();
+
+        addCashLog(newCashLog);
     }
 }
