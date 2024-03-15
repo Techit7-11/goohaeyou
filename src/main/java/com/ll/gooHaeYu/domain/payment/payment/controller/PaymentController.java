@@ -1,10 +1,13 @@
 package com.ll.gooHaeYu.domain.payment.payment.controller;
 
+import com.ll.gooHaeYu.domain.payment.payment.dto.PaymentDto;
+import com.ll.gooHaeYu.domain.payment.payment.dto.cancel.PaymentCancelResDto;
+import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentReqDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentResDto;
-import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.gooHaeYu.domain.payment.payment.service.PaymentCancelService;
+import com.ll.gooHaeYu.domain.payment.payment.service.PaymentInfoService;
 import com.ll.gooHaeYu.domain.payment.payment.service.PaymentService;
 import com.ll.gooHaeYu.global.rsData.RsData;
 import com.ll.gooHaeYu.global.security.MemberDetails;
@@ -12,7 +15,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.mapping.Map;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentController {
     private final PaymentService paymentService;
     private final PaymentCancelService paymentCancelService;
+    private final PaymentInfoService paymentInfoService;
 
     @PostMapping()
     @Operation(summary = "결제 요청")
@@ -54,11 +57,20 @@ public class PaymentController {
 
     @PostMapping("/cancel")
     @Operation(summary = "결제 취소")
-    public RsData<Map> tossPaymentCancel(@AuthenticationPrincipal MemberDetails memberDetails,
+    public RsData<PaymentCancelResDto> tossPaymentCancel(@AuthenticationPrincipal MemberDetails memberDetails,
                                          @RequestParam String paymentKey,
                                          @RequestParam String cancelReason) {
-        Map map = paymentCancelService.tossPaymentCancel(memberDetails.getUsername(), paymentKey, cancelReason);
 
-        return RsData.of(map);
+        PaymentCancelResDto resDto = paymentCancelService.tossPaymentCancel(memberDetails.getUsername(), paymentKey, cancelReason);
+
+        return RsData.of(resDto);
+    }
+
+    @GetMapping("/{applicationId}")
+    @Operation(summary = "결제정보 가져오기")
+    public RsData<PaymentDto> getPaymentKey(@AuthenticationPrincipal MemberDetails memberDetails,
+                                            @PathVariable Long applicationId) {
+
+        return RsData.of(paymentInfoService.getValidPayment(memberDetails.getUsername(), applicationId));
     }
 }
