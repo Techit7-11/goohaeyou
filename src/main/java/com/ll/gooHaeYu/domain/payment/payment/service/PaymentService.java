@@ -2,8 +2,6 @@ package com.ll.gooHaeYu.domain.payment.payment.service;
 
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.domain.payment.cashLog.entity.CashLog;
-import com.ll.gooHaeYu.domain.payment.cashLog.entity.type.EventType;
 import com.ll.gooHaeYu.domain.payment.cashLog.service.CashLogService;
 import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentReqDto;
@@ -68,7 +66,7 @@ public class PaymentService {
 
         applicationService.updateApplicationOnPaymentSuccess(payment.getApplicationId(), amount);
 
-        addCashLogOnSuccess(successDto, payment);
+        cashLogService.createCashLogOnPaid(successDto, payment);
 
         return successDto;
     }
@@ -118,26 +116,11 @@ public class PaymentService {
     }
 
     @Transactional
-    public void addCashLogOnSuccess(PaymentSuccessDto successDto, Payment payment) {
-        PayStatus payStatus = PayStatus.findByMethod(successDto.getMethod());
-
-        CashLog cashLog =  CashLog.builder()
-                .member(payment.getMember())
-                .description(successDto.getOrderName())
-                .eventType(EventType.결제_토스페이먼츠)
-                .totalAmount(successDto.getTotalAmount())
-                .vat(cashLogService.getVat(payment.getTotalAmount()))
-                .paymentFee(cashLogService.getPaymentFee(payStatus, payment.getTotalAmount()))
-                .netAmount(cashLogService.getNetAmount(payStatus, payment.getTotalAmount()))
-                .applicationId(payment.getApplicationId())
-                .build();
-
-        cashLogService.addCashLog(cashLog);
-    }
-
-    @Transactional
     public PaymentFailDto tossPaymentFail(String code, String message, String orderId) {
         handlePaymentFailure(orderId, message);
+
+        Payment payment = findPaymentByOrderId(orderId);
+        paymentRepository.delete(payment);
 
         return PaymentFailDto.builder()
                 .errorCode(code)

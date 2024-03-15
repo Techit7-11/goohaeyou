@@ -51,7 +51,7 @@ public class PaymentCancelService {
                 new HttpEntity<>(params, headers),
                 PaymentCancelResDto.class);
 
-        cashLogService.addCashLogOnCancel(payment);
+        cashLogService.createCashLogOnCancel(payment);
 
         return paymentCancelResDto;
     }

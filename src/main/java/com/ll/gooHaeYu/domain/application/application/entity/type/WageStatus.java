@@ -10,6 +10,7 @@ public enum WageStatus {
 
     // 개인 지급
     APPLICATION_APPROVED("지원서 승인"),
+    WORK_INCOMPLETE_NO_PAYMENT("작업 미완료로 인한 취소"),
     WAGE_PAID("급여 지급 완료"),
 
     // 서비스 결제
