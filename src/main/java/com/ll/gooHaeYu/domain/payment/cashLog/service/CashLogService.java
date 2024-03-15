@@ -1,17 +1,13 @@
 package com.ll.gooHaeYu.domain.payment.cashLog.service;
 
-import com.ll.gooHaeYu.domain.application.application.dto.ApplicationDto;
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
-import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.payment.cashLog.dto.CashLogDto;
 import com.ll.gooHaeYu.domain.payment.cashLog.entity.CashLog;
 import com.ll.gooHaeYu.domain.payment.cashLog.entity.type.EventType;
 import com.ll.gooHaeYu.domain.payment.cashLog.repository.CashLogRepository;
-import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
 import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayStatus;
 import com.ll.gooHaeYu.domain.payment.payment.entity.type.PayTypeFee;
-import com.ll.gooHaeYu.global.event.cashLog.CashLogEvent;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,7 +78,7 @@ public class CashLogService {
         long earn = application.getEarn();
         CashLog newCashLog =  CashLog.builder()
                 .member(application.getMember())
-                .description("지원서_1_대금_결제")
+                .description("지원서_" + application.getId() + "_대금_결제")
                 .eventType(EventType.정산_급여)
                 .totalAmount(earn)
                 .vat(getVat(earn))
@@ -91,5 +87,20 @@ public class CashLogService {
                 .applicationId(application.getId())
                 .build();
      cashLogRepository.save(newCashLog);
+    }
+
+    public void addCashLogOnCancel(Payment payment) {
+        CashLog cashLog = CashLog.builder()
+                .member(payment.getMember())
+                .description("지원서_" + payment.getApplicationId() + "_급여_결제취소")
+                .paymentFee(0)
+                .vat(0)
+                .totalAmount(payment.getTotalAmount())
+                .netAmount(payment.getTotalAmount())
+                .applicationId(payment.getApplicationId())
+                .eventType(EventType.취소_토스페이먼츠)
+                .build();
+
+        cashLogRepository.save(cashLog);
     }
 }

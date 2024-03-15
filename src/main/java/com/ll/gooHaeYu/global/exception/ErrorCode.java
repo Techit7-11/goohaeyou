@@ -23,7 +23,6 @@ public enum ErrorCode {
 
     NOTIFICATION_NOT_EXIST(HttpStatus.NOT_FOUND, "해당 알림은 존재하지 않습니다."),
 
-    // NOT_EDITABLE -> NOT_ABLE 더 넓은 범위에 사용하기 위해 변경
     NOT_ABLE(HttpStatus.FORBIDDEN,"권한이 없습니다."),
 
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "찾을 수 없는 token 입니다."),
@@ -61,7 +60,12 @@ public enum ErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 
     COMPLETION_NOT_POSSIBLE(HttpStatus.BAD_REQUEST, "현재 상태 에서는 완료 처리가 불가능 합니다."),
-    AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "금액이 일치하지 않습니다.");
+
+    INVALID_WAGE_PAYMENT_METHOD(HttpStatus.NOT_FOUND, "유효하지 않은 방법 입니다."),
+
+    AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "금액이 일치하지 않습니다."),
+
+    PAYMENT_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "결제 정보가 없습니다.");
 
 
     private final HttpStatus status;

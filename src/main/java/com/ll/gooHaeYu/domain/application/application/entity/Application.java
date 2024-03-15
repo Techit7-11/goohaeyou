@@ -70,6 +70,10 @@ public class Application extends BaseTimeEntity {
         this.jobCompleted = true;
     }
 
+    public void changeToNotCompleted() {
+        this.jobCompleted = false;
+    }
+
     public void setEarn(int earn) {
         this.earn = earn;
     }

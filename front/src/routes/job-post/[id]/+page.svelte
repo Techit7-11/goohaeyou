@@ -328,7 +328,7 @@
 										<span class="font-medium">급여 지급 방법:</span>
 										<span class="ml-2 text-gray-600">
 											{#if jobPostDetailDto?.wagePaymentMethod === 'INDIVIDUAL_PAYMENT'}개인 지급{:else if jobPostDetailDto?.wagePaymentMethod === 'SERVICE_PAYMENT'}서비스
-												결제{:else}정보 없음{/if}
+												정산{:else}정보 없음{/if}
 										</span>
 									</div>
 								</li>

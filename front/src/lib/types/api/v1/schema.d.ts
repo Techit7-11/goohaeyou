@@ -60,14 +60,6 @@ export interface paths {
     /** 댓글 작성 */
     post: operations["write"];
   };
-  "/api/payments": {
-    /** 결제 요청 */
-    post: operations["requestTossPayments"];
-  };
-  "/api/payments/cancel": {
-    /** 결제 취소 */
-    post: operations["tossPaymentCancel"];
-  };
   "/api/member/review/{jobPostingId}": {
     /** 지원자 리뷰 작성 */
     post: operations["createReview"];
@@ -120,14 +112,6 @@ export interface paths {
   "/api/post-comment/{postId}": {
     /** 해당 공고에 달린 댓글 목록 */
     get: operations["findByPostId"];
-  };
-  "/api/payments/success": {
-    /** 결제 성공 */
-    get: operations["tossPaymentSuccess"];
-  };
-  "/api/payments/fail": {
-    /** 결제 실패 */
-    get: operations["tossPaymentFail"];
   };
   "/api/notification": {
     /** 유저 별 알림리스트 */
@@ -260,37 +244,6 @@ export interface components {
       msg?: string;
       data?: components["schemas"]["Register"];
     };
-    PaymentReqDto: {
-      /** @enum {string} */
-      payStatus: "REQUEST" | "CARD" | "EASY_PAY";
-      /** Format: int64 */
-      amount: number;
-      orderId?: string;
-      orderName?: string;
-      /** Format: int64 */
-      applicationId?: number;
-    };
-    PaymentResDto: {
-      /** @enum {string} */
-      payStatus: "REQUEST" | "CARD" | "EASY_PAY";
-      /** Format: int64 */
-      amount: number;
-      orderId: string;
-      orderName: string;
-      payer: string;
-      successUrl?: string;
-      failUrl?: string;
-      failReason?: string;
-      canceled?: boolean;
-      cancelReason?: string;
-    };
-    RsDataPaymentResDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["PaymentResDto"];
-    };
     ApplicantReviewDto: {
       /** Format: int64 */
       id?: number;
@@ -357,53 +310,6 @@ export interface components {
       statusCode?: number;
       msg?: string;
       data?: components["schemas"]["CommentDto"][];
-    };
-    PaymentSuccessDto: {
-      paymentKey?: string;
-      orderId?: string;
-      orderName?: string;
-      method?: string;
-      /** Format: int32 */
-      totalAmount?: number;
-      approvedAt?: string;
-      card?: components["schemas"]["SuccessCardDto"];
-      easyPay?: components["schemas"]["SuccessEasyPayDto"];
-    };
-    RsDataPaymentSuccessDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["PaymentSuccessDto"];
-    };
-    SuccessCardDto: {
-      company?: string;
-      number?: string;
-      installmentPlanMonths?: string;
-      isInterestFree?: string;
-      approveNo?: string;
-      useCardPoint?: string;
-      cardType?: string;
-      acquireStatus?: string;
-    };
-    SuccessEasyPayDto: {
-      provider?: string;
-      /** Format: int32 */
-      amount?: number;
-      /** Format: int32 */
-      discountAmount?: number;
-    };
-    PaymentFailDto: {
-      errorCode?: string;
-      errorMessage?: string;
-      orderId?: string;
-    };
-    RsDataPaymentFailDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["PaymentFailDto"];
     };
     NotificationDto: {
       /** Format: int64 */
@@ -949,38 +855,6 @@ export interface operations {
       };
     };
   };
-  /** 결제 요청 */
-  requestTossPayments: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PaymentReqDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["RsDataPaymentResDto"];
-        };
-      };
-    };
-  };
-  /** 결제 취소 */
-  tossPaymentCancel: {
-    parameters: {
-      query: {
-        paymentKey: string;
-        cancelReason: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-        };
-      };
-    };
-  };
   /** 지원자 리뷰 작성 */
   createReview: {
     parameters: {
@@ -1215,42 +1089,6 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["RsDataListCommentDto"];
-        };
-      };
-    };
-  };
-  /** 결제 성공 */
-  tossPaymentSuccess: {
-    parameters: {
-      query: {
-        paymentKey: string;
-        orderId: string;
-        amount: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["RsDataPaymentSuccessDto"];
-        };
-      };
-    };
-  };
-  /** 결제 실패 */
-  tossPaymentFail: {
-    parameters: {
-      query: {
-        code: string;
-        message: string;
-        orderId: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["RsDataPaymentFailDto"];
         };
       };
     };
