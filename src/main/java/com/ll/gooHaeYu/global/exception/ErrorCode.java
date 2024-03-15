@@ -61,7 +61,11 @@ public enum ErrorCode {
 
     COMPLETION_NOT_POSSIBLE(HttpStatus.BAD_REQUEST, "현재 상태 에서는 완료 처리가 불가능 합니다."),
 
-    INVALID_WAGE_PAYMENT_METHOD(HttpStatus.NOT_FOUND, "유효하지 않은 방법 입니다.");
+    INVALID_WAGE_PAYMENT_METHOD(HttpStatus.NOT_FOUND, "유효하지 않은 방법 입니다."),
+
+    AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "금액이 일치하지 않습니다."),
+
+    PAYMENT_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "결제 정보가 없습니다.");
 
 
     private final HttpStatus status;
