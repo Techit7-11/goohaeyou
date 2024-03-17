@@ -38,11 +38,10 @@
 			.apiEndPoints()
 			.PATCH(`/api/jobs/complete/${applicationId}/manually`, {});
 
-		if (response.data?.statusCode === 204) {
+		if (response.data?.resultType === 'SUCCESS') {
 			location.reload();
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage);
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			rq.msgError('요청 중 오류가 발생했습니다.');
 		}
@@ -53,12 +52,13 @@
 			.apiEndPoints()
 			.PATCH(`/api/jobs/individual/no-work/${applicationId}`, {});
 
-		if (response.data?.statusCode === 204) {
+		if (response.data?.resultType === 'SUCCESS') {
 			rq.msgInfo('취소 완료되었습니다.');
 			location.reload();
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage);
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else if (response.data?.resultType === 'VALIDATION_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			rq.msgError('요청 중 오류가 발생했습니다.');
 		}

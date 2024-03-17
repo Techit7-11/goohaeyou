@@ -20,15 +20,12 @@
 
 		const response = await rq.apiEndPoints().POST('/api/member/join', { body: newMemberData });
 
-		if (response.data?.statusCode === 200) {
+		if (response.data?.resultType === 'SUCCESS') {
 			rq.msgAndRedirect({ msg: '회원가입 완료' }, undefined, '/');
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage);
-		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
-			if (Array.isArray(response.data.data)) {
-				rq.msgError(response.data.data[0]);
-			}
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else if (response.data?.resultType === 'VALIDATION_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			rq.msgError('회원가입 중 오류가 발생했습니다.');
 		}
