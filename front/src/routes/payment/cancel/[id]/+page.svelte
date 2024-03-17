@@ -22,14 +22,16 @@
 
 		const response = await rq.apiEndPoints().GET(`/api/payments/${applicationId}`);
 
-		if (response.data?.msg === 'OK') {
+		if (response.data?.resultType === 'SUCCESS') {
 			paymentDto = response.data?.data;
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			rq.msgError(response.data?.data.message);
-			rq.goTo('/applications/detail/' + applicationId);
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgAndRedirect(
+				response.data?.data.message,
+				undefined,
+				'/applications/detail/' + applicationId
+			);
 		} else {
-			rq.msgError('오류가 발생했습니다.');
-			rq.goTo('/applications/detail/' + applicationId);
+			rq.msgAndRedirect('오류가 발생했습니다.', undefined, '/applications/detail/' + applicationId);
 		}
 	});
 
@@ -43,12 +45,11 @@
 
 		const response = await rq.apiEndPoints().POST(`/api/payments/cancel?${params}`);
 
-		if (response.data?.msg === 'OK') {
+		if (response.data?.resultType === 'SUCCESS') {
 			rq.msgInfo('결제가 취소되었습니다.');
 			rq.goTo('/applications/detail/' + applicationId);
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage);
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			rq.msgError('결제 취소 중 오류가 발생했습니다.');
 		}

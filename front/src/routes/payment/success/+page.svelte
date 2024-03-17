@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import rq from '$lib/rq/rq.svelte';
 
 	async function load() {
@@ -11,22 +12,20 @@
 			.apiEndPoints()
 			.GET(`/api/payments/success?orderId=${orderId}&paymentKey=${paymentKey}&amount=${amount}`);
 
-		if (response.data?.msg === 'OK') {
+		if (response.data?.resultType === 'SUCCESS') {
 			return response.data!;
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			rq.msgError(response.data?.data.message);
-			rq.goTo('/'); // 추후에 경로 재설정
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgAndRedirect(response.data?.message, undefined, '/'); // 추후에 경로 재설정
 		} else {
-			rq.msgError('결제 정보를 불러오는 중 오류가 발생했습니다.');
-			rq.goTo('/');
+			rq.msgAndRedirect({ msg: '결제 정보를 불러오는 중 오류가 발생했습니다.' }, undefined, '/');
 		}
 	}
 
-	function formatAmount(amount) {
+	function formatAmount(amount: number) {
 		return amount.toLocaleString('ko-KR');
 	}
 
-	function formatDateTime(dateTimeString) {
+	function formatDateTime(dateTimeString: string) {
 		const date = new Date(dateTimeString);
 		return date.toLocaleString('ko-KR', {
 			year: 'numeric',
@@ -93,7 +92,7 @@
 		<div class="mt-6">
 			<button
 				class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-				on:click={() => rq.goTo('/applications/detail/' + data.applicationId)}
+				on:click={() => rq.goTo('/')}
 				>확인
 			</button>
 		</div>

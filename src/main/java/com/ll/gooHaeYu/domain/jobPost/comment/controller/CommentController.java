@@ -3,7 +3,7 @@ package com.ll.gooHaeYu.domain.jobPost.comment.controller;
 import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentDto;
 import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentForm;
 import com.ll.gooHaeYu.domain.jobPost.comment.service.CommentService;
-import com.ll.gooHaeYu.global.rsData.RsData;
+import com.ll.gooHaeYu.global.rsData.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,19 +24,19 @@ public class CommentController {
 
     @GetMapping
     @Operation(summary = "해당 공고에 달린 댓글 목록")
-    public RsData<List<CommentDto>> findByPostId(@PathVariable("postId") Long postId) {
+    public ApiResponse<List<CommentDto>> findByPostId(@PathVariable("postId") Long postId) {
 
-        return RsData.of(commentService.findByPostId(postId));
+        return ApiResponse.ok(commentService.findByPostId(postId));
     }
 
     @PostMapping("/comment")
     @Operation(summary = "댓글 작성")
-    public RsData<CommentForm.Register> write (@AuthenticationPrincipal MemberDetails memberDetails,
+    public ApiResponse<CommentForm.Register> write (@AuthenticationPrincipal MemberDetails memberDetails,
                                                @PathVariable("postId") Long postId,
                                                @Valid @RequestBody CommentForm.Register form){
         CommentForm.Register jobPostForm = commentService.writeComment(postId,memberDetails.getUsername(),form);
 
-        return RsData.of(jobPostForm);
+        return ApiResponse.ok(jobPostForm);
     }
 
     @PutMapping("/comment/{commentId}")

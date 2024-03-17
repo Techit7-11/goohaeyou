@@ -1,8 +1,9 @@
 package com.ll.gooHaeYu.domain.jobPost.employ.controller;
 
 import com.ll.gooHaeYu.domain.jobPost.employ.service.WorkCompletionService;
-import com.ll.gooHaeYu.global.rsData.RsData;
+import com.ll.gooHaeYu.global.rsData.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
+import com.ll.gooHaeYu.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,21 +22,21 @@ public class WorkCompletionController {
 
     @PatchMapping ("/complete/{applicationId}/manually")
     @Operation(summary = "구인자가 수동으로 알바완료 처리")
-    public RsData<Void> completeJobManually(@AuthenticationPrincipal MemberDetails memberDetails,
-                                            @PathVariable (name = "applicationId") Long applicationId) {
+    public ApiResponse<Empty> completeJobManually(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                  @PathVariable (name = "applicationId") Long applicationId) {
 
         workCompletionService.completeJobManually(memberDetails.getUsername(), applicationId);
 
-        return RsData.of("204", "NO_CONTENT");
+        return ApiResponse.noContent();
     }
 
     @PatchMapping("/individual/no-work/{applicationId}")
     @Operation(summary = "개인 지급 알바 미완료 처리")
-    public RsData<Void> cancelIndividualNoWork(@AuthenticationPrincipal MemberDetails memberDetails,
+    public ApiResponse<Empty> cancelIndividualNoWork(@AuthenticationPrincipal MemberDetails memberDetails,
                                                @PathVariable (name = "applicationId") Long applicationId) {
 
         workCompletionService.cancelByIndividualPayment(memberDetails.getUsername(), applicationId);
 
-        return RsData.of("204", "NO_CONTENT");
+        return ApiResponse.noContent();
     }
 }
