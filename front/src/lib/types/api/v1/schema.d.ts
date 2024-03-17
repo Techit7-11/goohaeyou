@@ -219,13 +219,15 @@ export interface components {
       birth?: string;
       password?: string;
     };
-    RsDataVoid: {
-      resultCode?: string;
+    ApiResponseEmpty: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: Record<string, never>;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["Empty"];
     };
+    Empty: Record<string, never>;
     SocialProfileForm: {
       name: string;
       phoneNumber: string;
@@ -234,6 +236,14 @@ export interface components {
       location: string;
       /** Format: date */
       birth: string;
+    };
+    ApiResponseMemberDto: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["MemberDto"];
     };
     MemberDto: {
       /** Format: int64 */
@@ -247,26 +257,21 @@ export interface components {
       name?: string;
       phoneNumber?: string;
     };
-    RsDataMemberDto: {
-      resultCode?: string;
+    ApiResponseModify: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["MemberDto"];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["Modify"];
     };
-    RsDataModify: {
-      resultCode?: string;
+    ApiResponseRegister: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["Modify"];
-    };
-    RsDataRegister: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["Register"];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["Register"];
     };
     PaymentReqDto: {
       /** @enum {string} */
@@ -277,6 +282,14 @@ export interface components {
       orderName?: string;
       /** Format: int64 */
       applicationId?: number;
+    };
+    ApiResponsePaymentResDto: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["PaymentResDto"];
     };
     PaymentResDto: {
       /** @enum {string} */
@@ -292,25 +305,19 @@ export interface components {
       canceled?: boolean;
       cancelReason?: string;
     };
-    RsDataPaymentResDto: {
-      resultCode?: string;
+    ApiResponsePaymentCancelResDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["PaymentResDto"];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["PaymentCancelResDto"];
     };
     PaymentCancelResDto: {
       /** Format: int32 */
       cancelAmount?: number;
       transactionKey?: string;
       canceledAt?: string;
-    };
-    RsDataPaymentCancelResDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["PaymentCancelResDto"];
     };
     ApplicantReviewDto: {
       /** Format: int64 */
@@ -323,12 +330,13 @@ export interface components {
       /** Format: int64 */
       applicantId?: number;
     };
-    RsDataApplicantReviewDto: {
-      resultCode?: string;
+    ApiResponseApplicantReviewDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["ApplicantReviewDto"];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["ApplicantReviewDto"];
     };
     LoginForm: {
       username: string;
@@ -345,20 +353,21 @@ export interface components {
       /** Format: date */
       birth: string;
     };
-    RsDataJoinForm: {
-      resultCode?: string;
+    ApiResponseJoinForm: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["JoinForm"];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["JoinForm"];
     };
-    RsDataURI: {
-      resultCode?: string;
+    ApiResponseListCommentDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      /** Format: uri */
-      data?: string;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["CommentDto"][];
     };
     CommentDto: {
       /** Format: int64 */
@@ -372,12 +381,13 @@ export interface components {
       /** Format: date-time */
       modifyAt: string;
     };
-    RsDataListCommentDto: {
-      resultCode?: string;
+    ApiResponsePaymentDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["CommentDto"][];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["PaymentDto"];
     };
     PaymentDto: {
       paymentKey?: string;
@@ -390,12 +400,13 @@ export interface components {
       applicationId?: number;
       payStatus?: string;
     };
-    RsDataPaymentDto: {
-      resultCode?: string;
+    ApiResponsePaymentSuccessDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["PaymentDto"];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["PaymentSuccessDto"];
     };
     PaymentSuccessDto: {
       paymentKey?: string;
@@ -407,13 +418,6 @@ export interface components {
       approvedAt?: string;
       card?: components["schemas"]["SuccessCardDto"];
       easyPay?: components["schemas"]["SuccessEasyPayDto"];
-    };
-    RsDataPaymentSuccessDto: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["PaymentSuccessDto"];
     };
     SuccessCardDto: {
       company?: string;
@@ -432,17 +436,26 @@ export interface components {
       /** Format: int32 */
       discountAmount?: number;
     };
+    ApiResponsePaymentFailDto: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["PaymentFailDto"];
+    };
     PaymentFailDto: {
       errorCode?: string;
       errorMessage?: string;
       orderId?: string;
     };
-    RsDataPaymentFailDto: {
-      resultCode?: string;
+    ApiResponseListNotificationDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["PaymentFailDto"];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["NotificationDto"][];
     };
     NotificationDto: {
       /** Format: int64 */
@@ -458,26 +471,29 @@ export interface components {
       seen?: boolean;
       url?: string;
     };
-    RsDataListNotificationDto: {
-      resultCode?: string;
+    ApiResponseBoolean: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["NotificationDto"][];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: boolean;
     };
-    RsDataBoolean: {
-      resultCode?: string;
+    ApiResponseListApplicantReviewDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: boolean;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["ApplicantReviewDto"][];
     };
-    RsDataListApplicantReviewDto: {
-      resultCode?: string;
+    ApiResponseListJobPostDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["ApplicantReviewDto"][];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["JobPostDto"][];
     };
     JobPostDto: {
       /** Format: int64 */
@@ -499,12 +515,13 @@ export interface components {
       jobStartDate?: string;
       closed?: boolean;
     };
-    RsDataListJobPostDto: {
-      resultCode?: string;
+    ApiResponseListApplicationDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["JobPostDto"][];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["ApplicationDto"][];
     };
     ApplicationDto: {
       /** Format: int64 */
@@ -528,12 +545,13 @@ export interface components {
       createdAt?: string;
       approve?: boolean;
     };
-    RsDataListApplicationDto: {
-      resultCode?: string;
+    ApiResponseJobPostDetailDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["ApplicationDto"][];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["JobPostDetailDto"];
     };
     JobPostDetailDto: {
       /** Format: int64 */
@@ -574,12 +592,13 @@ export interface components {
       wagePaymentMethod?: "UNDEFINED" | "INDIVIDUAL_PAYMENT" | "SERVICE_PAYMENT";
       closed?: boolean;
     };
-    RsDataJobPostDetailDto: {
-      resultCode?: string;
+    ApiResponseGetPostsResponseBody: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["JobPostDetailDto"];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["GetPostsResponseBody"];
     };
     GetPostsResponseBody: {
       itemPage: components["schemas"]["PageDtoJobPostDto"];
@@ -595,12 +614,13 @@ export interface components {
       number: number;
       content: components["schemas"]["JobPostDto"][];
     };
-    RsDataGetPostsResponseBody: {
-      resultCode?: string;
+    ApiResponseListRoomListDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["GetPostsResponseBody"];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["RoomListDto"][];
     };
     RoomListDto: {
       /** Format: int64 */
@@ -610,12 +630,13 @@ export interface components {
       lastChat?: string;
       lastChatDate?: string;
     };
-    RsDataListRoomListDto: {
-      resultCode?: string;
+    ApiResponseRoomDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["RoomListDto"][];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["RoomDto"];
     };
     Message: {
       /** Format: int64 */
@@ -643,12 +664,13 @@ export interface components {
       username2?: string;
       messages?: components["schemas"]["Message"][];
     };
-    RsDataRoomDto: {
-      resultCode?: string;
+    ApiResponseListMessageDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["RoomDto"];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["MessageDto"][];
     };
     MessageDto: {
       /** Format: int64 */
@@ -657,26 +679,21 @@ export interface components {
       text: string;
       createdAt?: string;
     };
-    RsDataListMessageDto: {
-      resultCode?: string;
+    ApiResponseApplicationDto: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["MessageDto"][];
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: components["schemas"]["ApplicationDto"];
     };
-    RsDataApplicationDto: {
-      resultCode?: string;
+    ApiResponseString: {
       /** Format: int32 */
       statusCode?: number;
-      msg?: string;
-      data?: components["schemas"]["ApplicationDto"];
-    };
-    RsDataString: {
-      resultCode?: string;
-      /** Format: int32 */
-      statusCode?: number;
-      msg?: string;
-      data?: string;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      data: string;
     };
   };
   responses: never;
@@ -747,7 +764,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataMemberDto"];
+          "*/*": components["schemas"]["ApiResponseMemberDto"];
         };
       };
     };
@@ -763,7 +780,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -779,7 +796,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataMemberDto"];
+          "*/*": components["schemas"]["ApiResponseMemberDto"];
         };
       };
     };
@@ -795,7 +812,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataJobPostDetailDto"];
+          "*/*": components["schemas"]["ApiResponseJobPostDetailDto"];
         };
       };
     };
@@ -816,7 +833,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataModify"];
+          "*/*": components["schemas"]["ApiResponseModify"];
         };
       };
     };
@@ -846,7 +863,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -862,7 +879,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataRoomDto"];
+          "*/*": components["schemas"]["ApiResponseRoomDto"];
         };
       };
     };
@@ -878,7 +895,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -894,7 +911,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataApplicationDto"];
+          "*/*": components["schemas"]["ApiResponseApplicationDto"];
         };
       };
     };
@@ -915,7 +932,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -936,7 +953,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataURI"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -952,7 +969,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -983,7 +1000,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataRegister"];
+          "*/*": components["schemas"]["ApiResponseRegister"];
         };
       };
     };
@@ -999,7 +1016,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataPaymentResDto"];
+          "*/*": components["schemas"]["ApiResponsePaymentResDto"];
         };
       };
     };
@@ -1016,7 +1033,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataPaymentCancelResDto"];
+          "*/*": components["schemas"]["ApiResponsePaymentCancelResDto"];
         };
       };
     };
@@ -1037,7 +1054,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataApplicantReviewDto"];
+          "*/*": components["schemas"]["ApiResponseApplicantReviewDto"];
         };
       };
     };
@@ -1064,7 +1081,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataMemberDto"];
+          "*/*": components["schemas"]["ApiResponseMemberDto"];
         };
       };
     };
@@ -1080,7 +1097,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataJoinForm"];
+          "*/*": components["schemas"]["ApiResponseJoinForm"];
         };
       };
     };
@@ -1091,7 +1108,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListJobPostDto"];
+          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
         };
       };
     };
@@ -1107,7 +1124,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataRegister"];
+          "*/*": components["schemas"]["ApiResponseRegister"];
         };
       };
     };
@@ -1123,7 +1140,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -1139,7 +1156,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -1155,7 +1172,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListMessageDto"];
+          "*/*": components["schemas"]["ApiResponseListMessageDto"];
         };
       };
     };
@@ -1176,7 +1193,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -1192,7 +1209,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -1208,7 +1225,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -1225,7 +1242,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataVoid"];
+          "*/*": components["schemas"]["ApiResponseEmpty"];
         };
       };
     };
@@ -1270,7 +1287,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListCommentDto"];
+          "*/*": components["schemas"]["ApiResponseListCommentDto"];
         };
       };
     };
@@ -1286,7 +1303,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataPaymentDto"];
+          "*/*": components["schemas"]["ApiResponsePaymentDto"];
         };
       };
     };
@@ -1304,7 +1321,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataPaymentSuccessDto"];
+          "*/*": components["schemas"]["ApiResponsePaymentSuccessDto"];
         };
       };
     };
@@ -1322,7 +1339,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataPaymentFailDto"];
+          "*/*": components["schemas"]["ApiResponsePaymentFailDto"];
         };
       };
     };
@@ -1333,7 +1350,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListNotificationDto"];
+          "*/*": components["schemas"]["ApiResponseListNotificationDto"];
         };
       };
     };
@@ -1344,7 +1361,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataBoolean"];
+          "*/*": components["schemas"]["ApiResponseBoolean"];
         };
       };
     };
@@ -1355,7 +1372,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListApplicantReviewDto"];
+          "*/*": components["schemas"]["ApiResponseListApplicantReviewDto"];
         };
       };
     };
@@ -1371,7 +1388,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataApplicantReviewDto"];
+          "*/*": components["schemas"]["ApiResponseApplicantReviewDto"];
         };
       };
     };
@@ -1387,7 +1404,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataString"];
+          "*/*": components["schemas"]["ApiResponseString"];
         };
       };
     };
@@ -1398,7 +1415,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListJobPostDto"];
+          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
         };
       };
     };
@@ -1409,7 +1426,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListJobPostDto"];
+          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
         };
       };
     };
@@ -1420,7 +1437,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListCommentDto"];
+          "*/*": components["schemas"]["ApiResponseListCommentDto"];
         };
       };
     };
@@ -1431,7 +1448,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListApplicationDto"];
+          "*/*": components["schemas"]["ApiResponseListApplicationDto"];
         };
       };
     };
@@ -1447,7 +1464,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataBoolean"];
+          "*/*": components["schemas"]["ApiResponseBoolean"];
         };
       };
     };
@@ -1465,7 +1482,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataGetPostsResponseBody"];
+          "*/*": components["schemas"]["ApiResponseGetPostsResponseBody"];
         };
       };
     };
@@ -1483,7 +1500,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListJobPostDto"];
+          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
         };
       };
     };
@@ -1499,7 +1516,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListApplicationDto"];
+          "*/*": components["schemas"]["ApiResponseListApplicationDto"];
         };
       };
     };
@@ -1510,7 +1527,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["RsDataListRoomListDto"];
+          "*/*": components["schemas"]["ApiResponseListRoomListDto"];
         };
       };
     };
