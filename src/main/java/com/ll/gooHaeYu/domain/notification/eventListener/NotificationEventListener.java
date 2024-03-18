@@ -64,7 +64,7 @@ public class NotificationEventListener {
     @EventListener
     public void createdChatRoomEventListen(CreateChatRoomEvent event) {
 
-        notificationService.notifyAboutChatRoom(event);
+//        notificationService.notifyAboutChatRoom(event);
     }
 
     @EventListener
