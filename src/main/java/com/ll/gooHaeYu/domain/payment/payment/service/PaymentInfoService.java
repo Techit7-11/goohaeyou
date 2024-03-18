@@ -25,15 +25,7 @@ public class PaymentInfoService {
                         throw new CustomException(ALREADY_CANCELED);
                     }
 
-                    return PaymentDto.builder()
-                            .paymentKey(payment.getPaymentKey())
-                            .canceled(payment.isCanceled())
-                            .paid(payment.isPaid())
-                            .totalAmount(payment.getTotalAmount())
-                            .applicationId(payment.getApplicationId())
-                            .orderName(payment.getOrderName())
-                            .payStatus(payment.getPayStatus())
-                            .build();
+                    return buildPaymentDto(payment);
                 })
                 .orElseThrow(() -> new CustomException(PAYMENT_INFO_NOT_FOUND));
     }
@@ -42,5 +34,17 @@ public class PaymentInfoService {
         if (!payment.getMember().getUsername().equals(username)) {
             throw new CustomException(NOT_ABLE);
         }
+    }
+
+    private PaymentDto buildPaymentDto(Payment payment) {
+        return PaymentDto.builder()
+                .paymentKey(payment.getPaymentKey())
+                .canceled(payment.isCanceled())
+                .paid(payment.isPaid())
+                .totalAmount(payment.getTotalAmount())
+                .applicationId(payment.getApplicationId())
+                .orderName(payment.getOrderName())
+                .payStatus(payment.getPayStatus())
+                .build();
     }
 }

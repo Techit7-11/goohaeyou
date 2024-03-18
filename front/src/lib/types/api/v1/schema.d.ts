@@ -411,6 +411,8 @@ export interface components {
     PaymentSuccessDto: {
       paymentKey?: string;
       orderId?: string;
+      /** Format: int64 */
+      applicationId?: number;
       orderName?: string;
       method?: string;
       /** Format: int32 */

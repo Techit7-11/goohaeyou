@@ -15,11 +15,8 @@ import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.standard.base.util.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
@@ -29,7 +26,6 @@ import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final TossPaymentsConfig tossPaymentsConfig;
-    private final RestTemplate restTemplate;
     private final MemberService memberService;
     private final ApplicationService applicationService;
     private final TossPaymentUtil tossPaymentUtil;
@@ -84,16 +80,14 @@ public class PaymentService {
 
     @Transactional
     public PaymentSuccessDto requestPaymentAccept(String paymentKey, String orderId, Long amount) {
-        HttpHeaders headers = tossPaymentUtil.createBasicAuthHeaders();
         JSONObject params = createPaymentRequestParams(orderId, amount);
 
-        try {
-            return restTemplate.postForObject(TossPaymentsConfig.URL + paymentKey,
-                    new HttpEntity<>(params, headers),
-                    PaymentSuccessDto.class);
-        } catch (Exception e) {
-            throw new CustomException(ALREADY_APPROVED);
-        }
+        PaymentSuccessDto paymentSuccessDto = tossPaymentUtil.sendPaymentRequest(
+                paymentKey, params, PaymentSuccessDto.class);
+
+        paymentSuccessDto.setApplicationId(findPaymentByOrderId(orderId).getApplicationId());
+
+        return paymentSuccessDto;
     }
 
     private JSONObject createPaymentRequestParams(String orderId, Long amount) {

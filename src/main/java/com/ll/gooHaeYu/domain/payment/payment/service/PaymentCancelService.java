@@ -6,13 +6,10 @@ import com.ll.gooHaeYu.domain.payment.cashLog.service.CashLogService;
 import com.ll.gooHaeYu.domain.payment.payment.dto.cancel.PaymentCancelResDto;
 import com.ll.gooHaeYu.domain.payment.payment.entity.Payment;
 import com.ll.gooHaeYu.domain.payment.payment.repository.PaymentRepository;
-import com.ll.gooHaeYu.global.config.TossPaymentsConfig;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.standard.base.util.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -38,18 +35,15 @@ public class PaymentCancelService {
 
         payment.cancelPayment(cancelReason);
 
-        HttpHeaders headers = tossPaymentUtil.createBasicAuthHeaders();
-
         JSONObject params  = new JSONObject();
         params.put("cancelReason", cancelReason);
 
         UpdatePaymentAndApplication(payment, cancelReason);
 
         // TossPayments 결제 취소 API를 호출하고, 응답 값을 DTO 객체로 매핑
-        PaymentCancelResDto paymentCancelResDto = restTemplate.postForObject(
-                TossPaymentsConfig.URL + paymentKey + "/cancel",
-                new HttpEntity<>(params, headers),
-                PaymentCancelResDto.class);
+        PaymentCancelResDto paymentCancelResDto = tossPaymentUtil.sendPaymentCancelRequest(
+                paymentKey, params, PaymentCancelResDto.class
+        );
 
         cashLogService.createCashLogOnCancel(payment);
 
