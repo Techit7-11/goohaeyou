@@ -12,17 +12,13 @@
 			}
 		});
 
-		if (response.data?.statusCode === 200) {
+		if (response.data?.resultType === 'SUCCESS') {
 			rq.msgAndRedirect({ msg: '로그인 성공' }, undefined, '/'); // 메인페이지로 이동
 			rq.setLogined(response.data?.data); // 로그인 상태로 바꾼다
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			// CustomException 오류 메시지 처리
-			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage ?? '알 수 없는 오류가 발생했습니다.');
-		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
-			if (Array.isArray(response.data.data)) {
-				rq.msgError(response.data.data[0]);
-			}
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else if (response.data?.resultType === 'VALIDATION_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			rq.msgError('로그인 중 오류가 발생했습니다.');
 		}

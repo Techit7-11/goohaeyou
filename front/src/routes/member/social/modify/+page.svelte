@@ -36,15 +36,12 @@
 	async function updateMember() {
 		const response = await rq.apiEndPoints().PUT('/api/member/social', { body: updatedMemberData });
 
-		if (response.data?.statusCode === 200) {
+		if (response.data?.resultType === 'SUCCESS') {
 			rq.msgAndRedirect({ msg: '회원정보 수정 완료' }, undefined, '/');
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage);
-		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
-			if (Array.isArray(response.data.data)) {
-				rq.msgError(response.data.data[0]);
-			}
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else if (response.data?.resultType === 'VALIDATION_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			console.log('Error updating member:', response.data?.msg);
 			rq.msgError('회원정보 수정 중 오류가 발생했습니다.');

@@ -61,12 +61,11 @@ public class NotificationEventListener {
         notificationService.jobPostClosedNotificationEventListen(event);
     }
 
-//    프록시 문제로 알림기능 고도화 시 매칭에 관한 채팅방 생성 알림 발송
-//    @EventListener
-//    public void createdChatRoomEventListen(CreateChatRoomEvent event) {
-//
+    @EventListener
+    public void createdChatRoomEventListen(CreateChatRoomEvent event) {
+
 //        notificationService.notifyAboutChatRoom(event);
-//    }
+    }
 
     @EventListener
     public void calculateEventListen(CalculateNotificationEvent event) {

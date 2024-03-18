@@ -1,6 +1,9 @@
 server:
   port: 8090
 spring:
+  batch:
+    job:
+      enabled: false
   profiles:
     active: dev
     include: secret
@@ -30,3 +33,4 @@ custom:
 tossPayments:
   clientKey: ${tossPayments.apiClientKey}
   secretKey: ${tossPayments.apiSecretKey}
+  url: "https://api.tosspayments.com/v1/payments/"

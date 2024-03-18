@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.global.exception;
 
-import com.ll.gooHaeYu.global.rsData.RsData;
+import com.ll.gooHaeYu.global.rsData.ApiResponse;
+import com.ll.gooHaeYu.standard.base.Empty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,34 +15,27 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public RsData<List<String>> handleValidException(MethodArgumentNotValidException e) {
+    public ApiResponse<Empty> handleValidException(MethodArgumentNotValidException e) {
 
         List<String> errorMessages = e.getBindingResult().getAllErrors().stream()
                 .map(ObjectError::getDefaultMessage)
                 .toList();
 
-        log.error(errorMessages.toString());
+        log.error(errorMessages.toString());    // 모든 유효성 검사 에러를 로그로 찍음
 
-        return RsData.of(
-                "400",
-                "VALIDATION_EXCEPTION",
-                errorMessages
-        );
+        CustomHttpStatus customHttpStatus = CustomHttpStatus.builder()
+                .statusCode(400)
+                .statusMessage(errorMessages.get(0))   // 클라이언트에게는 첫 번째 에러를 반환
+                .build();
+
+        return ApiResponse.validationException(customHttpStatus);
     }
 
     @ExceptionHandler(CustomException.class)
-    public RsData<ErrorResponse> handleCustomException(CustomException e) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .errorCode(e.getErrorCode())
-                .message(e.getMessage())
-                .build();
+    public ApiResponse<Empty> handleCustomException(CustomException customException) {
 
-        log.error(e.getMessage(), e);
+        log.error(customException.getErrorCode() + ": " + customException.getMessage());
 
-        return RsData.of(
-                Integer.toString(e.getErrorCode().getStatus().value()),
-                "CUSTOM_EXCEPTION",
-                errorResponse
-        );
+        return ApiResponse.customException(customException.getErrorCode());
     }
 }

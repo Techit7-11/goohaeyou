@@ -2,8 +2,7 @@ package com.ll.gooHaeYu.domain.notification.controller;
 
 import com.ll.gooHaeYu.domain.notification.dto.NotificationDto;
 import com.ll.gooHaeYu.domain.notification.service.NotificationService;
-import com.ll.gooHaeYu.global.rsData.RsData;
-import com.ll.gooHaeYu.global.security.MemberDetails;
+import com.ll.gooHaeYu.global.rsData.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +21,8 @@ public class NotificationController {
 
     @GetMapping
     @Operation(summary = "유저 별 알림리스트")
-    public RsData<List<NotificationDto>> getList(Authentication authentication) {
-        return RsData.of(notificationService.getList(authentication.getName()));
+    public ApiResponse<List<NotificationDto>> getList(Authentication authentication) {
+        return ApiResponse.ok(notificationService.getList(authentication.getName()));
     }
 
     @DeleteMapping("/all")
@@ -50,8 +49,8 @@ public class NotificationController {
 
     @GetMapping("/new")
     @Operation(summary = "읽지 않은 알림 유무 확인")
-    public RsData<Boolean> unreadNotification(Authentication memberDetails) {
-        return RsData.of(notificationService.unreadNotification(memberDetails.getName()));
+    public ApiResponse<Boolean> unreadNotification(Authentication memberDetails) {
+        return ApiResponse.ok(notificationService.unreadNotification(memberDetails.getName()));
     }
 
 }

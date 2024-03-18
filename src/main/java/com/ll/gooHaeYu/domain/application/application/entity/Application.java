@@ -43,7 +43,7 @@ public class Application extends BaseTimeEntity {
 
     private Boolean jobCompleted = null;
 
-    private LocalDate jobStartDate;
+    private LocalDate jobEndDate;
 
     public void updateBody(String body) {
         if (body != null && !body.isBlank()) {
@@ -70,6 +70,10 @@ public class Application extends BaseTimeEntity {
         this.jobCompleted = true;
     }
 
+    public void changeToNotCompleted() {
+        this.jobCompleted = false;
+    }
+
     public void setEarn(int earn) {
         this.earn = earn;
     }
@@ -78,7 +82,7 @@ public class Application extends BaseTimeEntity {
         this.receive = receive;
     }
 
-    public void setJobStartDate(LocalDate jobStartDate) {
-        this.jobStartDate = jobStartDate;
+    public void setJobEndDate(LocalDate jobEndDate) {
+        this.jobEndDate = jobEndDate;
     }
 }

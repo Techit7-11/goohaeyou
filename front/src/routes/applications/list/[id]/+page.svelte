@@ -44,12 +44,11 @@
 		if (ids.length > 0) {
 			const response = await rq.apiEndPoints().PATCH(`/api/employ/${postId}/${ids.join(',')}`, {});
 
-			if (response.data?.statusCode === 204) {
+			if (response.data?.resultType === 'SUCCESS') {
 				rq.msgAndRedirect({ msg: '승인 완료' }, undefined, `/applications/list/${postId}`);
 				location.reload();
-			} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-				const customErrorMessage = response.data?.data?.message;
-				rq.msgError(customErrorMessage);
+			} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+				rq.msgError(response.data?.message);
 			} else {
 				rq.msgError('승인 요청 중 오류가 발생했습니다.');
 			}

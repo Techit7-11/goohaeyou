@@ -23,8 +23,7 @@ import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.APPL
 import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.APPLICATION_UNAPPROVE;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.DELETE;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.NOTICE;
-import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_ABLE;
-import static com.ll.gooHaeYu.global.exception.ErrorCode.NOT_POSSIBLE_TO_APPROVE_IT_YET;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -60,13 +59,14 @@ public class EmployService {
                 application.approve();
 
                 application.updateWageStatus(updateWageStatus);
-                application.setJobStartDate(jobPost.getJobStartDate());
+                application.setJobEndDate(jobPost.getJobStartDate()
+                        .plusDays(postDetail.getWage().getWorkDays() - 1));
 
                 increaseApplicantTransactionCount(application);
                 increaseAuthorTransactionCount(jobPost);
 
                 publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
-                publisher.publishEvent(new CreateChatRoomEvent(this,postWriterId,receiverId));
+                publisher.publishEvent(new CreateChatRoomEvent(this,postWriterId,receiverId,jobPost.getTitle()));
 
             }else {
                 application.reject();
@@ -85,12 +85,11 @@ public class EmployService {
     }
 
     private WageStatus determineWageStatus(WagePaymentMethod wagePaymentMethod) {
-        if (wagePaymentMethod == WagePaymentMethod.SERVICE_PAYMENT) {
-            return WageStatus.PAYMENT_PENDING;
-        } else if (wagePaymentMethod == WagePaymentMethod.INDIVIDUAL_PAYMENT) {
-            return WageStatus.APPLICATION_APPROVED;
-        }
-        return WageStatus.UNDEFINED;
+        return switch (wagePaymentMethod) {
+            case SERVICE_PAYMENT -> WageStatus.PAYMENT_PENDING;
+            case INDIVIDUAL_PAYMENT -> WageStatus.APPLICATION_APPROVED;
+            default -> throw new CustomException(INVALID_WAGE_PAYMENT_METHOD);
+        };
     }
 
     private void increaseApplicantTransactionCount(Application application) {
