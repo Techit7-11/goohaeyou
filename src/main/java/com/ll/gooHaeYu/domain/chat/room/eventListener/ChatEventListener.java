@@ -16,11 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class ChatEventListener {
     private final RoomService roomService;
+    private final NotificationService notificationService;
 
     @EventListener
     public void createChatRoomEventListen(CreateChatRoomEvent event) {
 
         roomService.createRoom(event.getMemberId1(), event.getMemberId2());
+        notificationService.notifyAboutChatRoom(event);
     }
 
 
