@@ -232,9 +232,9 @@
 				<div class="mt-4">
 					<div class="flex flex-col text-gray-700 text-sm">
 						<div class="text-xs">등록 일자 : {jobPostDetailDto?.createdAt}</div>
-						{#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifiedAt}
+						<!-- {#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifiedAt}
 							<div class="text-xs">수정 일자 : {jobPostDetailDto?.modifiedAt}</div>
-						{/if}
+						{/if} -->
 						<div class="flex justify-end">
 							{#if jobPostDetailDto?.author === rq.member.username}
 								<div class="mt-4">
