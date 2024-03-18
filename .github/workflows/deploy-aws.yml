@@ -9,7 +9,7 @@ on:
       - readme.md
       - infraScript/**
     branches:
-      - release/1
+      - dev
 
 permissions:
   contents: write
