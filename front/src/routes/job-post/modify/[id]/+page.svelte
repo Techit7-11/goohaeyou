@@ -12,9 +12,9 @@
 		deadLine: '',
 		jobStartDate: '',
 		payBasis: '',
-		workTime: '0',
-		workDays: '1',
-		cost: 0
+		workTime: '',
+		workDays: '',
+		cost: ''
 	};
 	let postId;
 
@@ -50,15 +50,13 @@
 		}
 
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}`, { body: jobPostData });
-		if (response.data?.statusCode === 200) {
+
+		if (response.data?.resultType === 'SUCCESS') {
 			rq.msgAndRedirect({ msg: '글 수정 완료' }, undefined, '/');
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage);
-		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
-			if (Array.isArray(response.data.data)) {
-				rq.msgError(response.data.data[0]);
-			}
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else if (response.data?.resultType === 'VALIDATION_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			rq.msgError('글 수정 중 오류가 발생했습니다.');
 		}
@@ -158,28 +156,33 @@
 				</div>
 
 				<div class="form-group">
-					<label class="label" for="jobStartDate">* 시작 일자</label>
-					<input
-						type="date"
-						id="jobStartDate"
-						class="input input-bordered w-full"
-						bind:value={jobPostData.jobStartDate}
-					/>
-				</div>
-
-				<div class="divider mt-10"></div>
-
-				<div class="form-group">
-					<label class="label" for="payBasis">* 급여 지급 기준</label>
-					<select
-						class="input input-bordered w-full"
-						id="payBasis"
-						bind:value={jobPostData.payBasis}
-					>
-						<option value="" disabled selected>- 선택하세요 -</option>
-						<option value="TOTAL_HOURS">총 시간</option>
-						<option value="TOTAL_DAYS">총 일수</option>
-					</select>
+					<span class="label">* 급여 지급 기준</span>
+					<div class="flex items-center justify-start space-x-4">
+						<div class="form-control">
+							<label class="label cursor-pointer flex items-center space-x-2">
+								<input
+									type="radio"
+									value="TOTAL_HOURS"
+									bind:group={jobPostData.payBasis}
+									name="payBasis"
+									class="radio checked:bg-blue-500"
+								/>
+								<span class="label-text">총 시간</span>
+							</label>
+						</div>
+						<div class="form-control">
+							<label class="label cursor-pointer flex items-center space-x-2">
+								<input
+									type="radio"
+									value="TOTAL_DAYS"
+									bind:group={jobPostData.payBasis}
+									name="payBasis"
+									class="radio checked:bg-blue-500"
+								/>
+								<span class="label-text">총 일수</span>
+							</label>
+						</div>
+					</div>
 				</div>
 
 				{#if jobPostData.payBasis === 'TOTAL_HOURS'}
@@ -191,7 +194,7 @@
 							class="input input-bordered w-full"
 							min="1"
 							max="24"
-							placeholder="예: 8"
+							placeholder="예) 3"
 							bind:value={jobPostData.workTime}
 						/>
 					</div>

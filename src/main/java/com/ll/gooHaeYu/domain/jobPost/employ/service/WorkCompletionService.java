@@ -10,36 +10,41 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.ll.gooHaeYu.domain.application.application.entity.type.WageStatus.*;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class WorkCompletionService {
     private final ApplicationService applicationService;
     private final JobPostService jobPostService;
 
+    // 수동 알바완료 처리
     @Transactional
     public void completeJobManually(String username, Long applicationId) {
+        Application application = getApplicationWithAuthorizationCheck(username, applicationId);
+
+        updateApplicationByComplete(application);
+    }
+
+    private Application getApplicationWithAuthorizationCheck(String username, Long applicationId) {
         Application application = applicationService.findByIdAndValidate(applicationId);
         JobPost jobPost = jobPostService.findByIdAndValidate(application.getJobPostDetail().getJobPost().getId());
 
-        checkPermissions(username, jobPost);
+        checkAuthorization(username, jobPost);
 
-        updateApplicationStatus(application);
-        application.changeToCompleted();
+        return application;
     }
 
-    private void checkPermissions(String username, JobPost jobPost) {
+    private void checkAuthorization(String username, JobPost jobPost) {
         if (!jobPost.getJobPostDetail().getAuthor().equals(username)) {
             throw new CustomException(NOT_ABLE);
         }
-        if (!jobPost.isEmployed() || !jobPost.isClosed()) {
-            throw new CustomException(BAD_REQUEST);
-        }
     }
 
-    private void updateApplicationStatus(Application application) {
+    private void updateApplicationByComplete(Application application) {
+        application.changeToCompleted();
+
         switch (application.getWageStatus()) {
             case PAYMENT_COMPLETED -> application.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
             case APPLICATION_APPROVED -> {
@@ -50,4 +55,20 @@ public class WorkCompletionService {
         }
     }
 
+    // 개인 지급 알바 미완료 처리
+    @Transactional
+    public void cancelByIndividualPayment(String username, Long applicationId) {
+        Application application = getApplicationWithAuthorizationCheck(username, applicationId);
+
+        if (!application.getWageStatus().equals(APPLICATION_APPROVED)) {
+            throw new CustomException(BAD_REQUEST);
+        }
+
+        updateApplicationByCancel(application);
+    }
+
+    private void updateApplicationByCancel(Application application) {
+        application.changeToNotCompleted();
+        application.updateWageStatus(WageStatus.WORK_INCOMPLETE_NO_PAYMENT);
+    }
 }

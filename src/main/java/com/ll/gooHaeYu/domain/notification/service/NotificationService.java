@@ -4,7 +4,6 @@ import com.ll.gooHaeYu.domain.application.application.entity.Application;
 import com.ll.gooHaeYu.domain.chat.room.service.RoomService;
 import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
@@ -103,21 +102,19 @@ public class NotificationService {
         makeNotification(application.getMember(), jobPost.getMember(), jobPost.getTitle(),CALCULATE_PAYMENT, NOTICE, url);
     }
 
-//    @Transactional
-//    public void notifyAboutChatRoom(CreateChatRoomEvent event) {
-//        log.info("알림 생성 중");
-//        Member member1 = memberService.findById(event.getMemberId1());
-//
-//        Member member2Proxy = memberService.findById(event.getMemberId2());
-//        Hibernate.initialize(member2Proxy); // 프록시 초기화
-//        Member member2 = member2Proxy;
-//
-//        Long roomId = roomService.findByUsername1AndUsername2(member1.getUsername(), member2.getUsername());
-//
-//        String url = "/chat/"+roomId;
-//        makeNotification(member1,member2," ",CHATROOM_CREATED,NOTICE, url);
-//        log.info("알림 생성 완료");
-//    }
+    @Transactional
+    public void notifyAboutChatRoom(CreateChatRoomEvent event) {
+        log.info("알림 생성 중");
+        Member member1 = memberService.findById(event.getMemberId1());
+        Member member2 = memberService.findById(event.getMemberId2());
+        String title = event.getPostTitle();
+        Long roomId = roomService.findByUsername1AndUsername2(member1.getUsername(), member2.getUsername()).getId();
+
+        String url = "/chat/"+roomId;
+        makeNotification(member1,member2,title,CHATROOM_CREATED,NOTICE, url);
+        makeNotification(member2,member1,title,CHATROOM_CREATED,NOTICE, url);
+        log.info("알림 생성 완료");
+    }
 
     private void makeNotification(Member toMember, Member fromMember, String jobPostTitle, CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {
         Notification notification = Notification.builder()

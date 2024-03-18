@@ -38,11 +38,27 @@
 			.apiEndPoints()
 			.PATCH(`/api/jobs/complete/${applicationId}/manually`, {});
 
-		if (response.data?.statusCode === 204) {
+		if (response.data?.resultType === 'SUCCESS') {
 			location.reload();
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage);
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else {
+			rq.msgError('요청 중 오류가 발생했습니다.');
+		}
+	}
+
+	async function cancelRequest(applicationId: number) {
+		const response = await rq
+			.apiEndPoints()
+			.PATCH(`/api/jobs/individual/no-work/${applicationId}`, {});
+
+		if (response.data?.resultType === 'SUCCESS') {
+			rq.msgInfo('취소 완료되었습니다.');
+			location.reload();
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else if (response.data?.resultType === 'VALIDATION_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			rq.msgError('요청 중 오류가 발생했습니다.');
 		}
@@ -70,12 +86,16 @@
 		return age;
 	}
 
-	function goToEditPage(applicationId: number) {
-		rq.goTo(`/applications/modify/${applicationId}`);
+	function goToEditPage() {
+		rq.goTo(`/applications/modify/${$page.params.id}`);
 	}
 
-	function goToPaymentPage(applicationId: number, wages: number) {
+	function goToPaymentPage(wages: number) {
 		rq.goTo(`/payment/pay/${$page.params.id}/${wages}`);
+	}
+
+	function goToPayCancelPage() {
+		rq.goTo(`/payment/cancel/${$page.params.id}`);
 	}
 </script>
 
@@ -159,12 +179,22 @@
 							{/if}
 						</div>
 					{/if}
-					{#if rq.member.username == application.jobPostAuthorUsername && (application.wageStatus == '지원서 승인' || application.wageStatus == '급여 결제 완료')}
-						<div class="text-center mt-2 flex justify-center items-center space-x-2">
+					{#if application.jobPostAuthorUsername == rq.member.username && (application.wageStatus == '급여 결제 완료' || application.wageStatus == '지원서 승인')}
+						<div class="text-center mt-2 flex justify-center items-center space-x-8">
 							<button
 								class="btn btn-active btn-primary btn-sm"
 								on:click={() => completeJobManually(application.id)}>알바 완료</button
 							>
+							{#if application.wageStatus == '급여 결제 완료'}
+								<button class="btn btn-sm" on:click={() => goToPayCancelPage()}
+									>급여 결제 취소</button
+								>
+							{/if}
+							{#if application.wageStatus == '지원서 승인'}
+								<button class="btn btn-sm" on:click={() => cancelRequest(application.id)}
+									>취소 요청</button
+								>
+							{/if}
 						</div>
 					{/if}
 				</div>
@@ -175,8 +205,7 @@
 					{#if application.wageStatus == '급여 결제 전'}
 						<button
 							class="btn btn-btn btn-sm mx-12 mt-6"
-							on:click={() => goToPaymentPage(application.id, application.wages)}
-							>급여 결제하기</button
+							on:click={() => goToPaymentPage(application.wages)}>급여 결제하기</button
 						>
 					{:else}
 						<button
@@ -184,7 +213,7 @@
 							style="background-color: #fafafa; color: #4b5563;"
 							disabled
 						>
-							{application.wageStatus}
+							진행 단계: {application.wageStatus}
 						</button>
 					{/if}
 				</div>

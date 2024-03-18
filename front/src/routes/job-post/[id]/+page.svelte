@@ -63,10 +63,10 @@
 	async function registerInterest(postId: number) {
 		const response = await rq.apiEndPoints().POST(`/api/job-posts/${postId}/interest`);
 
-		if (response.data?.msg == 'CUSTOM_EXCEPTION') {
-			rq.msgAndRedirect({ msg: response.data?.data?.message }, undefined, `/job-post/${postId}`);
-		} else if (response.data?.statusCode === 204) {
+		if (response.data?.resultType === 'SUCCESS') {
 			interested = true;
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgAndRedirect({ msg: response.data?.message }, undefined, `/job-post/${postId}`);
 		} else {
 			console.error('관심 등록에 실패하였습니다.');
 		}
@@ -75,12 +75,10 @@
 	async function removeInterest(postId: number) {
 		const response = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}/interest`);
 
-		if (response.data?.msg == 'CUSTOM_EXCEPTION') {
-			rq.msgAndRedirect({ msg: response.data?.data?.message }, undefined, `/job-post/${postId}`);
-		}
-
-		if (response.data?.statusCode === 204) {
+		if (response.data?.resultType === 'SUCCESS') {
 			interested = false;
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgAndRedirect({ msg: response.data?.message }, undefined, `/job-post/${postId}`);
 		} else {
 			console.error('관심 취소에 실패하였습니다.');
 		}
@@ -155,11 +153,11 @@
 	async function postEarlyClosing() {
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
 
-		if (response.data?.statusCode === 204) {
+		if (response.data?.resultType === 'SUCCESS') {
 			alert('공고가 조기 마감 되었습니다.');
 			location.reload();
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			rq.msgError(response.data?.data?.message);
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			console.error('조기 마감에 실패하였습니다.');
 		}
@@ -328,7 +326,7 @@
 										<span class="font-medium">급여 지급 방법:</span>
 										<span class="ml-2 text-gray-600">
 											{#if jobPostDetailDto?.wagePaymentMethod === 'INDIVIDUAL_PAYMENT'}개인 지급{:else if jobPostDetailDto?.wagePaymentMethod === 'SERVICE_PAYMENT'}서비스
-												결제{:else}정보 없음{/if}
+												정산{:else}정보 없음{/if}
 										</span>
 									</div>
 								</li>

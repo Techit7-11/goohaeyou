@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class ErrorResponse {
-    private ErrorCode errorCode;
-    private String message;
+public class CustomHttpStatus{
+    private int statusCode;
+    private String statusMessage;
 }

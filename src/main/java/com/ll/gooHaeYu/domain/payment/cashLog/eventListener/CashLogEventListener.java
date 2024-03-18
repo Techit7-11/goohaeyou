@@ -5,7 +5,6 @@ import com.ll.gooHaeYu.global.event.cashLog.CashLogEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -14,6 +13,6 @@ public class CashLogEventListener {
 
     @EventListener
     public void creatCashLogEvent(CashLogEvent event) {
-        cashLogService.createCashLog(event.getApplication());
+        cashLogService.createCashLogOnSettled(event.getApplication());
     }
 }
