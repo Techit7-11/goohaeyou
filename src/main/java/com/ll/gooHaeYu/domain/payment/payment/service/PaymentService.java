@@ -82,9 +82,12 @@ public class PaymentService {
     public PaymentSuccessDto requestPaymentAccept(String paymentKey, String orderId, Long amount) {
         JSONObject params = createPaymentRequestParams(orderId, amount);
 
-        return tossPaymentUtil.sendPaymentRequest(
-                paymentKey, params, PaymentSuccessDto.class
-        );
+        PaymentSuccessDto paymentSuccessDto = tossPaymentUtil.sendPaymentRequest(
+                paymentKey, params, PaymentSuccessDto.class);
+
+        paymentSuccessDto.setApplicationId(findPaymentByOrderId(orderId).getApplicationId());
+
+        return paymentSuccessDto;
     }
 
     private JSONObject createPaymentRequestParams(String orderId, Long amount) {
