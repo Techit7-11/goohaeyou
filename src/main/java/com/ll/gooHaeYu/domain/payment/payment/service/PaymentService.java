@@ -2,8 +2,6 @@ package com.ll.gooHaeYu.domain.payment.payment.service;
 
 import com.ll.gooHaeYu.domain.application.application.service.ApplicationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.domain.payment.cashLog.entity.CashLog;
-import com.ll.gooHaeYu.domain.payment.cashLog.entity.type.EventType;
 import com.ll.gooHaeYu.domain.payment.cashLog.service.CashLogService;
 import com.ll.gooHaeYu.domain.payment.payment.dto.fail.PaymentFailDto;
 import com.ll.gooHaeYu.domain.payment.payment.dto.request.PaymentReqDto;
@@ -17,11 +15,8 @@ import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.standard.base.util.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
@@ -31,7 +26,6 @@ import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final TossPaymentsConfig tossPaymentsConfig;
-    private final RestTemplate restTemplate;
     private final MemberService memberService;
     private final ApplicationService applicationService;
     private final TossPaymentUtil tossPaymentUtil;
@@ -68,7 +62,7 @@ public class PaymentService {
 
         applicationService.updateApplicationOnPaymentSuccess(payment.getApplicationId(), amount);
 
-        addCashLogOnSuccess(successDto, payment);
+        cashLogService.createCashLogOnPaid(successDto, payment);
 
         return successDto;
     }
@@ -86,16 +80,14 @@ public class PaymentService {
 
     @Transactional
     public PaymentSuccessDto requestPaymentAccept(String paymentKey, String orderId, Long amount) {
-        HttpHeaders headers = tossPaymentUtil.createBasicAuthHeaders();
         JSONObject params = createPaymentRequestParams(orderId, amount);
 
-        try {
-            return restTemplate.postForObject(TossPaymentsConfig.URL + paymentKey,
-                    new HttpEntity<>(params, headers),
-                    PaymentSuccessDto.class);
-        } catch (Exception e) {
-            throw new CustomException(ALREADY_APPROVED);
-        }
+        PaymentSuccessDto paymentSuccessDto = tossPaymentUtil.sendPaymentRequest(
+                paymentKey, params, PaymentSuccessDto.class);
+
+        paymentSuccessDto.setApplicationId(findPaymentByOrderId(orderId).getApplicationId());
+
+        return paymentSuccessDto;
     }
 
     private JSONObject createPaymentRequestParams(String orderId, Long amount) {
@@ -118,26 +110,11 @@ public class PaymentService {
     }
 
     @Transactional
-    public void addCashLogOnSuccess(PaymentSuccessDto successDto, Payment payment) {
-        PayStatus payStatus = PayStatus.findByMethod(successDto.getMethod());
-
-        CashLog cashLog =  CashLog.builder()
-                .member(payment.getMember())
-                .description(successDto.getOrderName())
-                .eventType(EventType.결제_토스페이먼츠)
-                .totalAmount(successDto.getTotalAmount())
-                .vat(cashLogService.getVat(payment.getTotalAmount()))
-                .paymentFee(cashLogService.getPaymentFee(payStatus, payment.getTotalAmount()))
-                .netAmount(cashLogService.getNetAmount(payStatus, payment.getTotalAmount()))
-                .applicationId(payment.getApplicationId())
-                .build();
-
-        cashLogService.addCashLog(cashLog);
-    }
-
-    @Transactional
     public PaymentFailDto tossPaymentFail(String code, String message, String orderId) {
         handlePaymentFailure(orderId, message);
+
+        Payment payment = findPaymentByOrderId(orderId);
+        paymentRepository.delete(payment);
 
         return PaymentFailDto.builder()
                 .errorCode(code)

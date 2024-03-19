@@ -36,7 +36,7 @@ public class ApplicationService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public Long writeApplication(String username, Long id, ApplicationForm.Register form) {
+    public void writeApplication(String username, Long id, ApplicationForm.Register form) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(id);
         Member member = memberService.getMember(username);
         canWrite(postDetail, member);
@@ -48,8 +48,6 @@ public class ApplicationService {
         applicationRepository.save(newApplication);
 
         publisher.publishEvent(new ApplicationCreateAndChangedEvent(this, postDetail, newApplication, APPLICATION_CREATED));
-
-        return newApplication.getId();
     }
 
     private Application createNewApplication(Member member, JobPostDetail postDetail, ApplicationForm.Register form) {

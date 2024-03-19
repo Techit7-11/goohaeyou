@@ -6,8 +6,9 @@ import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
 import com.ll.gooHaeYu.domain.member.member.dto.SocialProfileForm;
 import com.ll.gooHaeYu.domain.member.member.service.AuthenticationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.global.rsData.RsData;
+import com.ll.gooHaeYu.global.rsData.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
+import com.ll.gooHaeYu.standard.base.Empty;
 import com.ll.gooHaeYu.standard.base.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,17 +35,17 @@ public class MemberController {
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
-    public RsData<JoinForm> join(@RequestBody @Valid JoinForm form) {
+    public ApiResponse<JoinForm> join(@RequestBody @Valid JoinForm form) {
         JoinForm joinForm = memberService.join(form);
-        return RsData.of(joinForm);
+        return ApiResponse.ok(joinForm);
     }
 
     @PostMapping ("/login")
     @Operation(summary = "로그인, accessToken, refreshToken 쿠키 생성됨")
-    public RsData<MemberDto> login(@RequestBody @Valid LoginForm form, HttpServletRequest request, HttpServletResponse response) {
+    public ApiResponse<MemberDto> login(@RequestBody @Valid LoginForm form, HttpServletRequest request, HttpServletResponse response) {
         memberService.login(form);
         MemberDto memberDto = authenticationService.authenticateAndSetTokens(form.getUsername(), request, response);
-        return RsData.of(memberDto);
+        return ApiResponse.ok(memberDto);
     }
 
     @PostMapping ("/logout")
@@ -59,11 +60,10 @@ public class MemberController {
 
     @PutMapping("/social")
     @Operation(summary = "최초 소셜로그인 - 필수 회원정보 입력")
-    public RsData<MemberDto> updateSocialMember(@AuthenticationPrincipal MemberDetails memberDetails,
+    public ApiResponse<MemberDto> updateSocialMember(@AuthenticationPrincipal MemberDetails memberDetails,
                                                 @Valid @RequestBody SocialProfileForm form) {
         MemberDto updatedMember = memberService.updateSocialMemberProfile(memberDetails.getUsername(), form);
 
-        return RsData.of(updatedMember);
+        return ApiResponse.ok(updatedMember);
     }
-
 }

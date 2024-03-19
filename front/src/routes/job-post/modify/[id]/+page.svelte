@@ -13,7 +13,8 @@
 		jobStartDate: '',
 		payBasis: '',
 		workTime: '',
-		cost: 0
+		workDays: '',
+		cost: ''
 	};
 	let postId;
 
@@ -39,18 +40,23 @@
 			console.error('Error loading job post detail:', error);
 		}
 	}
+
 	// 공고 수정 제출 함수
 	async function submitForm() {
+		if (jobPostData.payBasis === 'TOTAL_HOURS') {
+			jobPostData.workDays = '1'; // 총 시간 선택 시, 일수 기본값 1로 설정
+		} else if (jobPostData.payBasis === 'TOTAL_DAYS') {
+			jobPostData.workTime = '0'; // 총 일수 선택 시, 시간 기본값 0으로 설정
+		}
+
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}`, { body: jobPostData });
-		if (response.data?.statusCode === 200) {
+
+		if (response.data?.resultType === 'SUCCESS') {
 			rq.msgAndRedirect({ msg: '글 수정 완료' }, undefined, '/');
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			const customErrorMessage = response.data?.data?.message;
-			rq.msgError(customErrorMessage);
-		} else if (response.data?.msg === 'VALIDATION_EXCEPTION') {
-			if (Array.isArray(response.data.data)) {
-				rq.msgError(response.data.data[0]);
-			}
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else if (response.data?.resultType === 'VALIDATION_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			rq.msgError('글 수정 중 오류가 발생했습니다.');
 		}
@@ -150,41 +156,63 @@
 				</div>
 
 				<div class="form-group">
-					<label class="label" for="jobStartDate">* 시작 일자</label>
-					<input
-						type="date"
-						id="jobStartDate"
-						class="input input-bordered w-full"
-						bind:value={jobPostData.jobStartDate}
-					/>
+					<span class="label">* 급여 지급 기준</span>
+					<div class="flex items-center justify-start space-x-4">
+						<div class="form-control">
+							<label class="label cursor-pointer flex items-center space-x-2">
+								<input
+									type="radio"
+									value="TOTAL_HOURS"
+									bind:group={jobPostData.payBasis}
+									name="payBasis"
+									class="radio checked:bg-blue-500"
+								/>
+								<span class="label-text">총 시간</span>
+							</label>
+						</div>
+						<div class="form-control">
+							<label class="label cursor-pointer flex items-center space-x-2">
+								<input
+									type="radio"
+									value="TOTAL_DAYS"
+									bind:group={jobPostData.payBasis}
+									name="payBasis"
+									class="radio checked:bg-blue-500"
+								/>
+								<span class="label-text">총 일수</span>
+							</label>
+						</div>
+					</div>
 				</div>
 
-				<div class="divider mt-10"></div>
-
-				<div class="form-group">
-					<label class="label" for="payBasis">* 급여 지급 기준</label>
-					<select
-						class="input input-bordered w-full"
-						id="payBasis"
-						bind:value={jobPostData.payBasis}
-					>
-						<option value="" disabled selected>- 선택하세요 -</option>
-						<option value="TOTAL_HOURS">총 시간</option>
-						<option value="TOTAL_DAYS">총 일수</option>
-						<option value="TOTAL_PROJECTS">총 건수</option>
-					</select>
-				</div>
-
-				<div class="form-group">
-					<label class="label" for="workTime">* 도움시간 또는 도움일수</label>
-					<input
-						type="text"
-						id="workTime"
-						class="input input-bordered w-full"
-						placeholder="예시) 2시간, 3일, 또는 협의"
-						bind:value={jobPostData.workTime}
-					/>
-				</div>
+				{#if jobPostData.payBasis === 'TOTAL_HOURS'}
+					<div class="form-group">
+						<label class="label" for="workTime">* 총 시간 입력</label>
+						<input
+							type="number"
+							id="workTime"
+							class="input input-bordered w-full"
+							min="1"
+							max="24"
+							placeholder="예) 3"
+							bind:value={jobPostData.workTime}
+						/>
+					</div>
+				{:else if jobPostData.payBasis === 'TOTAL_DAYS'}
+					<div class="form-group">
+						<label class="label" for="workDays">* 총 일수 선택 </label>
+						<select
+							class="input input-bordered w-full"
+							id="workDays"
+							bind:value={jobPostData.workDays}
+						>
+							<option value="" disabled selected>- 선택하세요 -</option>
+							{#each Array(7) as _, i}
+								<option value={i + 1}>{i + 1}일</option>
+							{/each}
+						</select>
+					</div>
+				{/if}
 
 				<div class="form-group">
 					<label class="label" for="cost">* 급여</label>

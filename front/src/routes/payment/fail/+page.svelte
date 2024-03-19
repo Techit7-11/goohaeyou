@@ -11,14 +11,12 @@
 			.apiEndPoints()
 			.GET(`/api/payments/fail?code=${code}&message=${message}&orderId=${orderId}`);
 
-		if (response.data?.msg === 'OK') {
+		if (response.data?.resultType === 'SUCCESS') {
 			return response.data!;
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			rq.msgError(response.data?.data.message);
-			rq.goTo('/'); // 추후에 경로 재설정
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgAndRedirect(response.data?.message, undefined, '/'); // 추후에 경로 재설정
 		} else {
-			rq.msgError('결제 실패 정보를 불러오는 중 오류가 발생했습니다.');
-			rq.goTo('/');
+			rq.msgError('결제 실패 정보를 불러오는 중 오류가 발생했습니다.', undefined, '/');
 		}
 	}
 </script>

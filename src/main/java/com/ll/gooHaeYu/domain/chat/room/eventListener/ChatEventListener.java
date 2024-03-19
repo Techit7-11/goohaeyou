@@ -22,7 +22,7 @@ public class ChatEventListener {
     public void createChatRoomEventListen(CreateChatRoomEvent event) {
 
         roomService.createRoom(event.getMemberId1(), event.getMemberId2());
-//        notificationService.notifyAboutChatRoom(event);
+        notificationService.notifyAboutChatRoom(event);
     }
 
 

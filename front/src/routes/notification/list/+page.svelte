@@ -205,3 +205,9 @@
 		</div>
 	</div>
 {/await}
+
+<svelte:head>
+	<script>
+		var global = window;
+	</script>
+</svelte:head>

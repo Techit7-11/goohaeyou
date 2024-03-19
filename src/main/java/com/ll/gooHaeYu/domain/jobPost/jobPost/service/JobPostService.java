@@ -71,6 +71,7 @@ public class JobPostService {
         Wage wage = Wage.builder()
                 .cost(form.getCost())
                 .workTime(form.getWorkTime())
+                .workDays(form.getWorkDays())
                 .payBasis(form.getPayBasis())
                 .wagePaymentMethod(form.getWagePaymentMethod())
                 .jobPostDetail(postDetail)
@@ -103,7 +104,7 @@ public class JobPostService {
         postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate());
         postDetail.updatePostDetail(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
-        postDetail.getWage().updateWageInfo(form.getWorkTime(), form.getCost(), form.getPayBasis());
+        postDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
 
 
 
