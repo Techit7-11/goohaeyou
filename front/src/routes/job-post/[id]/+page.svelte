@@ -4,23 +4,19 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { format } from 'date-fns';
 	import Map from './Map.svelte';
-
 	let postId = parseInt($page.params.id);
 	let comments = [];
 	let newComment = '';
 	let editingContent = '';
 	let interested = false;
-
 	onMount(async () => {
 		await loadComments(); // 댓글 로드
 		await updateInterestStatus(); // 관심등록 여부 확인 및 상태 업데이트
 	});
-
 	async function updateInterestStatus() {
 		const { data } = await checkInterestStatus(postId);
 		interested = data?.data;
 	}
-
 	async function load() {
 		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
 		return data!;
@@ -41,7 +37,6 @@
 	function editPost() {
 		rq.goTo(`/job-post/modify/${postId}`);
 	}
-
 	async function deletePost() {
 		try {
 			const { data } = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}`);
@@ -52,14 +47,11 @@
 			alert('글을 삭제하는 데 실패했습니다.');
 		}
 	}
-
 	async function checkInterestStatus() {
 		const postId = parseInt($page.params.id);
 		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}/members/interest`);
-
 		interested = data?.data;
 	}
-
 	async function registerInterest(postId: number) {
 		const response = await rq.apiEndPoints().POST(`/api/job-posts/${postId}/interest`);
 
@@ -71,7 +63,6 @@
 			console.error('관심 등록에 실패하였습니다.');
 		}
 	}
-
 	async function removeInterest(postId: number) {
 		const response = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}/interest`);
 
@@ -83,7 +74,6 @@
 			console.error('관심 취소에 실패하였습니다.');
 		}
 	}
-
 	// 댓글
 	async function loadComments() {
 		try {
@@ -98,7 +88,6 @@
 			console.error('댓글을 로드하는 중 오류가 발생했습니다.', error);
 		}
 	}
-
 	async function addComment() {
 		try {
 			if (rq.isLogout()) {
@@ -136,7 +125,6 @@
 			console.error('댓글 수정 중 오류가 발생했습니다.', error);
 		}
 	}
-
 	async function deleteComment(commentId) {
 		try {
 			await rq.apiEndPoints().DELETE(`/api/post-comment/${postId}/comment/${commentId}`);
@@ -148,7 +136,6 @@
 	function formatDateTime(dateTimeString) {
 		return format(new Date(dateTimeString), 'yyyy-MM-dd HH:mm');
 	}
-
 	// 공고 조기 마감
 	async function postEarlyClosing() {
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
@@ -162,7 +149,6 @@
 			console.error('조기 마감에 실패하였습니다.');
 		}
 	}
-
 	// 지원서 목록으로 이동
 	function goToApplicationsList(postId) {
 		window.location.href = `/applications/list/${postId}`;
@@ -176,7 +162,6 @@
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dbec7e19bbbe4a9e21a7b64b16dd537c&libraries=services"
 	></script>
 </svelte:head>
-
 {#await load()}
 	<div class="flex items-center justify-center min-h-screen">
 		<span class="loading loading-dots loading-lg"></span>
@@ -380,12 +365,10 @@
 						/></svg
 					>
 					<span class="text-sm">{jobPostDetailDto?.location ?? '정보 없음'}</span>
-
 					<!-- 지도 표시를 위한 섹션 -->
 					<section>
 						<Map />
 					</section>
-
 					<div class="divider"></div>
 					<div class="flex justify-end text-gray-700 text-sm">
 						<div class="flex">
@@ -400,7 +383,6 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="container mx-auto px-4 py-8">
 				<div class="w-full max-w-4xl mx-auto">
 					<!-- 댓글 입력 폼 -->
