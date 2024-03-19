@@ -40,8 +40,8 @@ public class PaymentController {
     @GetMapping("/success")
     @Operation(summary = "결제 성공")
     public ApiResponse<PaymentSuccessDto> tossPaymentSuccess(@RequestParam String paymentKey,
-                                        @RequestParam String orderId,
-                                        @RequestParam Long amount) {
+                                                             @RequestParam String orderId,
+                                                             @RequestParam Long amount) {
 
         return ApiResponse.ok(paymentService.tossPaymentSuccess(paymentKey, orderId, amount));
     }
@@ -49,8 +49,8 @@ public class PaymentController {
     @GetMapping("/fail")
     @Operation(summary = "결제 실패")
     public ApiResponse<PaymentFailDto> tossPaymentFail(@RequestParam String code,
-                                                  @RequestParam String message,
-                                                  @RequestParam String orderId) {
+                                                       @RequestParam String message,
+                                                       @RequestParam String orderId) {
 
         return ApiResponse.ok(paymentService.tossPaymentFail(code, message, orderId));
     }
@@ -58,8 +58,8 @@ public class PaymentController {
     @PostMapping("/cancel")
     @Operation(summary = "결제 취소")
     public ApiResponse<PaymentCancelResDto> tossPaymentCancel(@AuthenticationPrincipal MemberDetails memberDetails,
-                                         @RequestParam String paymentKey,
-                                         @RequestParam String cancelReason) {
+                                                              @RequestParam String paymentKey,
+                                                              @RequestParam String cancelReason) {
 
         PaymentCancelResDto resDto = paymentCancelService.tossPaymentCancel(memberDetails.getUsername(), paymentKey, cancelReason);
 
@@ -69,7 +69,7 @@ public class PaymentController {
     @GetMapping("/{applicationId}")
     @Operation(summary = "결제정보 가져오기")
     public ApiResponse<PaymentDto> getPaymentKey(@AuthenticationPrincipal MemberDetails memberDetails,
-                                            @PathVariable Long applicationId) {
+                                                 @PathVariable Long applicationId) {
 
         return ApiResponse.ok(paymentInfoService.getValidPayment(memberDetails.getUsername(), applicationId));
     }

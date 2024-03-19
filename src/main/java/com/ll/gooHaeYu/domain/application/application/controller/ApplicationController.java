@@ -23,8 +23,8 @@ public class ApplicationController {
     @PostMapping("/{id}")
     @Operation(summary = "지원서 작성")
     public ApiResponse<Empty> writeApplication(@AuthenticationPrincipal MemberDetails memberDetails,
-                                             @PathVariable(name = "id") Long id,
-                                             @Valid @RequestBody ApplicationForm.Register form) {
+                                               @PathVariable(name = "id") Long id,
+                                               @Valid @RequestBody ApplicationForm.Register form) {
         applicationService.writeApplication(memberDetails.getUsername(), id, form);
 
         return ApiResponse.created();
@@ -40,8 +40,8 @@ public class ApplicationController {
     @PutMapping("/{id}")
     @Operation(summary = "지원서 수정")
     public ApiResponse<Empty> modifyApplication(@AuthenticationPrincipal MemberDetails memberDetails,
-                                           @PathVariable(name = "id") Long id,
-                                           @Valid @RequestBody ApplicationForm.Modify form) {
+                                                @PathVariable(name = "id") Long id,
+                                                @Valid @RequestBody ApplicationForm.Modify form) {
         applicationService.modifyApplication(memberDetails.getUsername(), id, form);
 
         return ApiResponse.noContent();
@@ -50,7 +50,7 @@ public class ApplicationController {
     @DeleteMapping("/{id}")
     @Operation(summary = "지원서 삭제")
     public ApiResponse<Empty> deleteApplication(@AuthenticationPrincipal MemberDetails memberDetails,
-                                           @PathVariable(name = "id") Long id) {
+                                                @PathVariable(name = "id") Long id) {
         applicationService.deleteApplication(memberDetails.getUsername(), id);
 
         return ApiResponse.noContent();
