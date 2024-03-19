@@ -39,7 +39,7 @@ public class MessageController {
     @GetMapping
     @Operation(summary = "채팅 메세지 로드")
     public ApiResponse<List<MessageDto>> writeChat(@AuthenticationPrincipal MemberDetails memberDetails,
-                                              @PathVariable(name = "roomId")Long roomId) {
+                                                   @PathVariable(name = "roomId")Long roomId) {
 
         return ApiResponse.ok(messageService.findByPostId(memberDetails.getUsername(),roomId));
     }
