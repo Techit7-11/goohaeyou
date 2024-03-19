@@ -4,23 +4,19 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { format } from 'date-fns';
 	import Map from './Map.svelte';
-
 	let postId = parseInt($page.params.id);
 	let comments = [];
 	let newComment = '';
 	let editingContent = '';
 	let interested = false;
-
 	onMount(async () => {
 		await loadComments(); // 댓글 로드
 		await updateInterestStatus(); // 관심등록 여부 확인 및 상태 업데이트
 	});
-
 	async function updateInterestStatus() {
 		const { data } = await checkInterestStatus(postId);
 		interested = data?.data;
 	}
-
 	async function load() {
 		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
 		return data!;
@@ -41,7 +37,6 @@
 	function editPost() {
 		rq.goTo(`/job-post/modify/${postId}`);
 	}
-
 	async function deletePost() {
 		try {
 			const { data } = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}`);
@@ -52,40 +47,31 @@
 			alert('글을 삭제하는 데 실패했습니다.');
 		}
 	}
-
 	async function checkInterestStatus() {
 		const postId = parseInt($page.params.id);
 		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}/members/interest`);
-
 		interested = data?.data;
 	}
-
 	async function registerInterest(postId: number) {
 		const response = await rq.apiEndPoints().POST(`/api/job-posts/${postId}/interest`);
-
-		if (response.data?.msg == 'CUSTOM_EXCEPTION') {
-			rq.msgAndRedirect({ msg: response.data?.data?.message }, undefined, `/job-post/${postId}`);
-		} else if (response.data?.statusCode === 204) {
+		if (response.data?.resultType === 'SUCCESS') {
 			interested = true;
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgAndRedirect({ msg: response.data?.message }, undefined, `/job-post/${postId}`);
 		} else {
 			console.error('관심 등록에 실패하였습니다.');
 		}
 	}
-
 	async function removeInterest(postId: number) {
 		const response = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}/interest`);
-
-		if (response.data?.msg == 'CUSTOM_EXCEPTION') {
-			rq.msgAndRedirect({ msg: response.data?.data?.message }, undefined, `/job-post/${postId}`);
-		}
-
-		if (response.data?.statusCode === 204) {
+		if (response.data?.resultType === 'SUCCESS') {
 			interested = false;
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgAndRedirect({ msg: response.data?.message }, undefined, `/job-post/${postId}`);
 		} else {
 			console.error('관심 취소에 실패하였습니다.');
 		}
 	}
-
 	// 댓글
 	async function loadComments() {
 		try {
@@ -100,7 +86,6 @@
 			console.error('댓글을 로드하는 중 오류가 발생했습니다.', error);
 		}
 	}
-
 	async function addComment() {
 		try {
 			if (rq.isLogout()) {
@@ -138,7 +123,6 @@
 			console.error('댓글 수정 중 오류가 발생했습니다.', error);
 		}
 	}
-
 	async function deleteComment(commentId) {
 		try {
 			await rq.apiEndPoints().DELETE(`/api/post-comment/${postId}/comment/${commentId}`);
@@ -150,21 +134,18 @@
 	function formatDateTime(dateTimeString) {
 		return format(new Date(dateTimeString), 'yyyy-MM-dd HH:mm');
 	}
-
 	// 공고 조기 마감
 	async function postEarlyClosing() {
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
-
-		if (response.data?.statusCode === 204) {
+		if (response.data?.resultType === 'SUCCESS') {
 			alert('공고가 조기 마감 되었습니다.');
 			location.reload();
-		} else if (response.data?.msg === 'CUSTOM_EXCEPTION') {
-			rq.msgError(response.data?.data?.message);
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
 		} else {
 			console.error('조기 마감에 실패하였습니다.');
 		}
 	}
-
 	// 지원서 목록으로 이동
 	function goToApplicationsList(postId) {
 		window.location.href = `/applications/list/${postId}`;
@@ -172,12 +153,12 @@
 </script>
 
 <svelte:head>
+	<title>Home</title>
 	<meta name="description" content="Svelte demo app" />
 	<script
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dbec7e19bbbe4a9e21a7b64b16dd537c&libraries=services"
 	></script>
 </svelte:head>
-
 {#await load()}
 	<div class="flex items-center justify-center min-h-screen">
 		<span class="loading loading-dots loading-lg"></span>
@@ -233,9 +214,9 @@
 				<div class="mt-4">
 					<div class="flex flex-col text-gray-700 text-sm">
 						<div class="text-xs">등록 일자 : {jobPostDetailDto?.createdAt}</div>
-						{#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifiedAt}
+						<!-- {#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifiedAt}
 							<div class="text-xs">수정 일자 : {jobPostDetailDto?.modifiedAt}</div>
-						{/if}
+						{/if} -->
 						<div class="flex justify-end">
 							{#if jobPostDetailDto?.author === rq.member.username}
 								<div class="mt-4">
@@ -300,31 +281,14 @@
 												d="M17.5,11c-3.584,0-6.5,2.916-6.5,6.5s2.916,6.5,6.5,6.5,6.5-2.916,6.5-6.5-2.916-6.5-6.5-6.5Zm0,12c-3.032,0-5.5-2.467-5.5-5.5s2.468-5.5,5.5-5.5,5.5,2.467,5.5,5.5-2.468,5.5-5.5,5.5Zm1.354-4.854c.195,.195,.195,.512,0,.707-.098,.098-.226,.146-.354,.146s-.256-.049-.354-.146l-1-1c-.094-.094-.146-.221-.146-.354v-2c0-.276,.224-.5,.5-.5s.5,.224,.5,.5v1.793l.854,.854Zm.646-14.146h-2.028c-.25-2.247-2.16-4-4.472-4h-2.5c-2.312,0-4.223,1.753-4.472,4h-1.528C2.019,4,0,6.019,0,8.5v11c0,2.481,2.019,4.5,4.5,4.5h6c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5H4.5c-1.93,0-3.5-1.57-3.5-3.5v-6.5H9.5c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5H1v-3.5c0-1.93,1.57-3.5,3.5-3.5h15c1.93,0,3.5,1.57,3.5,3.5v2c0,.276,.224,.5,.5,.5s.5-.224,.5-.5v-2c0-2.481-2.019-4.5-4.5-4.5ZM10.5,1h2.5c1.76,0,3.221,1.306,3.464,3H7.036c.243-1.694,1.704-3,3.464-3Z"
 											/></svg
 										>
-										<span class="font-medium">급여 타입:</span>
+										<span class="font-medium">작업 시간/일수:</span>
 										<span class="ml-2 text-gray-600">
-											{#if jobPostDetailDto?.payBasis === 'TOTAL_HOURS'}총 시간{:else if jobPostDetailDto?.payBasis === 'TOTAL_DAYS'}총
-												일수{:else if jobPostDetailDto?.payBasis === 'TOTAL_PROJECTS'}총 건수{:else if jobPostDetailDto?.payBasis === 'UNDEFINED'}미정{:else}'정보
-												없음'{/if}
+											{#if jobPostDetailDto?.payBasis === 'TOTAL_HOURS'}
+												{jobPostDetailDto.workTime}시간
+											{:else if jobPostDetailDto?.payBasis === 'TOTAL_DAYS'}
+												{jobPostDetailDto.workDays}일
+											{:else}정보 없음{/if}
 										</span>
-									</div>
-								</li>
-								<li class="flex items-center text-gray-700">
-									<div class="flex items-center">
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											id="arrow-circle-down"
-											viewBox="0 0 24 24"
-											width="15"
-											height="15"
-											class="mr-2"
-											><path
-												d="M12,24C5.383,24,0,18.617,0,12S5.383,0,12,0s12,5.383,12,12-5.383,12-12,12ZM12,1C5.935,1,1,5.935,1,12s4.935,11,11,11,11-4.935,11-11S18.065,1,12,1Zm1.854,16.26l-4.877-4.876c-.211-.212-.211-.557,0-.768l4.873-4.872-.707-.707-4.873,4.873c-.601,.601-.601,1.58,0,2.181l4.877,4.877,.707-.707Z"
-											/></svg
-										>
-										<span class="font-medium">도움시간 또는 일수:</span>
-										<span class="ml-2 text-gray-600"
-											>{jobPostDetailDto?.workTime ?? '정보 없음'}</span
-										>
 									</div>
 								</li>
 								<li class="flex items-center text-gray-700">
@@ -344,7 +308,7 @@
 										<span class="font-medium">급여 지급 방법:</span>
 										<span class="ml-2 text-gray-600">
 											{#if jobPostDetailDto?.wagePaymentMethod === 'INDIVIDUAL_PAYMENT'}개인 지급{:else if jobPostDetailDto?.wagePaymentMethod === 'SERVICE_PAYMENT'}서비스
-												결제{:else}정보 없음{/if}
+												정산{:else}정보 없음{/if}
 										</span>
 									</div>
 								</li>
@@ -398,12 +362,10 @@
 						/></svg
 					>
 					<span class="text-sm">{jobPostDetailDto?.location ?? '정보 없음'}</span>
-
 					<!-- 지도 표시를 위한 섹션 -->
 					<section>
 						<Map />
 					</section>
-
 					<div class="divider"></div>
 					<div class="flex justify-end text-gray-700 text-sm">
 						<div class="flex">
@@ -418,7 +380,6 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="container mx-auto px-4 py-8">
 				<div class="w-full max-w-4xl mx-auto">
 					<!-- 댓글 입력 폼 -->
