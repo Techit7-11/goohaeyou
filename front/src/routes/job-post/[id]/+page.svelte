@@ -54,6 +54,7 @@
 	}
 	async function registerInterest(postId: number) {
 		const response = await rq.apiEndPoints().POST(`/api/job-posts/${postId}/interest`);
+
 		if (response.data?.resultType === 'SUCCESS') {
 			interested = true;
 		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
@@ -64,6 +65,7 @@
 	}
 	async function removeInterest(postId: number) {
 		const response = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}/interest`);
+
 		if (response.data?.resultType === 'SUCCESS') {
 			interested = false;
 		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
@@ -137,6 +139,7 @@
 	// 공고 조기 마감
 	async function postEarlyClosing() {
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
+
 		if (response.data?.resultType === 'SUCCESS') {
 			alert('공고가 조기 마감 되었습니다.');
 			location.reload();
