@@ -10,3 +10,6 @@ spring:
   h2:
     console:
       enabled: true
+tossPayments:
+  successUrl: "http://localhost:5173/payment/success"
+  failUrl: "http://localhost:5173/payment/fail"

@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.1'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'jacoco'
 }
 
 group = 'com.ll'
@@ -87,8 +88,77 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 }
 
-tasks.named('test') {
+// 테스트를 실행할때마다 jacoco 리포트 생성
+test {
+	finalizedBy jacocoTestReport
 	useJUnitPlatform()
+}
+
+jacoco {
+	toolVersion = "0.8.10"
+	reportsDirectory = layout.buildDirectory.dir('jacocoReport')
+}
+
+jacocoTestReport {
+
+	dependsOn test   // 테스트 후 실행 되도록
+
+	reports {    // 리포트 파일
+		xml.required = false
+		csv.required = false
+		html.required = true
+	}
+
+	// 리포트 생성 시 커버리지 측정에서 제외할 클래스
+	afterEvaluate {
+		classDirectories.setFrom(
+				files(classDirectories.files.collect {
+					fileTree(dir: it, excludes: [
+							'**/*Application*',           // 애플리케이션 실행 클래스 제외
+							'**/global/**',               // 전역 설정 및 구성 클래스 제외
+							'**/standard/**',             // 표준 유틸리티 및 기반 클래스 제외
+							'**/dto/**',                  // DTO 클래스 제외
+							'**/eventListener/**',        // 이벤트 리스너 클래스 제외
+							'**/chat/**',                 // 채팅 관련 클래스 제외
+							'**/payment/**',              // 토스페이먼츠 관련 클래스 제외
+							'**/home/**',                 // 배포 관련 클래스 제외
+							'**/ReadinessController*',
+							"**/Q*"                       // QueryDSL 자동 생성 클래스 제외
+					])
+				})
+		)
+	}
+	finalizedBy 'jacocoTestCoverageVerification'
+}
+
+// Jacoco 커버리지 검증 태스크 설정
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled = true;   // 룰 활성화
+			element = 'CLASS'   // 룰을 체크할 단위
+
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.00     // 변경 예정, ex) 0.70 -> 라인 커버리지가 70% 이상이어야만 빌드 통과
+			}
+			// 커버리지 측정 제외 대상
+			excludes = [
+					'**/*Application*',
+					'**/global/**',
+					'**/standard/**',
+					'**/dto/**',
+					'**/eventListener/**',
+					'**/chat/**',
+					'**/payment/**',
+					'**/home/**',
+					'**/ReadinessController*',
+					"**/Q*"
+			]
+		}
+
+	}
 }
 
 jar{
