@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   output:
     ansi:
       enabled: always
@@ -36,5 +38,3 @@ logging:
 tossPayments:
   successUrl: "http://localhost:5173/payment/success"
   failUrl: "http://localhost:5173/payment/fail"
-app:
-  init-run: false
