@@ -1,7 +1,9 @@
 package com.ll.gooHaeYu.controller.jobPost;
+
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.dto.LoginForm;
+import com.ll.gooHaeYu.domain.member.member.dto.MemberForm;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
@@ -19,11 +21,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
 import java.time.Duration;
 import java.time.LocalDate;
-import static org.hamcrest.Matchers.is;
+
+import static com.ll.gooHaeYu.global.config.AppConfig.objectMapper;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,11 +66,13 @@ public class MypageControllerIntegrationTest {
         memberService.login(new LoginForm(joinForm.getUsername(), joinForm.getPassword()));
         Member member = memberService.getMember(joinForm.getUsername());
         String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
+
         // When
         ResultActions resultActions = mockMvc.perform(get("/api/member")
                         .cookie(new Cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
+
         // Then
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode").value(200))
@@ -103,5 +111,34 @@ public class MypageControllerIntegrationTest {
                 .andExpect(jsonPath("$.data[0].title", is("공고 제목1")))
                 .andExpect(jsonPath("$.data[1].author", is("recruiter")))
                 .andExpect(jsonPath("$.data[1].title", is("공고 제목2")));
+    }
+
+    @DisplayName("내 정보 수정 - 성공")
+    @Test
+    void putMemberDetailsSuccess() throws Exception {
+        // Given
+        memberService.join(new JoinFormBuilder().setUsername("user12").build());
+        Member member = memberService.getMember("user12");
+        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
+
+        // 수정할 정보를 담은 폼 생성
+        MemberForm.Modify updateForm = new MemberForm.Modify();
+        updateForm.setPassword("newpassword123");
+        updateForm.setGender(Gender.MALE);
+        updateForm.setLocation("서울특별시");
+        updateForm.setBirth(LocalDate.of(1991, 1, 10));
+
+        // When
+        ResultActions resultActions = mockMvc.perform(put("/api/member")
+                        .cookie(new Cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateForm))) // 수정할 정보를 JSON 형식으로 전송
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode").value(204))
+                .andExpect(jsonPath("$.message").value("No Content"))
+                .andExpect(jsonPath("$.resultType").value("SUCCESS"));
     }
 }
