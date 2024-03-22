@@ -30,7 +30,7 @@ public class InterestController {
     @DeleteMapping("/{id}/interest")
     @Operation(summary = "구인공고 관심 제거")
     public ApiResponse<Empty> disinterest(@AuthenticationPrincipal MemberDetails memberDetails,
-                                    @PathVariable(name = "id") Long id) {
+                                          @PathVariable(name = "id") Long id) {
         jobPostService.disinterest(memberDetails.getUsername(), id);
 
         return ApiResponse.noContent();
@@ -39,7 +39,7 @@ public class InterestController {
     @GetMapping("/{id}/members/interest")
     @Operation(summary = "로그인한 유저의 해당 구인공고 관심 등록 여부")
     public ApiResponse<Boolean> isInterested(@AuthenticationPrincipal MemberDetails memberDetails,
-                                        @PathVariable(name = "id") Long id) {
+                                             @PathVariable(name = "id") Long id) {
         boolean result = jobPostService.isInterested(memberDetails.getUsername(), id);
 
         return ApiResponse.ok(result);

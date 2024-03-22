@@ -8,7 +8,6 @@ import com.ll.gooHaeYu.domain.member.member.service.AuthenticationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.rsData.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
-import com.ll.gooHaeYu.standard.base.Empty;
 import com.ll.gooHaeYu.standard.base.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,7 +41,8 @@ public class MemberController {
 
     @PostMapping ("/login")
     @Operation(summary = "로그인, accessToken, refreshToken 쿠키 생성됨")
-    public ApiResponse<MemberDto> login(@RequestBody @Valid LoginForm form, HttpServletRequest request, HttpServletResponse response) {
+    public ApiResponse<MemberDto> login(@RequestBody @Valid LoginForm form,
+                                        HttpServletRequest request, HttpServletResponse response) {
         memberService.login(form);
         MemberDto memberDto = authenticationService.authenticateAndSetTokens(form.getUsername(), request, response);
         return ApiResponse.ok(memberDto);
@@ -61,7 +61,7 @@ public class MemberController {
     @PutMapping("/social")
     @Operation(summary = "최초 소셜로그인 - 필수 회원정보 입력")
     public ApiResponse<MemberDto> updateSocialMember(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                @Valid @RequestBody SocialProfileForm form) {
+                                                     @Valid @RequestBody SocialProfileForm form) {
         MemberDto updatedMember = memberService.updateSocialMemberProfile(memberDetails.getUsername(), form);
 
         return ApiResponse.ok(updatedMember);

@@ -32,7 +32,7 @@ public class RoomController {
     @GetMapping("/{roomId}")
     @Operation(summary = "채팅방 입장")
     public ApiResponse<RoomDto> showRoom(@AuthenticationPrincipal MemberDetails memberDetails,
-                                    @PathVariable Long roomId) {
+                                         @PathVariable Long roomId) {
         return ApiResponse.ok(roomService.findById(roomId, memberDetails.getUsername()));
     }
 

@@ -48,8 +48,8 @@ public class JobPostController {
     @PutMapping("/{id}")
     @Operation(summary = "구인공고 수정")
     public ApiResponse<JobPostForm.Modify> modifyPost(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                 @PathVariable(name = "id") Long id,
-                                                 @Valid @RequestBody JobPostForm.Modify form) {
+                                                      @PathVariable(name = "id") Long id,
+                                                      @Valid @RequestBody JobPostForm.Modify form) {
        JobPostForm.Modify jobPostForm = jobPostService.modifyPost(memberDetails.getUsername(), id, form);
 
         return ApiResponse.ok(jobPostForm);
@@ -63,7 +63,8 @@ public class JobPostController {
 
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
-    public ApiResponse<JobPostDetailDto> showDetailPost(@PathVariable(name = "id") Long id, HttpServletRequest request, HttpServletResponse response) {
+    public ApiResponse<JobPostDetailDto> showDetailPost(@PathVariable(name = "id") Long id,
+                                                        HttpServletRequest request, HttpServletResponse response) {
         final String VIEWED_JOB_POSTS_COOKIE = "viewedJobPosts";
         boolean isJobPostAlreadyVisited = checkJobPostVisited(request, id, VIEWED_JOB_POSTS_COOKIE);
 
@@ -83,7 +84,8 @@ public class JobPostController {
     }
 
     // 쿠키 추가
-    private void addOrUpdateViewedJobPostsCookie(HttpServletRequest request, HttpServletResponse response, Long jobId, String cookieName) {
+    private void addOrUpdateViewedJobPostsCookie(HttpServletRequest request, HttpServletResponse response,
+                                                 Long jobId, String cookieName) {
         // 쿠키에서 방문한 게시물 ID 목록 가져옴
         Cookie viewCookie = CookieUtil.findCookie(request, cookieName);
         String newCookieValue;

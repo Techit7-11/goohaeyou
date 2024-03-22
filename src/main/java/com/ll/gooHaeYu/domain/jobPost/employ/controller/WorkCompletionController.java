@@ -33,7 +33,7 @@ public class WorkCompletionController {
     @PatchMapping("/individual/no-work/{applicationId}")
     @Operation(summary = "개인 지급 알바 미완료 처리")
     public ApiResponse<Empty> cancelIndividualNoWork(@AuthenticationPrincipal MemberDetails memberDetails,
-                                               @PathVariable (name = "applicationId") Long applicationId) {
+                                                     @PathVariable (name = "applicationId") Long applicationId) {
 
         workCompletionService.cancelByIndividualPayment(memberDetails.getUsername(), applicationId);
 

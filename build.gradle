@@ -9,7 +9,9 @@ group = 'com.ll'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
 }
 
 configurations {
@@ -73,6 +75,7 @@ dependencies {
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.projectlombok:lombok:1.18.28'
 
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
@@ -95,7 +98,7 @@ test {
 }
 
 jacoco {
-	toolVersion = "0.8.10"
+	toolVersion = "0.8.11"
 	reportsDirectory = layout.buildDirectory.dir('jacocoReport')
 }
 
