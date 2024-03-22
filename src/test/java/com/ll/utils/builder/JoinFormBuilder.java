@@ -1,4 +1,4 @@
-package com.ll.utils;
+package com.ll.utils.builder;
 
 import com.ll.gooHaeYu.domain.member.member.dto.JoinForm;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
