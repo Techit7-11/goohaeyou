@@ -32,7 +32,6 @@ public class EmployController {
                                       @PathVariable (name="postId") Long postId ,
                                       @PathVariable (name ="applicationIds") List<Long> applicationIds) {
 
-        System.out.println("test " + authentication.getName());
         employService.approve(authentication.getName(), postId, applicationIds);
 
         return ApiResponse.noContent();
