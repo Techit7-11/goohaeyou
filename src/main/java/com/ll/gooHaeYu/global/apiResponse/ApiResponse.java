@@ -17,13 +17,19 @@ public class ApiResponse<T> {
     private final String message;
     @NotNull
     private final ApiResultType resultType;
+    private final String errorCode;
     @NotNull
     private final T data;
 
     private ApiResponse(int statusCode, String message, ApiResultType resultType, T data) {
+        this(statusCode, message, resultType, null, data);
+    }
+
+    private ApiResponse(int statusCode, String message, ApiResultType resultType, String errorCode, T data) {
         this.statusCode = statusCode;
         this.message = message;
         this.resultType = resultType;
+        this.errorCode = errorCode;
         this.data = data;
     }
 
@@ -78,6 +84,7 @@ public class ApiResponse<T> {
                 errorCode.getStatus().value(),
                 errorCode.getMessage(),
                 ApiResultType.CUSTOM_EXCEPTION,
+                errorCode.name(),
                 new Empty()
         );
     }
