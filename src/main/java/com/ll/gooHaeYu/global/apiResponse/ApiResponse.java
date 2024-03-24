@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.global.rsData;
+package com.ll.gooHaeYu.global.apiResponse;
 
 import com.ll.gooHaeYu.global.exception.CustomHttpStatus;
 import com.ll.gooHaeYu.global.exception.ErrorCode;
