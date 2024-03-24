@@ -3,7 +3,7 @@ package com.ll.gooHaeYu.domain.chat.room.controller;
 import com.ll.gooHaeYu.domain.chat.room.dto.RoomDto;
 import com.ll.gooHaeYu.domain.chat.room.dto.RoomListDto;
 import com.ll.gooHaeYu.domain.chat.room.service.RoomService;
-import com.ll.gooHaeYu.global.rsData.ApiResponse;
+import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import com.ll.gooHaeYu.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
