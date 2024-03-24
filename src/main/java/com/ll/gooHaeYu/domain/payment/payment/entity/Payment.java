@@ -46,6 +46,9 @@ public class Payment {
 
     private Long applicationId;
 
+    @Version
+    private Long version;   // JPA가 관리하는 버전 필드
+
     public void updatePayer(Member member) {
         this.member = member;
     }
