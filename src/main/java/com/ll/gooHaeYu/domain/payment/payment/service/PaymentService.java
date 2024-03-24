@@ -131,7 +131,6 @@ public class PaymentService {
     private void handlePaymentFailure(String orderId, String message) {
         Payment payment = findPaymentByOrderId(orderId);
         payment.markAsUnpaid();
-        payment.recordFailReason(message);
     }
 
     private Payment findPaymentByOrderId(String orderId) {
