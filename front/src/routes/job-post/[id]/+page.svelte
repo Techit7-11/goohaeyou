@@ -11,7 +11,9 @@
 	let interested = false;
 	onMount(async () => {
 		await loadComments(); // 댓글 로드
-		await updateInterestStatus(); // 관심등록 여부 확인 및 상태 업데이트
+		if (rq.isLogin()) {
+			await updateInterestStatus(); // 관심등록 여부 확인 및 상태 업데이트
+		}
 	});
 	async function updateInterestStatus() {
 		const { data } = await checkInterestStatus(postId);
