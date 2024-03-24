@@ -9,7 +9,7 @@ import com.ll.gooHaeYu.global.config.AppConfig;
 import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import com.ll.gooHaeYu.standard.base.Empty;
-import com.ll.gooHaeYu.standard.base.PageDto;
+import com.ll.gooHaeYu.standard.dto.PageDto;
 import com.ll.gooHaeYu.standard.base.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
