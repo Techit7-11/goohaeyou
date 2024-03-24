@@ -42,9 +42,10 @@ public class Payment {
 
     private String cancelReason;
 
-    private String failReason;
-
     private Long applicationId;
+
+    @Version
+    private Long version;   // JPA가 관리하는 버전 필드
 
     public void updatePayer(Member member) {
         this.member = member;
@@ -66,10 +67,6 @@ public class Payment {
         this.paid = false;
     }
 
-    public void recordFailReason(String failReason) {
-        this.failReason = failReason;
-    }
-
     public void cancelPayment(String cancelReason) {
         this.canceled = true;
         this.cancelReason = cancelReason;
@@ -85,7 +82,6 @@ public class Payment {
                 .orderName(orderName)
                 .payer(member.getUsername())
                 .canceled(canceled)
-                .failReason(failReason)
                 .build();
     }
 }

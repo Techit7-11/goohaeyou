@@ -115,6 +115,7 @@ export interface paths {
     patch: operations["approve"];
   };
   "/ready": {
+    /** 배포한 애플리케이션의 준비 상태를 확인 */
     get: operations["isReady"];
   };
   "/member/socialLogin/{providerTypeCode}": {
@@ -225,6 +226,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["Empty"];
     };
     Empty: Record<string, never>;
@@ -243,6 +245,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["MemberDto"];
     };
     MemberDto: {
@@ -263,6 +266,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["Modify"];
     };
     ApiResponseRegister: {
@@ -271,6 +275,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["Register"];
     };
     PaymentReqDto: {
@@ -289,6 +294,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["PaymentResDto"];
     };
     PaymentResDto: {
@@ -311,6 +317,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["PaymentCancelResDto"];
     };
     PaymentCancelResDto: {
@@ -336,6 +343,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["ApplicantReviewDto"];
     };
     LoginForm: {
@@ -359,6 +367,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["JoinForm"];
     };
     ApiResponseListCommentDto: {
@@ -367,6 +376,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["CommentDto"][];
     };
     CommentDto: {
@@ -387,6 +397,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["PaymentDto"];
     };
     PaymentDto: {
@@ -406,6 +417,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["PaymentSuccessDto"];
     };
     PaymentSuccessDto: {
@@ -444,6 +456,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["PaymentFailDto"];
     };
     PaymentFailDto: {
@@ -457,6 +470,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["NotificationDto"][];
     };
     NotificationDto: {
@@ -479,6 +493,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: boolean;
     };
     ApiResponseListApplicantReviewDto: {
@@ -487,6 +502,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["ApplicantReviewDto"][];
     };
     ApiResponseListJobPostDto: {
@@ -495,6 +511,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["JobPostDto"][];
     };
     JobPostDto: {
@@ -523,6 +540,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["ApplicationDto"][];
     };
     ApplicationDto: {
@@ -553,6 +571,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["JobPostDetailDto"];
     };
     JobPostDetailDto: {
@@ -600,6 +619,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["GetPostsResponseBody"];
     };
     GetPostsResponseBody: {
@@ -622,6 +642,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["RoomListDto"][];
     };
     RoomListDto: {
@@ -638,6 +659,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["RoomDto"];
     };
     Message: {
@@ -672,6 +694,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["MessageDto"][];
     };
     MessageDto: {
@@ -687,6 +710,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: components["schemas"]["ApplicationDto"];
     };
     ApiResponseString: {
@@ -695,6 +719,7 @@ export interface components {
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
       data: string;
     };
   };
@@ -1249,6 +1274,7 @@ export interface operations {
       };
     };
   };
+  /** 배포한 애플리케이션의 준비 상태를 확인 */
   isReady: {
     responses: {
       /** @description OK */

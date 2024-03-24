@@ -2,7 +2,7 @@ package com.ll.gooHaeYu.domain.member.review.controller;
 
 import com.ll.gooHaeYu.domain.member.review.dto.ApplicantReviewDto;
 import com.ll.gooHaeYu.domain.member.review.service.ReviewService;
-import com.ll.gooHaeYu.global.rsData.ApiResponse;
+import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

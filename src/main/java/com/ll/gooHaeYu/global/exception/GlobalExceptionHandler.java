@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.global.exception;
 
-import com.ll.gooHaeYu.global.rsData.ApiResponse;
+import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import com.ll.gooHaeYu.standard.base.Empty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.ObjectError;
