@@ -100,8 +100,8 @@ public class ApplicationControllerIntegrationTest {
 
         // Then
         resultActions.andExpect(jsonPath("$.statusCode").value(404))
-                .andExpect(jsonPath("$.resultType").value("CUSTOM_EXCEPTION"))
                 .andExpect(jsonPath("$.message").value("해당 공고는 존재하지 않습니다."))
+                .andExpect(jsonPath("$.errorCode").value("POST_NOT_EXIST"))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
