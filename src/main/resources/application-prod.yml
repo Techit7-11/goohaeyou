@@ -34,11 +34,11 @@ spring:
     exclude:
 logging:
   level:
-    com.ll.gooHaeYu: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.orm.jdbc.bind: DEBUG
-    org.hibernate.orm.jdbc.extract: DEBUG
-    org.springframework.transaction.interceptor: DEBUG
+    com.ll.gooHaeYu: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.orm.jdbc.bind: INFO
+    org.hibernate.orm.jdbc.extract: INFO
+    org.springframework.transaction.interceptor: INFO
 custom:
   site:
     cookieDomain: "${custom.prod.cookieDomain}"

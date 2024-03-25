@@ -6,7 +6,7 @@ import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
 import com.ll.gooHaeYu.domain.member.member.dto.SocialProfileForm;
 import com.ll.gooHaeYu.domain.member.member.service.AuthenticationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
-import com.ll.gooHaeYu.global.rsData.ApiResponse;
+import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import com.ll.gooHaeYu.standard.base.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;

@@ -9,7 +9,7 @@ import com.ll.gooHaeYu.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.gooHaeYu.domain.payment.payment.service.PaymentCancelService;
 import com.ll.gooHaeYu.domain.payment.payment.service.PaymentInfoService;
 import com.ll.gooHaeYu.domain.payment.payment.service.PaymentService;
-import com.ll.gooHaeYu.global.rsData.ApiResponse;
+import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

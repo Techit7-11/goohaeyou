@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.standard.base;
+package com.ll.gooHaeYu.standard.dto;
 
 import lombok.Getter;
 import org.springframework.data.domain.Page;

@@ -2,7 +2,7 @@ package com.ll.gooHaeYu.domain.notification.controller;
 
 import com.ll.gooHaeYu.domain.notification.dto.NotificationDto;
 import com.ll.gooHaeYu.domain.notification.service.NotificationService;
-import com.ll.gooHaeYu.global.rsData.ApiResponse;
+import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

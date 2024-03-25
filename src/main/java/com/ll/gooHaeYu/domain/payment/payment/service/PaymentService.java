@@ -13,7 +13,9 @@ import com.ll.gooHaeYu.domain.payment.payment.repository.PaymentRepository;
 import com.ll.gooHaeYu.global.config.TossPaymentsConfig;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.standard.base.util.TossPaymentUtil;
+import com.ll.gooHaeYu.standard.dto.retryOnOptimisticLock.RetryOnOptimisticLock;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PaymentService {
@@ -32,10 +35,12 @@ public class PaymentService {
     private final CashLogService cashLogService;
 
     @Transactional
+    @RetryOnOptimisticLock(attempts = 2, backoff = 500L)
     public PaymentResDto requestTossPayment(PaymentReqDto paymentReqDto, String username) {
         Payment payment = createPaymentEntity(paymentReqDto, username);
 
-        PaymentResDto paymentResDto = paymentRepository.save(payment).toPaymentRespDto();
+        Payment savedPayment = paymentRepository.save(payment);
+        PaymentResDto paymentResDto = savedPayment.toPaymentRespDto();
         setRedirectUrls(paymentResDto);
 
         return paymentResDto;
@@ -126,7 +131,6 @@ public class PaymentService {
     private void handlePaymentFailure(String orderId, String message) {
         Payment payment = findPaymentByOrderId(orderId);
         payment.markAsUnpaid();
-        payment.recordFailReason(message);
     }
 
     private Payment findPaymentByOrderId(String orderId) {

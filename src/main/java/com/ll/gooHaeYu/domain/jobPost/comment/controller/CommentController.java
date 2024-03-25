@@ -3,7 +3,7 @@ package com.ll.gooHaeYu.domain.jobPost.comment.controller;
 import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentDto;
 import com.ll.gooHaeYu.domain.jobPost.comment.dto.CommentForm;
 import com.ll.gooHaeYu.domain.jobPost.comment.service.CommentService;
-import com.ll.gooHaeYu.global.rsData.ApiResponse;
+import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
