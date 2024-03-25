@@ -137,7 +137,7 @@
 		<p class="mb-10">© 2024 All Rights Reserved by Techit7-11번과_GooHaeYou</p>
 	</aside>
 </footer>
-<div class="btm-nav">
+<div class="btm-nav" style="z-index: 1;">
 	<button on:click={NavMaps}>
 		<span class="btm-nav-label"></span>
 		<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 576 512"
