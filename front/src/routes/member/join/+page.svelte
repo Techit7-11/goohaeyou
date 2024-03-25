@@ -8,6 +8,7 @@
 		password: '',
 		name: '',
 		phoneNumber: '',
+		email: '',
 		gender: 'MALE',
 		location: '',
 		birth: ''
@@ -94,6 +95,16 @@
 						class="input input-bordered w-full"
 						placeholder="휴대폰 번호를 입력해주세요."
 						bind:value={newMemberData.phoneNumber}
+					/>
+				</div>
+				<div class="form-group">
+					<label class="label" for="email">* 이메일</label>
+					<input
+						type="text"
+						id="email"
+						class="input input-bordered w-full"
+						placeholder="이메일을 입력해주세요."
+						bind:value={newMemberData.email}
 					/>
 				</div>
 				<div class="form-group">
