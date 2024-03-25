@@ -103,4 +103,8 @@ public class Member extends BaseTimeEntity {
     public void addRestCash(int earn) {
         this.restCash += earn;
     }
+
+    public void authenticate() {
+        this.authenticated = true;
+    }
 }

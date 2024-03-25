@@ -19,7 +19,7 @@ import org.thymeleaf.context.Context;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.ll.gooHaeYu.global.exception.ErrorCode.EMAIL_ALREADY_AUTHENTICATED;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -84,6 +84,31 @@ public class EmailAuthService {
             emailAuthRepository.save(newEmailAuth);
 
             return newEmailAuth;
+        }
+    }
+
+    @Transactional
+    public void confirmVerification(String username, String authCode) {
+        EmailAuth emailAuth = emailAuthRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(INITIATE_EMAIL_REQUEST));
+
+        verifyCode(emailAuth, authCode);
+
+        emailAuthRepository.delete(emailAuth);
+
+        Member member = memberService.getMember(username);
+        member.authenticate();
+    }
+
+    @Transactional
+    public void verifyCode(EmailAuth emailAuth, String authCode) {
+        if (emailAuth.getExpiredAt().isBefore(LocalDateTime.now())) {
+            emailAuthRepository.delete(emailAuth);
+            throw new CustomException(EXPIRED_AUTH_CODE);
+        }
+
+        if (!authCode.equals(emailAuth.getAuthCode())) {
+            throw new CustomException(INVALID_AUTH_CODE);
         }
     }
 }
