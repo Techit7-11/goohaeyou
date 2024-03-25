@@ -56,6 +56,10 @@ public class MemberDetails implements OAuth2User, UserDetails {
         return member.getPhoneNumber();
     }
 
+    public String getEmail() {
+        return member.getEmail();
+    }
+
     // OAuth2User Override
     @Override
     public Map<String, Object> getAttributes() {

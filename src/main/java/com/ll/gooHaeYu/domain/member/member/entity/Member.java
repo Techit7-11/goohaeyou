@@ -29,7 +29,10 @@ public class Member extends BaseTimeEntity {
 
     private String name;
 
-    private String phoneNumber;   // 01012341234
+    private String phoneNumber;
+
+    @Column(unique = true)
+    private String email;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.GUEST;
@@ -44,6 +47,8 @@ public class Member extends BaseTimeEntity {
     private String location;
 
     private LocalDate birth;  // yyyy-MM-dd
+
+    private boolean authenticated;
 
     private long restCash;
 

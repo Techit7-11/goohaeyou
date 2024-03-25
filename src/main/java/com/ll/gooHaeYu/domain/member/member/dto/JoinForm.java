@@ -34,6 +34,10 @@ public class JoinForm {
     @Pattern(regexp = "^\\d{10,11}$", message = "휴대폰 번호는 숫자만 10자리 또는 11자리여야 합니다.")
     private String phoneNumber;
 
+    @Email(message = "이메일 형식이 아닙니다.")
+    @NotBlank(message = "이메일은 필수 항목입니다.")
+    private String email;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
