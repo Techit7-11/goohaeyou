@@ -89,6 +89,10 @@ dependencies {
 	//MapStruct
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
+	// Mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 // 테스트를 실행할때마다 jacoco 리포트 생성
