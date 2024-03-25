@@ -25,6 +25,14 @@
 				rq.goTo('/member/login');
 				return;
 			}
+
+			if (!rq.member.authenticated) {
+				rq.msgAndRedirect(
+					{ msg: '서비스를 이용하기 위해 먼저 본인 인증을 진행해주세요.' },
+					undefined,
+					'/member/me'
+				);
+			}
 		} catch (error) {
 			console.error('인증 초기화 중 오류 발생:', error);
 			rq.msgError('인증 과정에서 오류가 발생했습니다.');
