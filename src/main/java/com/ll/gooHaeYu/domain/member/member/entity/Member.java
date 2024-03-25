@@ -6,6 +6,7 @@ import com.ll.gooHaeYu.domain.member.member.entity.type.Level;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -31,7 +32,7 @@ public class Member extends BaseTimeEntity {
 
     private String phoneNumber;
 
-    @Column(unique = true)
+    @Email
     private String email;
 
     @Enumerated(EnumType.STRING)
