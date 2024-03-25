@@ -17,10 +17,16 @@ public class MemberDto {
     @NotBlank
     private String username;
     private Gender gender;
+    @NotBlank
     private String location;
     private LocalDate birth;
+    @NotBlank
     private String name;
+    @NotBlank
     private String phoneNumber;
+    @NotBlank
+    private String email;
+    private boolean authenticated;
 
     public static MemberDto fromEntity(Member member) {
         return MemberDto.builder()
@@ -31,6 +37,8 @@ public class MemberDto {
                 .birth(member.getBirth())
                 .name(member.getName())
                 .phoneNumber(member.getPhoneNumber())
+                .email(member.getEmail())
+                .authenticated(member.isAuthenticated())
                 .build();
     }
 }

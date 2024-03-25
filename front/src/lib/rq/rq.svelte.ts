@@ -30,6 +30,8 @@ class Rq {
 		let birth = $state<string>('');
 		let name = $state<string>('');
 		let phoneNumber = $state<string>('');
+		let email = $state<string>('');
+		let authenticated = $state<boolean>(false);
 
 		return {
 			get id() {
@@ -56,6 +58,12 @@ class Rq {
 			set phoneNumber(value: string) {
 				phoneNumber = value;
 			},
+			get email() {
+				return email;
+			},
+			set email(value: string) {
+				email = value;
+			},
 			get gender() {
 				return gender;
 			},
@@ -73,6 +81,12 @@ class Rq {
 			},
 			set birth(value: string) {
 				birth = value;
+			},
+			get authenticated() {
+				return authenticated;
+			},
+			set authenticated(value: boolean) {
+				authenticated = value;
 			}
 		};
 	}
@@ -123,6 +137,7 @@ class Rq {
 		this.member.birth = '';
 		this.member.name = '';
 		this.member.phoneNumber = '';
+		(this.member.email = ''), (this.member.authenticated = false);
 	}
 
 	public isLogin() {
