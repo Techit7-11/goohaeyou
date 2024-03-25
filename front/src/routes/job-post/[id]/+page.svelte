@@ -157,13 +157,7 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-	<script
-		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dbec7e19bbbe4a9e21a7b64b16dd537c&libraries=services"
-	></script>
-</svelte:head>
+
 {#await load()}
 	<div class="flex items-center justify-center min-h-screen">
 		<span class="loading loading-dots loading-lg"></span>
