@@ -25,7 +25,6 @@ spring:
           starttls:
             enable: true
             required: true
-      auth-code-expiration-millis: 1800000  # 인증코드 만료 시간: 30분
 logging:
   level:
     root: INFO
