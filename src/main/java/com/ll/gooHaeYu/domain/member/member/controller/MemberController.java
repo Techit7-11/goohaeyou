@@ -63,7 +63,6 @@ public class MemberController {
     public ApiResponse<MemberDto> updateSocialMember(@AuthenticationPrincipal MemberDetails memberDetails,
                                                      @Valid @RequestBody SocialProfileForm form) {
         MemberDto updatedMember = memberService.updateSocialMemberProfile(memberDetails.getUsername(), form);
-
         return ApiResponse.ok(updatedMember);
     }
 }
