@@ -331,7 +331,7 @@
 {#if showVerifyCodeModal}
 	<div class="modal modal-open">
 		<div class="modal-box">
-			<h3 class="font-bold text-lg mt-2 mb-4">인증 코드 입력</h3>
+			<h3 class="font-bold text-lg mt-1 mb-4">인증 코드 입력</h3>
 			<input
 				type="text"
 				bind:value={authCode}
