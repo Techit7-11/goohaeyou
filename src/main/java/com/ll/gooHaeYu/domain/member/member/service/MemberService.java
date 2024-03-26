@@ -126,16 +126,18 @@ public class MemberService {
             Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
             return filename;
         } catch (IOException e) {
-            log.error("파일 업로드 중 오류 발생", e); // 로깅 강화
+            log.error("파일 업로드 중 오류 발생", e);
             throw new CustomException(FILE_UPLOAD_ERROR);
         }
     }
 
     @Transactional
     public String updateMemberImage(Long memberId, MultipartFile file) {
-        Member member = findById(memberId); // 사용자 정보 조회
-        String imageUrl = saveFile(file); // 파일 저장
-        member.setImageUrl(imageUrl); // 이미지 URL 업데이트
-        return imageUrl; // 저장된 이미지 URL 반환
+        Member member = findById(memberId);
+        String filename = saveFile(file);
+        String baseUrl = "http://localhost:8090/members/images/";
+        String imageUrl = baseUrl + filename;
+        member.setImageUrl(imageUrl);
+        return imageUrl;
     }
 }
