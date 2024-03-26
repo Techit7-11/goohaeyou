@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,6 +30,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private static final Logger log = LoggerFactory.getLogger(MemberService.class);
 
     @Value("${spring.file.upload-dir}")
     private String uploadDir;
@@ -99,7 +102,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form, MultipartFile imgUri) {
+    public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form) {
         Member member = getMember(username);
 
         member.oauthDetailUpdate(form);
@@ -123,7 +126,16 @@ public class MemberService {
             Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
             return filename;
         } catch (IOException e) {
+            log.error("파일 업로드 중 오류 발생", e); // 로깅 강화
             throw new CustomException(FILE_UPLOAD_ERROR);
         }
+    }
+
+    @Transactional
+    public String updateMemberImage(Long memberId, MultipartFile file) {
+        Member member = findById(memberId); // 사용자 정보 조회
+        String imageUrl = saveFile(file); // 파일 저장
+        member.setImageUrl(imageUrl); // 이미지 URL 업데이트
+        return imageUrl; // 저장된 이미지 URL 반환
     }
 }

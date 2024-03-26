@@ -25,6 +25,10 @@ export interface paths {
     /** 최초 소셜로그인 - 필수 회원정보 입력 */
     put: operations["updateSocialMember"];
   };
+  "/api/member/image": {
+    /** 프로필 이미지 업로드 */
+    put: operations["uploadMemberImage"];
+  };
   "/api/job-posts/{id}": {
     /** 구인공고 단건 조회 */
     get: operations["showDetailPost"];
@@ -281,7 +285,19 @@ export interface components {
       errorCode?: string;
       data: components["schemas"]["Modify"];
     };
+<<<<<<< HEAD
     ApiResponseRegister: {
+=======
+    RsDataString: {
+      resultCode?: string;
+      /** Format: int32 */
+      statusCode?: number;
+      msg?: string;
+      data?: string;
+    };
+    RsDataModify: {
+      resultCode?: string;
+>>>>>>> b015f2b (refactor:  업로드 기능 리팩토링)
       /** Format: int32 */
       statusCode?: number;
       message: string;
@@ -729,11 +745,16 @@ export interface components {
     ApiResponseString: {
       /** Format: int32 */
       statusCode?: number;
+<<<<<<< HEAD
       message: string;
       /** @enum {string} */
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
       errorCode?: string;
       data: string;
+=======
+      msg?: string;
+      data?: components["schemas"]["ApplicationDto"];
+>>>>>>> b015f2b (refactor:  업로드 기능 리팩토링)
     };
   };
   responses: never;
@@ -827,9 +848,9 @@ export interface operations {
   };
   /** 최초 소셜로그인 - 필수 회원정보 입력 */
   updateSocialMember: {
-    requestBody?: {
+    requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["SocialProfileForm"];
+        "application/json": components["schemas"]["SocialProfileForm"];
       };
     };
     responses: {
@@ -837,6 +858,25 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["ApiResponseMemberDto"];
+        };
+      };
+    };
+  };
+  /** 프로필 이미지 업로드 */
+  uploadMemberImage: {
+    requestBody?: {
+      content: {
+        "application/json": {
+          /** Format: binary */
+          image: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["RsDataString"];
         };
       };
     };
