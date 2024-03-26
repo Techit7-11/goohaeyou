@@ -1,10 +1,9 @@
 package com.ll.gooHaeYu.domain.member.emailAuth.service;
 
-import com.ll.gooHaeYu.domain.member.emailAuth.entity.EmailAuth;
-import com.ll.gooHaeYu.domain.member.emailAuth.repository.EmailAuthRepository;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.standard.base.util.RedisUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -16,44 +15,35 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EmailAuthService {
+    private static final String EMAIL_SUBJECT = "[From 구해유] 이메일 인증을 위한 인증코드가 발급되었습니다.";
+    private static final String EMAIL_TEMPLATE = "emailTemplate";
+    private static final long EXPIRATION_IN_SECONDS = 1800; // 30 minutes
+
     private final MemberService memberService;
-    private final EmailAuthRepository emailAuthRepository;
     private final TemplateEngine templateEngine;
     private final JavaMailSender javaMailSender;
+    private final RedisUtil redisUtil;
 
     @Transactional
     public void sendEmail(String username, String email) {
         verifyAlreadyAuthenticated(username);
 
-        EmailAuth emailAuth = manageMail(username, email);
+        String authCode = manageMail(username);
 
         Context context = new Context();
-        context.setVariable("authCode", emailAuth.getAuthCode());
-        String htmlContent = templateEngine.process("emailTemplate", context);
+        context.setVariable("authCode", authCode);
+        String htmlContent = templateEngine.process(EMAIL_TEMPLATE, context);
 
-        try {
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-            helper.setTo(email);
-            helper.setSubject("[From 구해유] 이메일 인증을 위한 인증코드가 발급되었습니다.");
-            helper.setText(htmlContent, true);
-
-            javaMailSender.send(mimeMessage);
-        } catch (MessagingException e) {
-            throw new RuntimeException("이메일 전송 실패", e);
-        }
+        sendEmailToUser(email, htmlContent);
     }
 
-    public void verifyAlreadyAuthenticated(String username) {
+    private void verifyAlreadyAuthenticated(String username) {
         Member member = memberService.getMember(username);
 
         if (member.isAuthenticated()) {
@@ -62,52 +52,50 @@ public class EmailAuthService {
     }
 
     @Transactional
-    public EmailAuth manageMail(String username, String email) {
+    public String manageMail(String username) {
         String randomKey = RandomStringUtils.randomAlphanumeric(5);
 
-        Optional<EmailAuth> optionalEmailAuth = emailAuthRepository.findByUsername(username);
+        if (redisUtil.getData(username) != null) {
+            redisUtil.deleteData(username);
+        }
 
-        if (optionalEmailAuth.isPresent()) {
-            EmailAuth existEmail = optionalEmailAuth.get();
-            existEmail.setAuthCode(randomKey);
-            existEmail.setExpiredAt(LocalDateTime.now().plusMinutes(30));
+        redisUtil.setDataExpire(username, randomKey, EXPIRATION_IN_SECONDS);
 
-            return existEmail;
-        } else {
-            EmailAuth newEmailAuth = EmailAuth.builder()
-                    .username(username)
-                    .email(email)
-                    .authCode(randomKey)
-                    .expiredAt(LocalDateTime.now().plusMinutes(30))
-                    .build();
+        return randomKey;
+    }
 
-            emailAuthRepository.save(newEmailAuth);
+    private void sendEmailToUser(String email, String htmlContent) {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+            helper.setTo(email);
+            helper.setSubject(EMAIL_SUBJECT);
+            helper.setText(htmlContent, true);
 
-            return newEmailAuth;
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RuntimeException("이메일 전송 실패", e);
         }
     }
 
     @Transactional
-    public void confirmVerification(String username, String authCode) {
-        EmailAuth emailAuth = emailAuthRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException(INITIATE_EMAIL_REQUEST));
+    public void confirmVerification(String username, String inputCode) {
+        String authCode = redisUtil.getData(username);
 
-        verifyCode(emailAuth, authCode);
+        if (authCode == null) {
+            throw new CustomException(INITIATE_EMAIL_REQUEST);
+        }
 
-        emailAuthRepository.delete(emailAuth);
+        verifyCode(inputCode, authCode);
+
+        redisUtil.deleteData(username);
 
         Member member = memberService.getMember(username);
         member.authenticate();
     }
 
-    @Transactional
-    public void verifyCode(EmailAuth emailAuth, String authCode) {
-        if (emailAuth.getExpiredAt().isBefore(LocalDateTime.now())) {
-            emailAuthRepository.delete(emailAuth);
-            throw new CustomException(EXPIRED_AUTH_CODE);
-        }
-
-        if (!authCode.equals(emailAuth.getAuthCode())) {
+    private void verifyCode(String inputCode, String authCode) {
+        if (!inputCode.equals(authCode)) {
             throw new CustomException(INVALID_AUTH_CODE);
         }
     }
