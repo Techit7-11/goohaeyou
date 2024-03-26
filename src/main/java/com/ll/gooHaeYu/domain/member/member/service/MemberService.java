@@ -92,9 +92,12 @@ public class MemberService {
     public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form) {
         Member member = getMember(username);
 
+        if (member.getEmail() == null) {    // 소셜 회원은 본인인증을 할 필요가 없다
+            member.authenticate();
+        }
+
         member.oauthDetailUpdate(form);
         member.updateRole(Role.USER);
-        member.authenticate();   // 소셜 회원은 본인인증을 할 필요가 없다.
 
         return MemberDto.fromEntity(member);
     }
