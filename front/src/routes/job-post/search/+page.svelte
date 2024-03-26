@@ -40,7 +40,7 @@
 
 <div class="flex justify-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
-		<div class="container flex justify-center items-center my-4">
+		<div class="search-box container flex justify-center items-center my-4">
 			<div class="join">
 				<select class="join-item select max-w-xs text-center flex flex-1 mx-1" name="kwType">
 					<option value="titleOrBody">제목 + 내용</option>
@@ -54,7 +54,7 @@
 					class="join-item input w-full max-w-xs"
 					on:keyup={handleKeyPress}
 				/>
-				<button class="join-item btn btn-ghost btn-circle mx-1" on:click={loading}>
+				<button class="join-item-btn btn btn-ghost btn-circle mx-1" on:click={loading}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5"
@@ -131,3 +131,31 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.join {
+		border: 1px solid oklch(0.77 0.2 132.02); /* 테두리를 1px 두께로 설정하고 검은색(#000)으로 색상을 지정합니다. */
+	}
+
+	.card:hover {
+		background-color: oklch(0.95 0.05 128.99 / 0.30);
+	}
+
+	.badge-primary {
+		border-color: oklch(0.77 0.2 132.02); /* 테두리 색상 설정 */
+		background-color: oklch(0.77 0.2 132.02); /* 배경 색상 설정 */
+		color: white;
+	}
+
+	.badge-neutral {
+		border-color: oklch(0.57 0.02 72.86); /* 테두리 색상 설정 */
+		background-color: oklch(0.57 0.02 72.86); /* 배경 색상 설정 */
+		color: white;
+	}
+
+	.btn-primary {
+		border-color: oklch(0.77 0.2 132.02); /* 테두리 색상 설정 */
+		background-color: oklch(0.77 0.2 132.02); /* 배경 색상 설정 */
+		color: white;
+	}
+</style>
