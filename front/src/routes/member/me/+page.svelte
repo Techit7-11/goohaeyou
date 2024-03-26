@@ -3,6 +3,9 @@
 	import { onMount } from 'svelte';
 
 	let reviews = [];
+	let authCode = '';
+	let showSendEmailModal = false;
+	let showVerifyCodeModal = false;
 
 	function navigateToChatRoomListPage() {
 		rq.goTo('/chat/list');
@@ -91,6 +94,44 @@
 		}
 		return stars;
 	}
+
+	// 본인 인증하기 버튼 클릭 시 호출
+	function openSendEmailModal() {
+		showSendEmailModal = true;
+	}
+
+	// 이메일로 인증 코드 발송
+	async function sendAuthEmail() {
+		const response = await rq.apiEndPoints().POST('/api/auth/email');
+		if (response.data?.resultType === 'SUCCESS') {
+			alert('인증 코드를 발송했습니다. 이메일을 확인해주세요.');
+			showSendEmailModal = false;
+			showVerifyCodeModal = true;
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else {
+			rq.msgError('이메일 발송 중 오류가 발생했습니다.');
+		}
+	}
+
+	// 사용자가 입력한 인증 코드 검증
+	async function verifyAuthCode() {
+		const response = await rq.apiEndPoints().PATCH(`/api/members/verify/${authCode}`);
+		if (response.data?.resultType === 'SUCCESS') {
+			rq.member.authenticated = true;
+			showVerifyCodeModal = false;
+			alert('인증이 완료되었습니다.');
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else {
+			rq.msgError('인증 코드 검증 중 오류가 발생했습니다.');
+		}
+	}
+
+	function closeModal() {
+		showSendEmailModal = false;
+		showVerifyCodeModal = false;
+	}
 </script>
 
 <div class="flex justify-center items-center mt-2">
@@ -102,6 +143,11 @@
 			<div class="text-center">
 				<div class="font-bold text-xl">내 정보</div>
 				<div class="mt-3 text-gray-500">현재 로그인한 회원의 정보입니다.</div>
+				{#if !rq.member.authenticated}
+					<div class="text-center mt-4">
+						<button class="font-bold" on:click={openSendEmailModal}>본인 인증하기</button>
+					</div>
+				{/if}
 			</div>
 			<div class="divider"></div>
 			<div class="grid grid-colos-1 gap-4">
@@ -268,3 +314,36 @@
 		</div>
 	</div>
 </div>
+
+{#if showSendEmailModal}
+	<div class="modal modal-open">
+		<div class="modal-box">
+			<h3 class="font-bold text-lg mt-1">이메일 본인인증</h3>
+			<p class="py-4">계속하기 위해, 아래 버튼으로 인증 코드를 요청해주세요.</p>
+			<div class="modal-action">
+				<button class="btn btn-primary" on:click={sendAuthEmail}>인증 코드 발송</button>
+				<button class="btn" on:click={closeModal}>닫기</button>
+			</div>
+		</div>
+	</div>
+{/if}
+
+{#if showVerifyCodeModal}
+	<div class="modal modal-open">
+		<div class="modal-box">
+			<h3 class="font-bold text-lg mt-2 mb-4">인증 코드 입력</h3>
+			<input
+				type="text"
+				bind:value={authCode}
+				placeholder="인증 코드"
+				class="input input-bordered w-full max-w-xs"
+			/>
+			<p class="py-4">인증 코드를 입력하고 본인 인증을 완료해주세요.</p>
+			<p class="text-sm text-gray-600">인증 번호는 <strong>30분</strong> 동안 유효합니다.</p>
+			<div class="modal-action">
+				<button class="btn btn-primary" on:click={verifyAuthCode}>인증 코드 확인</button>
+				<button class="btn" on:click={closeModal}>닫기</button>
+			</div>
+		</div>
+	</div>
+{/if}

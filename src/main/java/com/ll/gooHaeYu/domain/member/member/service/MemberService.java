@@ -36,6 +36,7 @@ public class MemberService {
                 .password(bCryptPasswordEncoder.encode(form.getPassword()))
                 .name(form.getName())
                 .phoneNumber(form.getPhoneNumber())
+                .email(form.getEmail())
                 .gender(form.getGender())
                 .location(form.getLocation())
                 .birth(form.getBirth())
@@ -91,9 +92,10 @@ public class MemberService {
     public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form) {
         Member member = getMember(username);
 
-        Member updatedMember = member.oauthDetailUpdate(form);
+        member.oauthDetailUpdate(form);
         member.updateRole(Role.USER);
+        member.authenticate();   // 소셜 회원은 본인인증을 할 필요가 없다.
 
-        return MemberDto.fromEntity(updatedMember);
+        return MemberDto.fromEntity(member);
     }
 }

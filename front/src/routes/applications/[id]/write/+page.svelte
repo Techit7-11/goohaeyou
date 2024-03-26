@@ -8,6 +8,16 @@
 	};
 
 	async function loadjobPostData() {
+		if (rq.member.name == null) {
+			rq.msgAndRedirect(undefined, { msg: '회원정보 입력이 필요합니다.' }, '/member/social/modify');
+		} else if (!rq.member.authenticated) {
+			rq.msgAndRedirect(
+				{ msg: '서비스를 이용하기 위해 먼저 본인 인증을 진행해주세요.' },
+				undefined,
+				'/member/me'
+			);
+		}
+
 		const { data } = await rq.apiEndPoints().GET('/api/job-posts/{id}', {
 			params: {
 				path: {

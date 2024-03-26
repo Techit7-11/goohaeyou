@@ -102,6 +102,14 @@ export interface paths {
     /** 채팅 생성 */
     post: operations["writeChat"];
   };
+  "/api/auth/email": {
+    /** 인증 메일 전송 */
+    post: operations["sendAuthEmail"];
+  };
+  "/api/members/verify/{code}": {
+    /** 인증코드 확인 */
+    patch: operations["verifyCode"];
+  };
   "/api/jobs/individual/no-work/{applicationId}": {
     /** 개인 지급 알바 미완료 처리 */
     patch: operations["cancelIndividualNoWork"];
@@ -254,11 +262,13 @@ export interface components {
       username: string;
       /** @enum {string} */
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location?: string;
+      location: string;
       /** Format: date */
       birth?: string;
-      name?: string;
-      phoneNumber?: string;
+      name: string;
+      phoneNumber: string;
+      email: string;
+      authenticated?: boolean;
     };
     ApiResponseModify: {
       /** Format: int32 */
@@ -355,6 +365,7 @@ export interface components {
       password: string;
       name: string;
       phoneNumber: string;
+      email: string;
       /** @enum {string} */
       gender?: "MALE" | "FEMALE" | "UNDEFINED";
       location: string;
@@ -1214,6 +1225,33 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["Register"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
+      };
+    };
+  };
+  /** 인증 메일 전송 */
+  sendAuthEmail: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
+      };
+    };
+  };
+  /** 인증코드 확인 */
+  verifyCode: {
+    parameters: {
+      path: {
+        code: string;
       };
     };
     responses: {

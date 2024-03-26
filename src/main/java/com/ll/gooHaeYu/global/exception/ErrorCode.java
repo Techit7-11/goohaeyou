@@ -67,7 +67,15 @@ public enum ErrorCode {
 
     PAYMENT_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "결제 정보가 없습니다."),
 
-    PAYMENT_REQUEST_CONFLICT(HttpStatus.CONFLICT, "현재 다른 결제 요청을 처리 중입니다. 잠시 후 다시 시도해 주세요.");
+    PAYMENT_REQUEST_CONFLICT(HttpStatus.CONFLICT, "현재 다른 결제 요청을 처리 중입니다. 잠시 후 다시 시도해 주세요."),
+
+    EMAIL_ALREADY_AUTHENTICATED(HttpStatus.BAD_REQUEST, "이미 이메일 인증이 완료된 상태입니다."),
+
+    EXPIRED_AUTH_CODE(HttpStatus.GONE, "만료된 인증코드 입니다."),
+
+    INVALID_AUTH_CODE(HttpStatus.BAD_REQUEST, "잘못된 인증코드 입니다."),
+
+    INITIATE_EMAIL_REQUEST(HttpStatus.BAD_REQUEST, "먼저 이메일 인증 요청을 진행해주세요.");
 
 
     private final HttpStatus status;
