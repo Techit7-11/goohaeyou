@@ -137,7 +137,7 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
-        if (!toMember.getFCMToken().equals(null) && toMember.getFCMToken() != null) {
+        if (toMember.getFCMToken() != null) {
             fcmService.send(toMember.getFCMToken(), jobPostTitle, causeTypeCode);
         }
 
