@@ -26,6 +26,9 @@ repositories {
 
 dependencies {
 
+	// Firebase-admin
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.2.0'
+
 	// Spring Batch
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	testImplementation 'org.springframework.batch:spring-batch-test'
