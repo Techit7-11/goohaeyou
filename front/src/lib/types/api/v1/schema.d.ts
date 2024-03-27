@@ -68,6 +68,9 @@ export interface paths {
     /** 결제 취소 */
     post: operations["tossPaymentCancel"];
   };
+  "/api/notification/register": {
+    post: operations["register"];
+  };
   "/api/member/review/{jobPostingId}": {
     /** 지원자 리뷰 작성 */
     post: operations["createReview"];
@@ -1062,6 +1065,19 @@ export interface operations {
         content: {
           "*/*": components["schemas"]["ApiResponsePaymentCancelResDto"];
         };
+      };
+    };
+  };
+  register: {
+    requestBody: {
+      content: {
+        "application/json": string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
       };
     };
   };

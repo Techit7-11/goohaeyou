@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.*;
 import static com.ll.gooHaeYu.domain.notification.entity.type.ResultTypeCode.*;
@@ -35,6 +37,9 @@ public class NotificationService {
     private final MemberService memberService;
     private final RoomService roomService;
     private final JobPostService jobPostService;
+    private final FCMService fcmService;
+
+    private final Map<Long, String> tokenMap = new HashMap<>();
 
     @Transactional
     public void notifyApplicantsAboutPost(ChangeOfPostEvent event) {
@@ -129,6 +134,11 @@ public class NotificationService {
                 .build();
 
         notificationRepository.save(notification);
+
+        if (tokenMap.containsKey(toMember.getId()) && tokenMap.get(toMember.getId()) != null) {
+            fcmService.send(tokenMap.get(toMember.getId()), jobPostTitle, causeTypeCode);
+        }
+
     }
 
     public List<NotificationDto> getList(String username) {
@@ -166,5 +176,16 @@ public class NotificationService {
     public Boolean unreadNotification(String username) {
         Member toMember = memberService.getMember(username);
         return notificationRepository.existsByToMemberAndSeenIsFalse(toMember);
+    }
+
+    public void register(Long userId, String token) {
+        int startIndex = token.indexOf("\"token\":\"") + "\"token\":\"".length();
+        int endIndex = token.lastIndexOf("\"");
+        String extractedToken = token.substring(startIndex, endIndex);
+        tokenMap.put(userId, extractedToken);
+    }
+
+    public void deleteToken(Long userId) {
+        tokenMap.remove(userId);
     }
 }

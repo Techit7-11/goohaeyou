@@ -17,6 +17,7 @@
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/adapter-node": "^5.0.1",
 		"@sveltejs/adapter-vercel": "^4.0.3",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
@@ -46,6 +47,7 @@
 		"@stomp/stompjs": "^7.0.0",
 		"@tosspayments/payment-widget-sdk": "^0.10.2",
 		"date-fns": "^3.3.1",
+		"firebase": "^10.9.0",
 		"openapi-fetch": "^0.8.2",
 		"socket.io-client": "^4.7.4",
 		"sockjs-client": "^1.6.1",

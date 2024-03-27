@@ -3,11 +3,13 @@ package com.ll.gooHaeYu.domain.notification.controller;
 import com.ll.gooHaeYu.domain.notification.dto.NotificationDto;
 import com.ll.gooHaeYu.domain.notification.service.NotificationService;
 import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
+import com.ll.gooHaeYu.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,6 +53,13 @@ public class NotificationController {
     @Operation(summary = "읽지 않은 알림 유무 확인")
     public ApiResponse<Boolean> unreadNotification(Authentication memberDetails) {
         return ApiResponse.ok(notificationService.unreadNotification(memberDetails.getName()));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@AuthenticationPrincipal MemberDetails memberDetails,
+                                         @RequestBody String token) {
+        notificationService.register(memberDetails.getId(), token);
+        return ResponseEntity.noContent().build();
     }
 
 }

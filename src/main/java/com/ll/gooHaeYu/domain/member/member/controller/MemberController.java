@@ -6,6 +6,7 @@ import com.ll.gooHaeYu.domain.member.member.dto.MemberDto;
 import com.ll.gooHaeYu.domain.member.member.dto.SocialProfileForm;
 import com.ll.gooHaeYu.domain.member.member.service.AuthenticationService;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.domain.notification.service.NotificationService;
 import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import com.ll.gooHaeYu.standard.base.util.CookieUtil;
@@ -31,6 +32,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final AuthenticationService authenticationService;
+    private final NotificationService notificationService;
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
@@ -50,9 +52,13 @@ public class MemberController {
 
     @PostMapping ("/logout")
     @Operation(summary = "로그아웃 처리 및 쿠키 삭제")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> logout(@AuthenticationPrincipal MemberDetails memberDetails,
+                                    HttpServletRequest request, HttpServletResponse response) {
         Stream.of("refresh_token", "access_token", "JSESSIONID")
                 .forEach(cookieName -> CookieUtil.deleteCookie(request, response, cookieName));
+
+        notificationService.deleteToken(memberDetails.getId());
+
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("message", "로그아웃 되었습니다.");
         return ResponseEntity.ok(responseMap);
