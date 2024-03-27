@@ -5,9 +5,12 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
-import com.ll.gooHaeYu.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
 import lombok.Value;
+=======
+import org.springframework.beans.factory.annotation.Value;
+>>>>>>> 6e68cbe351c4e6a096ab63f16580628b617e0569
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +34,10 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
+    private static final Logger log = LoggerFactory.getLogger(MemberService.class);
+
+    @Value("${spring.file.upload-dir}")
+    private String uploadDir;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
