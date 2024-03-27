@@ -147,7 +147,7 @@
 		>
 		<span class="btm-nav-label">지도</span>
 	</button>
-	
+
 	<button on:click={NavSearch}>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -267,6 +267,6 @@
 
 	.btm-nav-label {
 		font-size: 0.7rem; /* 폰트 크기를 작게 설정합니다. */
-    	font-weight: 300;
+		font-weight: 300;
 	}
 </style>

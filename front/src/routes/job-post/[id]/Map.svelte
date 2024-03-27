@@ -70,4 +70,4 @@
 	}
 </script>
 
-<div id="map" style="width:100%; height:160px; z-index:0;" ></div>
+<div id="map" style="width:100%; height:160px; z-index:0;"></div>
