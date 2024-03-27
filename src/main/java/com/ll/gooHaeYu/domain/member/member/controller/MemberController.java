@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,5 +71,12 @@ public class MemberController {
                                                      @Valid @RequestBody SocialProfileForm form) {
         MemberDto updatedMember = memberService.updateSocialMemberProfile(memberDetails.getUsername(), form);
         return ApiResponse.ok(updatedMember);
+    }
+
+    @PutMapping("/image")
+    @Operation(summary = "프로필 이미지 업로드")
+    public ApiResponse<String> uploadMemberImage(@AuthenticationPrincipal MemberDetails memberDetails, @RequestParam("image") MultipartFile image) {
+        String imageUrl = memberService.updateMemberImage(memberDetails.getId(), image);
+        return ApiResponse.ok(imageUrl);
     }
 }

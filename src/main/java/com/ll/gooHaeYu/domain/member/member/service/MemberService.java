@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -101,7 +103,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form, MultipartFile imgUri) {
+    public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form) {
         Member member = getMember(username);
 
         if (member.getEmail() == null) {    // 소셜 회원은 본인인증을 할 필요가 없다
@@ -130,5 +132,13 @@ public class MemberService {
         } catch (IOException e) {
             throw new CustomException(FILE_UPLOAD_ERROR);
         }
+    }
+
+    @Transactional
+    public String updateMemberImage(Long memberId, MultipartFile file) {
+        Member member = findById(memberId);
+        String imageUrl = saveFile(file);
+        member.setImageUrl(imageUrl);
+        return imageUrl;
     }
 }
