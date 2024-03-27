@@ -51,7 +51,14 @@
             console.log(rq.isLogin());
 			const app = initializeApp(firebaseConfig);
 			requestPermission();
-			function requestPermission() {
+
+        } else {
+            console.log("Not logged in");
+        }
+    }, 100); // 로드가 된 후 0.1초 시간의 텀을 두고 한번만 실행
+	});
+
+	function requestPermission() {
 			const messaging = getMessaging();
   			void Notification.requestPermission()
 				.then((permission) => {
@@ -75,13 +82,6 @@
 					}
   			})
 		}
-        } else {
-            console.log("Not logged in");
-        }
-    }, 100); // 로드가 된 후 0.1초 시간의 텀을 두고 한번만 실행
-	});
-
-
 
 
 	// 해당 부분은 읽지 않은 알림이 있을 경우 ui 변경 시도를 위해 작성했습니다.

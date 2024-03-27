@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.ExecutionException;
 
 @Service
-@Slf4j
 public class FCMService {
 
     public void send(String token, String postTitle, CauseTypeCode causeTypeCode) {
@@ -22,7 +21,7 @@ public class FCMService {
                                 "\""+postTitle+"\""+getContent(causeTypeCode)))
                         .build())
                 .build();
-        log.debug("ss");
+
         try {
             String response = FirebaseMessaging.getInstance().sendAsync(message).get();
         } catch (InterruptedException e) {
