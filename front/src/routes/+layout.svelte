@@ -142,7 +142,7 @@
 		<a class="link link-hover">About us</a>
 		<a class="link link-hover">Contact</a>
 		<a class="link link-hover">Jobs</a>
-		<a class="link link-hover">Press kit</a>
+		<a class="link link-hover" href="https://github.com/Techit7-11/GooHaeYou" target="_blank">Github</a>
 	</nav>
 	<nav>
 		<div class="grid grid-flow-col gap-4">
@@ -185,7 +185,7 @@
 		</div>
 	</nav>
 	<aside>
-		<p class="mb-10">© 2024 All Rights Reserved by Techit7-11번과_GooHaeYou</p>
+		<p class="mb-2">© 2024 All Rights Reserved by Techit7-11번과_GooHaeYou</p>
 	</aside>
 </footer>
 <div class="btm-nav" style="z-index: 1;">

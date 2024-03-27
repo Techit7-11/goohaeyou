@@ -199,5 +199,6 @@
 
 	.select-bordered {
 		background-color: oklch(0.98 0 0); /* 배경색 설정 */
+		border: 1px solid oklch(0.77 0.2 132.02); /* 테두리를 1px 두께로 설정하고 검은색(#000)으로 색상을 지정합니다. */
 	}
 </style>
