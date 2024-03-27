@@ -111,11 +111,11 @@
 												<p>{formatDate(application.createdAt)}</p>
 												<p>
 													{#if application.approve === true}
-														<span class="text-sm text-emerald-700">승인</span>
+														<span class="badge" style="border-color: #ffe647; background-color: #ffe5477a;">승인</span>
 													{:else if application.approve === false}
-														<span class="text-sm text-rose-600">미승인</span>
+														<span class="badge" style="border-color: #80776c; background-color: #80776c9c;">미승인</span>
 													{:else}
-														<span class="text-sm text-orange-500">진행중</span>
+													<span class="badge" style="border-color: #82cf23; background-color: #82cf2369;">진행중</span>
 													{/if}
 												</p>
 												<p>
@@ -168,3 +168,4 @@
 {:catch error}
 	<p>Error loading applications: {error.message}</p>
 {/await}
+

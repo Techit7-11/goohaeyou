@@ -141,11 +141,11 @@
 							<p>{formatDate(application.createdAt)}</p>
 							<p>
 								{#if application.approve === true}
-									<span class="text-sm text-emerald-700">승인</span>
+									<span class="badge" style="border-color: #ffe647; background-color: #ffe5477a;">승인</span>
 								{:else if application.approve === false}
-									<span class="text-sm text-rose-600">미승인</span>
+									<span class="badge" style="border-color: #80776c; background-color: #80776c9c;">미승인</span>
 								{:else}
-									<span class="text-sm text-orange-500">진행중</span>
+									<span class="badge" style="border-color: #82cf23; background-color: #82cf2369;">진행중</span>
 								{/if}
 							</p>
 						</div>
@@ -155,8 +155,8 @@
 							<p class="text-lg font-semibold">작성 내용</p>
 						</div>
 						<div
-							class="bg-white rounded-md shadow p-3 overflow-auto mt-4"
-							style="max-height: 200px;"
+							class="bg-white rounded-md shadow p-3 overflow-auto mt-4 body-text"
+							style="min-height: 100px; max-height: 200px;"
 						>
 							<p>{application.body}</p>
 						</div>
@@ -223,3 +223,19 @@
 {:catch error}
 	<p class="text-error">데이터를 로드하는 동안 오류가 발생했습니다: {error.message}</p>
 {/await}
+
+<style>
+	.card.bg-base-100.shadow-lg.rounded-lg.p-5 {
+		border: 1px solid oklch(0.77 0.2 132.02);
+	}
+
+	.body-text {
+		background-color: #e3f4d2;
+	}
+
+	.btn-primary {
+		border-color: oklch(0.77 0.2 132.02); /* 테두리 색상 설정 */
+		background-color: oklch(0.77 0.2 132.02); /* 배경 색상 설정 */
+		color: white;
+	}
+</style>

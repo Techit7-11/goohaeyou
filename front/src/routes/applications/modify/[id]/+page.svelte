@@ -95,3 +95,12 @@
 {:catch error}
 	<p>지원서를 로드하는 중 오류가 발생했습니다: {error.message}</p>
 {/await}
+
+
+<style>
+	.btn-primary {
+		border-color: oklch(0.77 0.2 132.02); /* 테두리 색상 설정 */
+		background-color: oklch(0.77 0.2 132.02); /* 배경 색상 설정 */
+		color: white;
+	}
+</style>

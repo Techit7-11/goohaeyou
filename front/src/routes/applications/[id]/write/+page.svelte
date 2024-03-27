@@ -73,15 +73,15 @@
 			<div class="p-6 max-w-4xl w-full mx-auto my-10 bg-white rounded-box shadow-lg">
 				<div>{jobPostDetailDto?.author}</div>
 				<div class="flex justify-between items-center">
-					<div class="text-xl font-bold">{jobPostDetailDto?.title}</div>
+					<div class="title-text text-xl font-bold">{jobPostDetailDto?.title}</div>
 				</div>
 				<div class="divider"></div>
-				<div class="grid grid-cols-4 gap-4 my-4">
+				<div class="grid grid-cols-4 gap-3 my-4">
 					<div class="text-sm">모집 상태 :</div>
 					<div>
-						<span class="text-sm {jobPostDetailDto?.closed ? 'text-rose-600' : 'text-emerald-700'}">
+						<div class="text-sm {jobPostDetailDto?.closed ? 'text-rose-600' : 'text-emerald-700'}">
 							{jobPostDetailDto?.closed ? '마감' : '구인중'}
-						</span>
+						</div>
 					</div>
 					<div class="text-sm">지원 가능 여부 :</div>
 					<div class="text-sm">
@@ -91,10 +91,6 @@
 							<div class="text-sm text-rose-600">불가능</div>
 						{/if}
 					</div>
-					<div class="text-sm">지원 가능 나이 :</div>
-					<div class="text-sm">
-						{jobPostDetailDto?.minAge === 0 ? '없음' : jobPostDetailDto?.minAge ?? '없음'}
-					</div>
 					<div class="text-sm">성별 구분 :</div>
 					<div class="text-sm">
 						{jobPostDetailDto?.gender === 'MALE'
@@ -103,10 +99,14 @@
 								? '여'
 								: '무관'}
 					</div>
+					<div class="text-sm">지원 가능 나이 :</div>
+					<div class="text-sm">
+						{jobPostDetailDto?.minAge === 0 ? '없음' : jobPostDetailDto?.minAge ?? '없음'}
+					</div>
 				</div>
 				<div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
 				<div class="divider"></div>
-				<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
+				<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200 body-text">
 					<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
 				</div>
 				<div class="divider"></div>
@@ -152,3 +152,30 @@
 		</div>
 	</div>
 {/await}
+
+<style>
+	.p-6.max-w-4xl.w-full.mx-auto.my-10.bg-white.rounded-box.shadow-lg {
+		border: 1px solid oklch(0.77 0.2 132.02);
+	}
+
+	/* 제목 형광펜 스타일 */
+	.title-text {
+		background: linear-gradient(to top, oklch(0.77 0.2 132.02 / 0.62) 50%, transparent 60%);
+	}
+
+	.btn-primary {
+		border-color: oklch(0.77 0.2 132.02); /* 테두리 색상 설정 */
+		background-color: oklch(0.77 0.2 132.02); /* 배경 색상 설정 */
+		color: white;
+	}
+
+	.body-text {
+		background-color: #e3f4d2;
+	}
+
+	.grid-cols-4 {
+		display: grid;
+		grid-template-columns: 1.5fr 1fr 2fr 1fr; /* 두 번째 열을 첫 번째 열보다 2배 넓게 설정 */
+	}
+
+</style>
