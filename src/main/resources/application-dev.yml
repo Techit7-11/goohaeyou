@@ -3,10 +3,10 @@ spring:
     ansi:
       enabled: always
   datasource:
-    url: jdbc:mysql://localhost:3306/ghy1?serverTimezone=Asia/Seoul
-    username: root
-    password: 1
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:./db_dev;MODE=MYSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
   batch:
     jdbc:
       initialize-schema: always
