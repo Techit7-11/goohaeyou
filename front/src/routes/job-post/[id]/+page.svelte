@@ -157,7 +157,6 @@
 	}
 </script>
 
-
 {#await load()}
 	<div class="flex items-center justify-center min-h-screen">
 		<span class="loading loading-dots loading-lg"></span>
@@ -206,7 +205,12 @@
 									</button>
 								{/if}
 							</div>
-							<button class="btn btn-neutral" on:click={apply}>지원하기</button>
+							<button
+								class="btn btn-green rounded-md px-3 py-1"
+								on:click={apply}
+								style="background-color: hsl(140, 60%, 50%) !important; color: white"
+								>지원하기</button
+							>
 						{/if}
 					</div>
 				</div>
@@ -219,16 +223,23 @@
 						<div class="flex justify-end">
 							{#if jobPostDetailDto?.author === rq.member.username}
 								<div class="mt-4">
-									<button class="btn btn-primary btn-xs mx-1" on:click={editPost}>수정하기</button>
-									<button class="btn btn-xs mx-1" on:click={deletePost}>삭제하기</button>
+									<button
+										class="btn btn btn-xs mx-1 bg-green-500 text-white font-thin"
+										on:click={editPost}>수정하기</button
+									>
+									<button
+										class="btn btn-xs mx-1 bg-yellow-500 text-white font-thin"
+										on:click={deletePost}>삭제하기</button
+									>
 									{#if !jobPostDetailDto.closed}
-										<button class="btn btn-xs mx-1" on:click={() => postEarlyClosing()}
-											>조기마감</button
+										<button
+											class="btn btn-xs mx-1 bg-green-500 text-white font-thin"
+											on:click={() => postEarlyClosing()}>조기마감</button
 										>
 									{/if}
 									{#if jobPostDetailDto?.author === rq.member.username}
 										<button
-											class="btn btn-primary btn-xs mx-1"
+											class="btn btn btn-xs mx-1 bg-green-500 text-white font-thin"
 											on:click={() => goToApplicationsList(jobPostDetailDto?.id)}
 											>지원서 확인</button
 										>
@@ -240,7 +251,7 @@
 					<div class="divider"></div>
 					<div class="my-5">
 						<div class="bg-white p-5 rounded-lg shadow-lg">
-							<h3 class="text-md font-medium text-gray-800 mb-3">조건</h3>
+							<h3 class="text-md font-medium text-green-500 mb-3">조건</h3>
 							<ul class="list-disc space-y-2 text-sm">
 								<li class="flex items-center text-gray-700">
 									<div class="flex items-center">
@@ -374,7 +385,7 @@
 							<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
 						</div>
 					</div>
-					<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200">
+					<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-green-200">
 						<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
 					</div>
 				</div>
@@ -384,11 +395,13 @@
 					<!-- 댓글 입력 폼 -->
 					<div class="flex justify-between items-center mb-4">
 						<textarea
-							class="textarea textarea-bordered w-full"
+							class="textarea textarea-bordered border-green-300 w-full"
 							placeholder="댓글을 입력하세요."
 							bind:value={newComment}
 						></textarea>
-						<button class="btn btn-ghost mx-3" on:click={addComment}>댓글 달기</button>
+						<button class="btn btn-ghost mx-3 bg-white text-green-500" on:click={addComment}
+							>댓글 달기</button
+						>
 					</div>
 					<div class="divider"></div>
 					<!-- 댓글 목록 -->
@@ -417,16 +430,18 @@
 									<div>
 										{#if comment.author === rq.member.username}
 											{#if comment.isEditing}
-												<button class="btn btn-xs btn-ghost" on:click={() => submitEdit(comment.id)}
-													>수정 완료</button
+												<button
+													class="btn btn-xs btn-ghost text-green-500"
+													on:click={() => submitEdit(comment.id)}>수정 완료</button
 												>
 											{:else}
-												<button class="btn btn-xs btn-ghost" on:click={() => startEdit(comment.id)}
-													>수정</button
+												<button
+													class="btn btn-xs btn-ghost text-green-500"
+													on:click={() => startEdit(comment.id)}>수정</button
 												>
 											{/if}
 											<button
-												class="btn btn-xs btn-ghost"
+												class="btn btn-xs btn-ghost text-green-500"
 												on:click={() => deleteComment(comment.id)}>삭제</button
 											>
 										{/if}
