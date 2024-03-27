@@ -141,19 +141,19 @@
 				<div class="mt-3 text-green-600">현재 로그인한 회원의 정보입니다.</div>
 				<div class="flex justify-center items-center mt-8 space-x-4">
 					<button
-						class="text-xs px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors duration-150 ease-in-out"
+						class="text-xs px-4 py-1 rounded-md bg-green3 text-white hover:bg-green-500 transition-colors duration-150 ease-in-out"
 						on:click={navigateToChatRoomListPage}>채팅방 이동</button
 					>
 
 					{#if !rq.member.authenticated && rq.member.email != null}
 						<button
-							class="text-xs px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors duration-150 ease-in-out"
+							class="text-xs px-4 py-1 rounded-md bg-green3 text-white hover:bg-green-500 transition-colors duration-150 ease-in-out"
 							on:click={openSendEmailModal}>본인 인증하기</button
 						>
 					{/if}
 				</div>
 			</div>
-			<div class="border-t-2 border-green-100 my-6"></div>
+			<div class="border-t-2 border-gray-200 my-6"></div>
 			<div class="grid grid-cols-1 gap-2 pl-2 pr-8">
 				<div class="flex items-center justify-between bg-gray-50 px-4 py-3">
 					<div class="text-xs font-medium text-gray-600">아이디</div>
@@ -193,7 +193,7 @@
 					>
 				</div>
 			</div>
-			<div class="border-t-2 border-green-200 my-6"></div>
+			<div class="border-t-2 border-gray-200 my-6"></div>
 			<div class="flex justify-center">
 				<div class="join flex flex-wrap gap-4 justify-around">
 					<label for="my_modal_1" class="btn btn-ghost join-item">작성 공고</label>
@@ -348,7 +348,7 @@
 				class="input input-bordered w-full max-w-xs"
 			/>
 			<p class="py-4 mt-2">인증 코드를 입력하고 본인 인증을 완료해주세요.</p>
-			<p class="text-sm text-gray-600">인증 번호는 <strong>30분</strong> 동안 유효합니다.</p>
+			<p class="text-sm text-gray-600">인증 코드는 <strong>30분</strong> 동안 유효합니다.</p>
 			<div class="modal-action">
 				<button class="btn bg-green-500 hover:bg-green-600 text-white" on:click={verifyAuthCode}
 					>인증 코드 확인</button

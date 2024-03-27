@@ -41,3 +41,4 @@ logging:
 tossPayments:
   successUrl: "http://localhost:5173/payment/success"
   failUrl: "http://localhost:5173/payment/fail"
+firebaseAdminSdkPath: "firebase/goohaeyou-firebase-adminsdk.json"

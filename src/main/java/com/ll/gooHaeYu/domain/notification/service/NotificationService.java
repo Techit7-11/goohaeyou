@@ -137,9 +137,9 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
-//        if (toMember.getFCMToken() != null) {
-//            fcmService.send(toMember.getFCMToken(), jobPostTitle, causeTypeCode);
-//        }
+        if (toMember.getFCMToken() != null) {
+            fcmService.send(toMember.getFCMToken(), jobPostTitle, causeTypeCode);
+        }
 
     }
 
