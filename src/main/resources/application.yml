@@ -32,7 +32,10 @@ spring:
       max-file-size: 2MB
       max-request-size: 10MB
   file:
-    upload-dir: /Users/mingulee/Desktop/uploads
+    upload-dir: /Users/mingulee/Desktop/uploads/
+  web:
+    resources:
+      static-locations: file:/Users/mingulee/Desktop/uploads/
 logging:
   level:
     root: INFO

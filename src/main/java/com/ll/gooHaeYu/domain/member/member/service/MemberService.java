@@ -137,7 +137,9 @@ public class MemberService {
     @Transactional
     public String updateMemberImage(Long memberId, MultipartFile file) {
         Member member = findById(memberId);
-        String imageUrl = saveFile(file);
+        String filename = saveFile(file);
+        String baseUrl = "http://localhost:8090/members/images/";
+        String imageUrl = baseUrl + filename;
         member.setImageUrl(imageUrl);
         return imageUrl;
     }
