@@ -9,7 +9,7 @@ on:
       - readme.md
       - infraScript/**
     branches:
-      -feature/front-0
+      - feature/front-0
 
 permissions:
   contents: write
