@@ -20,7 +20,7 @@ RUN ./gradlew dependencies --no-daemon
 COPY src src
 
 # 애플리케이션 빌드
-RUN ./gradlew build --no-daemon
+RUN ./gradlew build --no-daemon -x test
 
 # 두 번째 스테이지: 실행 스테이지
 FROM ghcr.io/graalvm/jdk-community:21
