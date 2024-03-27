@@ -6,6 +6,7 @@ import com.ll.gooHaeYu.domain.jobPost.comment.entity.Comment;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
+import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.domain.notification.dto.NotificationDto;
 import com.ll.gooHaeYu.domain.notification.entity.Notification;
@@ -38,6 +39,7 @@ public class NotificationService {
     private final RoomService roomService;
     private final JobPostService jobPostService;
     private final FCMService fcmService;
+    private final MemberRepository memberRepository;
 
     private final Map<Long, String> tokenMap = new HashMap<>();
 
@@ -135,9 +137,9 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
-        if (tokenMap.containsKey(toMember.getId()) && tokenMap.get(toMember.getId()) != null) {
-            fcmService.send(tokenMap.get(toMember.getId()), jobPostTitle, causeTypeCode);
-        }
+//        if (toMember.getFCMToken() != null) {
+//            fcmService.send(toMember.getFCMToken(), jobPostTitle, causeTypeCode);
+//        }
 
     }
 
@@ -178,14 +180,21 @@ public class NotificationService {
         return notificationRepository.existsByToMemberAndSeenIsFalse(toMember);
     }
 
+    @Transactional
     public void register(Long userId, String token) {
         int startIndex = token.indexOf("\"token\":\"") + "\"token\":\"".length();
         int endIndex = token.lastIndexOf("\"");
         String extractedToken = token.substring(startIndex, endIndex);
-        tokenMap.put(userId, extractedToken);
+//        tokenMap.put(userId, extractedToken);
+        Member member = memberService.findById(userId);
+        member.registerFCMToken(extractedToken);
+        memberRepository.save(member);
     }
 
+    @Transactional
     public void deleteToken(Long userId) {
-        tokenMap.remove(userId);
+        Member member = memberService.findById(userId);
+        member.removeFCMToken();
+        memberRepository.save(member);
     }
 }

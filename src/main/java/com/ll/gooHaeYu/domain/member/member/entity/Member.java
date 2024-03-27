@@ -53,6 +53,8 @@ public class Member extends BaseTimeEntity {
 
     private long restCash;
 
+    private String FCMToken = null;
+
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {
             this.location = location;
@@ -104,5 +106,13 @@ public class Member extends BaseTimeEntity {
 
     public void authenticate() {
         this.authenticated = true;
+    }
+
+    public void registerFCMToken(String token) {
+        this.FCMToken = token;
+    }
+
+    public void removeFCMToken() {
+        this.FCMToken = null;
     }
 }
