@@ -206,10 +206,8 @@
 								{/if}
 							</div>
 							<button
-								class="btn btn-green rounded-md px-3 py-1"
-								on:click={apply}
-								style="background-color: hsl(140, 60%, 50%) !important; color: white"
-								>지원하기</button
+								class="btn btn rounded-md px-3 py-1 bg-green4 text-white hover:bg-green-500"
+								on:click={apply}>지원하기</button
 							>
 						{/if}
 					</div>
@@ -224,22 +222,22 @@
 							{#if jobPostDetailDto?.author === rq.member.username}
 								<div class="mt-4">
 									<button
-										class="btn btn btn-xs mx-1 bg-green-500 text-white font-thin"
+										class="btn btn btn-xs mx-1 bg-green3 text-white hover:bg-green-500 font-thin"
 										on:click={editPost}>수정하기</button
 									>
 									<button
-										class="btn btn-xs mx-1 bg-yellow-500 text-white font-thin"
+										class="btn btn-xs mx-1 bg-yellow-500 text-white hover:bg-yellow3 font-thin"
 										on:click={deletePost}>삭제하기</button
 									>
 									{#if !jobPostDetailDto.closed}
 										<button
-											class="btn btn-xs mx-1 bg-green-500 text-white font-thin"
+											class="btn btn-xs mx-1 bg-green3 text-white hover:bg-green-500 font-thin"
 											on:click={() => postEarlyClosing()}>조기마감</button
 										>
 									{/if}
 									{#if jobPostDetailDto?.author === rq.member.username}
 										<button
-											class="btn btn btn-xs mx-1 bg-green-500 text-white font-thin"
+											class="btn btn btn-xs mx-1 bg-green3 text-white hover:bg-green-500 font-thin"
 											on:click={() => goToApplicationsList(jobPostDetailDto?.id)}
 											>지원서 확인</button
 										>
@@ -385,7 +383,7 @@
 							<div class="text-sm mx-2">{jobPostDetailDto?.incrementViewCount}</div>
 						</div>
 					</div>
-					<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-green-200">
+					<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-green3">
 						<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
 					</div>
 				</div>
@@ -395,7 +393,7 @@
 					<!-- 댓글 입력 폼 -->
 					<div class="flex justify-between items-center mb-4">
 						<textarea
-							class="textarea textarea-bordered border-green-300 w-full"
+							class="textarea textarea-bordered border-green4 w-full"
 							placeholder="댓글을 입력하세요."
 							bind:value={newComment}
 						></textarea>
@@ -431,17 +429,17 @@
 										{#if comment.author === rq.member.username}
 											{#if comment.isEditing}
 												<button
-													class="btn btn-xs btn-ghost text-green-500"
+													class="btn btn-xs btn-ghost text-gray-500"
 													on:click={() => submitEdit(comment.id)}>수정 완료</button
 												>
 											{:else}
 												<button
-													class="btn btn-xs btn-ghost text-green-500"
+													class="btn btn-xs btn-ghost text-gray-500"
 													on:click={() => startEdit(comment.id)}>수정</button
 												>
 											{/if}
 											<button
-												class="btn btn-xs btn-ghost text-green-500"
+												class="btn btn-xs btn-ghost text-gray-500"
 												on:click={() => deleteComment(comment.id)}>삭제</button
 											>
 										{/if}

@@ -149,7 +149,7 @@
 	}
 
 	.social .fab {
-		background-color: #80c283; /* 아이콘 배경색 */
+		background-color: #80c283; /* 구글 아이콘 배경색 */
 		color: white;
 		border-radius: 50%;
 		padding: 8px;
