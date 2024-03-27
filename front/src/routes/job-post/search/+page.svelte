@@ -83,28 +83,53 @@
 					{#each posts ?? [] as post, index}
 						<a href="/job-post/{post.id}" class="block">
 							<div class="card relative bg-base-100 shadow-xl my-4">
+								<div class="card-body flex flex-row justify-between">
+									<div>
+										<div class="text-bold text-gray-500 mb-1">{post.author}</div>
+										<div class="text-xs text-gray-500">{post.location}</div>
+									</div>
+									<div class="flex justify-center items-center">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											id="Outline"
+											viewBox="0 0 24 24"
+											width="12"
+											height="12"
+											><path
+												d="M7,24a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l8.17-8.17a3,3,0,0,0,0-4.24L6.29,1.71A1,1,0,0,1,7.71.29l8.17,8.17a5,5,0,0,1,0,7.08L7.71,23.71A1,1,0,0,1,7,24Z"
+											/></svg
+										>
+									</div>
+								</div>
+								<div class="bg-lime-400 h-60 text-white text-2xl flex items-center justify-center">
+									<p>{post.title}</p>
+								</div>
 								<div class="card-body">
 									<div class="flex items-center justify-between">
 										<div class="flex items-center">
 											<div class="flex flex-col mr-10">
-												<div class="text-bold text-gray-500 mb-1">{post.author}</div>
 												<div
 													class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
 												>
-													<div class="font-bold truncate">{post.title}</div>
-													<div class="text-xs text-gray-500">{post.location}</div>
+													<div class="text-xl font-bold truncate">{post.title}</div>
 													<div class="flex mt-2">
-														<div class="flex">
-															<div class="text-xs text-gray-500">조회</div>
-															<div class="text-xs mx-2">{post.incrementViewCount}</div>
+														<div class="flex-shrink">
+															<div class="text-xs mx-2 flex justify-center items-center">
+																{post.incrementViewCount}
+															</div>
+															<div class="text-xs text-gray-500">봤어유</div>
 														</div>
-														<div class="flex">
-															<div class="text-xs text-gray-500">댓글</div>
-															<div class="text-xs mx-2">{post.commentsCount}</div>
+														<div class="flex-shrink ml-3">
+															<div class="text-xs mx-2 flex justify-center items-center">
+																{post.commentsCount}
+															</div>
+															<div class="text-xs text-gray-500">쑥덕쑥덕</div>
 														</div>
-														<div class="flex">
-															<div class="text-xs text-gray-500">찜</div>
-															<div class="text-xs mx-2">{post.interestsCount}</div>
+														<div class="flex-shrink ml-3">
+															<div class="text-xs mx-2 flex justify-center items-center">
+																{post.interestsCount}
+															</div>
+															<div class="text-xs text-gray-500">관심있슈</div>
 														</div>
 													</div>
 												</div>
@@ -113,11 +138,10 @@
 										<div class="flex items-center justify-between">
 											<div class="flex flex-col items-center">
 												{#if post.closed}
-													<div class="badge badge-neutral">마감</div>
+													<div class="badge badge-neutral">구했어유</div>
 												{:else}
-													<div class="badge badge-primary my-1">구인중</div>
-													<div class="text-xs text-gray-500">마감기한</div>
-													<div class="text-xs text-gray-500">{post.deadLine}</div>
+													<div class="badge badge-primary my-1">구해유</div>
+													<div class="text-xs text-gray-500">~ {post.deadLine}</div>
 												{/if}
 											</div>
 										</div>
@@ -138,7 +162,7 @@
 	}
 
 	.card:hover {
-		background-color: oklch(0.95 0.05 128.99 / 0.30);
+		background-color: oklch(0.95 0.05 128.99 / 0.3);
 	}
 
 	.badge-primary {
