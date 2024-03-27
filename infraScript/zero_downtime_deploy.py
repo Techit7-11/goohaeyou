@@ -45,7 +45,7 @@ class ServiceManager:
     # Docker 컨테이너를 실행하는 함수
     def _run_container(self, name: str, port: int) -> None:
         os.system(
-            f"docker run --name={name} --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=app-1 --log-opt awslogs-stream=app-1-stream-1 -p {port}:8080 -v firebase:/temp/firebase -v /docker_projects/goohaeyou/volumes/gen:/gen --restart unless-stopped -e TZ=Asia/Seoul --pull always -d ghcr.io/techit7-11/goohaeyou")
+            f"docker run --name={name} --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=app-1 --log-opt awslogs-stream=app-1-stream-1 -p {port}:8080 -v firebase:/tmp/firebase -v /docker_projects/goohaeyou/volumes/gen:/gen --restart unless-stopped -e TZ=Asia/Seoul --pull always -d ghcr.io/techit7-11/goohaeyou")
 
     # Socat 포트를 전환하는 함수
     def _switch_port(self) -> None:
