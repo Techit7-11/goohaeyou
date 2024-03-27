@@ -9,7 +9,7 @@ on:
       - readme.md
       - infraScript/**
     branches:
-      - dev
+      -feature/front-0
 
 permissions:
   contents: write
@@ -93,6 +93,6 @@ jobs:
           comment: Deploy-aws
           command: |
             mkdir -p /docker_projects/goohaeyou
-            curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/GooHaeYou/dev/infraScript/zero_downtime_deploy.py
+            curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/GooHaeYou/feature/front-0/infraScript/zero_downtime_deploy.py
             chmod +x /docker_projects/goohaeyou/zero_downtime_deploy.py
             /docker_projects/goohaeyou/zero_downtime_deploy.py

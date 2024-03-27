@@ -47,3 +47,4 @@ custom:
 tossPayments:
   successUrl: "https://www.goohaeyou.site/payment/success"
   failUrl: "https://www.goohaeyou.site/payment/fail"
+firebaseAdminSdkPath: "/tmp/firebase/goohaeyou-firebase-adminsdk.json"

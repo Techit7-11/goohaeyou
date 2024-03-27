@@ -174,6 +174,6 @@
 	.pont {
 		font-family: 'Jua', sans-serif;
 		font-size: 2rem;
-		color: #39b939;
+		color: #37b637;
 	}
 </style>

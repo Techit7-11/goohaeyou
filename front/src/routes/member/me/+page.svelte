@@ -348,7 +348,7 @@
 				class="input input-bordered w-full max-w-xs"
 			/>
 			<p class="py-4 mt-2">인증 코드를 입력하고 본인 인증을 완료해주세요.</p>
-			<p class="text-sm text-gray-600">인증 번호는 <strong>30분</strong> 동안 유효합니다.</p>
+			<p class="text-sm text-gray-600">인증 코드는 <strong>30분</strong> 동안 유효합니다.</p>
 			<div class="modal-action">
 				<button class="btn bg-green-500 hover:bg-green-600 text-white" on:click={verifyAuthCode}
 					>인증 코드 확인</button
