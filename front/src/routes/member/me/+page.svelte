@@ -3,6 +3,9 @@
 	import { onMount } from 'svelte';
 
 	let reviews = [];
+	let authCode = '';
+	let showSendEmailModal = false;
+	let showVerifyCodeModal = false;
 
 	function navigateToChatRoomListPage() {
 		rq.goTo('/chat/list');
@@ -91,49 +94,98 @@
 		}
 		return stars;
 	}
+
+	// 본인 인증하기 버튼 클릭 시 호출
+	function openSendEmailModal() {
+		showSendEmailModal = true;
+	}
+
+	// 이메일로 인증 코드 발송
+	async function sendAuthEmail() {
+		const response = await rq.apiEndPoints().POST('/api/auth/email');
+		if (response.data?.resultType === 'SUCCESS') {
+			showSendEmailModal = false;
+			showVerifyCodeModal = true;
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else {
+			rq.msgError('이메일 발송 중 오류가 발생했습니다.');
+		}
+	}
+
+	// 사용자가 입력한 인증 코드 검증
+	async function verifyAuthCode() {
+		const response = await rq.apiEndPoints().PATCH(`/api/members/verify/${authCode}`);
+		if (response.data?.resultType === 'SUCCESS') {
+			rq.member.authenticated = true;
+			showVerifyCodeModal = false;
+			alert('인증이 완료되었습니다.');
+		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(response.data?.message);
+		} else {
+			rq.msgError('인증 코드 검증 중 오류가 발생했습니다.');
+		}
+	}
+
+	function closeModal() {
+		showSendEmailModal = false;
+		showVerifyCodeModal = false;
+	}
 </script>
 
-<div class="flex justify-center items-center mt-2">
-	<button class="font-bold" on:click={navigateToChatRoomListPage}>채팅방 이동</button>
-</div>
 <div class="flex justify-center items-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
 		<div class="w-full max-w-4xl mx-auto my-10">
 			<div class="text-center">
-				<div class="font-bold text-xl">내 정보</div>
-				<div class="mt-3 text-gray-500">현재 로그인한 회원의 정보입니다.</div>
+				<div class="text-xl font-semibold text-gray-800">내 정보</div>
+				<div class="mt-3 text-green-600">현재 로그인한 회원의 정보입니다.</div>
+				<div class="flex justify-center items-center mt-8 space-x-4">
+					<button
+						class="text-xs px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors duration-150 ease-in-out"
+						on:click={navigateToChatRoomListPage}>채팅방 이동</button
+					>
+
+					{#if !rq.member.authenticated && rq.member.email != null}
+						<button
+							class="text-xs px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors duration-150 ease-in-out"
+							on:click={openSendEmailModal}>본인 인증하기</button
+						>
+					{/if}
+				</div>
 			</div>
-			<div class="divider"></div>
-			<div class="grid grid-colos-1 gap-4">
-				<div class="flex justify-between items-center w-full">
-					<div class="font-bold">아이디</div>
-					<div class="text-gray-500 flex-auto text-right">{rq.member.username}</div>
+			<div class="border-t-2 border-green-100 my-6"></div>
+			<div class="grid grid-cols-1 gap-2 pl-2 pr-8">
+				<div class="flex items-center justify-between bg-gray-50 px-4 py-3">
+					<div class="text-xs font-medium text-gray-600">아이디</div>
+					<div class="ml-4 text-xs font-bold text-gray-500">{rq.member.username}</div>
 				</div>
-				<div class="flex justify-between items-center w-full">
-					<div class="font-bold">이름</div>
-					<div class="text-gray-500 flex-auto text-right">{rq.member.name}</div>
+				<div class="flex items-center justify-between bg-gray-50 px-4 py-3">
+					<div class="text-xs font-medium text-gray-500">이름</div>
+					<div class="ml-4 text-xs text-gray-900">{rq.member.name}</div>
 				</div>
-				<div class="flex justify-between items-center w-full">
-					<div class="font-bold">휴대폰 번호</div>
-					<div class="text-gray-500 flex-auto text-right">{rq.member.phoneNumber}</div>
+				<div class="flex items-center justify-between bg-gray-50 px-4 py-3">
+					<div class="text-xs font-medium text-gray-500">휴대폰 번호</div>
+					<div class="ml-4 text-xs text-gray-900">{rq.member.phoneNumber}</div>
 				</div>
-				<div class="flex justify-between items-center w-full">
-					<div class="font-bold">성별</div>
-					<div class="text-gray-500 flex-auto text-right">
-						{#if rq.member.gender === 'MALE'}
-							남자
-						{:else if rq.member.gender === 'FEMALE'}
-							여자
-						{/if}
+				{#if rq.member.email != null}
+					<div class="px-4 py-2 flex items-center justify-between">
+						<div class="text-xs font-medium text-gray-500">이메일</div>
+						<div class="text-xs text-gray-900">{rq.member.email}</div>
+					</div>
+				{/if}
+				<div class="px-4 py-2 flex items-center justify-between">
+					<div class="text-xs font-medium text-gray-500">주소</div>
+					<div class="text-xs text-gray-900">{rq.member.location}</div>
+				</div>
+				<div class="px-4 py-2 flex items-center justify-between">
+					<div class="text-xs font-medium text-gray-500">성별</div>
+					<div class="text-xs text-gray-900">
+						{#if rq.member.gender === 'MALE'}남자{:else if rq.member.gender === 'FEMALE'}여자{/if}
 					</div>
 				</div>
-				<div class="flex justify-between items-center w-full">
-					<div class="font-bold">주소</div>
-					<div class="text-gray-500 flex-auto text-right">{rq.member.location}</div>
-				</div>
-				<div class="flex justify-between items-center w-full">
-					<div class="font-bold">생년월일</div>
-					<div class="text-gray-500 flex-auto text-right">{rq.member.birth}</div>
+				<div class="px-4 py-2 flex items-center justify-between">
+					<div class="text-xs font-medium text-gray-500">생년월일</div>
+					<div class="text-xs text-gray-900">{rq.member.birth}</div>
 				</div>
 				<div>
 					<button class="w-full btn btn-ghost" on:click={navigateToModifyPage}
@@ -141,7 +193,7 @@
 					>
 				</div>
 			</div>
-			<div class="divider"></div>
+			<div class="border-t-2 border-green-200 my-6"></div>
 			<div class="flex justify-center">
 				<div class="join flex flex-wrap gap-4 justify-around">
 					<label for="my_modal_1" class="btn btn-ghost join-item">작성 공고</label>
@@ -268,3 +320,41 @@
 		</div>
 	</div>
 </div>
+
+{#if showSendEmailModal}
+	<div class="modal modal-open">
+		<div class="modal-box">
+			<h3 class="font-bold text-lg mt-1">이메일 본인인증</h3>
+			<p class="py-4">계속하기 위해, 아래 버튼으로 인증 코드를 요청해주세요.</p>
+			<div class="modal-action">
+				<button class="btn bg-green-500 hover:bg-green-600 text-white" on:click={sendAuthEmail}
+					>인증 코드 발송</button
+				>
+				<button class="btn" on:click={closeModal}>닫기</button>
+			</div>
+		</div>
+	</div>
+{/if}
+
+{#if showVerifyCodeModal}
+	<div class="modal modal-open">
+		<div class="modal-box">
+			<h3 class="font-bold text-lg mt-1 mb-4">인증 코드 입력</h3>
+			<p class="py-4">인증 코드를 발송했습니다. 이메일을 확인해주세요.</p>
+			<input
+				type="text"
+				bind:value={authCode}
+				placeholder="인증 코드"
+				class="input input-bordered w-full max-w-xs"
+			/>
+			<p class="py-4 mt-2">인증 코드를 입력하고 본인 인증을 완료해주세요.</p>
+			<p class="text-sm text-gray-600">인증 번호는 <strong>30분</strong> 동안 유효합니다.</p>
+			<div class="modal-action">
+				<button class="btn bg-green-500 hover:bg-green-600 text-white" on:click={verifyAuthCode}
+					>인증 코드 확인</button
+				>
+				<button class="btn" on:click={closeModal}>닫기</button>
+			</div>
+		</div>
+	</div>
+{/if}

@@ -10,6 +10,7 @@ public class JoinFormBuilder {
     private String password = "password123";
     private String name = "김일번";
     private String phoneNumber = "01012345678";
+    private String email = "test@example.com";
     private Gender gender = Gender.MALE;
     private String location = "경기 성남시 분당구 판교역로 4";
     private LocalDate birth = LocalDate.of(2000, 1, 1);
@@ -34,6 +35,11 @@ public class JoinFormBuilder {
         return this;
     }
 
+    public JoinFormBuilder setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
     public JoinFormBuilder setGender(Gender gender) {
         this.gender = gender;
         return this;
@@ -50,6 +56,6 @@ public class JoinFormBuilder {
     }
 
     public JoinForm build() {
-        return new JoinForm(username, password, name, phoneNumber, gender, location, birth);
+        return new JoinForm(username, password, name, phoneNumber, email, gender, location, birth);
     }
 }

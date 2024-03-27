@@ -6,6 +6,7 @@ import com.ll.gooHaeYu.domain.member.member.entity.type.Level;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -29,7 +30,10 @@ public class Member extends BaseTimeEntity {
 
     private String name;
 
-    private String phoneNumber;   // 01012341234
+    private String phoneNumber;
+
+    @Email
+    private String email;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.GUEST;
@@ -44,6 +48,8 @@ public class Member extends BaseTimeEntity {
     private String location;
 
     private LocalDate birth;  // yyyy-MM-dd
+
+    private boolean authenticated = false;
 
     private long restCash;
 
@@ -71,14 +77,12 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
-    public Member oauthDetailUpdate(SocialProfileForm form) {
+    public void oauthDetailUpdate(SocialProfileForm form) {
         this.name = form.getName();
         this.phoneNumber = form.getPhoneNumber();
         this.gender = form.getGender();
         this.location = form.getLocation();
         this.birth = form.getBirth();
-
-        return this;
     }
 
     public void updateRestCash(long cash) {
@@ -96,5 +100,9 @@ public class Member extends BaseTimeEntity {
 
     public void addRestCash(int earn) {
         this.restCash += earn;
+    }
+
+    public void authenticate() {
+        this.authenticated = true;
     }
 }

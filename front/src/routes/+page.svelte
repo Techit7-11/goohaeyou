@@ -63,6 +63,9 @@
 		load();
 	}
 </script>
+<svelte:head>
+	<title>구해유</title>
+</svelte:head>
 
 <div class="sort mx-auto w-80 mt-5">
 	<select class="select select-bordered w-full max-w-xs" on:change={handleSortSelect}>
@@ -142,7 +145,35 @@
 {/await}
 
 <style>
-	a:hover {
-		color: #a5a5a5; /* 호버 시 색상 변경 */
+	.card:hover {
+		background-color: oklch(0.95 0.05 128.99 / 0.30);
 	}
+
+	/* 제목 형광펜 스타일 */
+	/*.card:hover .truncate {
+		background: linear-gradient(to top, oklch(0.77 0.2 132.02 / 0.72) 50%, transparent 50%);
+	}*/
+
+	.badge-primary {
+		border-color: oklch(0.77 0.2 132.02); /* 테두리 색상 설정 */
+		background-color: oklch(0.77 0.2 132.02); /* 배경 색상 설정 */
+		color: white;
+	}
+
+	.badge-neutral {
+		border-color: oklch(0.57 0.02 72.86); /* 테두리 색상 설정 */
+		background-color: oklch(0.57 0.02 72.86); /* 배경 색상 설정 */
+		color: white;
+	}
+
+	.btn-primary {
+		border-color: oklch(0.77 0.2 132.02); /* 테두리 색상 설정 */
+		background-color: oklch(0.77 0.2 132.02); /* 배경 색상 설정 */
+		color: white;
+	}
+
+	.select-bordered {
+		background-color: oklch(0.98 0 0); /* 배경색 설정 */
+	}
+
 </style>
