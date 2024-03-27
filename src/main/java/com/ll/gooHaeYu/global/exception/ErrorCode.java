@@ -75,8 +75,11 @@ public enum ErrorCode {
 
     INVALID_AUTH_CODE(HttpStatus.BAD_REQUEST, "잘못된 인증코드 입니다."),
 
-    INITIATE_EMAIL_REQUEST(HttpStatus.BAD_REQUEST, "먼저 이메일 인증 요청을 진행해주세요.");
+    INITIATE_EMAIL_REQUEST(HttpStatus.BAD_REQUEST, "먼저 이메일 인증 요청을 진행해주세요."),
 
+    FILE_IS_EMPTY(HttpStatus.BAD_REQUEST, "파일이 비어있습니다."),
+
+    FILE_UPLOAD_ERROR(HttpStatus.BAD_REQUEST, "업로드에 실패했습니다.");
 
     private final HttpStatus status;
     private final String message;

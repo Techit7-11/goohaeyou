@@ -13,6 +13,7 @@ spring:
   threads:
     virtual:
       enabled: true
+<<<<<<< HEAD
   mail:
     host: smtp.gmail.com
     port: 587
@@ -25,6 +26,13 @@ spring:
           starttls:
             enable: true
             required: true
+      auth-code-expiration-millis: 1800000  # 인증코드 만료 시간: 30분
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+  file:
+    upload-dir: /uploads/
 logging:
   level:
     root: INFO

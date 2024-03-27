@@ -7,9 +7,18 @@ import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
@@ -21,6 +30,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     @Transactional
     public JoinForm join(JoinForm form) {
@@ -89,7 +101,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form) {
+    public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form, MultipartFile imgUri) {
         Member member = getMember(username);
 
         if (member.getEmail() == null) {    // 소셜 회원은 본인인증을 할 필요가 없다
@@ -100,5 +112,23 @@ public class MemberService {
         member.updateRole(Role.USER);
 
         return MemberDto.fromEntity(member);
+    }
+
+    private String saveFile(MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new CustomException(FILE_IS_EMPTY);
+        }
+        try {
+            String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Path storageDirectory = Paths.get(uploadDir);
+            if (!Files.exists(storageDirectory)) {
+                Files.createDirectories(storageDirectory);
+            }
+            Path destination = storageDirectory.resolve(Paths.get(filename));
+            Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+            return filename;
+        } catch (IOException e) {
+            throw new CustomException(FILE_UPLOAD_ERROR);
+        }
     }
 }

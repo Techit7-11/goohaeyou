@@ -8,6 +8,7 @@ import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -52,6 +53,9 @@ public class Member extends BaseTimeEntity {
     private boolean authenticated = false;
 
     private long restCash;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {
@@ -104,5 +108,10 @@ public class Member extends BaseTimeEntity {
 
     public void authenticate() {
         this.authenticated = true;
+
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
