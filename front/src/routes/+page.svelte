@@ -110,7 +110,7 @@
 								</div>
 							</div>
 							<div
-								class="bg-lime-400 h-60 text-white text-2xl text-shadow flex items-center justify-center"
+								class="bg-lime-500 h-60 text-white text-2xl text-shadow flex items-center justify-center"
 							>
 								<p>{post.title}</p>
 							</div>
