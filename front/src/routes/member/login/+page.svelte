@@ -69,8 +69,10 @@
 					<button type="submit" class="w-full btn btn-green">로그인</button>
 				</div>
 				<div class="my-5 flex items-center">
-					<a href={rq.getGoogleLoginUrl()} class="social"><i class="fab fa-google"></i>
-					<span class="social-text">Google로 시작</span></a>
+					<a href={rq.getGoogleLoginUrl()} class="social"
+						><i class="fab fa-google"></i>
+						<span class="social-text">Google로 시작</span></a
+					>
 				</div>
 				<p class="text-center text-sm text-gray-600">
 					아직 회원이 아니라면?

@@ -126,4 +126,3 @@
 </script>
 
 <div id="map" style="width:90%; height:500px; margin-top: 15px; margin-bottom: 25px;"></div>
-

@@ -51,7 +51,6 @@
 
 	function drawMoreMessage(message) {
 		lastMessageId = message.id;
-		console.log('aaaaaaaaaa');
 		console.log(message);
 		const messageElement = document.createElement('li');
 		if (message.sender === 'admin') {
@@ -59,37 +58,33 @@
 				<th:block>${message.text}</th:block>
 			</div>`;
 		} else if (message.sender === member.username) {
-			messageElement.innerHTML = `<div class="chat chat-end">
-						<div class="chat-image avatar">
-							<div class="w-10 rounded-full">
-								<img
-									alt="Tailwind CSS chat bubble component"
-									src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-								/>
-							</div>
-						</div>
-						<div class="chat-header">
-							<th:block>${message.sender}</th:block>
-						</div>
-						<div class="chat-bubble"><th:block>${message.text}</th:block></div>
-						<div class="chat-footer opacity-50"><th:block>${message.createdAt}</th:block></div>
-					</div>`;
+			messageElement.innerHTML = `
+					<div class="chat chat-end my-5">
+                    								<div class="chat-bubble bg-lime-500 text-white">
+                    									<th:block>${message.text}</th:block>
+                    								</div>
+                    								<div class="chat-footer opacity-50 text-xs my-2">
+                    									<th:block>${message.createdAt}</th:block>
+                    								</div>
+                    							</div>`;
 		} else {
-			messageElement.innerHTML = `<div class="chat chat-start">
-						<div class="chat-image avatar">
-							<div class="w-10 rounded-full">
-								<img
-									alt="Tailwind CSS chat bubble component"
-									src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-								/>
-							</div>
-						</div>
-						<div class="chat-header">
-							<th:block>${message.sender}</th:block>
-						</div>
-						<div class="chat-bubble"><th:block>${message.text}</th:block></div>
-						<div class="chat-footer opacity-50"><th:block>${message.createdAt}</th:block></div>
-					</div>`;
+			messageElement.innerHTML = `
+					<div class="chat chat-start my-5">
+                    								<div class="chat-image avatar">
+                    									<div class="avatar online placeholder">
+                    										<div class="bg-black text-neutral-content rounded-full w-12">
+                    											<span class="text-xs">${message.sender}.slice(0, 4)}</span>
+                    										</div>
+                    									</div>
+                    								</div>
+                    								<div class="chat-header text-xs my-1">${message.sender}</div>
+                    								<div class="chat-bubble bg-lime-500 text-white">
+                    									<th:block>${message.text}</th:block>
+                    								</div>
+                    								<div class="chat-footer opacity-50 text-xs my-2">
+                    									<th:block>${message.createdAt}</th:block>
+                    								</div>
+                    							</div>`;
 		}
 		chatMessagesEl.appendChild(messageElement);
 		chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
@@ -134,6 +129,15 @@
 			console.error('메세지 로드하는 중 오류가 발생했습니다.', error);
 		}
 	}
+
+	async function exitChatRoom(roomId: number) {
+		const isConfirmed = confirm('정말 나가시겠습니까?');
+		if (isConfirmed) {
+			console.log(roomId);
+			const response = await rq.apiEndPoints().PUT(`/api/chat/${roomId}`);
+			window.location.href = '/chat/list';
+		}
+	}
 </script>
 
 {#await load()}
@@ -141,61 +145,60 @@
 		<span class="loading loading-dots loading-lg"></span>
 	</div>
 {:then { data: roomDto }}
-	<div class="p-1 max-w-4xl mx-auto bg-white rounded-box shadow-lg">
-		<ul class="__messages">
-			{#each messages as message}
-				<!-- {#each roomDto.messages as message} -->
-				{#if message.sender === 'admin'}
-					<div class="flex justify-center">
-						<th:block>{message.text}</th:block>
-					</div>
-				{:else if message.sender === member.username}
-					<div class="chat chat-end">
-						<div class="chat-image avatar">
-							<div class="w-10 rounded-full">
-								<img
-									alt="Tailwind CSS chat bubble component"
-									src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-								/>
+	<div class="flex justify-center items-center min-h-screen bg-base-100">
+		<div class="container mx-auto px-4">
+			<div class="w-full max-w-4xl mx-auto">
+				<div class="flex items-center justify-center mb-20">
+					<button class="text-sm text-gray-500" type="button" on:click={() => exitChatRoom(roomId)}
+						>채팅방 나가기</button
+					>
+				</div>
+				<ul class="__messages">
+					{#each messages as message}
+						<!-- {#each roomDto.messages as message} -->
+						{#if message.sender === 'admin'}
+							<div class="flex justify-center">
+								<th:block>{message.text}</th:block>
 							</div>
-						</div>
-						<div class="chat-header">
-							<th:block>{message.sender}</th:block>
-						</div>
-						<div class="chat-bubble"><th:block>{message.text}</th:block></div>
-						<div class="chat-footer opacity-50">
-							<th:block>{formatMessageTime(message.createdAt)}</th:block>
-						</div>
-					</div>
-				{:else}
-					<div class="chat chat-start">
-						<div class="chat-image avatar">
-							<div class="w-10 rounded-full">
-								<img
-									alt="Tailwind CSS chat bubble component"
-									src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-								/>
+						{:else if message.sender === member.username}
+							<div class="chat chat-end my-5">
+								<div class="chat-bubble bg-lime-500 text-white">
+									<th:block>{message.text}</th:block>
+								</div>
+								<div class="chat-footer opacity-50 text-xs my-2">
+									<th:block>{formatMessageTime(message.createdAt)}</th:block>
+								</div>
 							</div>
-						</div>
-						<div class="chat-header">
-							<th:block>{message.sender}</th:block>
-						</div>
-						<div class="chat-bubble"><th:block>{message.text}</th:block></div>
-						<div class="chat-footer opacity-50">
-							<th:block>{formatMessageTime(message.createdAt)}</th:block>
-						</div>
-					</div>
-				{/if}
-			{/each}
-		</ul>
+						{:else}
+							<div class="chat chat-start my-5">
+								<div class="chat-image avatar">
+									<div class="avatar online placeholder">
+										<div class="bg-black text-neutral-content rounded-full w-12">
+											<span class="text-xs">{message.sender.slice(0, 4)}</span>
+										</div>
+									</div>
+								</div>
+								<div class="chat-header text-xs my-1">{message.sender}</div>
+								<div class="chat-bubble bg-lime-500 text-white">
+									<th:block>{message.text}</th:block>
+								</div>
+								<div class="chat-footer opacity-50 text-xs my-2">
+									<th:block>{formatMessageTime(message.createdAt)}</th:block>
+								</div>
+							</div>
+						{/if}
+					{/each}
+				</ul>
 
-		<div class="flex justify-between items-center mb-4">
-			<textarea
-				class="textarea textarea-bordered w-full"
-				placeholder="댓글을 입력하세요."
-				bind:value={newContent}
-			></textarea>
-			<button class="btn btn-ghost mx-3" on:click={addContent}>보내기</button>
+				<div class="flex justify-between items-center mt-4">
+					<textarea
+						class="textarea textarea-bordered w-full"
+						placeholder="메시지 보내기"
+						bind:value={newContent}
+					></textarea>
+					<button class="btn btn-ghost mx-3" on:click={addContent}>보내기</button>
+				</div>
+			</div>
 		</div>
 	</div>
 {/await}
