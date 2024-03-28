@@ -70,6 +70,7 @@
 					{data.card.cardType}카드
 				</div>
 			{/if}
+
 			{#if data.method == '간편결제'}
 				<div class="text-gray-700 font-basic">
 					<span class="text-black">결제 수단: </span>
