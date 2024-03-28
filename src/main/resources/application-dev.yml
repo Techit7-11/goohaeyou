@@ -29,7 +29,7 @@ spring:
       enabled: true
   autoconfigure:   # 운영환경에서만 redis를 사용하도록 설정
     exclude:
-      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      #- org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
       #- org.springframework.boot.autoconfigure.session.SessionAutoConfiguration   # 세션을 redis에 저장
 logging:
   level:
