@@ -48,10 +48,10 @@
 	}
 </script>
 
-<div class="flex items-center justify-center min-h-screen bg-gray-100">
+<div class="flex items-center justify-center min-h-screen bg-basic-100">
 	<div class="container mx-auto px-4">
 		<div class="max-w-sm mx-auto my-10">
-			<h2 class="text-2xl font-bold text-center my-3">회원가입</h2>
+			<h2 class="text-2xl font-bold text-center text-green6 my-3">회원가입</h2>
 			<form on:submit|preventDefault={registerMember}>
 				<div class="form-group">
 					<label class="label" for="username">* 사용자ID</label>
@@ -129,7 +129,7 @@
 						/>
 						<!-- 다음 주소 API 팝업 열기 버튼 -->
 						<button
-							class="btn btn-primary ml-3"
+							class="btn btn bg-green3 text-white hover:bg-green-500 ml-3"
 							style="padding: 6px 7px; font-size: 14px;"
 							on:click={openDaumAddressPopup}
 							type="button">주소 검색</button
@@ -146,7 +146,10 @@
 					/>
 				</div>
 				<div class="my-5">
-					<button class="w-full btn btn-primary" on:click={newMemberData}>회원가입</button>
+					<button
+						class="w-full btn btn bg-green3 text-white hover:bg-green-500"
+						on:click={newMemberData}>회원가입</button
+					>
 				</div>
 			</form>
 		</div>
@@ -154,6 +157,9 @@
 </div>
 
 <style>
+	.bg-basic-100 {
+		background-color: #fdfffe;
+	}
 	.form-group {
 		margin-bottom: 10px;
 	}
