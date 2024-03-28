@@ -125,16 +125,6 @@ public class JobPostService {
     }
 
     @Transactional
-    public void deletePost(String username, Long id) {
-        JobPost post = findByIdAndValidate(id);
-
-        if (!canEditPost(username, post.getMember().getUsername()))
-            throw new CustomException(NOT_ABLE);
-
-        jobPostRepository.deleteById(id);
-    }
-
-    @Transactional
     public void deleteJobPost(String username, Long postId) {
         JobPost post = findByIdAndValidate(postId);
 
@@ -268,37 +258,8 @@ public class JobPostService {
         return spec;
     }
 
-//    @Transactional
-//    public void deadline(String username, Long postId) {
-//        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
-//        JobPost jobPost = postDetail.getJobPost();
-//        if (!canEditPost(username,postDetail.getAuthor())) {
-//            throw new CustomException(NOT_ABLE);
-//        }
-//
-//        List<Application> applicationList = postDetail.getApplications().stream()
-//                .filter(application -> application.getApprove() != null && !application.getApprove())
-//                .collect(Collectors.toList());
-//
-//        for (Application application : applicationList) {
-//            postDetail.getApplications().remove(application);
-//        }
-//    }
-
-
     public List<JobPost> findExpiredJobPosts(LocalDate currentDate) { //    ver.  LocalDate
         return jobPostRepository.findByClosedFalseAndDeadlineBefore(currentDate);
-    }
-
-
-//    public List<JobPost> findExpiredJobPosts(LocalDateTime currentDateTime) { //    ver. LocalDateTime
-//        return jobPostRepository.findByClosedFalseAndDeadlineBefore(currentDateTime);
-//    }
-
-    @Transactional
-    public void closeJobPost(JobPost jobPost) {
-        jobPost.close();
-        jobPostRepository.save(jobPost);
     }
 
     @EventListener
@@ -336,9 +297,4 @@ public class JobPostService {
         jobPost.update();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
-
-//    public JobPostDetail getJobPostDetailByApplication(Application application) {
-//
-//        return jobPostdetailRepository.findByApplication(application).orElseThrow(() -> new CustomException(POST_NOT_EXIST));
-//    }
 }

@@ -184,9 +184,8 @@
 				<div class="flex justify-center">
 					{#if jobPostDetailDto?.author === rq.member.username}
 						<div class="mt-4">
-							<button
-								class="btn btn btn-xs mx-1 bg-green-500 text-white font-thin"
-								on:click={editPost}>수정하기</button
+							<button class="btn btn btn-xs mx-1 bg-green4 text-white font-thin" on:click={editPost}
+								>수정하기</button
 							>
 							<button
 								class="btn btn-xs mx-1 bg-yellow-500 text-white font-thin"
@@ -194,13 +193,13 @@
 							>
 							{#if !jobPostDetailDto.closed}
 								<button
-									class="btn btn-xs mx-1 bg-green-500 text-white font-thin"
+									class="btn btn-xs mx-1 bg-green4 text-white font-thin"
 									on:click={() => postEarlyClosing()}>조기마감</button
 								>
 							{/if}
 							{#if jobPostDetailDto?.author === rq.member.username}
 								<button
-									class="btn btn btn-xs mx-1 bg-green-500 text-white font-thin"
+									class="btn btn btn-xs mx-1 bg-green4 text-white font-thin"
 									on:click={() => goToApplicationsList(jobPostDetailDto?.id)}>지원서 확인</button
 								>
 							{/if}
@@ -230,7 +229,7 @@
 				<div class="mt-4">
 					<div class="my-5">
 						<div class="bg-white p-5 rounded-lg shadow-lg">
-							<h3 class="text-md font-medium text-green-500 mb-3">근무 조건</h3>
+							<h3 class="text-md font-medium text-green5 mb-3">근무 조건</h3>
 							<ul class="list-disc space-y-2 text-sm">
 								<li class="flex items-center text-gray-700">
 									<div class="flex items-center">
@@ -319,7 +318,7 @@
 								</div>
 							</ul>
 							<div class="divider"></div>
-							<h3 class="text-md font-medium text-green-500 mb-3">모집 조건</h3>
+							<h3 class="text-md font-medium text-green5 mb-3">모집 조건</h3>
 							<div class="flex flex-col">
 								<div class="flex mb-1">
 									<div class="text-sm">모집 상태 :</div>
@@ -378,7 +377,7 @@
 					<section>
 						<Map />
 					</section>
-					<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-green-200">
+					<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-300">
 						<div class="whitespace-pre-line h-48">{jobPostDetailDto?.body}</div>
 					</div>
 					<div class="flex justify-center mt-5 gap-2 w-full">
