@@ -109,7 +109,9 @@
 									>
 								</div>
 							</div>
-							<div class="bg-lime-400 h-60 text-white text-2xl flex items-center justify-center">
+							<div
+								class="bg-lime-400 h-60 text-white text-2xl text-shadow flex items-center justify-center"
+							>
 								<p>{post.title}</p>
 							</div>
 							<div class="card-body">
@@ -200,5 +202,8 @@
 	.select-bordered {
 		background-color: oklch(0.98 0 0); /* 배경색 설정 */
 		border: 1px solid oklch(0.77 0.2 132.02); /* 테두리를 1px 두께로 설정하고 검은색(#000)으로 색상을 지정합니다. */
+	}
+	.text-shadow {
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 	}
 </style>

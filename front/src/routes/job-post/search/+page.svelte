@@ -101,7 +101,7 @@
 										>
 									</div>
 								</div>
-								<div class="bg-lime-400 h-60 text-white text-2xl flex items-center justify-center">
+								<div class="bg-lime-400 h-60 text-white text-2xl text-shadow flex items-center justify-center">
 									<p>{post.title}</p>
 								</div>
 								<div class="card-body">
@@ -182,4 +182,7 @@
 		background-color: oklch(0.77 0.2 132.02); /* 배경 색상 설정 */
 		color: white;
 	}
+	.text-shadow {
+    		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    	}
 </style>
