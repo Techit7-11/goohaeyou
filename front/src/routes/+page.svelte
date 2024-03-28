@@ -109,12 +109,12 @@
 									>
 								</div>
 							</div>
-							<div
+							<!-- <div
 								class="bg-lime-500 h-60 text-white text-2xl text-shadow flex items-center justify-center"
 							>
 								<p>{post.title}</p>
-							</div>
-							<div class="card-body">
+							</div> -->
+							<div class="card-body pt-0">
 								<div class="flex items-center justify-between">
 									<div class="flex items-center">
 										<div class="flex flex-col mr-10">
