@@ -7,7 +7,7 @@
 	import { getMessaging, getToken } from "firebase/messaging";
 	import { initializeApp } from "firebase/app";
 
-	
+
 	const { children } = $props();
 
 	function handleAuthAction() {
@@ -42,7 +42,7 @@
 			appId: "1:421577386725:web:5c120908373765a55e020c",
 			measurementId: "G-X6YNTCZ56G"
 		};
-	
+
 	onMount(() => {
 		rq.initAuth();
 
@@ -118,12 +118,12 @@
 	<div class="main-bar fixed-div">
 		<div class="navbar bg-base-100">
 			<div class="navbar-start">
-				<a class="btn btn-ghost text-xl" href="/">GooHaeYou</a>
+				<a class="btn btn-ghost text-xl font-mono" href="/">GooHaeYou</a>
 			</div>
 			<div class="navbar-center"></div>
 			<div class="navbar-end">
 				{#if rq.isLogout()}
-					<a class="btn btn-ghost mx-3" href="/member/login">Login</a>
+					<a class="btn btn-ghost font-mono mx-3" href="/member/login">Login</a>
 				{/if}
 				{#if rq.isLogin()}
 					<button class="btn btn-ghost mx-3" on:click={() => rq.logoutAndRedirect('/')}
