@@ -52,4 +52,4 @@ terraform/terraform.tfstate.backup
 terraform/.terraform.lock.hcl
 
 ### firebase ###
-/src/main/resources/firebase/goohaeyou-firebase-adminsdk.json
+firebase/goohaeyou-firebase-adminsdk.json
