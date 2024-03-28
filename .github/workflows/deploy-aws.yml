@@ -9,7 +9,7 @@ on:
       - readme.md
       - infraScript/**
     branches:
-      - dev
+      - hotfix/modify-script
 
 permissions:
   contents: write
@@ -54,10 +54,10 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Firebase Admin SDK 파일 생성
-        run: |
-          mkdir -p src/main/resources/firebase
-          echo "${{ secrets.FIREBASE_ADMINSDK_JSON }}" > src/main/resources/firebase/goohaeyou-firebase-adminsdk.json
+#      - name: Firebase Admin SDK 파일 생성
+#        run: |
+#          mkdir -p src/main/resources/firebase
+#          echo "${{ secrets.FIREBASE_ADMINSDK_JSON }}" > src/main/resources/firebase/goohaeyou-firebase-adminsdk.json
       - name: set lower case owner name
         run: |
           echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
@@ -93,6 +93,6 @@ jobs:
           comment: Deploy-aws
           command: |
             mkdir -p /docker_projects/goohaeyou
-            curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/GooHaeYou/dev/infraScript/zero_downtime_deploy.py
+            curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/GooHaeYou/hotfix/modify-script/infraScript/zero_downtime_deploy.py
             chmod +x /docker_projects/goohaeyou/zero_downtime_deploy.py
             /docker_projects/goohaeyou/zero_downtime_deploy.py
