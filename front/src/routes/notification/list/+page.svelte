@@ -191,9 +191,9 @@
 								>
 								<a on:click={() => markNotificationAsRead(notification)} href={notification.url}>
 									{#if notification.seen}
-										<div class="badge badge-neutral">확인</div>
+										<div class="badge bg-gray-300 text-white">확인</div>
 									{:else}
-										<div class="badge badge-primary">미확인</div>
+										<div class="badge bg-green4 text-white">미확인</div>
 									{/if}
 								</a>
 							</div>
