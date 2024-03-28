@@ -141,13 +141,13 @@
 				<div class="mt-3 text-green-600">현재 로그인한 회원의 정보입니다.</div>
 				<div class="flex justify-center items-center mt-8 space-x-4">
 					<button
-						class="text-xs px-4 py-1 rounded-md bg-green3 text-white hover:bg-green-500 transition-colors duration-150 ease-in-out"
+						class="text-xs px-4 py-1 rounded-md bg-green3 text-white hover:bg-green6 transition-colors duration-150 ease-in-out"
 						on:click={navigateToChatRoomListPage}>채팅방 이동</button
 					>
 
 					{#if !rq.member.authenticated && rq.member.email != null}
 						<button
-							class="text-xs px-4 py-1 rounded-md bg-green3 text-white hover:bg-green-500 transition-colors duration-150 ease-in-out"
+							class="text-xs px-4 py-1 rounded-md bg-green3 text-white hover:bg-green6 transition-colors duration-150 ease-in-out"
 							on:click={openSendEmailModal}>본인 인증하기</button
 						>
 					{/if}

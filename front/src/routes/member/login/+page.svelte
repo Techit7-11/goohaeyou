@@ -100,7 +100,7 @@
 	}
 
 	.form-group label {
-		color: #4caf50;
+		color: #3c9e41;
 	}
 
 	.input {
@@ -122,7 +122,7 @@
 	.input-group i {
 		position: absolute;
 		left: 10px;
-		color: #6a746a;
+		color: #5f695f;
 	}
 
 	.input-group .input {
@@ -130,7 +130,7 @@
 	}
 
 	.btn-green {
-		background-color: #6bc56e; /* 로그인 버튼 배경색 */
+		background-color: #69ca6e; /* 로그인 버튼 배경색 */
 		color: #fff;
 		font-size: 15px;
 		transition: background-color 0.3s ease;
