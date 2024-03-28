@@ -213,7 +213,7 @@
 										</div>
 									</a>
 									<button
-										class="btn btn-primary my-3 w-full"
+										class="btn btn bg-green4 text-white hover:bg-green6 my-3 w-full"
 										on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
 									>
 									<div class="divider"></div>
