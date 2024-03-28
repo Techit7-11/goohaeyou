@@ -54,10 +54,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Firebase Admin SDK 파일 생성
-        run: |
-          mkdir -p src/main/resources/firebase
-          echo "${{ secrets.FIREBASE_ADMINSDK_JSON }}" > src/main/resources/firebase/goohaeyou-firebase-adminsdk.json
       - name: set lower case owner name
         run: |
           echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
