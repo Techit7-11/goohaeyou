@@ -49,7 +49,7 @@
 							<ul role="list">
 								{#each roomListDto as room}
 									<div
-										class=" flow-root p-6 max-w-4xl mx-auto"
+										class=" flow-root p-6 max-w-4xl mx-auto hover: cursor-pointer"
 										on:click={() => goToRoomDetail(room.roomId)}
 									>
 										<li class=" sm:py-4">
