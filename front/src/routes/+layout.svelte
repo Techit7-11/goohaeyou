@@ -4,9 +4,8 @@
 	import rq from '$lib/rq/rq.svelte';
 	import '../tailwind.css';
 
-	import { getMessaging, getToken } from "firebase/messaging";
-	import { initializeApp } from "firebase/app";
-
+	import { getMessaging, getToken } from 'firebase/messaging';
+	import { initializeApp } from 'firebase/app';
 
 	const { children } = $props();
 
@@ -34,55 +33,54 @@
 	}
 
 	const firebaseConfig = {
-			apiKey: "AIzaSyC2-vB7k_IQUGn1osPjD4bLfCLaJeSYPzQ",
-			authDomain: "goohaeyou-9ba43.firebaseapp.com",
-			projectId: "goohaeyou-9ba43",
-			storageBucket: "goohaeyou-9ba43.appspot.com",
-			messagingSenderId: "421577386725",
-			appId: "1:421577386725:web:5c120908373765a55e020c",
-			measurementId: "G-X6YNTCZ56G"
-		};
+		apiKey: 'AIzaSyC2-vB7k_IQUGn1osPjD4bLfCLaJeSYPzQ',
+		authDomain: 'goohaeyou-9ba43.firebaseapp.com',
+		projectId: 'goohaeyou-9ba43',
+		storageBucket: 'goohaeyou-9ba43.appspot.com',
+		messagingSenderId: '421577386725',
+		appId: '1:421577386725:web:5c120908373765a55e020c',
+		measurementId: 'G-X6YNTCZ56G'
+	};
 
 	onMount(() => {
 		rq.initAuth();
 
 		setTimeout(() => {
-        if(rq.isLogin()){
-            console.log(rq.isLogin());
-			const app = initializeApp(firebaseConfig);
-			requestPermission();
-
-        } else {
-            console.log("Not logged in");
-        }
-    }, 100); // 로드가 된 후 0.1초 시간의 텀을 두고 한번만 실행
+			if (rq.isLogin()) {
+				console.log(rq.isLogin());
+				const app = initializeApp(firebaseConfig);
+				requestPermission();
+			} else {
+				console.log('Not logged in');
+			}
+		}, 100); // 로드가 된 후 0.1초 시간의 텀을 두고 한번만 실행
 	});
 
 	function requestPermission() {
-			const messaging = getMessaging();
-  			void Notification.requestPermission()
-				.then((permission) => {
-					if (permission === 'granted') {
-						getToken(messaging, { vapidKey: 'BDnzTq1rFlBlLYTM-hay6Qbrj-lXlDewXy9ShfFk3J2TF8Ndo3v70RbNYGAUg7Bc3LZOw_jX7reHjxHCYjyqC-k' })
-							.then((currentToken) => {
-								if (currentToken) {
-									console.log(currentToken)
-									rq.apiEndPoints().POST('/api/notification/register',{
-										body: { token : currentToken }
-									})
-								} else {
-									console.log('No registration token available. Request permission to generate one.');
-								}
-							})
-							.then(async function name(currentToken) {
-							})
-							.catch((err) => {
-								console.log('An error occurred while retrieving token. ', err);
+		const messaging = getMessaging();
+		void Notification.requestPermission().then((permission) => {
+			if (permission === 'granted') {
+				getToken(messaging, {
+					vapidKey:
+						'BDnzTq1rFlBlLYTM-hay6Qbrj-lXlDewXy9ShfFk3J2TF8Ndo3v70RbNYGAUg7Bc3LZOw_jX7reHjxHCYjyqC-k'
+				})
+					.then((currentToken) => {
+						if (currentToken) {
+							console.log(currentToken);
+							rq.apiEndPoints().POST('/api/notification/register', {
+								body: { token: currentToken }
 							});
-					}
-  			})
-		}
-
+						} else {
+							console.log('No registration token available. Request permission to generate one.');
+						}
+					})
+					.then(async function name(currentToken) {})
+					.catch((err) => {
+						console.log('An error occurred while retrieving token. ', err);
+					});
+			}
+		});
+	}
 
 	// 해당 부분은 읽지 않은 알림이 있을 경우 ui 변경 시도를 위해 작성했습니다.
 	// 논리 타입의 a는 변경이 잘 됩니다.
@@ -142,7 +140,9 @@
 		<a class="link link-hover">About us</a>
 		<a class="link link-hover">Contact</a>
 		<a class="link link-hover">Jobs</a>
-		<a class="link link-hover" href="https://github.com/Techit7-11/GooHaeYou" target="_blank">Github</a>
+		<a class="link link-hover" href="https://github.com/Techit7-11/GooHaeYou" target="_blank"
+			>Github</a
+		>
 	</nav>
 	<nav>
 		<div class="grid grid-flow-col gap-4">

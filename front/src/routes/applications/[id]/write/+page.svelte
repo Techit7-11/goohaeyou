@@ -106,7 +106,9 @@
 				</div>
 				<div class="text-sm">위치 : {jobPostDetailDto?.location}</div>
 				<div class="divider"></div>
-				<div class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200 body-text">
+				<div
+					class="p-4 mt-4 text-gray-700 bg-white rounded-lg shadow border border-gray-200 body-text"
+				>
 					<div class="whitespace-pre-line">{jobPostDetailDto?.body}</div>
 				</div>
 				<div class="divider"></div>
@@ -177,5 +179,4 @@
 		display: grid;
 		grid-template-columns: 1.5fr 1fr 2fr 1fr; /* 두 번째 열을 첫 번째 열보다 2배 넓게 설정 */
 	}
-
 </style>
