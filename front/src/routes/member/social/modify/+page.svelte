@@ -67,7 +67,7 @@
 
 <div class="flex items-center justify-center min-h-screen bg-base-100">
 	<div class="container mx-auto px-4">
-		<h2 class="text-2xl font-bold text-center my-3">회원 정보 수정</h2>
+		<h2 class="text-2xl font-bold text-center text-green6 my-3">회원 정보 수정</h2>
 		<div class="max-w-sm mx-auto">
 			<div>
 				<label class="label" for="name">이름</label>
@@ -108,7 +108,7 @@
 					/>
 					<!-- 다음 주소 API 팝업 열기 버튼 -->
 					<button
-						class="btn btn-primary ml-3"
+						class="btn btn bg-green3 text-white hover:bg-green6 ml-3"
 						style="padding: 6px 7px; font-size: 14px;"
 						on:click={openDaumAddressPopup}>주소 검색</button
 					>
@@ -122,7 +122,10 @@
 				/>
 
 				<div class="mt-5">
-					<button class="w-full btn btn-primary" on:click={updateMember}>회원 정보 수정</button>
+					<button
+						class="w-full btn btn bg-green3 text-white hover:bg-green6"
+						on:click={updateMember}>회원 정보 수정</button
+					>
 				</div>
 			</div>
 		</div>

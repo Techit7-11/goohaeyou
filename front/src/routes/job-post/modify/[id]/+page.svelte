@@ -127,7 +127,7 @@
 						/>
 						<!-- 다음 주소 API 팝업 열기 버튼 -->
 						<button
-							class="btn btn bg-green3 text-white hover:bg-green-500 ml-3"
+							class="btn btn bg-green3 text-white hover:bg-green6 ml-3"
 							style="padding: 6px 7px; font-size: 14px;"
 							on:click={openDaumAddressPopup}
 							type="button">주소 검색</button
@@ -226,7 +226,7 @@
 				</div>
 
 				<div class="form-group">
-					<button class="w-full btn btn bg-green3 text-white hover:bg-green-500 my-3" type="submit"
+					<button class="w-full btn btn bg-green3 text-white hover:bg-green6 my-3" type="submit"
 						>글 수정</button
 					>
 				</div>
@@ -236,6 +236,9 @@
 </div>
 
 <style>
+	.bg-base-100 {
+		background-color: #fdfffe;
+	}
 	.form-group {
 		margin-bottom: 10px;
 	}
