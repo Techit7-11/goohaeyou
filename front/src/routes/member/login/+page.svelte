@@ -72,7 +72,7 @@
 					<a href={rq.getGoogleLoginUrl()} class="social"><i class="fab fa-google"></i></a>
 					<span class="social-text">Google로 시작</span>
 				</div>
-				<p class="text-center text-sm text-gray-500">
+				<p class="text-center text-sm text-gray-600">
 					아직 회원이 아니라면?
 					<a href="/member/join" class="font-semibold leading-6 text-green-600 hover:text-green-700"
 						>회원가입</a
@@ -84,17 +84,9 @@
 </div>
 
 <style>
-	body {
-		background-color: #ffffff;
-		font-family: Arial, sans-serif;
-		display: flex;
-		padding: 20px;
-		justify-content: center;
-		align-items: center;
-		height: 100vh;
-		margin: 0;
+	.bg-light-green {
+		background-color: #fcfffd;
 	}
-
 	.container {
 		background-color: #ffffff;
 		border: none;
@@ -112,7 +104,7 @@
 	}
 
 	.input {
-		border: 1px solid #c8e6c9;
+		border: 1px solid #bcdbbd;
 		background-color: #ffffff;
 		border-radius: 5px;
 	}
@@ -138,7 +130,7 @@
 	}
 
 	.btn-green {
-		background-color: #72cc75; /* 로그인 버튼 배경색 */
+		background-color: #6bc56e; /* 로그인 버튼 배경색 */
 		color: #fff;
 		font-size: 15px;
 		transition: background-color 0.3s ease;
@@ -164,7 +156,7 @@
 	}
 	.social-text {
 		margin-left: 10px; /* 아이콘과 텍스트 사이 간격 */
-		color: #929292;
+		color: #8f8f8f;
 		font-size: 0.875rem; /* 텍스트 크기 조정 */
 		align-self: center;
 	}
