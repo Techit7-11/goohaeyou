@@ -116,16 +116,6 @@ public class ApplicationService {
             throw new CustomException(ErrorCode.CLOSED_POST);
         }
 
-//        if (postDetail.getEssential().getMinAge()> LocalDateTime.now().plusYears(1).getYear()-member.getBirth().getYear()){ // 최소나이 조건 여부
-//            throw new CustomException(ErrorCode.UNSATISFIED_REQUIREMENTS);
-//        }
-
-//        if (postDetail.getEssential().getGender()!=UNDEFINED){ // 성별 조건 여부
-//            if (!postDetail.getEssential().getGender().equals(member.getGender())){
-//                throw new CustomException(ErrorCode.UNSATISFIED_REQUIREMENTS);
-//            }
-//        }
-
         if (postDetail.getAuthor().equals(member.getUsername())) { // 자신의 공고에 지원 불가능
             throw new CustomException(ErrorCode.NOT_ELIGIBLE_FOR_OWN_JOB);
         }
