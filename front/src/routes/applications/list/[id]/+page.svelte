@@ -162,8 +162,9 @@
 				</ul>
 				{#if canApprove}
 					<div class="max-w-4xl mx-auto my-5">
-						<button on:click={approveApplications} class="btn btn-primary w-full my-4"
-							>지원서 승인</button
+						<button
+							on:click={approveApplications}
+							class="btn btn bg-green4 text-white hover:bg-green6 w-full my-4">지원서 승인</button
 						>
 					</div>
 				{/if}
