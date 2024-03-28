@@ -56,7 +56,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Firebase Admin SDK 파일 생성
         run: |
-          mkdir -p src/main/resources/firebase
+          mkdir -p firebase
           echo "${{ secrets.FIREBASE_ADMINSDK_JSON }}" > firebase/goohaeyou-firebase-adminsdk.json
       - name: set lower case owner name
         run: |
