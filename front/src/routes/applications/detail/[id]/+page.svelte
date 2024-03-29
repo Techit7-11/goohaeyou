@@ -97,6 +97,9 @@
 	function goToPayCancelPage() {
 		rq.goTo(`/payment/cancel/${$page.params.id}`);
 	}
+	function goToReviewPage() {
+		rq.goTo(`/member/review/${$page.params.id}`);
+	}
 </script>
 
 {#await loadApplication() then application}
@@ -208,7 +211,7 @@
 
 			{#if application.jobPostAuthorUsername == rq.member.username && application.approve == true}
 				<div class="flex justify-center">
-					{#if application.wageStatus == '급여 결제 전'}
+					{#if application.wageStatus == '급여 결제 완료'}
 						<button
 							class="btn btn-btn btn-sm mx-12 mt-6"
 							on:click={() => goToPaymentPage(application.wages)}>급여 결제하기</button
@@ -222,6 +225,11 @@
 							진행 단계: {application.wageStatus}
 						</button>
 					{/if}
+				</div>
+			{/if}
+			{#if application.wageStatus != '급여 결제 전'}
+				<div class="text-center mt-4">
+					<button class="btn btn-sm" on:click={goToReviewPage}>리뷰 작성하기</button>
 				</div>
 			{/if}
 		</div>
