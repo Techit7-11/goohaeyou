@@ -184,22 +184,23 @@
 				<div class="flex justify-center">
 					{#if jobPostDetailDto?.author === rq.member.username}
 						<div class="mt-4">
-							<button class="btn btn btn-xs mx-1 bg-green4 text-white font-thin" on:click={editPost}
-								>수정하기</button
+							<button
+								class="btn btn btn-xs mx-1 bg-green4 text-white hover:bg-green6 font-thin"
+								on:click={editPost}>수정하기</button
 							>
 							<button
-								class="btn btn-xs mx-1 bg-yellow-500 text-white font-thin"
+								class="btn btn-xs mx-1 bg-yellow-500 text-white hover:bg-yellow1 font-thin"
 								on:click={deletePost}>삭제하기</button
 							>
 							{#if !jobPostDetailDto.closed}
 								<button
-									class="btn btn-xs mx-1 bg-green4 text-white font-thin"
+									class="btn btn-xs mx-1 bg-green4 text-white hover:bg-green6 font-thin"
 									on:click={() => postEarlyClosing()}>조기마감</button
 								>
 							{/if}
 							{#if jobPostDetailDto?.author === rq.member.username}
 								<button
-									class="btn btn btn-xs mx-1 bg-green4 text-white font-thin"
+									class="btn btn btn-xs mx-1 bg-green4 text-white hover:bg-green6 font-thin"
 									on:click={() => goToApplicationsList(jobPostDetailDto?.id)}>지원서 확인</button
 								>
 							{/if}
