@@ -290,20 +290,22 @@
 						<div class="modal-box">
 							{#each reviews ?? [] as ReviewDto}
 								<div class="card flex flex-row justify-between items-center">
-									<div>
-										<div class="flex items-center">
-											<div class="text-sm text-gray-500">{ReviewDto.jobPostingId}번 공고</div>
-											<div class="rating rating-md rating-half mx-2 mb-2">
-												{#each generateStars(ReviewDto.score) as star (star.value)}
-													<input
-														class={`mask mask-star-2 ${star.checked ? 'bg-green-500' : 'bg-gray-300'} ${star.value % 1 === 0.5 ? 'mask-half-1' : 'mask-half-2'}`}
-														disabled
-													/>
-												{/each}
+									<a href="/applications/detail/{ReviewDto.jobPostingId}" class="card-link">
+										<div>
+											<div class="flex items-center">
+												<div class="text-sm text-gray-500">{ReviewDto.jobPostingId}번 지원서</div>
+												<div class="rating rating-md rating-half mx-2 mb-2">
+													{#each generateStars(ReviewDto.score) as star (star.value)}
+														<input
+															class={`mask mask-star-2 ${star.checked ? 'bg-green-500' : 'bg-gray-300'} ${star.value % 1 === 0.5 ? 'mask-half-1' : 'mask-half-2'}`}
+															disabled
+														/>
+													{/each}
+												</div>
 											</div>
+											<div class="text-lg font-bold truncate">{ReviewDto.body}</div>
 										</div>
-										<div class="text-lg font-bold truncate">{ReviewDto.body}</div>
-									</div>
+									</a>
 									<div>
 										<button class="btn btn-ghost" on:click={() => deleteReview(ReviewDto.id)}
 											>삭제</button

@@ -97,6 +97,9 @@
 	function goToPayCancelPage() {
 		rq.goTo(`/payment/cancel/${$page.params.id}`);
 	}
+	function goToReviewPage() {
+		rq.goTo(`/member/review/${$page.params.id}`);
+	}
 </script>
 
 {#await loadApplication() then application}
@@ -222,6 +225,11 @@
 							진행 단계: {application.wageStatus}
 						</button>
 					{/if}
+				</div>
+			{/if}
+			{#if application.approve == true}
+				<div class="text-center mt-4">
+					<button class="btn btn-sm" on:click={goToReviewPage}>리뷰 작성하기</button>
 				</div>
 			{/if}
 		</div>
