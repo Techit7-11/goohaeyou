@@ -10,6 +10,7 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
+import com.ll.gooHaeYu.standard.base.KwType;
 import com.ll.gooHaeYu.global.event.notification.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -202,6 +203,11 @@ public class JobPostService {
         Member member = memberService.getMember(username);
 
         return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
+    }
+
+    public Page<JobPost> findByKw(KwType kwType, String kw, Pageable pageable) {
+        System.out.println("서비스에서 kwType : " + kwType);
+        return jobPostRepository.findByKw(kwType, kw, pageable);
     }
 
     public Page<JobPost> findBySort(Pageable pageable) {

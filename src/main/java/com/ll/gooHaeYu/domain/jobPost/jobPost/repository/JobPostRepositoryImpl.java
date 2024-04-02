@@ -2,6 +2,7 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.repository;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.QJobPost;
+import com.ll.gooHaeYu.standard.base.KwType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -17,6 +18,50 @@ import org.springframework.data.support.PageableExecutionUtils;
 @RequiredArgsConstructor
 public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public Page<JobPost> findByKw(KwType kwType, String kw, Pageable pageable) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (kw != null && !kw.isBlank()) {
+            applyKeywordFilter(kwType, kw, builder);
+        }
+
+        JPAQuery<JobPost> postsQuery = createPostsQuery(builder);
+        applySearchSorting(pageable, postsQuery);
+
+        postsQuery.offset(pageable.getOffset()).limit(pageable.getPageSize());
+
+        JPAQuery<Long> totalQuery = createTotalQuery(builder);
+
+        return PageableExecutionUtils.getPage(postsQuery.fetch(), pageable, totalQuery::fetchOne);
+    }
+
+    private void applyKeywordFilter(KwType kwType, String kw, BooleanBuilder builder) {
+        System.out.println(kw);
+        System.out.println("리포지터리 Impl에서 kwType : " + kwType);
+        switch (kwType) {
+            case kwType.TITLE -> builder.and(QJobPost.jobPost.title.containsIgnoreCase(kw));
+            case kwType.BODY -> builder.and(QJobPost.jobPost.jobPostDetail.body.containsIgnoreCase(kw));
+            case kwType.AUTHOR -> builder.and(QJobPost.jobPost.member.username.containsIgnoreCase(kw));
+            case kwType.LOCATION -> builder.and(QJobPost.jobPost.location.containsIgnoreCase(kw));
+            case kwType.EMPLOYED -> builder.and(QJobPost.jobPost.employed.eq(Boolean.valueOf(kw)));
+            default -> builder.and(
+                    QJobPost.jobPost.title.containsIgnoreCase(kw)
+                            .or(QJobPost.jobPost.jobPostDetail.body.containsIgnoreCase(kw))
+                            .or(QJobPost.jobPost.member.username.containsIgnoreCase(kw))
+                            .or(QJobPost.jobPost.location.containsIgnoreCase(kw))
+                            .or(QJobPost.jobPost.employed.eq(Boolean.valueOf(kw)))
+            );
+        }
+    }
+
+    private void applySearchSorting(Pageable pageable, JPAQuery<JobPost> postsQuery) {
+        for (Sort.Order o : pageable.getSort()) {
+            PathBuilder pathBuilder = new PathBuilder<>(JobPost.class, "jobPost");
+            postsQuery.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC, pathBuilder.get(o.getProperty())));
+        }
+    }
 
     @Override
     public Page<JobPost> findBySort(Pageable pageable) {
@@ -48,7 +93,6 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
                     order.isAscending() ? Order.ASC : Order.DESC,
                     pathBuilder.get(order.getProperty())
             );
-            System.out.println(orderSpecifier);
             postsQuery.orderBy(orderSpecifier);
         }
     }
