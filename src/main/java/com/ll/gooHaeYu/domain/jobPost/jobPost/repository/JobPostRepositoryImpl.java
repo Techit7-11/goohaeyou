@@ -51,7 +51,7 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
                             .or(QJobPost.jobPost.jobPostDetail.body.containsIgnoreCase(kw))
                             .or(QJobPost.jobPost.member.username.containsIgnoreCase(kw))
                             .or(QJobPost.jobPost.location.containsIgnoreCase(kw))
-                            .or(QJobPost.jobPost.employed.eq(Boolean.valueOf(kw)))
+                            //.or(QJobPost.jobPost.employed.eq(Boolean.valueOf(kw)))
             );
         }
     }
