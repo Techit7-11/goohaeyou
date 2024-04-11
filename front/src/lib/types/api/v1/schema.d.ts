@@ -1597,7 +1597,7 @@ export interface operations {
       query?: {
         page?: number;
         kw?: string;
-        kwType?: "ALL" | "TITLE" | "BODY" | "AUTHOR" | "LOCATION" | "EMPLOYED";
+        kwType?: string[];
       };
     };
     responses: {

@@ -57,6 +57,19 @@
 	<div class="container mx-auto px-4">
 		<div class="search-box container flex justify-center items-center my-4 flex-col">
 			<div class="join">
+				<div class="filter">
+					<select
+						name="kwType"
+						class="select select-bordered"
+						value={$page.url.searchParams.get('kwType') ?? 'ALL'}
+					>
+						<option value="ALL">전체</option>
+						<option value="title">제목</option>
+						<option value="body">내용</option>
+						<option value="AUTHOR">작성자</option>
+						<option value="LOCATION">주소</option>
+					</select>
+				</div>
 				<input
 					name="kw"
 					type="search"
@@ -81,20 +94,30 @@
 					>
 				</button>
 			</div>
-            <div class="filter">
-                <select
-                    name="kwType"
-                    class="select select-bordered"
-                    value={$page.url.searchParams.get('kwType') ?? 'ALL'}
-                >
-                    <option value="ALL">전체</option>
-                    <option value="TITLE">제목</option>
-                    <option value="BODY">내용</option>
-                    <option value="AUTHOR">작성자</option>
-                    <option value="LOCATION">주소</option>
-                    <option value="EMPLOYED">상태</option>
-                </select>
-            </div>
+            <div class="filter-closed">
+				<button class="btn btn-filter">전체</button>
+				<button class="btn btn-filter">공고중</button>
+				<button class="btn btn-filter">마감</button>
+			</div>
+			<div class="filter-gender">
+				<button class="btn btn-filter">무관</button>
+				<button class="btn btn-filter">여성</button>
+				<button class="btn btn-filter">남성</button>
+			</div>
+			<div class="filter-age">
+				<button class="btn btn-filter">전체</button>
+				<button class="btn btn-filter">19세 이하</button>
+				<button class="btn btn-filter">20대</button>
+				<button class="btn btn-filter">30대</button>
+				<button class="btn btn-filter">40대 이상</button>
+			</div>
+			<div class="filter-location">
+				<button class="btn btn-filter">전국</button>
+				<button class="btn btn-filter">서울</button>
+				<button class="btn btn-filter">경기</button>
+				<button class="btn btn-filter">충북</button>
+				<button class="btn btn-filter">제주</button>
+			</div>
 		</div>
 
 		<div class="w-full max-w-4xl mx-auto">

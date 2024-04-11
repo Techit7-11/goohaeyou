@@ -205,9 +205,9 @@ public class JobPostService {
         return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
     }
 
-    public Page<JobPost> findByKw(KwType kwType, String kw, Pageable pageable) {
-        System.out.println("서비스에서 kwType : " + kwType);
-        return jobPostRepository.findByKw(kwType, kw, pageable);
+    public Page<JobPost> findByKw(List<String> kwTypes, String kw, Pageable pageable) {
+        System.out.println("서비스에서 kwType : " + kwTypes);
+        return jobPostRepository.findByKw(kwTypes, kw, pageable);
     }
 
     public Page<JobPost> findBySort(Pageable pageable) {
