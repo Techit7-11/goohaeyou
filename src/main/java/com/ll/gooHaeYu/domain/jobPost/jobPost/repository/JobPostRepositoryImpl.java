@@ -51,6 +51,7 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
             kwList.add(QJobPost.jobPost.location.containsIgnoreCase(kw));
         }
 
+
         //kw 조건 리스트 or 조건으로 결합
         BooleanExpression combinedKwList = kwList.stream()
                 .reduce(BooleanExpression::or)

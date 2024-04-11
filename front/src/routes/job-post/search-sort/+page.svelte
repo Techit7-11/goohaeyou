@@ -25,31 +25,56 @@
 		}
 	}
 
-    async function load() {
-        const kwInput = document.querySelector('input[name="kw"]') as HTMLInputElement;
-		kw = kwInput.value;
+    // async function load() {
+    //     const kwInput = document.querySelector('input[name="kw"]') as HTMLInputElement;
+	// 	kw = kwInput.value;
 
-		const kwTypeSelect = document.querySelector('select[name="kwType"]') as HTMLSelectElement;
-		kwType = kwTypeSelect.value;
+	// 	const kwTypeSelect = document.querySelector('select[name="kwType"]') as HTMLSelectElement;
+	// 	kwType = kwTypeSelect.value;
 
-        const page_ = parseInt($page.url.searchParams.get('page') ?? '1');
+    //     const page_ = parseInt($page.url.searchParams.get('page') ?? '1');
 
-        const { data } = await rq.apiEndPoints().GET('/api/job-posts/search-sort', {
-            params: {
-                query: {
-                    page: page_,
-                    kw,
-                    kwType
-                }
+    //     const { data } = await rq.apiEndPoints().GET('/api/job-posts/search-sort', {
+    //         params: {
+    //             query: {
+    //                 page: page_,
+    //                 kw,
+    //                 kwType
+    //             }
+    //         }
+    //     });
+    //     console.log(kw, kwType);
+    //     console.log(data);
+
+	// 	posts = data!.data.itemPage.content;
+
+	// 	return data!;
+    // }
+
+	async function load() {
+    const kwInput = document.querySelector('input[name="kw"]') as HTMLInputElement;
+    kw = kwInput.value;
+
+    const kwTypeCheckboxes = document.querySelectorAll('input[name="kwType"]:checked');
+    kwType = Array.from(kwTypeCheckboxes).map((checkbox: HTMLInputElement) => checkbox.value).join(',');
+
+    const page_ = parseInt($page.url.searchParams.get('page') ?? '1');
+
+    const { data } = await rq.apiEndPoints().GET('/api/job-posts/search-sort', {
+        params: {
+            query: {
+                page: page_,
+                kw,
+                kwType
             }
-        });
-        console.log(kw, kwType);
-        console.log(data);
+        }
+    });
 
-		posts = data!.data.itemPage.content;
+    posts = data!.data.itemPage.content;
 
-		return data!;
-    }
+    return data!;
+}
+
 
 </script>
 
@@ -57,19 +82,6 @@
 	<div class="container mx-auto px-4">
 		<div class="search-box container flex justify-center items-center my-4 flex-col">
 			<div class="join">
-				<div class="filter">
-					<select
-						name="kwType"
-						class="select select-bordered"
-						value={$page.url.searchParams.get('kwType') ?? 'ALL'}
-					>
-						<option value="ALL">전체</option>
-						<option value="title">제목</option>
-						<option value="body">내용</option>
-						<option value="AUTHOR">작성자</option>
-						<option value="LOCATION">주소</option>
-					</select>
-				</div>
 				<input
 					name="kw"
 					type="search"
@@ -93,6 +105,24 @@
 						/></svg
 					>
 				</button>
+			</div>
+			<div class="filter">
+				<label>
+					<input type="checkbox" name="kwType" value="title">
+					<span>제목</span>
+				</label>
+				<label>
+					<input type="checkbox" name="kwType" value="body">
+					<span>내용</span>
+				</label>
+				<label>
+					<input type="checkbox" name="kwType" value="author">
+					<span>작성자</span>
+				</label>
+				<label>
+					<input type="checkbox" name="kwType" value="location">
+					<span>주소</span>
+				</label>
 			</div>
             <div class="filter-closed">
 				<button class="btn btn-filter">전체</button>
