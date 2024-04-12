@@ -24,7 +24,7 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<JobPost> findByKw(List<String> kwTypes, String kw, Pageable pageable) {
+    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
 
 //        if (kw != null && !kw.isBlank()) {
@@ -51,7 +51,6 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
             kwList.add(QJobPost.jobPost.location.containsIgnoreCase(kw));
         }
 
-
         //kw 조건 리스트 or 조건으로 결합
         BooleanExpression combinedKwList = kwList.stream()
                 .reduce(BooleanExpression::or)
@@ -60,6 +59,15 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
         //결합된 kw 조건 리스트 쿼리에 적용
         if(combinedKwList != null) {
             builder.and(combinedKwList);
+        }
+
+        // closed 조건 추가
+        if (closed.equals("true")) {
+            builder.and(QJobPost.jobPost.closed.eq(true));
+        } else if (closed.equals("false")) {
+            builder.and(QJobPost.jobPost.closed.eq(false));
+        } else {
+            //전체
         }
 
         JPAQuery<JobPost> postsQuery = createPostsQuery(builder);

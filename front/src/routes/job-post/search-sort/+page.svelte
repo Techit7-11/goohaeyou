@@ -25,32 +25,6 @@
 		}
 	}
 
-    // async function load() {
-    //     const kwInput = document.querySelector('input[name="kw"]') as HTMLInputElement;
-	// 	kw = kwInput.value;
-
-	// 	const kwTypeSelect = document.querySelector('select[name="kwType"]') as HTMLSelectElement;
-	// 	kwType = kwTypeSelect.value;
-
-    //     const page_ = parseInt($page.url.searchParams.get('page') ?? '1');
-
-    //     const { data } = await rq.apiEndPoints().GET('/api/job-posts/search-sort', {
-    //         params: {
-    //             query: {
-    //                 page: page_,
-    //                 kw,
-    //                 kwType
-    //             }
-    //         }
-    //     });
-    //     console.log(kw, kwType);
-    //     console.log(data);
-
-	// 	posts = data!.data.itemPage.content;
-
-	// 	return data!;
-    // }
-
 	async function load() {
     const kwInput = document.querySelector('input[name="kw"]') as HTMLInputElement;
     kw = kwInput.value;
@@ -74,7 +48,6 @@
 
     return data!;
 }
-
 
 </script>
 
@@ -126,9 +99,9 @@
 			</div>
             <div class="filter-closed">
 				<button class="btn btn-filter">전체</button>
-				<button class="btn btn-filter">공고중</button>
-				<button class="btn btn-filter">마감</button>
-			</div>
+    <button class="btn btn-filter">공고중</button>
+    <button class="btn btn-filter">마감</button>
+</div>
 			<div class="filter-gender">
 				<button class="btn btn-filter">무관</button>
 				<button class="btn btn-filter">여성</button>
@@ -246,5 +219,10 @@
 	.text-shadow {
 		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 	}
+
+	.selected {
+        background-color: green; /* 선택된 버튼의 배경색을 변경합니다. */
+        color: white; /* 선택된 버튼의 텍스트 색상을 변경합니다. */
+    }
 
 </style>

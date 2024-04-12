@@ -1598,6 +1598,7 @@ export interface operations {
         page?: number;
         kw?: string;
         kwType?: string[];
+        closed?: string;
       };
     };
     responses: {
