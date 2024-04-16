@@ -7,7 +7,6 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.*;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.*;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
-import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
@@ -205,9 +204,9 @@ public class JobPostService {
         return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
     }
 
-    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, Pageable pageable) {
+    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int min_Age, Pageable pageable) {
         System.out.println("서비스에서 kwType : " + kwTypes);
-        return jobPostRepository.findByKw(kwTypes, kw, closed, gender, pageable);
+        return jobPostRepository.findByKw(kwTypes, kw, closed, gender, min_Age, pageable);
     }
 
     public Page<JobPost> findBySort(Pageable pageable) {

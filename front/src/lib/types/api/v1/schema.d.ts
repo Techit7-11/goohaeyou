@@ -1600,6 +1600,7 @@ export interface operations {
         kwType?: string[];
         closed?: string;
         gender?: string;
+        min_Age?: number;
       };
     };
     responses: {
