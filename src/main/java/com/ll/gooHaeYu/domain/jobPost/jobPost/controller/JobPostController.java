@@ -133,8 +133,9 @@ public class JobPostController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(defaultValue = "") String kw,
             @RequestParam(value = "kwType", defaultValue = "") List<String> kwTypes,
-            @RequestParam(defaultValue = "") String closed
-    ) {
+            @RequestParam(defaultValue = "") String closed,
+            @RequestParam(defaultValue = "") String gender
+            ) {
         System.out.println("컨트롤러에서 kwType : " + kwTypes);
 
         List<Sort.Order> sorts = new ArrayList<>();
@@ -142,7 +143,7 @@ public class JobPostController {
 
         Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
 
-        Page<JobPost> itemPage = jobPostService.findByKw(kwTypes, kw, closed, pageable);
+        Page<JobPost> itemPage = jobPostService.findByKw(kwTypes, kw, closed, gender, pageable);
 
         Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
 

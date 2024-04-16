@@ -1599,6 +1599,7 @@ export interface operations {
         kw?: string;
         kwType?: string[];
         closed?: string;
+        gender?: string;
       };
     };
     responses: {

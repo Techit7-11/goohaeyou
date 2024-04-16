@@ -2,7 +2,7 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.repository;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.QJobPost;
-import com.ll.gooHaeYu.standard.base.KwType;
+import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -24,12 +24,8 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, Pageable pageable) {
+    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
-
-//        if (kw != null && !kw.isBlank()) {
-//            applyKeywordFilter(kwType, kw, builder);
-//        }
 
         //kw 조건 리스트에 담기
         List<BooleanExpression> kwList = new ArrayList<>();
@@ -70,6 +66,15 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
             //전체
         }
 
+        // gender 조건 추가
+        if (gender.equals("MALE")) {
+            builder.and(QJobPost.jobPost.jobPostDetail.essential.gender.eq(Gender.MALE));
+        } else if (gender.equals("FEMALE")) {
+            builder.and(QJobPost.jobPost.jobPostDetail.essential.gender.eq(Gender.FEMALE));
+        } else {
+            //전체
+        }
+
         JPAQuery<JobPost> postsQuery = createPostsQuery(builder);
         applySearchSorting(pageable, postsQuery);
 
@@ -81,25 +86,6 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
                 .where(builder);
 
         return PageableExecutionUtils.getPage(postsQuery.fetch(), pageable, totalQuery::fetchOne);
-    }
-
-    private void applyKeywordFilter(KwType kwType, String kw, BooleanBuilder builder) {
-        System.out.println(kw);
-        System.out.println("리포지터리 Impl에서 kwType : " + kwType);
-
-        switch (kwType) {
-            case kwType.TITLE -> builder.and(QJobPost.jobPost.title.containsIgnoreCase(kw));
-            case kwType.BODY -> builder.and(QJobPost.jobPost.jobPostDetail.body.containsIgnoreCase(kw));
-            case kwType.AUTHOR -> builder.and(QJobPost.jobPost.member.username.containsIgnoreCase(kw));
-            case kwType.LOCATION -> builder.and(QJobPost.jobPost.location.containsIgnoreCase(kw));
-            default -> builder.and(
-                    QJobPost.jobPost.title.containsIgnoreCase(kw)
-                            .or(QJobPost.jobPost.jobPostDetail.body.containsIgnoreCase(kw))
-                            .or(QJobPost.jobPost.member.username.containsIgnoreCase(kw))
-                            .or(QJobPost.jobPost.location.containsIgnoreCase(kw))
-                            //.or(QJobPost.jobPost.employed.eq(Boolean.valueOf(kw)))
-            );
-        }
     }
 
     private void applySearchSorting(Pageable pageable, JPAQuery<JobPost> postsQuery) {
