@@ -9,5 +9,5 @@ import java.util.List;
 public interface JobPostRepositoryCustom {
     Page<JobPost> findBySort(Pageable pageable);
 
-    Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int min_Age, Pageable pageable);
+    Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int min_Age, List<String> location, Pageable pageable);
 }

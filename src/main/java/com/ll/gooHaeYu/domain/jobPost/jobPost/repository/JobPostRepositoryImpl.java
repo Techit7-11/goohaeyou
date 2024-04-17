@@ -24,12 +24,11 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int min_Age, Pageable pageable) {
+    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int min_Age, List<String> location, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
 
         //kw 조건 리스트에 담기
         List<BooleanExpression> kwList = new ArrayList<>();
-
 
         if (kwTypes.contains("title")) {
             kwList.add(QJobPost.jobPost.title.containsIgnoreCase(kw));
@@ -100,6 +99,80 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
             default:
                 //전체
                 break;
+        }
+
+        List<BooleanExpression> locationList = new ArrayList<>();
+
+        if (location.contains("충북")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("충북"));
+        }
+
+        if (location.contains("제주")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("제주"));
+        }
+
+        if (location.contains("서울")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("서울"));
+        }
+
+        if (location.contains("대전")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("대전"));
+        }
+
+        if (location.contains("경기")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("경기"));
+        }
+
+        if (location.contains("강원")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("강원"));
+        }
+
+        if (location.contains("경남")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("경남"));
+        }
+
+        if (location.contains("경북")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("경북"));
+        }
+
+        if (location.contains("광주")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("광주"));
+        }
+
+        if (location.contains("대구")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("대구"));
+        }
+
+        if (location.contains("부산")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("부산"));
+        }
+
+        if (location.contains("울산")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("울산"));
+        }
+
+        if (location.contains("인천")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("인천"));
+        }
+
+        if (location.contains("전남")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("전남"));
+        }
+
+        if (location.contains("전북")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("전북"));
+        }
+
+        if (location.contains("충남")) {
+            locationList.add(QJobPost.jobPost.location.startsWith("충남"));
+        }
+
+        BooleanExpression combinedLocationList = locationList.stream()
+                .reduce(BooleanExpression::or)
+                .orElse(null);
+
+        if(combinedLocationList != null) {
+            builder.and(combinedLocationList);
         }
 
         JPAQuery<JobPost> postsQuery = createPostsQuery(builder);

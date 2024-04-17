@@ -1601,6 +1601,7 @@ export interface operations {
         closed?: string;
         gender?: string;
         min_Age?: number;
+        location?: string[];
       };
     };
     responses: {
