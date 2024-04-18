@@ -17,9 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
@@ -103,40 +101,20 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
                 break;
         }
 
-        // 지역 코드 매핑
-        Map<String, String> locationMap = new HashMap<>();
-        locationMap.put("CB", "충북");
-        locationMap.put("JJ", "제주");
-        locationMap.put("SL", "서울");
-        locationMap.put("DJ", "대전");
-        locationMap.put("GG", "경기");
-        locationMap.put("GW", "강원");
-        locationMap.put("GN", "경남");
-        locationMap.put("GB", "경북");
-        locationMap.put("GJ", "광주");
-        locationMap.put("DG", "대구");
-        locationMap.put("BS", "부산");
-        locationMap.put("US", "울산");
-        locationMap.put("IC", "인천");
-        locationMap.put("JN", "전남");
-        locationMap.put("JB", "전북");
-        locationMap.put("CN", "충남");
-
-        List<BooleanExpression> locationList = new ArrayList<>();
-
-        for (String location : locations) {
-            String locationCode = locationMap.get(location);
-            if (locationCode != null) {
-                locationList.add(QJobPost.jobPost.location.startsWith(locationCode));
+        // 지역 필터링
+        if (locations != null) {
+            List<BooleanExpression> locationList = new ArrayList<>();
+            for (String location : locations) {
+                locationList.add(QJobPost.jobPost.location.startsWith(location));
             }
-        }
-
-        BooleanExpression combinedLocationList = locationList.stream()
-                .reduce(BooleanExpression::or)
-                .orElse(null);
-
-        if(combinedLocationList != null) {
-            builder.and(combinedLocationList);
+            // 지역 조건 리스트 or 조건으로 결합
+            BooleanExpression combinedLocationList = locationList.stream()
+                    .reduce(BooleanExpression::or)
+                    .orElse(null);
+            // 결합된 지역 조건 리스트 쿼리에 적용
+            if (combinedLocationList != null) {
+                builder.and(combinedLocationList);
+            }
         }
 
         JPAQuery<JobPost> postsQuery = createPostsQuery(builder);
