@@ -17,14 +17,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int min_Age, List<String> location, Pageable pageable) {
+    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int min_Age, List<String> locations, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
 
         //kw 조건 리스트에 담기
@@ -101,70 +103,32 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
                 break;
         }
 
+        // 지역 코드 매핑
+        Map<String, String> locationMap = new HashMap<>();
+        locationMap.put("CB", "충북");
+        locationMap.put("JJ", "제주");
+        locationMap.put("SL", "서울");
+        locationMap.put("DJ", "대전");
+        locationMap.put("GG", "경기");
+        locationMap.put("GW", "강원");
+        locationMap.put("GN", "경남");
+        locationMap.put("GB", "경북");
+        locationMap.put("GJ", "광주");
+        locationMap.put("DG", "대구");
+        locationMap.put("BS", "부산");
+        locationMap.put("US", "울산");
+        locationMap.put("IC", "인천");
+        locationMap.put("JN", "전남");
+        locationMap.put("JB", "전북");
+        locationMap.put("CN", "충남");
+
         List<BooleanExpression> locationList = new ArrayList<>();
 
-        if (location.contains("충북")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("충북"));
-        }
-
-        if (location.contains("제주")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("제주"));
-        }
-
-        if (location.contains("서울")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("서울"));
-        }
-
-        if (location.contains("대전")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("대전"));
-        }
-
-        if (location.contains("경기")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("경기"));
-        }
-
-        if (location.contains("강원")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("강원"));
-        }
-
-        if (location.contains("경남")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("경남"));
-        }
-
-        if (location.contains("경북")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("경북"));
-        }
-
-        if (location.contains("광주")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("광주"));
-        }
-
-        if (location.contains("대구")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("대구"));
-        }
-
-        if (location.contains("부산")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("부산"));
-        }
-
-        if (location.contains("울산")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("울산"));
-        }
-
-        if (location.contains("인천")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("인천"));
-        }
-
-        if (location.contains("전남")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("전남"));
-        }
-
-        if (location.contains("전북")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("전북"));
-        }
-
-        if (location.contains("충남")) {
-            locationList.add(QJobPost.jobPost.location.startsWith("충남"));
+        for (String location : locations) {
+            String locationCode = locationMap.get(location);
+            if (locationCode != null) {
+                locationList.add(QJobPost.jobPost.location.startsWith(locationCode));
+            }
         }
 
         BooleanExpression combinedLocationList = locationList.stream()
