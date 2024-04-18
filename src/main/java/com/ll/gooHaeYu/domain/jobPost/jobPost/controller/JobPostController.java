@@ -138,7 +138,6 @@ public class JobPostController {
             @RequestParam(defaultValue = "0") int min_Age,
             @RequestParam(defaultValue = "") List<String> location
             ) {
-        System.out.println("컨트롤러에서 kwType : " + kwTypes);
 
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("id"));
