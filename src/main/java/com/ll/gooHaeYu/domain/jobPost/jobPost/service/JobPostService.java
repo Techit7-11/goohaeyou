@@ -204,7 +204,7 @@ public class JobPostService {
         return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
     }
 
-    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int min_Age, List<String> location, Pageable pageable) {
+    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int[] min_Age, List<String> location, Pageable pageable) {
         return jobPostRepository.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable);
     }
 

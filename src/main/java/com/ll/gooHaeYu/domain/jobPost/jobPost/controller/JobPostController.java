@@ -135,7 +135,7 @@ public class JobPostController {
             @RequestParam(value = "kwType", defaultValue = "") List<String> kwTypes,
             @RequestParam(defaultValue = "") String closed,
             @RequestParam(defaultValue = "") String gender,
-            @RequestParam(defaultValue = "0") int min_Age,
+            @RequestParam(defaultValue = "0") int[] min_Age,
             @RequestParam(defaultValue = "") List<String> location
             ) {
 

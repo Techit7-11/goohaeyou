@@ -26,28 +26,32 @@
 	}
 
 	async function load() {
-    const kwInput = document.querySelector('input[name="kw"]') as HTMLInputElement;
-    kw = kwInput.value;
+		const kwInput = document.querySelector('input[name="kw"]') as HTMLInputElement;
+		kw = kwInput.value;
 
-    const kwTypeCheckboxes = document.querySelectorAll('input[name="kwType"]:checked');
-    kwType = Array.from(kwTypeCheckboxes).map((checkbox: HTMLInputElement) => checkbox.value).join(',');
+		const kwTypeCheckboxes = document.querySelectorAll('input[name="kwType"]:checked');
+		kwType = Array.from(kwTypeCheckboxes).map((checkbox: HTMLInputElement) => checkbox.value).join(',');
 
-    const page_ = parseInt($page.url.searchParams.get('page') ?? '1');
+		const page_ = parseInt($page.url.searchParams.get('page') ?? '1');
 
-    const { data } = await rq.apiEndPoints().GET('/api/job-posts/search-sort', {
-        params: {
-            query: {
-                page: page_,
-                kw,
-                kwType
-            }
-        }
-    });
+		const { data } = await rq.apiEndPoints().GET('/api/job-posts/search-sort', {
+			params: {
+				query: {
+					page: page_,
+					kw,
+					kwType
+				}
+			}
+		});
 
-    posts = data!.data.itemPage.content;
+		posts = data!.data.itemPage.content;
 
-    return data!;
-}
+		return data!;
+	}
+
+	function all(event) {
+		console.log("버튼 클릭")
+	}
 
 </script>
 
@@ -98,10 +102,10 @@
 				</label>
 			</div>
             <div class="filter-closed">
-				<button class="btn btn-filter">전체</button>
-    <button class="btn btn-filter">공고중</button>
-    <button class="btn btn-filter">마감</button>
-</div>
+				<button class="btn btn-filter" on:click={all}>전체</button>
+				<button class="btn btn-filter" on:click={all}>공고중</button>
+				<button class="btn btn-filter" on:click={all}>마감</button>
+			</div>
 			<div class="filter-gender">
 				<button class="btn btn-filter">무관</button>
 				<button class="btn btn-filter">여성</button>
@@ -109,16 +113,30 @@
 			</div>
 			<div class="filter-age">
 				<button class="btn btn-filter">전체</button>
-				<button class="btn btn-filter">19세 이하</button>
+				<button class="btn btn-filter">10대</button>
 				<button class="btn btn-filter">20대</button>
 				<button class="btn btn-filter">30대</button>
-				<button class="btn btn-filter">40대 이상</button>
+				<button class="btn btn-filter">40대</button>
+				<button class="btn btn-filter">50대 이상</button>
 			</div>
 			<div class="filter-location">
 				<button class="btn btn-filter">전국</button>
 				<button class="btn btn-filter">서울</button>
+				<button class="btn btn-filter">부산</button>
+				<button class="btn btn-filter">대구</button>
+				<button class="btn btn-filter">인천</button>
+				<button class="btn btn-filter">광주</button>
+				<button class="btn btn-filter">대전</button>
+				<button class="btn btn-filter">울산</button>
+				<button class="btn btn-filter">세종</button>
 				<button class="btn btn-filter">경기</button>
+				<button class="btn btn-filter">강원</button>
 				<button class="btn btn-filter">충북</button>
+				<button class="btn btn-filter">충남</button>
+				<button class="btn btn-filter">전북</button>
+				<button class="btn btn-filter">전남</button>
+				<button class="btn btn-filter">경북</button>
+				<button class="btn btn-filter">경남</button>
 				<button class="btn btn-filter">제주</button>
 			</div>
 		</div>
@@ -219,10 +237,5 @@
 	.text-shadow {
 		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 	}
-
-	.selected {
-        background-color: green; /* 선택된 버튼의 배경색을 변경합니다. */
-        color: white; /* 선택된 버튼의 텍스트 색상을 변경합니다. */
-    }
 
 </style>

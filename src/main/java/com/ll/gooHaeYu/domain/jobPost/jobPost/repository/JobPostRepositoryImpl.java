@@ -24,7 +24,7 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int min_Age, List<String> locations, Pageable pageable) {
+    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int[] min_Ages, List<String> locations, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
 
         //kw 조건 리스트에 담기
@@ -75,30 +75,41 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
         }
 
         // 최소 나이 조건 추가
-        switch (min_Age) {
-            case 10:
-                builder.and(QJobPost.jobPost.jobPostDetail.essential.minAge.lt(20)
-                        .and(QJobPost.jobPost.jobPostDetail.essential.minAge.goe(10)));
-                break;
-            case 20:
-                builder.and(QJobPost.jobPost.jobPostDetail.essential.minAge.lt(30)
-                        .and(QJobPost.jobPost.jobPostDetail.essential.minAge.goe(20)));
-                break;
-            case 30:
-                builder.and(QJobPost.jobPost.jobPostDetail.essential.minAge.lt(40)
-                        .and(QJobPost.jobPost.jobPostDetail.essential.minAge.goe(30)));
-                break;
-            case 40:
-                builder.and(QJobPost.jobPost.jobPostDetail.essential.minAge.lt(50)
-                        .and(QJobPost.jobPost.jobPostDetail.essential.minAge.goe(40)));
-                break;
-            case 50:
-                builder.and(QJobPost.jobPost.jobPostDetail.essential.minAge.lt(100)
-                        .and(QJobPost.jobPost.jobPostDetail.essential.minAge.goe(50)));
-                break;
-            default:
-                //전체
-                break;
+        if (min_Ages != null) {
+            List<BooleanExpression> minAgeList = new ArrayList<>();
+            for (int min_Age : min_Ages) {
+                if (min_Age == 10) {
+                    BooleanExpression ageExpression = QJobPost.jobPost.jobPostDetail.essential.minAge.eq(0)
+                            .or(QJobPost.jobPost.jobPostDetail.essential.minAge.between(10, 19));
+                    minAgeList.add(ageExpression);
+                } else if (min_Age == 20) {
+                    BooleanExpression ageExpression = QJobPost.jobPost.jobPostDetail.essential.minAge.eq(0)
+                            .or(QJobPost.jobPost.jobPostDetail.essential.minAge.between(20, 29));
+                    minAgeList.add(ageExpression);
+                } else if (min_Age == 30) {
+                    BooleanExpression ageExpression = QJobPost.jobPost.jobPostDetail.essential.minAge.eq(0)
+                            .or(QJobPost.jobPost.jobPostDetail.essential.minAge.between(30, 39));
+                    minAgeList.add(ageExpression);
+                } else if (min_Age == 40) {
+                    BooleanExpression ageExpression = QJobPost.jobPost.jobPostDetail.essential.minAge.eq(0)
+                            .or(QJobPost.jobPost.jobPostDetail.essential.minAge.between(40, 49));
+                    minAgeList.add(ageExpression);
+                } else if (min_Age == 50) {
+                    BooleanExpression ageExpression = QJobPost.jobPost.jobPostDetail.essential.minAge.eq(0)
+                            .or(QJobPost.jobPost.jobPostDetail.essential.minAge.between(50, 59));
+                    minAgeList.add(ageExpression);
+                } else {
+                    // 전체
+                }
+            }
+
+            BooleanExpression combinedMinAgeList = minAgeList.stream()
+                    .reduce(BooleanExpression::or)
+                    .orElse(null);
+
+            if (combinedMinAgeList != null) {
+                builder.and(combinedMinAgeList);
+            }
         }
 
         // 지역 필터링
