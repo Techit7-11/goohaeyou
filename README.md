@@ -3,7 +3,8 @@
 <br/>
 
 <p align="center">
-  <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/0d344997-8b50-4120-b493-62acd810ae54" width="300px"/>
+  <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/0d344997-8b50-4120-b493-62acd810ae54" width="300px"/><br><br>
+  <a href="https://www.goohaeyou.site/">사이트 바로가기</a>
 </p>
 
 <br/><br/>
@@ -71,19 +72,19 @@
 
 | <h3>백엔드</h3>                                                                                        |
 |-----------------------------------------------------------------------------------------------------|
-| ![be](https://github.com/Techit7-11/GooHaeYou/assets/76129297/5cc54e75-51c5-458b-a79e-e95369dc9401) |
+| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/5cc54e75-51c5-458b-a79e-e95369dc9401" width=700px alt="백엔드"> |
 
 | <h3>인프라</h3>                                                                                           |
 |--------------------------------------------------------------------------------------------------------|
-| ![infra](https://github.com/Techit7-11/GooHaeYou/assets/76129297/d4c496c8-2ba7-46c6-be2f-86021b6b61e1) |
+| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/d4c496c8-2ba7-46c6-be2f-86021b6b61e1" width=600px alt="인프라"> |
 
 | <h3>프론트엔드</h3>                                                                                      |
 |-----------------------------------------------------------------------------------------------------|
-| ![fe](https://github.com/Techit7-11/GooHaeYou/assets/76129297/81da74fe-b688-4a11-a9e7-e17f644902d5) |
+| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/81da74fe-b688-4a11-a9e7-e17f644902d5" width=450px alt="프론트엔드"> |
 
 | <h3>외부 API</h3>                                                                                      | <h3>협업</h3>                                                                                             |
 |------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
-| ![API](https://github.com/Techit7-11/GooHaeYou/assets/76129297/3b52aa7a-02c5-43e3-a5ac-a57b4201cf5e) | ![collab](https://github.com/Techit7-11/GooHaeYou/assets/76129297/7747ea25-e9e0-4f64-9b53-f8e6fa847bf0) |
+| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/3b52aa7a-02c5-43e3-a5ac-a57b4201cf5e" width=300px alt="외부API"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/7747ea25-e9e0-4f64-9b53-f8e6fa847bf0" width=400px alt="협업"> |
 
 <br/>
 
