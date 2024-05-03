@@ -75,8 +75,17 @@ public enum ErrorCode {
 
     INVALID_AUTH_CODE(HttpStatus.BAD_REQUEST, "잘못된 인증코드 입니다."),
 
-    INITIATE_EMAIL_REQUEST(HttpStatus.BAD_REQUEST, "먼저 이메일 인증 요청을 진행해주세요.");
+    INITIATE_EMAIL_REQUEST(HttpStatus.BAD_REQUEST, "먼저 이메일 인증 요청을 진행해주세요."),
 
+    FILE_IS_EMPTY(HttpStatus.BAD_REQUEST, "파일이 비어있습니다."),
+
+    NO_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "파일 확장자가 없습니다."),
+
+    INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "유효하지 않은 파일 확장자 입니다."),
+
+    PUT_OBJECT_EXCEPTION(HttpStatus.BAD_REQUEST, "업로드 중 오류가 발생했습니다."),
+
+    IO_EXCEPTION_ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "이미지를 삭제하는 중 입출력 오류가 발생했습니다.");
 
     private final HttpStatus status;
     private final String message;
