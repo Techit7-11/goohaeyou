@@ -96,6 +96,9 @@ dependencies {
 	// Mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+	// S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 // 테스트를 실행할때마다 jacoco 리포트 생성
