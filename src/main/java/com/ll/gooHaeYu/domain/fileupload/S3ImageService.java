@@ -16,10 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -47,7 +47,7 @@ public class S3ImageService {
 
     // 이미지 업로드 수행
     private String uploadImage(MultipartFile image) {
-        validateImageFileExtension(image.getOriginalFilename());   // 이미지 확장자 유효성 검사
+        validateImageFileExtension(Objects.requireNonNull(image.getOriginalFilename()));   // 이미지 확장자 유효성 검사
         try {
             return uploadImageToS3(image);   // AWS S3에 이미지 업로드
         } catch (IOException e) {
@@ -73,7 +73,7 @@ public class S3ImageService {
     // AWS S3에 이미지 업로드
     private String uploadImageToS3(MultipartFile image) throws IOException {
         String originalFilename = image.getOriginalFilename();   // 원본 파일명
-        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));  // 확장자
+        String extension = Objects.requireNonNull(originalFilename).substring(originalFilename.lastIndexOf("."));  // 확장자
 
         String s3FileName = UUID.randomUUID().toString().substring(0, 10) + originalFilename;  // S3에 저장될 파일명
 
@@ -113,10 +113,10 @@ public class S3ImageService {
     // 이미지 주소로부터 파일명을 추출
     private String getKeyFromImageAddress(String imageAddress) {
         try {
-            URL url = new URL(imageAddress);
-            String decodingKey = URLDecoder.decode(url.getPath(), "UTF-8");
+            URI uri = new URI(imageAddress);
+            String decodingKey = URLDecoder.decode(uri.getPath(), StandardCharsets.UTF_8);
             return decodingKey.substring(1);  // 맨 앞의 '/' 제거
-        } catch (MalformedURLException | UnsupportedEncodingException e) {
+        } catch (URISyntaxException e) {
             throw new CustomException(IO_EXCEPTION_ON_IMAGE_DELETE);
         }
     }
