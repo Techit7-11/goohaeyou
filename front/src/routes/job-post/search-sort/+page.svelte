@@ -102,23 +102,32 @@
 				</label>
 			</div>
             <div class="filter-closed">
-				<button class="btn btn-filter" on:click={all}>전체</button>
-				<button class="btn btn-filter" on:click={all}>공고중</button>
-				<button class="btn btn-filter" on:click={all}>마감</button>
+				<select class="form-select">
+					<option value="all">전체</option>
+					<option value="open">공고중</option>
+					<option value="closed">마감</option>
+				</select>
 			</div>
+			
 			<div class="filter-gender">
-				<button class="btn btn-filter">무관</button>
-				<button class="btn btn-filter">여성</button>
-				<button class="btn btn-filter">남성</button>
+				<select class="form-select">
+					<option value="all">무관</option>
+					<option value="female">여성</option>
+					<option value="male">남성</option>
+				</select>
 			</div>
+			
 			<div class="filter-age">
-				<button class="btn btn-filter">전체</button>
-				<button class="btn btn-filter">10대</button>
-				<button class="btn btn-filter">20대</button>
-				<button class="btn btn-filter">30대</button>
-				<button class="btn btn-filter">40대</button>
-				<button class="btn btn-filter">50대 이상</button>
+				<select class="form-select">
+					<option value="all">전체</option>
+					<option value="10s">10대</option>
+					<option value="20s">20대</option>
+					<option value="30s">30대</option>
+					<option value="40s">40대</option>
+					<option value="50s">50대 이상</option>
+				</select>
 			</div>
+			
 			<div class="filter-location">
 				<button class="btn btn-filter">전국</button>
 				<button class="btn btn-filter">서울</button>
