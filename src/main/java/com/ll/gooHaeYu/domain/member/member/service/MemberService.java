@@ -1,11 +1,11 @@
 package com.ll.gooHaeYu.domain.member.member.service;
 
+import com.ll.gooHaeYu.domain.fileupload.S3ImageService;
 import com.ll.gooHaeYu.domain.member.member.dto.*;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
-import com.ll.gooHaeYu.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final S3ImageService s3ImageService;
 
     @Transactional
     public JoinForm join(JoinForm form) {
@@ -98,6 +98,7 @@ public class MemberService {
 
         member.oauthDetailUpdate(form);
         member.updateRole(Role.USER);
+        member.setImageUrl(s3ImageService.upload(form.getImage()));
 
         return MemberDto.fromEntity(member);
     }
