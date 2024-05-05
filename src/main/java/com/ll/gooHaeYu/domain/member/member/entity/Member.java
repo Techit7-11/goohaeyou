@@ -55,7 +55,7 @@ public class Member extends BaseTimeEntity {
 
     private String FCMToken = null;
 
-    private String imageUrl;
+    private String profileImageUrl;
 
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {
@@ -118,7 +118,7 @@ public class Member extends BaseTimeEntity {
         this.FCMToken = null;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }
