@@ -29,8 +29,8 @@ public class S3ImageController {
 
     @GetMapping(value = "/api/members/image")
     @Operation(summary = "프로필 이미지 URL 불러오기")
-    public ApiResponse<String> getMemberImage(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public ApiResponse<String> getMemberImage(String username) {
 
-        return ApiResponse.ok(profileImageService.getProfileImage(memberDetails.getUsername()));
+        return ApiResponse.ok(profileImageService.getProfileImage(username));
     }
 }

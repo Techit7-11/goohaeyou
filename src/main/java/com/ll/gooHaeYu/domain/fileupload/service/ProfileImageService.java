@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.FILE_IS_EMPTY;
-import static com.ll.gooHaeYu.global.exception.ErrorCode.PROFILE_IMAGE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -36,10 +35,6 @@ public class ProfileImageService {
 
     public String getProfileImage(String username) {
         Member member = memberService.getMember(username);
-
-        if (member.getProfileImageUrl() == null) {
-            throw new CustomException(PROFILE_IMAGE_NOT_FOUND);
-        }
 
         return member.getProfileImageUrl();
     }
