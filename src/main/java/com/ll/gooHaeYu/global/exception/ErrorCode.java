@@ -83,9 +83,13 @@ public enum ErrorCode {
 
     INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "유효하지 않은 파일 확장자 입니다."),
 
-    PUT_OBJECT_EXCEPTION(HttpStatus.BAD_REQUEST, "업로드 중 오류가 발생했습니다."),
+    AWS_SERVICE_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "AWS 서비스 오류가 발생했습니다."),
 
-    IO_EXCEPTION_ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "이미지를 삭제하는 중 입출력 오류가 발생했습니다.");
+    AWS_CLIENT_EXCEPTION(HttpStatus.BAD_REQUEST, "AWS 클라이언트 요청이 잘못되었습니다."),
+
+    IO_EXCEPTION_ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "이미지를 삭제하는 중 입출력 오류가 발생했습니다."),
+
+    PROFILE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "프로필 이미지가 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String message;
