@@ -249,8 +249,6 @@ export interface components {
       location: string;
       /** Format: date */
       birth: string;
-      /** Format: binary */
-      image?: string;
     };
     ApiResponseMemberDto: {
       /** Format: int32 */
@@ -274,6 +272,7 @@ export interface components {
       phoneNumber: string;
       email: string;
       authenticated?: boolean;
+      profileImageUrl?: string;
     };
     ApiResponseModify: {
       /** Format: int32 */
