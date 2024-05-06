@@ -19,5 +19,16 @@ export default {
 			}
 		}
 	},
-	plugins: [require('daisyui')]
+	plugins: [require('daisyui')],
+	daisyui: {
+		themes: [
+			{
+				mytheme: {
+					primary: '#78db4a',
+					'primary-focus': '#3bbe2a',
+					'primary-content': '#ffffff'
+				}
+			}
+		]
+	}
 };
