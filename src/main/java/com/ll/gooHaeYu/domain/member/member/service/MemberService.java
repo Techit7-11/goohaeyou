@@ -1,6 +1,5 @@
 package com.ll.gooHaeYu.domain.member.member.service;
 
-import com.ll.gooHaeYu.domain.fileupload.S3ImageService;
 import com.ll.gooHaeYu.domain.member.member.dto.*;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
@@ -20,7 +19,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final S3ImageService s3ImageService;
 
     @Transactional
     public JoinForm join(JoinForm form) {
@@ -98,7 +96,6 @@ public class MemberService {
 
         member.oauthDetailUpdate(form);
         member.updateRole(Role.USER);
-        member.setImageUrl(s3ImageService.upload(form.getImage()));
 
         return MemberDto.fromEntity(member);
     }
