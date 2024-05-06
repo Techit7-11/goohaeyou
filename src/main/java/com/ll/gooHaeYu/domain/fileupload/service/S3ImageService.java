@@ -1,7 +1,8 @@
-package com.ll.gooHaeYu.domain.fileupload;
+package com.ll.gooHaeYu.domain.fileupload.service;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -38,11 +39,10 @@ public class S3ImageService {
 
     // 이미지 업로드 (S3에 저장된 이미지 객체의 public url 반환)
     public String upload(MultipartFile image) {
-        // 이미지가 비어 있거나 파일명이 null이면 예외 발생
-        if (image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
+        if (image == null || image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
             throw new CustomException(FILE_IS_EMPTY);
         }
-        return uploadImage(image);   // 이미지 업로드 메서드 호출
+        return uploadImage(image);
     }
 
     // 이미지 업로드 수행
@@ -73,7 +73,7 @@ public class S3ImageService {
     // AWS S3에 이미지 업로드
     private String uploadImageToS3(MultipartFile image) throws IOException {
         String originalFilename = image.getOriginalFilename();   // 원본 파일명
-        String extension = Objects.requireNonNull(originalFilename).substring(originalFilename.lastIndexOf("."));  // 확장자
+        String extension = Objects.requireNonNull(originalFilename).substring(originalFilename.lastIndexOf(".") + 1);  // 확장자 추출시 시작점이 '.' 이므로, +1을 해주어야 확장자만 추출된다.
 
         String s3FileName = UUID.randomUUID().toString().substring(0, 10) + originalFilename;  // S3에 저장될 파일명
 
@@ -81,17 +81,17 @@ public class S3ImageService {
         byte[] bytes = IOUtils.toByteArray(inputStream);  // 이미지 데이터를 바이트 배열로 변환
 
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType("image/" + extension);  // 메타데이터 설정
+        metadata.setContentType("image/" + extension);  // 메타데이터 설정 ex) image/png
         metadata.setContentLength(bytes.length);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
         try {
-            PutObjectRequest putObjectRequest =
-                    new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata)
-                            .withCannedAcl(CannedAccessControlList.PublicRead);  // S3에 이미지 업로드 요청
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata);
             amazonS3.putObject(putObjectRequest);
-        } catch (Exception e) {
-            throw new CustomException(PUT_OBJECT_EXCEPTION);
+        } catch (AmazonServiceException e) {
+            throw new CustomException(AWS_SERVICE_EXCEPTION);
+        } catch (SdkClientException e) {
+            throw new CustomException(AWS_CLIENT_EXCEPTION);
         } finally {
             byteArrayInputStream.close();
             inputStream.close();
