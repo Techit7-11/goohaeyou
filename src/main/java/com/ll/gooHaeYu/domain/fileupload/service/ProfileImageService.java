@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.fileupload.service;
 
+import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
@@ -16,6 +17,7 @@ import static com.ll.gooHaeYu.global.exception.ErrorCode.FILE_IS_EMPTY;
 public class ProfileImageService {
     private final MemberService memberService;
     private final S3ImageService s3ImageService;
+    private final JobPostService jobPostService;
 
     @Transactional
     public void uploadProfileImage(String username, MultipartFile profileImageFile) {
@@ -33,8 +35,14 @@ public class ProfileImageService {
         member.setImageUrl(imageUrl);
     }
 
-    public String getProfileImage(String username) {
+    public String getMemberImageByUsername(String username) {
         Member member = memberService.getMember(username);
+
+        return member.getProfileImageUrl();
+    }
+
+    public String getMemberImageByPostId(Long postId) {
+        Member member = jobPostService.findByIdAndValidate(postId).getMember();
 
         return member.getProfileImageUrl();
     }
