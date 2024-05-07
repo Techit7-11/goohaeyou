@@ -16,7 +16,7 @@
 		// 공고 작성자 프로필 이미지 URL 로드
 		const response = await rq.apiEndPoints().GET(`/api/members/image/posts/${postId}`);
 		jobPostProfileImageUrl = response.data?.data;
-		rq.msgInfo(jobPostProfileImageUrl);
+
 		await loadComments(); // 댓글 로드
 
 		if (rq.isLogin()) {
@@ -174,7 +174,7 @@
 		<div class="container mx-auto px-4">
 			<div class="p-6 max-w-4xl mx-auto my-5 bg-white rounded-box shadow-lg">
 				<div class="flex">
-					<div class="avatar online placeholder">
+					<div class="avatar placeholder">
 						<div class="bg-neutral text-neutral-content rounded-full w-8">
 							{#if jobPostProfileImageUrl != null}
 								<img src={jobPostProfileImageUrl} alt="프로필 사진" />
@@ -436,9 +436,13 @@
 							<div class="p-4 rounded-lg bg-base-100 shadow">
 								<div class="flex items-center justify-between mb-2">
 									<div class="flex items-center space-x-2">
-										<div class="avatar online placeholder">
+										<div class="avatar placeholder">
 											<div class="bg-neutral text-neutral-content rounded-full w-8">
-												<span class="text-xs">{comment.author.slice(0, 3)}</span>
+												{#if comment.authorProfileImageUrl != null}
+													<img src={comment.authorProfileImageUrl} alt={comment.author} />
+												{:else}
+													<span class="text-xs">{comment.author.slice(0, 3)}</span>
+												{/if}
 											</div>
 										</div>
 										<div>

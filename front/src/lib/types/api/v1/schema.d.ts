@@ -413,6 +413,7 @@ export interface components {
       jobPostId: number;
       author: string;
       content: string;
+      authorProfileImageUrl?: string;
       /** Format: date-time */
       createAt: string;
       /** Format: date-time */
