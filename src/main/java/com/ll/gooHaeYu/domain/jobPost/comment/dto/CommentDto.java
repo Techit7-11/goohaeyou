@@ -24,6 +24,7 @@ public class CommentDto {
     private String author;
     @NotBlank
     private String content;
+    private String authorProfileImageUrl;
     @NotNull
     private LocalDateTime createAt;
     @NotNull
@@ -35,6 +36,7 @@ public class CommentDto {
                 .jobPostId(comment.getJobPostDetail().getJobPost().getId())
                 .author(comment.getMember().getUsername())
                 .content(comment.getContent())
+                .authorProfileImageUrl(comment.getMember().getProfileImageUrl())
                 .createAt(comment.getCreatedAt())
                 .modifyAt(comment.getModifiedAt())
                 .build();

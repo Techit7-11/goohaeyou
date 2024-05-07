@@ -32,6 +32,7 @@ class Rq {
 		let phoneNumber = $state<string>('');
 		let email = $state<string>('');
 		let authenticated = $state<boolean>(false);
+		let profileImageUrl = $state<string>('');
 
 		return {
 			get id() {
@@ -87,6 +88,12 @@ class Rq {
 			},
 			set authenticated(value: boolean) {
 				authenticated = value;
+			},
+			get profileImageUrl() {
+				return profileImageUrl;
+			},
+			set profileImageUrl(value: string) {
+				profileImageUrl = value;
 			}
 		};
 	}
@@ -137,7 +144,9 @@ class Rq {
 		this.member.birth = '';
 		this.member.name = '';
 		this.member.phoneNumber = '';
-		(this.member.email = ''), (this.member.authenticated = false);
+		(this.member.email = ''),
+			(this.member.authenticated = false),
+			(this.member.profileImageUrl = '');
 	}
 
 	public isLogin() {

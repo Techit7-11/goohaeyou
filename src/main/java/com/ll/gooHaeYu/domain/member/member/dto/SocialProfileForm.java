@@ -3,7 +3,10 @@ package com.ll.gooHaeYu.domain.member.member.dto;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,4 +39,5 @@ public class SocialProfileForm {   // JorinForm에서 username, password 제외
     @Past(message = "생년월일은 현재보다 앞선 날짜여야 합니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birth;
+
 }

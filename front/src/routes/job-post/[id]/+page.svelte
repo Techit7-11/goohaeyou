@@ -9,8 +9,16 @@
 	let newComment = '';
 	let editingContent = '';
 	let interested = false;
+	let jobPostProfileImageUrl = null;
+
 	onMount(async () => {
+		const postId = parseInt($page.params.id);
+		// 공고 작성자 프로필 이미지 URL 로드
+		const response = await rq.apiEndPoints().GET(`/api/members/image/posts/${postId}`);
+		jobPostProfileImageUrl = response.data?.data;
+
 		await loadComments(); // 댓글 로드
+
 		if (rq.isLogin()) {
 			await updateInterestStatus(); // 관심등록 여부 확인 및 상태 업데이트
 		}
@@ -30,10 +38,10 @@
 				rq.goTo('/member/login');
 				return;
 			}
-			const postId = parseInt($page.params.id);
+
 			rq.goTo(`/applications/${postId}/write`);
 		} catch (error) {
-			console.error('애플리케이션 작성 중 오류가 발생했습니다:', error);
+			console.error('오류가 발생했습니다:', error);
 		}
 	}
 	function editPost() {
@@ -166,9 +174,13 @@
 		<div class="container mx-auto px-4">
 			<div class="p-6 max-w-4xl mx-auto my-5 bg-white rounded-box shadow-lg">
 				<div class="flex">
-					<div class="avatar online placeholder">
+					<div class="avatar placeholder">
 						<div class="bg-neutral text-neutral-content rounded-full w-8">
-							<span class="text-xs">{jobPostDetailDto?.author.slice(0, 3)}</span>
+							{#if jobPostProfileImageUrl != null}
+								<img src={jobPostProfileImageUrl} alt="프로필 사진" />
+							{:else}
+								<span class="text-xs">{jobPostDetailDto?.author.slice(0, 3)}</span>
+							{/if}
 						</div>
 					</div>
 					<div class="text-md flex items-center mx-2">{jobPostDetailDto?.author}</div>
@@ -424,9 +436,13 @@
 							<div class="p-4 rounded-lg bg-base-100 shadow">
 								<div class="flex items-center justify-between mb-2">
 									<div class="flex items-center space-x-2">
-										<div class="avatar online placeholder">
+										<div class="avatar placeholder">
 											<div class="bg-neutral text-neutral-content rounded-full w-8">
-												<span class="text-xs">{comment.author.slice(0, 3)}</span>
+												{#if comment.authorProfileImageUrl != null}
+													<img src={comment.authorProfileImageUrl} alt={comment.author} />
+												{:else}
+													<span class="text-xs">{comment.author.slice(0, 3)}</span>
+												{/if}
 											</div>
 										</div>
 										<div>

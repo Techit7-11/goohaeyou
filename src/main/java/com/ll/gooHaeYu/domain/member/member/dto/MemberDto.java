@@ -27,6 +27,7 @@ public class MemberDto {
     @NotBlank
     private String email;
     private boolean authenticated;
+    private String profileImageUrl;
 
     public static MemberDto fromEntity(Member member) {
         return MemberDto.builder()
@@ -39,6 +40,7 @@ public class MemberDto {
                 .phoneNumber(member.getPhoneNumber())
                 .email(member.getEmail())
                 .authenticated(member.isAuthenticated())
+                .profileImageUrl(member.getProfileImageUrl())
                 .build();
     }
 }

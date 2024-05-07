@@ -15,6 +15,10 @@ export interface paths {
     /** 알림 읽음 처리 */
     put: operations["read"];
   };
+  "/api/members/image": {
+    /** 프로필 이미지 변경 */
+    put: operations["updateMemberImage"];
+  };
   "/api/member": {
     /** 내 정보 조회 */
     get: operations["detailMember"];
@@ -157,6 +161,14 @@ export interface paths {
     /** 읽지 않은 알림 유무 확인 */
     get: operations["unreadNotification"];
   };
+  "/api/members/image/{username}": {
+    /** 아이디로 프로필 이미지 URL 불러오기 */
+    get: operations["getMemberImageByUsername"];
+  };
+  "/api/members/image/posts/{postId}": {
+    /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
+    get: operations["getMemberImageByPostId"];
+  };
   "/api/member/review": {
     /** 나의 전체 리뷰 조회 */
     get: operations["getAllReviews"];
@@ -245,6 +257,14 @@ export interface components {
       data: components["schemas"]["Empty"];
     };
     Empty: Record<string, never>;
+    Modify: {
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location?: string;
+      /** Format: date */
+      birth?: string;
+      password?: string;
+    };
     SocialProfileForm: {
       name: string;
       phoneNumber: string;
@@ -276,6 +296,7 @@ export interface components {
       phoneNumber: string;
       email: string;
       authenticated?: boolean;
+      profileImageUrl?: string;
     };
     ApiResponseModify: {
       /** Format: int32 */
@@ -404,6 +425,7 @@ export interface components {
       jobPostId: number;
       author: string;
       content: string;
+      authorProfileImageUrl?: string;
       /** Format: date-time */
       createAt: string;
       /** Format: date-time */
@@ -513,6 +535,15 @@ export interface components {
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
       errorCode?: string;
       data: boolean;
+    };
+    ApiResponseString: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
+      data: string;
     };
     ApiResponseListApplicantReviewDto: {
       /** Format: int32 */
@@ -800,6 +831,25 @@ export interface operations {
       /** @description OK */
       200: {
         content: never;
+      };
+    };
+  };
+  /** 프로필 이미지 변경 */
+  updateMemberImage: {
+    requestBody?: {
+      content: {
+        "application/json": {
+          /** Format: binary */
+          profileImageFile?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
       };
     };
   };
@@ -1448,6 +1498,38 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["ApiResponseBoolean"];
+        };
+      };
+    };
+  };
+  /** 아이디로 프로필 이미지 URL 불러오기 */
+  getMemberImageByUsername: {
+    parameters: {
+      path: {
+        username: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseString"];
+        };
+      };
+    };
+  };
+  /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
+  getMemberImageByPostId: {
+    parameters: {
+      path: {
+        postId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseString"];
         };
       };
     };

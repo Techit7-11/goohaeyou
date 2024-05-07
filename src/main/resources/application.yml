@@ -7,6 +7,10 @@ spring:
   profiles:
     active: dev
     include: secret
+  servlet:
+    multipart: # 파일 업로드 관련
+      max-file-size: 5MB
+      max-request-size: 5MB
   jackson:
     serialization:
       fail-on-empty-beans: false
@@ -46,3 +50,14 @@ tossPayments:
   clientKey: ${tossPayments.apiClientKey}
   secretKey: ${tossPayments.apiSecretKey}
   url: "https://api.tosspayments.com/v1/payments/"
+cloud:
+  aws:
+    credentials:
+      accessKey: ${cloud.aws.credentials.accessKey}
+      secretKey: ${cloud.aws.credentials.secretKey}
+    s3:
+      bucketName: ${cloud.aws.s3.bucketName}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
