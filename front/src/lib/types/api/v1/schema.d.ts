@@ -207,6 +207,10 @@ export interface paths {
     /** 게시물 검색 */
     get: operations["searchJobPostsByTitleAndBody"];
   };
+  "/api/job-posts/search-sort": {
+    /** 구인공고 검색 */
+    get: operations["postSearchAndSort"];
+  };
   "/api/employ/{postId}": {
     /** 공고 별 지원리스트 */
     get: operations["getList_1"];
@@ -234,6 +238,14 @@ export interface components {
   schemas: {
     Register: {
       content: string;
+    };
+    Modify: {
+      /** @enum {string} */
+      gender?: "MALE" | "FEMALE" | "UNDEFINED";
+      location?: string;
+      /** Format: date */
+      birth?: string;
+      password?: string;
     };
     ApiResponseEmpty: {
       /** Format: int32 */
@@ -749,6 +761,15 @@ export interface components {
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
       errorCode?: string;
       data: components["schemas"]["ApplicationDto"];
+    };
+    ApiResponseString: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
+      data: string;
     };
   };
   responses: never;
@@ -1648,6 +1669,28 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["ApiResponseListJobPostDto"];
+        };
+      };
+    };
+  };
+  /** 구인공고 검색 */
+  postSearchAndSort: {
+    parameters: {
+      query?: {
+        page?: number;
+        kw?: string;
+        kwType?: string[];
+        closed?: string;
+        gender?: string;
+        min_Age?: number[];
+        location?: string[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseGetPostsResponseBody"];
         };
       };
     };

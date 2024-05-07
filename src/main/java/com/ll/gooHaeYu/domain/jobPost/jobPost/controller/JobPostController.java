@@ -5,12 +5,12 @@ import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
-import com.ll.gooHaeYu.global.config.AppConfig;
 import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
+import com.ll.gooHaeYu.global.config.AppConfig;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import com.ll.gooHaeYu.standard.base.Empty;
-import com.ll.gooHaeYu.standard.dto.PageDto;
 import com.ll.gooHaeYu.standard.base.util.CookieUtil;
+import com.ll.gooHaeYu.standard.dto.PageDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
@@ -124,6 +124,35 @@ public class JobPostController {
             @RequestParam(required = false, name = "body") String body) {
 
         return ApiResponse.ok(jobPostService.searchJobPostsByTitleAndBody(titleOrBody, title, body));
+    }
+
+
+    @GetMapping("/search-sort")
+    @Operation(summary = "구인공고 검색")
+    public ApiResponse<GetPostsResponseBody> postSearchAndSort(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(defaultValue = "") String kw,
+            @RequestParam(value = "kwType", defaultValue = "") List<String> kwTypes,
+            @RequestParam(defaultValue = "") String closed,
+            @RequestParam(defaultValue = "") String gender,
+            @RequestParam(defaultValue = "0") int[] min_Age,
+            @RequestParam(defaultValue = "") List<String> location
+            ) {
+
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
+
+        Page<JobPost> itemPage = jobPostService.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable);
+
+        Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
+
+        return ApiResponse.ok(
+                new GetPostsResponseBody(
+                        new PageDto<>(_itemPage)
+                )
+        );
     }
 
     public record GetPostsResponseBody(@NonNull PageDto<JobPostDto> itemPage) {
