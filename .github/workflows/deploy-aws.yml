@@ -9,7 +9,7 @@ on:
       - readme.md
       - infraScript/**
     branches:
-      - dev
+      - hotfix/fileupload
 
 permissions:
   contents: write

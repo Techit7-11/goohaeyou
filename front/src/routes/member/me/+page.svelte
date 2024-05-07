@@ -160,7 +160,7 @@
 
 		try {
 			// rq.apiEndPoints() 대신 직접 fetch 사용
-			const response = await fetch('http://localhost:8090/api/members/image', {
+			const response = await fetch(import.meta.env.VITE_CORE_API_BASE_URL + '/api/members/image', {
 				method: 'PUT',
 				body: formData,
 				credentials: 'include' // 쿠키가 필요한 경우
