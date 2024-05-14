@@ -44,3 +44,14 @@ tossPayments:
   successUrl: "https://www.goohaeyou.site/payment/success"
   failUrl: "https://www.goohaeyou.site/payment/fail"
 firebaseAdminSdkPath: "/tmp/firebase/goohaeyou-firebase-adminsdk.json"
+cloud:
+  aws:
+    credentials:
+      accessKey: ${cloud.aws.credentials.accessKey}
+      secretKey: ${cloud.aws.credentials.secretKey}
+    s3:
+      bucketName: ${cloud.aws.s3.bucketName}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
