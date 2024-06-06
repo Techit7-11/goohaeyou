@@ -38,6 +38,7 @@ public class ProfileImageService {
     }
 
     public String getMemberImageByUsername(String username) {
+        log.error("요청");
         Member member = memberService.getMember(username);
         log.error("프로필 이미지 url: " + member.getProfileImageUrl());
         return member.getProfileImageUrl();
