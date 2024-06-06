@@ -26,6 +26,7 @@
 			}
 
 			currentProfileImageUrl = rq.member.profileImageUrl || '';
+			console.log('현재 프로필 이미지 url:', currentProfileImageUrl);
 			loadMyReview();
 		} catch (error) {
 			console.error('인증 초기화 중 오류 발생:', error);
