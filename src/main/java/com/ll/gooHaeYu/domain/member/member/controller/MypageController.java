@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ import java.util.List;
 @Tag(name = "Mypage", description = "회원 관련 API")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api/member")
 public class MypageController {
     private final MemberService memberService;
@@ -34,6 +36,7 @@ public class MypageController {
     @GetMapping
     @Operation(summary = "내 정보 조회")
     public ApiResponse<MemberDto> detailMember(@AuthenticationPrincipal MemberDetails memberDetails) {
+        log.error("진입2");
         return ApiResponse.ok(memberService.findByUsername(memberDetails.getUsername()));
     }
 
