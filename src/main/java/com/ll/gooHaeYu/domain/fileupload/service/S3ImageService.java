@@ -11,7 +11,7 @@ import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -30,7 +30,7 @@ import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
+@Service
 public class S3ImageService {
     private final AmazonS3 amazonS3;
 

@@ -20,7 +20,7 @@ public class S3ImageController {
     @PutMapping(value = "/api/members/image")
     @Operation(summary = "프로필 이미지 변경")
     public ApiResponse<Empty> updateMemberImage(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                @RequestPart(value = "profileImageFile", required = false) MultipartFile profileImageFile) {
+                                                @RequestParam(value = "profileImageFile", required = false) MultipartFile profileImageFile) {
         profileImageService.uploadProfileImage(memberDetails.getUsername(), profileImageFile);
 
         return ApiResponse.noContent();
