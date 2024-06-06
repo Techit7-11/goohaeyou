@@ -7,6 +7,7 @@ import com.ll.gooHaeYu.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name = "S3-Image", description = "이미지 업로드 관련 API")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class S3ImageController {
     private final ProfileImageService profileImageService;
 
@@ -29,7 +31,7 @@ public class S3ImageController {
     @GetMapping(value = "/api/members/image/{username}")
     @Operation(summary = "아이디로 프로필 이미지 URL 불러오기")
     public ApiResponse<String> getMemberImageByUsername(@PathVariable(name = "username") String username) {
-
+        log.error("진입1");
         return ApiResponse.ok(profileImageService.getMemberImageByUsername(username));
     }
 
