@@ -42,7 +42,6 @@ public class MemberDto {
                 .authenticated(member.isAuthenticated())
                 .profileImageUrl(member.getProfileImageUrl()) // 이 필드가 올바르게 설정되는지 확인
                 .build();
-        System.out.println("Converted to DTO: " + dto);
         return dto;
     }
 }
