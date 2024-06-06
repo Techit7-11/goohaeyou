@@ -32,7 +32,7 @@ public class MemberDto {
     public static MemberDto fromEntity(Member member) {
         MemberDto dto = MemberDto.builder()
                 .id(member.getId())
-                .username(member.getUsername())
+                .username(member.getUsername() + "test")
                 .gender(member.getGender())
                 .location(member.getLocation())
                 .birth(member.getBirth())
