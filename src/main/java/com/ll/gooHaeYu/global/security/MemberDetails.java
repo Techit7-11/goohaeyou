@@ -60,6 +60,10 @@ public class MemberDetails implements OAuth2User, UserDetails {
         return member.getEmail();
     }
 
+    public String getProfileImageUrl() {
+        return member.getProfileImageUrl();
+    }
+
     // OAuth2User Override
     @Override
     public Map<String, Object> getAttributes() {

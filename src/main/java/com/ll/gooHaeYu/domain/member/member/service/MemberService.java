@@ -29,7 +29,7 @@ public class MemberService {
 
         Role role = form.getUsername().equals("admin") ? Role.ADMIN : Role.USER;
 
-        Member newMember = memberRepository.save(Member.builder()
+        memberRepository.save(Member.builder()
                 .username(form.getUsername())
                 .password(bCryptPasswordEncoder.encode(form.getPassword()))
                 .name(form.getName())
