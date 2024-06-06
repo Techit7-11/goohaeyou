@@ -10,7 +10,7 @@
 	let imagePreviewUrl = '';
 	let currentProfileImageUrl = '';
 
-	const baseUrl = import.meta.env.production.VITE_CORE_API_BASE_URL;
+	const baseUrl = import.meta.env.VITE_CORE_API_BASE_URL;
 
 	function navigateToChatRoomListPage() {
 		rq.goTo('/chat/list');
