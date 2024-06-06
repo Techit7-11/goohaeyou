@@ -30,7 +30,7 @@ public class MemberDto {
     private String profileImageUrl;
 
     public static MemberDto fromEntity(Member member) {
-        return MemberDto.builder()
+        MemberDto dto = MemberDto.builder()
                 .id(member.getId())
                 .username(member.getUsername())
                 .gender(member.getGender())
@@ -40,7 +40,9 @@ public class MemberDto {
                 .phoneNumber(member.getPhoneNumber())
                 .email(member.getEmail())
                 .authenticated(member.isAuthenticated())
-                .profileImageUrl(member.getProfileImageUrl())
+                .profileImageUrl(member.getProfileImageUrl()) // 이 필드가 올바르게 설정되는지 확인
                 .build();
+        System.out.println("Converted to DTO: " + dto);
+        return dto;
     }
 }
