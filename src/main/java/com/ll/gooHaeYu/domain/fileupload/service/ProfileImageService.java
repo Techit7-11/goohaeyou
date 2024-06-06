@@ -5,6 +5,7 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,7 @@ import static com.ll.gooHaeYu.global.exception.ErrorCode.FILE_IS_EMPTY;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class ProfileImageService {
     private final MemberService memberService;
     private final S3ImageService s3ImageService;
@@ -37,7 +39,7 @@ public class ProfileImageService {
 
     public String getMemberImageByUsername(String username) {
         Member member = memberService.getMember(username);
-
+        log.error("프로필 이미지 url: " + member.getProfileImageUrl());
         return member.getProfileImageUrl();
     }
 
