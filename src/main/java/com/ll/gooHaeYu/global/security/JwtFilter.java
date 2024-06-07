@@ -45,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } else {
             // 토큰이 만료되었거나 유효하지 않은 경우의 처리 로직
             // 예: 로그 출력, 에러 응답 설정 등
-            logger.info("Invalid or expired JWT token.");
+//            logger.info("Invalid or expired JWT token.");
         }
 
         filterChain.doFilter(request, response);

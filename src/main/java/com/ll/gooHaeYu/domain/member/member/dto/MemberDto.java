@@ -30,7 +30,7 @@ public class MemberDto {
     private String profileImageUrl;
 
     public static MemberDto fromEntity(Member member) {
-        return MemberDto.builder()
+        MemberDto dto = MemberDto.builder()
                 .id(member.getId())
                 .username(member.getUsername())
                 .gender(member.getGender())
@@ -42,5 +42,6 @@ public class MemberDto {
                 .authenticated(member.isAuthenticated())
                 .profileImageUrl(member.getProfileImageUrl())
                 .build();
+        return dto;
     }
 }

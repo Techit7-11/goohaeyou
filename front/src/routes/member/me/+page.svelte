@@ -10,6 +10,8 @@
 	let imagePreviewUrl = '';
 	let currentProfileImageUrl = '';
 
+	const baseUrl = import.meta.env.VITE_CORE_API_BASE_URL;
+
 	function navigateToChatRoomListPage() {
 		rq.goTo('/chat/list');
 	}
@@ -24,6 +26,7 @@
 			}
 
 			currentProfileImageUrl = rq.member.profileImageUrl || '';
+			console.log('현재 프로필 이미지 url:', currentProfileImageUrl);
 			loadMyReview();
 		} catch (error) {
 			console.error('인증 초기화 중 오류 발생:', error);
@@ -160,7 +163,7 @@
 
 		try {
 			// rq.apiEndPoints() 대신 직접 fetch 사용
-			const response = await fetch('http://localhost:8090/api/members/image', {
+			const response = await fetch(baseUrl + '/api/members/image', {
 				method: 'PUT',
 				body: formData,
 				credentials: 'include' // 쿠키가 필요한 경우

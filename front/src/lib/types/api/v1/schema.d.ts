@@ -239,14 +239,6 @@ export interface components {
     Register: {
       content: string;
     };
-    Modify: {
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location?: string;
-      /** Format: date */
-      birth?: string;
-      password?: string;
-    };
     ApiResponseEmpty: {
       /** Format: int32 */
       statusCode?: number;
@@ -761,15 +753,6 @@ export interface components {
       resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
       errorCode?: string;
       data: components["schemas"]["ApplicationDto"];
-    };
-    ApiResponseString: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: string;
     };
   };
   responses: never;

@@ -37,7 +37,6 @@ public class ProfileImageService {
 
     public String getMemberImageByUsername(String username) {
         Member member = memberService.getMember(username);
-
         return member.getProfileImageUrl();
     }
 
