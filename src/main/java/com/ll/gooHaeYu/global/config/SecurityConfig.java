@@ -57,6 +57,7 @@ public class SecurityConfig {
                                     "/api/post-comment/{postId}", "/api/members/image/posts/**", "/api/members/image/**",
                                     "/api/job-posts/{postId}/members/interest").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                            .requestMatchers("/ready").permitAll()
                             .anyRequest()
                             .authenticated();
 
