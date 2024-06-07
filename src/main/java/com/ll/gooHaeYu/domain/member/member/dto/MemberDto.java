@@ -40,7 +40,7 @@ public class MemberDto {
                 .phoneNumber(member.getPhoneNumber())
                 .email(member.getEmail())
                 .authenticated(member.isAuthenticated())
-                .profileImageUrl(member.getProfileImageUrl()) // 이 필드가 올바르게 설정되는지 확인
+                .profileImageUrl(member.getProfileImageUrl())
                 .build();
         return dto;
     }
