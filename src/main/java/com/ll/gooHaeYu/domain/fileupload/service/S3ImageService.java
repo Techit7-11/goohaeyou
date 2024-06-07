@@ -8,8 +8,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.standard.base.util.MIMETypeUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +28,6 @@ import java.util.UUID;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class S3ImageService {
@@ -81,7 +80,10 @@ public class S3ImageService {
         byte[] bytes = IOUtils.toByteArray(inputStream);  // 이미지 데이터를 바이트 배열로 변환
 
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType("image/" + extension);  // 메타데이터 설정 ex) image/png
+        MIMETypeUtil.getMimeType(extension).ifPresentOrElse(
+            metadata::setContentType,   // 메타데이터 설정 ex) image/png
+            () -> { throw new CustomException(INVALID_FILE_EXTENSION); }
+        );
         metadata.setContentLength(bytes.length);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
