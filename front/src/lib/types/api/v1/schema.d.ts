@@ -18,6 +18,8 @@ export interface paths {
   "/api/members/image": {
     /** 프로필 이미지 변경 */
     put: operations["updateMemberImage"];
+    /** 프로필 이미지 삭제 */
+    delete: operations["deleteMemberImage"];
   };
   "/api/member": {
     /** 내 정보 조회 */
@@ -827,6 +829,17 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
+      };
+    };
+  };
+  /** 프로필 이미지 삭제 */
+  deleteMemberImage: {
     responses: {
       /** @description OK */
       200: {
