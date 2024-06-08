@@ -29,7 +29,7 @@ public class ProfileImageService {
         }
 
         if (member.getProfileImageUrl() != null) {
-            s3ImageService.deleteImageFromS3(member.getProfileImageUrl());   // 기존의 프로필 이미지 파일을 S3에서 제거
+            deleteProfileImage(username);   // S3에서 이미지 제거, DB에서 이미지 url 제거
         }
 
         String imageUrl = s3ImageService.upload(profileImageFile);
