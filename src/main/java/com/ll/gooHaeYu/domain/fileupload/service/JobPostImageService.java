@@ -1,0 +1,68 @@
+package com.ll.gooHaeYu.domain.fileupload.service;
+
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostDetail;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostImage;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostDetailRepository;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.repository.JobPostImageRepository;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.service.JobPostService;
+import com.ll.gooHaeYu.global.exception.CustomException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class JobPostImageService {
+    private final JobPostService jobPostService;
+    private final S3ImageService s3ImageService;
+    private final JobPostImageRepository jobPostImageRepository;
+    private final JobPostDetailRepository jobPostDetailRepository;
+
+    @Transactional
+    public void uploadJobPostImage(String username, long postDetailId, MultipartFile[] jobPostImageFiles) {
+        JobPostDetail jobPostDetail = jobPostService.findByIdAndValidate(postDetailId).getJobPostDetail();
+
+        if (!jobPostDetail.getAuthor().equals(username)) {
+            throw new CustomException(NOT_ABLE);
+        }
+
+        if (jobPostImageFiles.length == 0) {
+            throw new CustomException(FILE_IS_EMPTY);
+        }
+
+        List<JobPostImage> jobPostImages = new ArrayList<>();
+
+        for (MultipartFile imageFile : jobPostImageFiles) {
+            String imageUrl = s3ImageService.upload(imageFile);
+
+            JobPostImage jobPostImage = JobPostImage.builder()
+                    .jobPostImageUrl(imageUrl)
+                    .jobPostDetail(jobPostDetail)
+                    .build();
+
+            jobPostImages.add(jobPostImage);
+        }
+
+        jobPostDetail.getJobPostImages().addAll(jobPostImages);
+        jobPostDetailRepository.save(jobPostDetail);
+    }
+
+    public List<String> getJobPostImage(Long postDetailId) {
+        List<JobPostImage> postImages = jobPostImageRepository.findByJobPostDetailId(postDetailId);
+
+        if (postImages.isEmpty()) {
+            throw new CustomException(POST_IMAGES_NOT_FOUND);
+        }
+
+        return postImages.stream()
+                .map(JobPostImage::getJobPostImageUrl)
+                .toList();
+    }
+}

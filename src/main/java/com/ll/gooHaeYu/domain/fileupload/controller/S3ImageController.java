@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.domain.fileupload.controller;
 
+import com.ll.gooHaeYu.domain.fileupload.service.JobPostImageService;
 import com.ll.gooHaeYu.domain.fileupload.service.ProfileImageService;
-import com.ll.gooHaeYu.domain.fileupload.service.S3ImageService;
 import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import com.ll.gooHaeYu.standard.base.Empty;
@@ -12,12 +12,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Tag(name = "S3-Image", description = "이미지 업로드 관련 API")
 @RestController
 @RequiredArgsConstructor
 public class S3ImageController {
     private final ProfileImageService profileImageService;
-    private final S3ImageService s3ImageService;
+    private final JobPostImageService jobPostImageService;
 
     @PutMapping(value = "/api/members/image")
     @Operation(summary = "프로필 이미지 변경")
@@ -48,5 +50,23 @@ public class S3ImageController {
         profileImageService.deleteProfileImage(memberDetail.getUsername());
 
         return ApiResponse.noContent();
+    }
+
+    @PostMapping(value = "api/job-post/images")
+    @Operation(summary = "공고에 이미지 등록")
+    public ApiResponse<Empty> registerPostImage(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                Long postDetailId,
+                                                @RequestParam(value = "jobPostImageFile", required = false) MultipartFile[] jobPostImageFiles) {
+        jobPostImageService.uploadJobPostImage(memberDetails.getUsername(), postDetailId, jobPostImageFiles);
+
+        return ApiResponse.created();
+    }
+
+    @GetMapping(value = "api/job-post/images/{postId}")
+    @Operation(summary = "공고에 등록된 이미지 불러오기")
+    public ApiResponse<List<String>> getPostImage(@PathVariable(name = "postId") Long postId) {
+        List<String> jobPostImages = jobPostImageService.getJobPostImage(postId);
+
+        return ApiResponse.ok(jobPostImages);
     }
 }
