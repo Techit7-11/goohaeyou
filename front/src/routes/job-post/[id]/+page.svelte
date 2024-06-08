@@ -10,6 +10,9 @@
 	let editingContent = '';
 	let interested = false;
 	let jobPostProfileImageUrl = null;
+	let imageContainer;
+
+	const baseUrl = import.meta.env.VITE_CORE_API_BASE_URL;
 
 	onMount(async () => {
 		const postId = parseInt($page.params.id);
@@ -28,8 +31,18 @@
 		interested = data?.data;
 	}
 	async function load() {
-		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}`);
-		return data!;
+		const [jobPostResponse, imageUrlResponse] = await Promise.all([
+			rq.apiEndPoints().GET(`/api/job-posts/${postId}`),
+			rq.apiEndPoints().GET(`/api/job-post/images/${postId}`)
+		]);
+
+		const jobPostData = jobPostResponse.data;
+		const imageUrls = imageUrlResponse.data?.data || [];
+
+		return {
+			...jobPostData,
+			imageUrls
+		};
 	}
 	async function apply() {
 		try {
@@ -163,13 +176,46 @@
 	function goToApplicationsList(postId) {
 		window.location.href = `/applications/list/${postId}`;
 	}
+	// 공고에 이미지 업로드
+	async function handleImageUpload(event) {
+		const files = event.target.files;
+		if (files.length > 3) {
+			alert('이미지는 최대 3개까지 등록할 수 있습니다.');
+			return;
+		}
+
+		const formData = new FormData();
+		for (let i = 0; i < files.length; i++) {
+			formData.append('jobPostImageFile', files[i]);
+		}
+
+		try {
+			const response = await fetch(baseUrl + `/api/job-post/images?postDetailId=${postId}`, {
+				method: 'POST',
+				body: formData,
+				credentials: 'include'
+			});
+
+			const responseData = await response.json();
+
+			if (responseData.resultType === 'SUCCESS') {
+				alert('이미지가 성공적으로 등록되었습니다.');
+				// 필요한 경우 페이지 새로고침 또는 이미지 목록 업데이트
+			} else {
+				alert('이미지 등록에 실패했습니다.');
+			}
+		} catch (error) {
+			console.error('이미지 등록 중 오류가 발생했습니다.', error);
+			alert('이미지 등록 중 오류가 발생했습니다.');
+		}
+	}
 </script>
 
 {#await load()}
 	<div class="flex items-center justify-center min-h-screen">
 		<span class="loading loading-dots loading-lg"></span>
 	</div>
-{:then { data: jobPostDetailDto }}
+{:then { data: jobPostDetailDto, imageUrls }}
 	<div class="flex justify-center items-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
 			<div class="p-6 max-w-4xl mx-auto my-5 bg-white rounded-box shadow-lg">
@@ -196,6 +242,20 @@
 				<div class="flex justify-center">
 					{#if jobPostDetailDto?.author === rq.member.username}
 						<div class="mt-4">
+							<label
+								for="jobPostImageFiles"
+								class="btn btn-xs mx-1 bg-green4 text-white hover:bg-green6 font-thin"
+							>
+								이미지 등록
+							</label>
+							<input
+								id="jobPostImageFiles"
+								type="file"
+								accept="image/*"
+								multiple
+								on:change={handleImageUpload}
+								class="hidden"
+							/>
 							<button
 								class="btn btn btn-xs mx-1 bg-green4 text-white hover:bg-green6 font-thin"
 								on:click={editPost}>수정하기</button
@@ -241,6 +301,35 @@
 				</div>
 				<div class="mt-4">
 					<div class="my-5">
+						{#if imageUrls && imageUrls.length > 0}
+							<div class="carousel w-full bg-white">
+								{#each imageUrls as imageUrl, index}
+									<div id="slide{index}" class="carousel-item relative w-full">
+										<div
+											class="sticky top-16 bg-white p-4 w-full max-w-screen-md mx-auto"
+											bind:this={imageContainer}
+										>
+											<figure class="w-full h-64 flex justify-center items-center bg-white">
+												<img
+													src={imageUrl}
+													alt="Image {index + 1}"
+													class="object-contain max-w-full max-h-full"
+												/>
+											</figure>
+										</div>
+										<div
+											class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2"
+										>
+											<a
+												href="#slide{(index - 1 + imageUrls.length) % imageUrls.length}"
+												class="btn btn-circle">❮</a
+											>
+											<a href="#slide{(index + 1) % imageUrls.length}" class="btn btn-circle">❯</a>
+										</div>
+									</div>
+								{/each}
+							</div>
+						{/if}
 						<div class="bg-white p-5 rounded-lg shadow-lg">
 							<h3 class="text-md font-medium text-green5 mb-3">근무 조건</h3>
 							<ul class="list-disc space-y-2 text-sm">

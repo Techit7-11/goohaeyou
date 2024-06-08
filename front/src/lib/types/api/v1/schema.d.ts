@@ -105,6 +105,10 @@ export interface paths {
     /** 구인공고 관심 제거 */
     delete: operations["disinterest"];
   };
+  "/api/job-post/images": {
+    /** 공고에 이미지 등록 */
+    post: operations["registerPostImage"];
+  };
   "/api/chat/{roomId}/message": {
     /** 채팅 메세지 로드 */
     get: operations["writeChat_1"];
@@ -212,6 +216,10 @@ export interface paths {
   "/api/job-posts/search-sort": {
     /** 구인공고 검색 */
     get: operations["postSearchAndSort"];
+  };
+  "/api/job-post/images/{postId}": {
+    /** 공고에 등록된 이미지 불러오기 */
+    get: operations["getPostImage"];
   };
   "/api/employ/{postId}": {
     /** 공고 별 지원리스트 */
@@ -678,6 +686,15 @@ export interface components {
       /** Format: int32 */
       number: number;
       content: components["schemas"]["JobPostDto"][];
+    };
+    ApiResponseListString: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
+      data: string[];
     };
     ApiResponseListRoomListDto: {
       /** Format: int32 */
@@ -1265,6 +1282,23 @@ export interface operations {
       };
     };
   };
+  /** 공고에 이미지 등록 */
+  registerPostImage: {
+    parameters: {
+      query: {
+        postDetailId: number;
+        jobPostImageFile?: string[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
+      };
+    };
+  };
   /** 채팅 메세지 로드 */
   writeChat_1: {
     parameters: {
@@ -1687,6 +1721,22 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["ApiResponseGetPostsResponseBody"];
+        };
+      };
+    };
+  };
+  /** 공고에 등록된 이미지 불러오기 */
+  getPostImage: {
+    parameters: {
+      path: {
+        postId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseListString"];
         };
       };
     };
