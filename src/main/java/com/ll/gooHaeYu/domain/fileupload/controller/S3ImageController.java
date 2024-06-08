@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.fileupload.controller;
 
 import com.ll.gooHaeYu.domain.fileupload.service.ProfileImageService;
+import com.ll.gooHaeYu.domain.fileupload.service.S3ImageService;
 import com.ll.gooHaeYu.global.apiResponse.ApiResponse;
 import com.ll.gooHaeYu.global.security.MemberDetails;
 import com.ll.gooHaeYu.standard.base.Empty;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class S3ImageController {
     private final ProfileImageService profileImageService;
+    private final S3ImageService s3ImageService;
 
     @PutMapping(value = "/api/members/image")
     @Operation(summary = "프로필 이미지 변경")
@@ -38,5 +40,13 @@ public class S3ImageController {
     public ApiResponse<String> getMemberImageByPostId(@PathVariable(name = "postId") Long postId) {
 
         return ApiResponse.ok(profileImageService.getMemberImageByPostId(postId));
+    }
+
+    @DeleteMapping(value = "api/members/image")
+    @Operation(summary = "프로필 이미지 삭제")
+    public ApiResponse<Empty> deleteMemberImage(@AuthenticationPrincipal MemberDetails memberDetail) {
+        profileImageService.deleteProfileImage(memberDetail.getUsername());
+
+        return ApiResponse.noContent();
     }
 }
