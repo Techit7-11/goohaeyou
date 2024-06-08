@@ -199,10 +199,12 @@
 			const responseData = await response.json();
 
 			if (responseData.resultType === 'SUCCESS') {
-				alert('이미지가 성공적으로 등록되었습니다.');
-				// 필요한 경우 페이지 새로고침 또는 이미지 목록 업데이트
+				rq.msgInfo('이미지가 성공적으로 등록되었습니다.');
+				location.reload();
+			} else if (responseData.resultType === 'CUSTOM_EXCEPTION') {
+				rq.msgError(responseData.message);
 			} else {
-				alert('이미지 등록에 실패했습니다.');
+				rq.msgError('이미지 등록에 실패했습니다.');
 			}
 		} catch (error) {
 			console.error('이미지 등록 중 오류가 발생했습니다.', error);
@@ -322,9 +324,12 @@
 										>
 											<a
 												href="#slide{(index - 1 + imageUrls.length) % imageUrls.length}"
-												class="btn btn-circle">❮</a
+												class="btn btn-circle bg-opacity-50 text-gray-600 hover:bg-opacity-70">❮</a
 											>
-											<a href="#slide{(index + 1) % imageUrls.length}" class="btn btn-circle">❯</a>
+											<a
+												href="#slide{(index + 1) % imageUrls.length}"
+												class="btn btn-circle bg-opacity-50 text-gray-600 hover:bg-opacity-70">❯</a
+											>
 										</div>
 									</div>
 								{/each}
