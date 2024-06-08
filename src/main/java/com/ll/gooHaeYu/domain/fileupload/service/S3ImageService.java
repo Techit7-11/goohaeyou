@@ -12,6 +12,7 @@ import com.ll.gooHaeYu.standard.base.util.MIMETypeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -28,8 +29,9 @@ import java.util.UUID;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class S3ImageService {
     private final AmazonS3 amazonS3;
 
@@ -37,6 +39,7 @@ public class S3ImageService {
     private String bucketName;
 
     // 이미지 업로드 (S3에 저장된 이미지 객체의 public url 반환)
+    @Transactional
     public String upload(MultipartFile image) {
         if (image == null || image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
             throw new CustomException(FILE_IS_EMPTY);
@@ -103,6 +106,7 @@ public class S3ImageService {
     }
 
     // AWS S3에서 이미지 삭제
+    @Transactional
     public void deleteImageFromS3(String imageAddress) {
         String key = getKeyFromImageAddress(imageAddress);   // 이미지 주소에서 파일명 추출
         try {
