@@ -11,6 +11,7 @@
 	let interested = false;
 	let jobPostProfileImageUrl = null;
 	let imageContainer;
+	let isEditingImages = false;
 
 	const baseUrl = import.meta.env.VITE_CORE_API_BASE_URL;
 
@@ -211,6 +212,23 @@
 			alert('이미지 등록 중 오류가 발생했습니다.');
 		}
 	}
+
+	// 공고에 이미지 삭제
+	async function deletePostImages() {
+		try {
+			const response = await rq.apiEndPoints().DELETE(`/api/job-post/${postId}/images`);
+
+			if (response.data?.resultType === 'SUCCESS') {
+				rq.msgInfo('이미지가 성공적으로 삭제되었습니다.');
+				location.reload();
+			} else {
+				rq.msgError('이미지 삭제에 실패했습니다.');
+			}
+		} catch (error) {
+			console.error('이미지 삭제 중 오류가 발생했습니다.', error);
+			alert('이미지 삭제 중 오류가 발생했습니다.');
+		}
+	}
 </script>
 
 {#await load()}
@@ -244,20 +262,6 @@
 				<div class="flex justify-center">
 					{#if jobPostDetailDto?.author === rq.member.username}
 						<div class="mt-4">
-							<label
-								for="jobPostImageFiles"
-								class="btn btn-xs mx-1 bg-green4 text-white hover:bg-green6 font-thin"
-							>
-								이미지 등록
-							</label>
-							<input
-								id="jobPostImageFiles"
-								type="file"
-								accept="image/*"
-								multiple
-								on:change={handleImageUpload}
-								class="hidden"
-							/>
 							<button
 								class="btn btn btn-xs mx-1 bg-green4 text-white hover:bg-green6 font-thin"
 								on:click={editPost}>수정하기</button
@@ -301,6 +305,44 @@
 						</div>
 					</div>
 				</div>
+				{#if jobPostDetailDto?.author === rq.member.username}
+					{#if isEditingImages}
+						<!-- 이미지 편집 섹션 -->
+						<div class="text-center mb-4">
+							<label
+								for="jobPostImageFiles"
+								class="btn btn-xs mx-1 bg-green4 text-white hover:bg-green6 font-thin"
+							>
+								이미지 등록 및 수정
+							</label>
+							<input
+								id="jobPostImageFiles"
+								type="file"
+								accept="image/*"
+								multiple
+								on:change={handleImageUpload}
+								class="hidden"
+							/>
+							<button
+								class="btn btn-xs mx-1 bg-yellow-500 text-white hover:bg-yellow1 font-thin"
+								on:click={deletePostImages}>이미지 삭제</button
+							>
+							<button
+								class="btn btn-xs mx-1 bg-gray-500 text-white hover:bg-gray1 font-thin"
+								on:click={() => (isEditingImages = false)}>취소</button
+							>
+						</div>
+					{:else}
+						<!-- 이미지 편집 버튼 -->
+						<div class="text-center mb-4">
+							<button
+								class="btn btn-xs mx-1 bg-green4 text-white hover:bg-green6 font-thin"
+								on:click={() => (isEditingImages = true)}>이미지 편집</button
+							>
+						</div>
+					{/if}
+				{/if}
+
 				<div class="mt-4">
 					<div class="my-5">
 						{#if imageUrls && imageUrls.length > 0}
