@@ -116,7 +116,9 @@
 	<div class="main-bar fixed-div">
 		<div class="navbar bg-base-100">
 			<div class="navbar-start">
-				<a class="btn btn-ghost text-xl font-mono" href="/">GooHaeYou</a>
+				<a class="btn btn-ghost text-xl font-mono" href="/"
+					><img src="/logo.png" alt="GooHaeYou Logo" class="h-10 w-auto" /></a
+				>
 			</div>
 			<div class="navbar-center"></div>
 			<div class="navbar-end">
