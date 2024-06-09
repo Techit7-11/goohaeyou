@@ -107,7 +107,7 @@ export interface paths {
   };
   "/api/job-post/images": {
     /** 공고에 이미지 등록 */
-    post: operations["registerPostImage"];
+    post: operations["registerPostImages"];
   };
   "/api/chat/{roomId}/message": {
     /** 채팅 메세지 로드 */
@@ -223,7 +223,7 @@ export interface paths {
   };
   "/api/job-post/images/{postId}": {
     /** 공고에 등록된 이미지 불러오기 */
-    get: operations["getPostImage"];
+    get: operations["getPostImages"];
   };
   "/api/employ/{postId}": {
     /** 공고 별 지원리스트 */
@@ -243,6 +243,10 @@ export interface paths {
   "/api/notification/all": {
     /** 알림 전부 삭제 */
     delete: operations["deleteAll"];
+  };
+  "/api/job-post/{postId}/images": {
+    /** 공고에 등록된 이미지 삭제 */
+    delete: operations["deletePostImages"];
   };
 }
 
@@ -587,6 +591,7 @@ export interface components {
       deadLine?: string;
       /** Format: date */
       jobStartDate?: string;
+      mainImageUrl?: string;
       closed?: boolean;
     };
     ApiResponseListApplicationDto: {
@@ -1287,7 +1292,7 @@ export interface operations {
     };
   };
   /** 공고에 이미지 등록 */
-  registerPostImage: {
+  registerPostImages: {
     parameters: {
       query: {
         postDetailId: number;
@@ -1750,7 +1755,7 @@ export interface operations {
     };
   };
   /** 공고에 등록된 이미지 불러오기 */
-  getPostImage: {
+  getPostImages: {
     parameters: {
       path: {
         postId: number;
@@ -1817,6 +1822,22 @@ export interface operations {
       /** @description OK */
       200: {
         content: never;
+      };
+    };
+  };
+  /** 공고에 등록된 이미지 삭제 */
+  deletePostImages: {
+    parameters: {
+      path: {
+        postId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
       };
     };
   };
