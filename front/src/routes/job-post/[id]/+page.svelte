@@ -361,18 +361,22 @@
 												/>
 											</figure>
 										</div>
-										<div
-											class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2"
-										>
-											<a
-												href="#slide{(index - 1 + imageUrls.length) % imageUrls.length}"
-												class="btn btn-circle bg-opacity-50 text-gray-600 hover:bg-opacity-70">❮</a
+										{#if imageUrls.length >= 2}
+											<div
+												class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2"
 											>
-											<a
-												href="#slide{(index + 1) % imageUrls.length}"
-												class="btn btn-circle bg-opacity-50 text-gray-600 hover:bg-opacity-70">❯</a
-											>
-										</div>
+												<a
+													href="#slide{(index - 1 + imageUrls.length) % imageUrls.length}"
+													class="btn btn-circle btn-sm bg-opacity-50 text-gray-600 hover:bg-opacity-70"
+													>❮</a
+												>
+												<a
+													href="#slide{(index + 1) % imageUrls.length}"
+													class="btn btn-circle btn-sm bg-opacity-50 text-gray-600 hover:bg-opacity-70"
+													>❯</a
+												>
+											</div>
+										{/if}
 									</div>
 								{/each}
 							</div>
