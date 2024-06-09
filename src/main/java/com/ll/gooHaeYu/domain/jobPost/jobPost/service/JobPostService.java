@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.fileupload.service.JobPostImageService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
@@ -45,6 +46,7 @@ public class JobPostService {
     private final EssentialRepository essentialRepository;
     private final ApplicationEventPublisher publisher;
     private final WageRepository wageRepository;
+    private final JobPostImageService jobPostImageService;
 
     @Transactional
     public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
@@ -131,6 +133,7 @@ public class JobPostService {
         Member member = findUserByUserNameValidate(username);
         publisher.publishEvent(new PostDeletedEvent(this,post,member,DELETE));
         if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
+            jobPostImageService.deleteJobPostImages(username, postId);
             jobPostRepository.deleteById(postId);
         } else {
             throw new CustomException(NOT_ABLE);
