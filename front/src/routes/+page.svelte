@@ -129,7 +129,9 @@
 											<div
 												class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
 											>
-												<div class="text-xl font-bold truncate">{post.title}</div>
+												<div class="text-xl font-bold max-w-full line-clamp-2">
+													{post.title}
+												</div>
 												<div class="flex mt-2">
 													<div class="flex-shrink">
 														<div class="text-xs mx-2 flex justify-center items-center">
