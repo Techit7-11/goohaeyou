@@ -37,6 +37,10 @@ public class JobPostImageService {
             throw new CustomException(FILE_IS_EMPTY);
         }
 
+        if (!jobPostDetail.getJobPostImages().isEmpty()) {
+            deleteJobPostImages(username, postDetailId);
+        }
+
         List<JobPostImage> jobPostImages = new ArrayList<>();
 
         boolean isMainNotSet = true;
@@ -67,6 +71,26 @@ public class JobPostImageService {
         return postImages.stream()
                 .map(JobPostImage::getJobPostImageUrl)
                 .toList();
+    }
+
+    @Transactional
+    public void deleteJobPostImages(String username, long postDetailId) {
+        JobPostDetail jobPostDetail = jobPostService.findByIdAndValidate(postDetailId).getJobPostDetail();
+        List<JobPostImage> jobPostImages = jobPostDetail.getJobPostImages();
+
+        if (!jobPostDetail.getAuthor().equals(username)) {
+            throw new CustomException(NOT_ABLE);
+        }
+
+        if (jobPostImages.isEmpty()) {
+            throw new CustomException(POST_IMAGES_NOT_FOUND);
+        }
+
+        for (JobPostImage jobPostImage : jobPostImages) {
+            s3ImageService.deleteImageFromS3(jobPostImage.getJobPostImageUrl());
+        }
+        jobPostImageRepository.deleteAll(jobPostImages);
+        jobPostDetail.getJobPostImages().clear();
     }
 
     @Transactional

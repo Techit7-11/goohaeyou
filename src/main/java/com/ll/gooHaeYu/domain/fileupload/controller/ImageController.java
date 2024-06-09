@@ -79,4 +79,13 @@ public class ImageController {
 
         return ApiResponse.noContent();
     }
+
+    @DeleteMapping(value = "api/job-post/{postId}/images")
+    @Operation(summary = "공고에 등록된 이미지 삭제")
+    public ApiResponse<Empty> deletePostImages(@AuthenticationPrincipal MemberDetails memberDetails,
+                                               @PathVariable(name = "postId") Long postId) {
+        jobPostImageService.deleteJobPostImages(memberDetails.getUsername(), postId);
+
+        return ApiResponse.noContent();
+    }
 }
