@@ -91,7 +91,9 @@ public enum ErrorCode {
 
     PROFILE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "프로필 이미지가 존재하지 않습니다."),
 
-    POST_IMAGES_NOT_FOUND(HttpStatus.NOT_FOUND, "공고에 등록된 이미지가 없습니다.");
+    POST_IMAGES_NOT_FOUND(HttpStatus.NOT_FOUND, "공고에 등록된 이미지가 없습니다."),
+
+    NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "이미지가 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String message;

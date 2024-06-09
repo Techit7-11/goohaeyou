@@ -20,9 +20,21 @@ public class JobPostImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String jobPostImageUrl;
+
+    @Column(nullable = false)
+    private boolean isMainImage = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_post_detail_id", nullable = false)
     private JobPostDetail jobPostDetail;
+
+    public void setMain() {
+        this.isMainImage = true;
+    }
+
+    public void unsetMain() {
+        this.isMainImage = false;
+    }
 }
