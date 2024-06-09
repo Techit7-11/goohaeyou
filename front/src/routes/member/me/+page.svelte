@@ -279,25 +279,36 @@
 								</div>
 							</div>
 							{#if isEditing}
-								<div class="flex items-center space-x-2">
-									<button
-										class="text-xs px-2 py-1 rounded-md bg-green3 text-white hover:bg-green6 transition-colors duration-150 ease-in-out"
-										on:click={() => document.getElementById('profileImageFile').click()}
-									>
-										변경
-									</button>
-									<button
-										class="text-xs px-2 py-1 rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors duration-150 ease-in-out"
-										on:click={deleteProfileImage}
-									>
-										제거
-									</button>
-									<button
-										class="text-xs px-2 py-1 rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors duration-150 ease-in-out"
-										on:click={() => (isEditing = false)}
-									>
-										취소
-									</button>
+								<div class="flex flex-col space-y-2">
+									<!-- 변경: flex-col과 space-y-2 추가 -->
+									<div class="flex items-center space-x-2">
+										<button
+											class="text-xs px-2 py-1 rounded-md bg-green3 text-white hover:bg-green6 transition-colors duration-150 ease-in-out"
+											style="white-space: nowrap;"
+											on:click={() => document.getElementById('profileImageFile').click()}
+										>
+											변경
+										</button>
+										<button
+											class="text-xs px-2 py-1 rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors duration-150 ease-in-out"
+											style="white-space: nowrap;"
+											on:click={deleteProfileImage}
+										>
+											제거
+										</button>
+										<button
+											class="text-xs px-2 py-1 rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors duration-150 ease-in-out"
+											style="white-space: nowrap;"
+											on:click={() => (isEditing = false)}
+										>
+											취소
+										</button>
+									</div>
+									<div class="flex items-center space-x-6">
+										<!-- ID 줄이 여기로 이동 -->
+										<div class="text-sm font-medium text-gray-600">ID :</div>
+										<div class="text-sm font-bold text-gray-500">{rq.member.username}</div>
+									</div>
 								</div>
 								<input
 									id="profileImageFile"
@@ -307,19 +318,31 @@
 									on:change={handleImageChange}
 								/>
 							{:else}
-								<button
-									class="text-xs px-2 py-1 rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors duration-150 ease-in-out"
-									on:click={() => (isEditing = true)}
-								>
-									수정
-								</button>
+								<div class="flex flex-col space-y-2">
+									<!-- 변경: flex-col과 space-y-2 추가 -->
+									<button
+										class="text-xs px-2 py-1 rounded-md bg-gray-200 text-gray-400 hover:bg-gray-300 transition-colors duration-150 ease-in-out"
+										style="white-space: nowrap; max-width: 100px; overflow: hidden; text-overflow: ellipsis;"
+										on:click={() => (isEditing = true)}
+									>
+										프로필 사진 변경
+									</button>
+									<div class="flex items-center space-x-6">
+										<!-- ID 줄이 여기로 이동 -->
+										<div class="text-sm font-medium text-gray-600">ID :</div>
+										<div class="text-sm font-bold text-gray-500">{rq.member.username}</div>
+									</div>
+								</div>
 							{/if}
 						{/if}
 					</div>
-					<div class="flex items-center space-x-6">
-						<div class="text-sm font-medium text-gray-600">ID :</div>
-						<div class="text-sm font-bold text-gray-500">{rq.member.username}</div>
-					</div>
+					{#if currentProfileImageUrl == ''}
+						<div class="flex items-center space-x-6">
+							<!-- 기존처럼 같은 줄에 위치 -->
+							<div class="text-sm font-medium text-gray-600">ID :</div>
+							<div class="text-sm font-bold text-gray-500">{rq.member.username}</div>
+						</div>
+					{/if}
 				</div>
 				<div class="flex items-center justify-between bg-gray-50 px-4 py-3">
 					<div class="text-xs font-medium text-gray-500">이름</div>
