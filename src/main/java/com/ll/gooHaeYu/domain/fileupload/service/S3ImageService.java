@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostImage;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.standard.base.util.MIMETypeUtil;
 import lombok.RequiredArgsConstructor;
@@ -108,11 +109,27 @@ public class S3ImageService {
     // AWS S3에서 이미지 삭제
     @Transactional
     public void deleteImageFromS3(String imageAddress) {
-        String key = getKeyFromImageAddress(imageAddress);   // 이미지 주소에서 파일명 추출
+        String fileName = getKeyFromImageAddress(imageAddress);   // 이미지 주소에서 파일명 추출
         try {
-            amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));   // S3에서 이미지 삭제 요청
+            amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));   // S3에서 이미지 삭제 요청
         } catch (Exception e) {
             throw new CustomException(IO_EXCEPTION_ON_IMAGE_DELETE);
+        }
+    }
+
+    @Transactional
+    public void deletePostImagesFromS3(List<JobPostImage> jobPostImages) {
+        if (jobPostImages.isEmpty()) {
+            throw new CustomException(POST_IMAGES_NOT_FOUND);
+        }
+
+        for (JobPostImage jobPostImage : jobPostImages) {
+            String fileName = getKeyFromImageAddress(jobPostImage.getJobPostImageUrl());   // 이미지 주소에서 파일명 추출
+            try {
+                amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));   // S3에서 이미지 삭제 요청
+            } catch (Exception e) {
+                throw new CustomException(IO_EXCEPTION_ON_IMAGE_DELETE);
+            }
         }
     }
 

@@ -175,10 +175,6 @@ export interface paths {
     /** 아이디로 프로필 이미지 URL 불러오기 */
     get: operations["getMemberImageByUsername"];
   };
-  "/api/members/image/posts/{postId}": {
-    /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
-    get: operations["getMemberImageByPostId"];
-  };
   "/api/member/review": {
     /** 나의 전체 리뷰 조회 */
     get: operations["getAllReviews"];
@@ -205,6 +201,14 @@ export interface paths {
     /** 내 지원서 조회 */
     get: operations["detailMyApplications"];
   };
+  "/api/job-posts/{postId}/members/image": {
+    /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
+    get: operations["getMemberImageByPostId"];
+  };
+  "/api/job-posts/{postId}/images": {
+    /** 공고에 등록된 이미지 불러오기 */
+    get: operations["getPostImages"];
+  };
   "/api/job-posts/{id}/members/interest": {
     /** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
     get: operations["isInterested"];
@@ -220,10 +224,6 @@ export interface paths {
   "/api/job-posts/search-sort": {
     /** 구인공고 검색 */
     get: operations["postSearchAndSort"];
-  };
-  "/api/job-post/images/{postId}": {
-    /** 공고에 등록된 이미지 불러오기 */
-    get: operations["getPostImages"];
   };
   "/api/employ/{postId}": {
     /** 공고 별 지원리스트 */
@@ -625,6 +625,15 @@ export interface components {
       createdAt?: string;
       approve?: boolean;
     };
+    ApiResponseListString: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
+      data: string[];
+    };
     ApiResponseJobPostDetailDto: {
       /** Format: int32 */
       statusCode?: number;
@@ -695,15 +704,6 @@ export interface components {
       /** Format: int32 */
       number: number;
       content: components["schemas"]["JobPostDto"][];
-    };
-    ApiResponseListString: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: string[];
     };
     ApiResponseListRoomListDto: {
       /** Format: int32 */
@@ -1577,22 +1577,6 @@ export interface operations {
       };
     };
   };
-  /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
-  getMemberImageByPostId: {
-    parameters: {
-      path: {
-        postId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseString"];
-        };
-      };
-    };
-  };
   /** 나의 전체 리뷰 조회 */
   getAllReviews: {
     responses: {
@@ -1680,6 +1664,38 @@ export interface operations {
       };
     };
   };
+  /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
+  getMemberImageByPostId: {
+    parameters: {
+      path: {
+        postId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseString"];
+        };
+      };
+    };
+  };
+  /** 공고에 등록된 이미지 불러오기 */
+  getPostImages: {
+    parameters: {
+      path: {
+        postId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseListString"];
+        };
+      };
+    };
+  };
   /** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
   isInterested: {
     parameters: {
@@ -1750,22 +1766,6 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["ApiResponseGetPostsResponseBody"];
-        };
-      };
-    };
-  };
-  /** 공고에 등록된 이미지 불러오기 */
-  getPostImages: {
-    parameters: {
-      path: {
-        postId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListString"];
         };
       };
     };
