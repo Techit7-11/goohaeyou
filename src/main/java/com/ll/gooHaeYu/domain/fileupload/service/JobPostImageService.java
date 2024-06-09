@@ -26,7 +26,7 @@ public class JobPostImageService {
     private final JobPostDetailRepository jobPostDetailRepository;
 
     @Transactional
-    public void uploadJobPostImage(String username, long postDetailId, MultipartFile[] jobPostImageFiles) {
+    public void uploadJobPostImages(String username, long postDetailId, MultipartFile[] jobPostImageFiles) {
         JobPostDetail jobPostDetail = jobPostService.findByIdAndValidate(postDetailId).getJobPostDetail();
 
         if (!jobPostDetail.getAuthor().equals(username)) {
@@ -61,7 +61,7 @@ public class JobPostImageService {
         jobPostDetailRepository.save(jobPostDetail);
     }
 
-    public List<String> getJobPostImage(Long postDetailId) {
+    public List<String> getJobPostImages(Long postDetailId) {
         List<JobPostImage> postImages = jobPostImageRepository.findByJobPostDetailId(postDetailId);
 
         if (postImages.isEmpty()) {

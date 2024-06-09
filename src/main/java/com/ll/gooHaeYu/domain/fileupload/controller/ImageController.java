@@ -54,18 +54,18 @@ public class ImageController {
 
     @PostMapping(value = "api/job-post/images")
     @Operation(summary = "공고에 이미지 등록")
-    public ApiResponse<Empty> registerPostImage(@AuthenticationPrincipal MemberDetails memberDetails,
+    public ApiResponse<Empty> registerPostImages(@AuthenticationPrincipal MemberDetails memberDetails,
                                                 Long postDetailId,
                                                 @RequestParam(value = "jobPostImageFile", required = false) MultipartFile[] jobPostImageFiles) {
-        jobPostImageService.uploadJobPostImage(memberDetails.getUsername(), postDetailId, jobPostImageFiles);
+        jobPostImageService.uploadJobPostImages(memberDetails.getUsername(), postDetailId, jobPostImageFiles);
 
         return ApiResponse.created();
     }
 
     @GetMapping(value = "api/job-post/images/{postId}")
     @Operation(summary = "공고에 등록된 이미지 불러오기")
-    public ApiResponse<List<String>> getPostImage(@PathVariable(name = "postId") Long postId) {
-        List<String> jobPostImages = jobPostImageService.getJobPostImage(postId);
+    public ApiResponse<List<String>> getPostImages(@PathVariable(name = "postId") Long postId) {
+        List<String> jobPostImages = jobPostImageService.getJobPostImages(postId);
 
         return ApiResponse.ok(jobPostImages);
     }
