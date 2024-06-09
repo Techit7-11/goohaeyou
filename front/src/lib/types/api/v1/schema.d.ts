@@ -131,6 +131,10 @@ export interface paths {
     /** 구인자가 수동으로 알바완료 처리 */
     patch: operations["completeJobManually"];
   };
+  "/api/job-post/{postId}/main-image": {
+    /** 공고의 대표 이미지 변경 */
+    patch: operations["changeMainImage"];
+  };
   "/api/employ/{postId}/{applicationIds}": {
     /** 지원서 승인 */
     patch: operations["approve"];
@@ -1384,6 +1388,26 @@ export interface operations {
     parameters: {
       path: {
         applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
+      };
+    };
+  };
+  /** 공고의 대표 이미지 변경 */
+  changeMainImage: {
+    parameters: {
+      query: {
+        currentImageId: number;
+        newImageId: number;
+      };
+      path: {
+        postId: number;
       };
     };
     responses: {

@@ -14,10 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Tag(name = "S3-Image", description = "이미지 업로드 관련 API")
+@Tag(name = "Image", description = "이미지 관련 API")
 @RestController
 @RequiredArgsConstructor
-public class S3ImageController {
+public class ImageController {
     private final ProfileImageService profileImageService;
     private final JobPostImageService jobPostImageService;
 
@@ -68,5 +68,15 @@ public class S3ImageController {
         List<String> jobPostImages = jobPostImageService.getJobPostImage(postId);
 
         return ApiResponse.ok(jobPostImages);
+    }
+
+    @PatchMapping(value = "api/job-post/{postId}/main-image")
+    @Operation(summary = "공고의 대표 이미지 변경")
+    public ApiResponse<Empty> changeMainImage(@AuthenticationPrincipal MemberDetails memberDetails,
+                                              @PathVariable(name = "postId") Long postId,
+                                              Long currentImageId, Long newImageId) {
+        jobPostImageService.changeMainImage(memberDetails.getUsername(), postId, currentImageId, newImageId);
+
+        return ApiResponse.noContent();
     }
 }

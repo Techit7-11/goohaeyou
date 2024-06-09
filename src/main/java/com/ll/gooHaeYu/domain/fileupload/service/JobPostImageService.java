@@ -39,15 +39,18 @@ public class JobPostImageService {
 
         List<JobPostImage> jobPostImages = new ArrayList<>();
 
+        boolean isMainNotSet = true;
         for (MultipartFile imageFile : jobPostImageFiles) {
             String imageUrl = s3ImageService.upload(imageFile);
 
             JobPostImage jobPostImage = JobPostImage.builder()
                     .jobPostImageUrl(imageUrl)
                     .jobPostDetail(jobPostDetail)
+                    .isMainImage(isMainNotSet)
                     .build();
 
             jobPostImages.add(jobPostImage);
+            isMainNotSet = false;
         }
 
         jobPostDetail.getJobPostImages().addAll(jobPostImages);
@@ -64,5 +67,22 @@ public class JobPostImageService {
         return postImages.stream()
                 .map(JobPostImage::getJobPostImageUrl)
                 .toList();
+    }
+
+    @Transactional
+    public void changeMainImage(String username, Long postId, Long currentImageId, Long newImageId) {
+        String author = jobPostService.findByJobPostAndNameAndValidate(postId).getAuthor();
+
+        if (!author.equals(username)) {
+            throw new CustomException(NOT_ABLE);
+        }
+
+        JobPostImage currentMainImage = jobPostImageRepository.findById(currentImageId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_IMAGE));
+        JobPostImage newMainImage = jobPostImageRepository.findById(newImageId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_IMAGE));
+
+        currentMainImage.unsetMain();
+        newMainImage.setMain();
     }
 }
