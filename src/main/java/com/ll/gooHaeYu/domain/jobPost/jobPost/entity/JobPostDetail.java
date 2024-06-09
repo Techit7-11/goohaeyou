@@ -56,6 +56,11 @@ public class JobPostDetail extends BaseTimeEntity {
     @Builder.Default
     private List<Interest> interests = new ArrayList<>();
 
+    @OneToMany(mappedBy = "jobPostDetail",cascade = ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @Builder.Default
+    private List<JobPostImage> jobPostImages = new ArrayList<>();
+
     public void updatePostDetail(String body) {
         if (body != null && !body.isBlank()) {
             this.body = body;

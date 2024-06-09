@@ -28,11 +28,13 @@
 - 프로젝트 주제 : 스팟 채용 서비스
 - 주요 기능 :
     - 로그인, 로그아웃, 회원가입, 마이페이지
-    - 구인 공고, 댓글 작성, 수정, 삭제, 검색, 정렬, 필터
+    - 구인 공고, 댓글 작성, 수정, 삭제
+    - 구인 공고 검색, 정렬, 필터
     - 1:1 채팅
     - 결제, 정산
     - 알림
     - 지도
+    - 이미지 업로드
 
 <br/>
 
@@ -41,9 +43,9 @@
 
 |                                                              이민구                                                              |                                                              이재열                                                              |                                                              차재준                                                              |                                                              홍지은                                                              |                                                              황세희                                                              |
 |:-----------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------:|
-| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/e5cb563e-a100-437e-aa7f-bc6ec1bd7456" width=120px alt="민구"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/2bf3093d-03b6-4b4e-9bcf-3e39ce9ec4e9" width=120px alt="재열"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/374149e6-d9d1-4598-88d4-724b81dca29d" width=120px alt="재준"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/ec3ce00e-6941-4948-b5af-d47792badfaa" width=120px alt="지은"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/8c104315-4f51-45ec-804d-154d65da47cf" width=120px alt="세희"> | 
+| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/e5cb563e-a100-437e-aa7f-bc6ec1bd7456" width=120px alt="민구"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/2bf3093d-03b6-4b4e-9bcf-3e39ce9ec4e9" width=120px alt="재열"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/374149e6-d9d1-4598-88d4-724b81dca29d" width=120px alt="재준"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/8137422f-dd32-4de6-875c-9abbef5c9683" width=120px alt="지은"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/8c104315-4f51-45ec-804d-154d65da47cf" width=120px alt="세희"> | 
 |                                              [Yimin2](https://github.com/Yimin2)                                              |                                             [jae9380](https://github.com/jae9380)                                             |                                             [lapishi](https://github.com/lapishi)                                             |                                              [itonse](https://github.com/itonse)                                              |                                            [sehee210](https://github.com/sehee210)                                            |             
-|                                 로그 인/아웃<br/>회원가입<br/>JWT token, 쿠키<br/>Oauth 2.0 인증<br/>리뷰, 댓글 CRUD                                  |                             공고, 댓글, 추천<br/> 알림 시스템<br/> 공고 자동 마감<br/> 자동 알바 완료<br/>1:1채팅<br/>FCM(웹 푸시)                              |                                                  공고/댓글 삭제<br/>검색, 회원 레벨                                                   |                              CI/CD, 배포<br/>결제, DB 관리<br/>급여 설정<br>수동 알바완료<br/>알바 취소 처리<br/>e-mail 본인인증                              | 검색 & 필터<br/>공고 정렬<br>공고 지원하기<br/>작성글 모아보기<br/>마이페이지, 지도
+|                                 로그 인/아웃<br/>회원가입<br/>JWT token, 쿠키<br/>Oauth 2.0 인증<br/>리뷰, 댓글 CRUD                                  |                             공고, 댓글, 추천<br/> 알림 시스템<br/> 공고 자동 마감<br/> 자동 알바 완료<br/>1:1채팅<br/>FCM(웹 푸시)                              |                                                  공고/댓글 삭제<br/>검색, 회원 레벨                                                   |                CI/CD, 배포<br/>결제, DB 관리<br/>공고, 프로필 이미지 CRUD<br/>급여 설정<br>수동 알바완료<br/>알바 취소 처리<br/>e-mail 본인인증                 | 검색 & 필터<br/>공고 정렬<br>공고 지원하기<br/>작성글 모아보기<br/>마이페이지, 지도
 |                         [commit](https://github.com/Techit7-11/GooHaeYou/commits/dev/?author=Yimin2)                          |                         [commit](https://github.com/Techit7-11/GooHaeYou/commits/dev/?author=jae9380)                         |                         [commit](https://github.com/Techit7-11/GooHaeYou/commits/dev/?author=lapishi)                         |                         [commit](https://github.com/Techit7-11/GooHaeYou/commits/dev/?author=itonse)                          |                        [commit](https://github.com/Techit7-11/GooHaeYou/commits/dev/?author=sehee210)                         |
 
 <br/><br/>
@@ -76,10 +78,10 @@
 
 | <h3>인프라</h3>                                                                                           |
 |--------------------------------------------------------------------------------------------------------|
-| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/d4c496c8-2ba7-46c6-be2f-86021b6b61e1" width=600px alt="인프라"> |
+| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/9976ae98-b37a-4668-b9c0-4af008c47e5a" width=600px alt="인프라"> |
 
-| <h3>프론트엔드</h3>                                                                                      |
-|-----------------------------------------------------------------------------------------------------|
+| <h3>프론트엔드</h3>                                                                                                                   |
+|----------------------------------------------------------------------------------------------------------------------------------|
 | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/81da74fe-b688-4a11-a9e7-e17f644902d5" width=450px alt="프론트엔드"> |
 
 | <h3>외부 API</h3>                                                                                      | <h3>협업</h3>                                                                                             |

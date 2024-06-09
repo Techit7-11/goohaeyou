@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.FILE_IS_EMPTY;
+import static com.ll.gooHaeYu.global.exception.ErrorCode.PROFILE_IMAGE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class ProfileImageService {
         }
 
         if (member.getProfileImageUrl() != null) {
-            s3ImageService.deleteImageFromS3(member.getProfileImageUrl());   // 기존의 프로필 이미지 파일을 S3에서 제거
+            deleteProfileImage(username);   // S3에서 이미지 제거, DB에서 이미지 url 제거
         }
 
         String imageUrl = s3ImageService.upload(profileImageFile);
@@ -44,5 +45,17 @@ public class ProfileImageService {
         Member member = jobPostService.findByIdAndValidate(postId).getMember();
 
         return member.getProfileImageUrl();
+    }
+
+    @Transactional
+    public void deleteProfileImage(String username) {
+        Member member = memberService.getMember(username);
+
+        if (member.getProfileImageUrl() == null) {
+            throw new CustomException(PROFILE_IMAGE_NOT_FOUND);
+        }
+
+        s3ImageService.deleteImageFromS3(member.getProfileImageUrl());
+        member.setImageUrl(null);
     }
 }

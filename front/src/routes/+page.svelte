@@ -109,19 +109,29 @@
 									>
 								</div>
 							</div>
-							<div
-								class="bg-lime-500 h-60 text-white text-2xl text-shadow flex items-center justify-center"
-							>
-								<p>{post.title}</p>
-							</div>
-							<div class="card-body">
+							<!-- 메인 이미지가 존재하는 경우 -->
+							{#if post.mainImageUrl}
+								<div
+									class="relative bg-cover bg-center h-60"
+									style="background-image: url('{post.mainImageUrl}')"
+								>
+									<div
+										class="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center"
+									>
+										<div class="text-white text-2xl text-shadow p-4">{post.title}</div>
+									</div>
+								</div>
+							{/if}
+							<div class="card-body {post.mainImageUrl ? '' : 'pt-1'}">
 								<div class="flex items-center justify-between">
 									<div class="flex items-center">
 										<div class="flex flex-col mr-10">
 											<div
 												class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
 											>
-												<div class="text-xl font-bold truncate">{post.title}</div>
+												<div class="text-xl font-bold max-w-full line-clamp-2">
+													{post.title}
+												</div>
 												<div class="flex mt-2">
 													<div class="flex-shrink">
 														<div class="text-xs mx-2 flex justify-center items-center">

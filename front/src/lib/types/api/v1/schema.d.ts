@@ -18,6 +18,8 @@ export interface paths {
   "/api/members/image": {
     /** 프로필 이미지 변경 */
     put: operations["updateMemberImage"];
+    /** 프로필 이미지 삭제 */
+    delete: operations["deleteMemberImage"];
   };
   "/api/member": {
     /** 내 정보 조회 */
@@ -103,6 +105,10 @@ export interface paths {
     /** 구인공고 관심 제거 */
     delete: operations["disinterest"];
   };
+  "/api/job-post/images": {
+    /** 공고에 이미지 등록 */
+    post: operations["registerPostImages"];
+  };
   "/api/chat/{roomId}/message": {
     /** 채팅 메세지 로드 */
     get: operations["writeChat_1"];
@@ -124,6 +130,10 @@ export interface paths {
   "/api/jobs/complete/{applicationId}/manually": {
     /** 구인자가 수동으로 알바완료 처리 */
     patch: operations["completeJobManually"];
+  };
+  "/api/job-post/{postId}/main-image": {
+    /** 공고의 대표 이미지 변경 */
+    patch: operations["changeMainImage"];
   };
   "/api/employ/{postId}/{applicationIds}": {
     /** 지원서 승인 */
@@ -165,10 +175,6 @@ export interface paths {
     /** 아이디로 프로필 이미지 URL 불러오기 */
     get: operations["getMemberImageByUsername"];
   };
-  "/api/members/image/posts/{postId}": {
-    /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
-    get: operations["getMemberImageByPostId"];
-  };
   "/api/member/review": {
     /** 나의 전체 리뷰 조회 */
     get: operations["getAllReviews"];
@@ -194,6 +200,14 @@ export interface paths {
   "/api/member/myapplications": {
     /** 내 지원서 조회 */
     get: operations["detailMyApplications"];
+  };
+  "/api/job-posts/{postId}/members/image": {
+    /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
+    get: operations["getMemberImageByPostId"];
+  };
+  "/api/job-posts/{postId}/images": {
+    /** 공고에 등록된 이미지 불러오기 */
+    get: operations["getPostImages"];
   };
   "/api/job-posts/{id}/members/interest": {
     /** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
@@ -229,6 +243,10 @@ export interface paths {
   "/api/notification/all": {
     /** 알림 전부 삭제 */
     delete: operations["deleteAll"];
+  };
+  "/api/job-post/{postId}/images": {
+    /** 공고에 등록된 이미지 삭제 */
+    delete: operations["deletePostImages"];
   };
 }
 
@@ -573,6 +591,7 @@ export interface components {
       deadLine?: string;
       /** Format: date */
       jobStartDate?: string;
+      mainImageUrl?: string;
       closed?: boolean;
     };
     ApiResponseListApplicationDto: {
@@ -605,6 +624,15 @@ export interface components {
       /** Format: date-time */
       createdAt?: string;
       approve?: boolean;
+    };
+    ApiResponseListString: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
+      data: string[];
     };
     ApiResponseJobPostDetailDto: {
       /** Format: int32 */
@@ -827,6 +855,17 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
+      };
+    };
+  };
+  /** 프로필 이미지 삭제 */
+  deleteMemberImage: {
     responses: {
       /** @description OK */
       200: {
@@ -1252,6 +1291,23 @@ export interface operations {
       };
     };
   };
+  /** 공고에 이미지 등록 */
+  registerPostImages: {
+    parameters: {
+      query: {
+        postDetailId: number;
+        jobPostImageFile?: string[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
+      };
+    };
+  };
   /** 채팅 메세지 로드 */
   writeChat_1: {
     parameters: {
@@ -1337,6 +1393,26 @@ export interface operations {
     parameters: {
       path: {
         applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
+      };
+    };
+  };
+  /** 공고의 대표 이미지 변경 */
+  changeMainImage: {
+    parameters: {
+      query: {
+        currentImageId: number;
+        newImageId: number;
+      };
+      path: {
+        postId: number;
       };
     };
     responses: {
@@ -1501,22 +1577,6 @@ export interface operations {
       };
     };
   };
-  /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
-  getMemberImageByPostId: {
-    parameters: {
-      path: {
-        postId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseString"];
-        };
-      };
-    };
-  };
   /** 나의 전체 리뷰 조회 */
   getAllReviews: {
     responses: {
@@ -1600,6 +1660,38 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["ApiResponseListApplicationDto"];
+        };
+      };
+    };
+  };
+  /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
+  getMemberImageByPostId: {
+    parameters: {
+      path: {
+        postId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseString"];
+        };
+      };
+    };
+  };
+  /** 공고에 등록된 이미지 불러오기 */
+  getPostImages: {
+    parameters: {
+      path: {
+        postId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseListString"];
         };
       };
     };
@@ -1730,6 +1822,22 @@ export interface operations {
       /** @description OK */
       200: {
         content: never;
+      };
+    };
+  };
+  /** 공고에 등록된 이미지 삭제 */
+  deletePostImages: {
+    parameters: {
+      path: {
+        postId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
       };
     };
   };

@@ -7,11 +7,13 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.JobPostImage;
 import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.standard.base.util.MIMETypeUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -28,9 +30,9 @@ import java.util.UUID;
 
 import static com.ll.gooHaeYu.global.exception.ErrorCode.*;
 
-@Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class S3ImageService {
     private final AmazonS3 amazonS3;
 
@@ -38,6 +40,7 @@ public class S3ImageService {
     private String bucketName;
 
     // 이미지 업로드 (S3에 저장된 이미지 객체의 public url 반환)
+    @Transactional
     public String upload(MultipartFile image) {
         if (image == null || image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
             throw new CustomException(FILE_IS_EMPTY);
@@ -81,7 +84,10 @@ public class S3ImageService {
         byte[] bytes = IOUtils.toByteArray(inputStream);  // 이미지 데이터를 바이트 배열로 변환
 
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType("image/" + extension);  // 메타데이터 설정 ex) image/png
+        MIMETypeUtil.getMimeType(extension).ifPresentOrElse(
+            metadata::setContentType,   // 메타데이터 설정 ex) image/png
+            () -> { throw new CustomException(INVALID_FILE_EXTENSION); }
+        );
         metadata.setContentLength(bytes.length);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
@@ -101,12 +107,29 @@ public class S3ImageService {
     }
 
     // AWS S3에서 이미지 삭제
+    @Transactional
     public void deleteImageFromS3(String imageAddress) {
-        String key = getKeyFromImageAddress(imageAddress);   // 이미지 주소에서 파일명 추출
+        String fileName = getKeyFromImageAddress(imageAddress);   // 이미지 주소에서 파일명 추출
         try {
-            amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));   // S3에서 이미지 삭제 요청
+            amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));   // S3에서 이미지 삭제 요청
         } catch (Exception e) {
             throw new CustomException(IO_EXCEPTION_ON_IMAGE_DELETE);
+        }
+    }
+
+    @Transactional
+    public void deletePostImagesFromS3(List<JobPostImage> jobPostImages) {
+        if (jobPostImages.isEmpty()) {
+            throw new CustomException(POST_IMAGES_NOT_FOUND);
+        }
+
+        for (JobPostImage jobPostImage : jobPostImages) {
+            String fileName = getKeyFromImageAddress(jobPostImage.getJobPostImageUrl());   // 이미지 주소에서 파일명 추출
+            try {
+                amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));   // S3에서 이미지 삭제 요청
+            } catch (Exception e) {
+                throw new CustomException(IO_EXCEPTION_ON_IMAGE_DELETE);
+            }
         }
     }
 

@@ -9,6 +9,7 @@
 	let profileImageFile: File | null = null;
 	let imagePreviewUrl = '';
 	let currentProfileImageUrl = '';
+	let isEditing = false;
 
 	const baseUrl = import.meta.env.VITE_CORE_API_BASE_URL;
 
@@ -26,7 +27,6 @@
 			}
 
 			currentProfileImageUrl = rq.member.profileImageUrl || '';
-			console.log('현재 프로필 이미지 url:', currentProfileImageUrl);
 			loadMyReview();
 		} catch (error) {
 			console.error('인증 초기화 중 오류 발생:', error);
@@ -148,6 +148,7 @@
 		}
 	}
 
+	// 프로필 이미지 업데이트
 	async function updateProfileImage() {
 		if (!profileImageFile) {
 			alert('프로필 사진을 선택해주세요.');
@@ -162,7 +163,7 @@
 		console.log('FormData entries:', Array.from(formData.entries())); // FormData 내용 확인
 
 		try {
-			// rq.apiEndPoints() 대신 직접 fetch 사용
+			// multipart/form-data 타입 데이터 전송에서 boundary 자동 명시를 위해 rq 대신 fetch 사용
 			const response = await fetch(baseUrl + '/api/members/image', {
 				method: 'PUT',
 				body: formData,
@@ -183,6 +184,30 @@
 		} catch (error) {
 			console.error('Error during profile image update:', error); // 에러 로그 찍기
 			rq.msgError('에러가 발생하였습니다.');
+		}
+	}
+
+	// 프로필 이미지 제거
+	async function deleteProfileImage() {
+		if (confirm('프로필 이미지를 제거하시겠습니까?')) {
+			try {
+				const response = await rq.apiEndPoints().DELETE('/api/members/image');
+				if (response.data?.resultType === 'SUCCESS') {
+					rq.msgInfo('프로필 이미지가 삭제되었습니다.');
+
+					currentProfileImageUrl = '';
+					profileImageFile = null;
+					imagePreviewUrl = '';
+					location.reload();
+				} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+					rq.msgError(response.data?.message);
+				} else {
+					rq.msgError('프로필 이미지 삭제를 실패하였습니다.');
+				}
+			} catch (error) {
+				console.error('Error during profile image delete:', error);
+				rq.msgError('에러가 발생하였습니다.');
+			}
 		}
 	}
 </script>
@@ -253,12 +278,71 @@
 									<img src={currentProfileImageUrl} alt="프로필 사진" />
 								</div>
 							</div>
+							{#if isEditing}
+								<div class="flex flex-col space-y-2">
+									<!-- 변경: flex-col과 space-y-2 추가 -->
+									<div class="flex items-center space-x-2">
+										<button
+											class="text-xs px-2 py-1 rounded-md bg-green3 text-white hover:bg-green6 transition-colors duration-150 ease-in-out"
+											style="white-space: nowrap;"
+											on:click={() => document.getElementById('profileImageFile').click()}
+										>
+											변경
+										</button>
+										<button
+											class="text-xs px-2 py-1 rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors duration-150 ease-in-out"
+											style="white-space: nowrap;"
+											on:click={deleteProfileImage}
+										>
+											제거
+										</button>
+										<button
+											class="text-xs px-2 py-1 rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors duration-150 ease-in-out"
+											style="white-space: nowrap;"
+											on:click={() => (isEditing = false)}
+										>
+											취소
+										</button>
+									</div>
+									<div class="flex items-center space-x-6">
+										<!-- ID 줄이 여기로 이동 -->
+										<div class="text-sm font-medium text-gray-600">ID :</div>
+										<div class="text-sm font-bold text-gray-500">{rq.member.username}</div>
+									</div>
+								</div>
+								<input
+									id="profileImageFile"
+									type="file"
+									accept="image/*"
+									class="hidden"
+									on:change={handleImageChange}
+								/>
+							{:else}
+								<div class="flex flex-col space-y-2">
+									<!-- 변경: flex-col과 space-y-2 추가 -->
+									<button
+										class="text-xs px-2 py-1 rounded-md bg-gray-200 text-gray-400 hover:bg-gray-300 transition-colors duration-150 ease-in-out"
+										style="white-space: nowrap; max-width: 100px; overflow: hidden; text-overflow: ellipsis;"
+										on:click={() => (isEditing = true)}
+									>
+										프로필 사진 변경
+									</button>
+									<div class="flex items-center space-x-6">
+										<!-- ID 줄이 여기로 이동 -->
+										<div class="text-sm font-medium text-gray-600">ID :</div>
+										<div class="text-sm font-bold text-gray-500">{rq.member.username}</div>
+									</div>
+								</div>
+							{/if}
 						{/if}
 					</div>
-					<div class="flex items-center space-x-6">
-						<div class="text-sm font-medium text-gray-600">ID :</div>
-						<div class="text-sm font-bold text-gray-500">{rq.member.username}</div>
-					</div>
+					{#if currentProfileImageUrl == ''}
+						<div class="flex items-center space-x-6">
+							<!-- 기존처럼 같은 줄에 위치 -->
+							<div class="text-sm font-medium text-gray-600">ID :</div>
+							<div class="text-sm font-bold text-gray-500">{rq.member.username}</div>
+						</div>
+					{/if}
 				</div>
 				<div class="flex items-center justify-between bg-gray-50 px-4 py-3">
 					<div class="text-xs font-medium text-gray-500">이름</div>

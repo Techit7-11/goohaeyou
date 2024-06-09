@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.fileupload.service.S3ImageService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostForm;
@@ -45,6 +46,7 @@ public class JobPostService {
     private final EssentialRepository essentialRepository;
     private final ApplicationEventPublisher publisher;
     private final WageRepository wageRepository;
+    private final S3ImageService s3ImageService;
 
     @Transactional
     public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
@@ -127,10 +129,15 @@ public class JobPostService {
     @Transactional
     public void deleteJobPost(String username, Long postId) {
         JobPost post = findByIdAndValidate(postId);
-
+        List<JobPostImage> jobPostImages = post.getJobPostDetail().getJobPostImages();
         Member member = findUserByUserNameValidate(username);
+
         publisher.publishEvent(new PostDeletedEvent(this,post,member,DELETE));
+
         if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
+            if (!jobPostImages.isEmpty()) {
+                s3ImageService.deletePostImagesFromS3(jobPostImages);
+            }
             jobPostRepository.deleteById(postId);
         } else {
             throw new CustomException(NOT_ABLE);
