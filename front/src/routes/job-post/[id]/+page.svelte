@@ -18,7 +18,7 @@
 	onMount(async () => {
 		const postId = parseInt($page.params.id);
 		// 공고 작성자 프로필 이미지 URL 로드
-		const response = await rq.apiEndPoints().GET(`/api/members/image/posts/${postId}`);
+		const response = await rq.apiEndPoints().GET(`/api/job-posts/${postId}/members/image`);
 		jobPostProfileImageUrl = response.data?.data;
 
 		await loadComments(); // 댓글 로드
@@ -34,7 +34,7 @@
 	async function load() {
 		const [jobPostResponse, imageUrlResponse] = await Promise.all([
 			rq.apiEndPoints().GET(`/api/job-posts/${postId}`),
-			rq.apiEndPoints().GET(`/api/job-post/images/${postId}`)
+			rq.apiEndPoints().GET(`/api/job-posts/${postId}/images`)
 		]);
 
 		const jobPostData = jobPostResponse.data;

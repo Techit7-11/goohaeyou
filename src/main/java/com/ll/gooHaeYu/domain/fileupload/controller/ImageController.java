@@ -37,7 +37,7 @@ public class ImageController {
         return ApiResponse.ok(profileImageService.getMemberImageByUsername(username));
     }
 
-    @GetMapping(value = "/api/members/image/posts/{postId}")
+    @GetMapping(value = "/api/job-posts/{postId}/members/image")
     @Operation(summary = "공고번호로 작성자의 프로필 이미지 URL 불러오기")
     public ApiResponse<String> getMemberImageByPostId(@PathVariable(name = "postId") Long postId) {
 
@@ -62,7 +62,7 @@ public class ImageController {
         return ApiResponse.created();
     }
 
-    @GetMapping(value = "api/job-post/images/{postId}")
+    @GetMapping(value = "api/job-posts/{postId}/images")
     @Operation(summary = "공고에 등록된 이미지 불러오기")
     public ApiResponse<List<String>> getPostImages(@PathVariable(name = "postId") Long postId) {
         List<String> jobPostImages = jobPostImageService.getJobPostImages(postId);
