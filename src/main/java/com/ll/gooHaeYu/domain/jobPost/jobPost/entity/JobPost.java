@@ -1,5 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
+import com.ll.gooHaeYu.domain.category.region.entity.Region;
+import com.ll.gooHaeYu.domain.category.task.entity.Task;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -20,6 +22,10 @@ public class JobPost extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "task_id", nullable = false)
+    private Task task;
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
@@ -53,6 +59,10 @@ public class JobPost extends BaseTimeEntity {
 
     @OneToOne(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private JobPostDetail jobPostDetail;
+
+    @ManyToOne
+    @JoinColumn(name = "region_id")
+    private Region region;
 
     public void update(String title, LocalDate deadline, LocalDate jobStartDate) {
         if (title != null && !title.isBlank()) {

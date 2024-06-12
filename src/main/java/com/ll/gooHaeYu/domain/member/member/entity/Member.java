@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.member.member.entity;
 
+import com.ll.gooHaeYu.domain.category.region.entity.Region;
 import com.ll.gooHaeYu.domain.member.member.dto.SocialProfileForm;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Level;
@@ -56,6 +57,10 @@ public class Member extends BaseTimeEntity {
     private String FCMToken = null;
 
     private String profileImageUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id", nullable = false)
+    private Region region;
 
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {
