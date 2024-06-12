@@ -123,11 +123,17 @@
 			<div class="navbar-center"></div>
 			<div class="navbar-end">
 				{#if rq.isLogout()}
-					<a class="btn btn-ghost font-mono mx-3" href="/member/login">Login</a>
+					<a
+						class="btn btn-ghost mx-3"
+						href="/member/login"
+						style="font-family: 'Arial', sans-serif; color: #228B22;">로그인</a
+					>
 				{/if}
 				{#if rq.isLogin()}
-					<button class="btn btn-ghost mx-3" on:click={() => rq.logoutAndRedirect('/')}
-						>Logout</button
+					<button
+						class="btn btn-ghost mx-3"
+						on:click={() => rq.logoutAndRedirect('/')}
+						style="font-family: 'Arial', sans-serif; color: #228B22;">로그아웃</button
 					>
 				{/if}
 			</div>
