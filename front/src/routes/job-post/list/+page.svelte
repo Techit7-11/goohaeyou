@@ -82,55 +82,88 @@
 	</div>
 {:then { data: { itemPage } }}
 	<div class="flex justify-center min-h-screen bg-base-100">
-		<div class="container mx-auto mx-4">
+		<div class="container mx-auto px-4">
 			<div class="w-full max-w-4xl mx-auto">
-				{#each posts ?? [] as post, index}
-					<a href="/job-post/{post.id}" class="block">
-						<div class="card relative bg-base-100 shadow-xl my-4">
-							<div class="card-body">
-								<div class="flex items-center justify-between">
-									<div class="flex items-center">
-										<div class="flex flex-col mr-10">
-											<div class="text-bold text-gray-500 mb-1">{post.author}</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					{#each posts ?? [] as post, index}
+						<a href="/job-post/{post.id}" class="block">
+							<div class="card relative bg-base-100 shadow-xl my-4">
+								<div class="card-body flex flex-row justify-between">
+									<div>
+										<div class="text-bold text-gray-500 mb-1">{post.author}</div>
+										<div class="text-xs text-gray-500">{post.location}</div>
+									</div>
+									<div class="flex justify-center items-center">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											id="Outline"
+											viewBox="0 0 24 24"
+											width="12"
+											height="12"
+										>
+											<path
+												d="M7,24a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l8.17-8.17a3,3,0,0,0,0-4.24L6.29,1.71A1,1,0,0,1,7.71.29l8.17,8.17a5,5,0,0,1,0,7.08L7.71,23.71A1,1,0,0,1,7,24Z"
+											/>
+										</svg>
+									</div>
+								</div>
+								<div class="card-body pt-1">
+									<div class="flex items-center justify-between">
+										<div class="flex items-center">
+											<!-- 메인 이미지가 존재하는 경우 -->
+											{#if post.mainImageUrl}
+												<img
+													src={post.mainImageUrl}
+													alt={post.title}
+													class="mr-4 w-20 h-20 object-cover"
+												/>
+											{/if}
 											<div
-												class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
+												class="flex flex-col max-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
 											>
-												<div class="font-bold truncate">{post.title}</div>
-												<div class="text-xs text-gray-500">{post.location}</div>
+												<div class="text-xl font-bold max-w-full line-clamp-2">
+													{post.title}
+												</div>
 												<div class="flex mt-2">
-													<div class="flex">
-														<div class="text-xs text-gray-500">조회</div>
-														<div class="text-xs mx-2">{post.incrementViewCount}</div>
+													<div class="flex-shrink">
+														<div class="text-xs mx-2 flex justify-center items-center">
+															{post.incrementViewCount}
+														</div>
+														<div class="text-xs text-gray-500">봤어유</div>
 													</div>
-													<div class="flex">
-														<div class="text-xs text-gray-500">댓글</div>
-														<div class="text-xs mx-2">{post.commentsCount}</div>
+													<div class="flex-shrink ml-3">
+														<div class="text-xs mx-2 flex justify-center items-center">
+															{post.commentsCount}
+														</div>
+														<div class="text-xs text-gray-500">쑥덕쑥덕</div>
 													</div>
-													<div class="flex">
-														<div class="text-xs text-gray-500">관심등록</div>
-														<div class="text-xs mx-2">{post.interestsCount}</div>
+													<div class="flex-shrink ml-3">
+														<div class="text-xs mx-2 flex justify-center items-center">
+															{post.interestsCount}
+														</div>
+														<div class="text-xs text-gray-500">관심있슈</div>
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="flex items-center justify-between">
-										<div class="flex flex-col items-center">
-											{#if post.closed}
-												<div class="badge badge-neutral">마감</div>
-											{:else}
-												<div class="badge badge-primary my-1">구인중</div>
-												<div class="text-xs text-gray-500">마감기한</div>
-												<div class="text-xs text-gray-500">{post.deadLine}</div>
-											{/if}
+										<div class="flex items-center justify-between min-w-[77px] ml-4">
+											<div class="flex flex-col items-center flex-nowrap">
+												{#if post.closed}
+													<div class="badge badge-neutral whitespace-nowrap">구했어유</div>
+												{:else}
+													<div class="badge badge-primary my-1 whitespace-nowrap">구해유</div>
+													<div class="text-xs text-gray-500 whitespace-nowrap">
+														~ {post.deadLine}
+													</div>
+												{/if}
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</a>
-				{/each}
-
+						</a>
+					{/each}
+				</div>
 				<div class="max-w-4xl mx-auto my-5">
 					<button class="w-full btn btn-primary my-5" on:click={JobPostWritePage}>
 						글 작성하기
@@ -143,7 +176,38 @@
 {/await}
 
 <style>
-	a:hover {
-		color: #a5a5a5; /* 호버 시 색상 변경 */
+	.card:hover {
+		background-color: oklch(0.95 0.05 128.99 / 0.3);
+	}
+
+	/* 제목 형광펜 스타일 */
+	/*.card:hover .truncate {
+		background: linear-gradient(to top, oklch(0.77 0.2 132.02 / 0.72) 50%, transparent 50%);
+	}*/
+
+	.badge-primary {
+		border-color: oklch(0.77 0.2 132.02); /* 테두리 색상 설정 */
+		background-color: oklch(0.77 0.2 132.02); /* 배경 색상 설정 */
+		color: white;
+	}
+
+	.badge-neutral {
+		border-color: oklch(0.57 0.02 72.86); /* 테두리 색상 설정 */
+		background-color: oklch(0.57 0.02 72.86); /* 배경 색상 설정 */
+		color: white;
+	}
+
+	.btn-primary {
+		border-color: oklch(0.77 0.2 132.02); /* 테두리 색상 설정 */
+		background-color: oklch(0.77 0.2 132.02); /* 배경 색상 설정 */
+		color: white;
+	}
+
+	.select-bordered {
+		background-color: oklch(0.98 0 0); /* 배경색 설정 */
+		border: 1px solid oklch(0.77 0.2 132.02); /* 테두리를 1px 두께로 설정하고 검은색(#000)으로 색상을 지정합니다. */
+	}
+	.text-shadow {
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 	}
 </style>
