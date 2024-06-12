@@ -88,46 +88,42 @@
 	<div class="flex justify-center min-h-screen bg-base-100">
 		<div class="container mx-auto px-4">
 			<div class="w-full max-w-4xl mx-auto">
-				{#each posts ?? [] as post, index}
-					<a href="/job-post/{post.id}" class="block">
-						<div class="card relative bg-base-100 shadow-xl my-4">
-							<div class="card-body flex flex-row justify-between">
-								<div>
-									<div class="text-bold text-gray-500 mb-1">{post.author}</div>
-									<div class="text-xs text-gray-500">{post.location}</div>
-								</div>
-								<div class="flex justify-center items-center">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										id="Outline"
-										viewBox="0 0 24 24"
-										width="12"
-										height="12"
-										><path
-											d="M7,24a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l8.17-8.17a3,3,0,0,0,0-4.24L6.29,1.71A1,1,0,0,1,7.71.29l8.17,8.17a5,5,0,0,1,0,7.08L7.71,23.71A1,1,0,0,1,7,24Z"
-										/></svg
-									>
-								</div>
-							</div>
-							<!-- 메인 이미지가 존재하는 경우 -->
-							{#if post.mainImageUrl}
-								<div
-									class="relative bg-cover bg-center h-60"
-									style="background-image: url('{post.mainImageUrl}')"
-								>
-									<div
-										class="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center"
-									>
-										<div class="text-white text-2xl text-shadow p-4">{post.title}</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					{#each posts ?? [] as post, index}
+						<a href="/job-post/{post.id}" class="block">
+							<div class="card relative bg-base-100 shadow-xl my-4">
+								<div class="card-body flex flex-row justify-between">
+									<div>
+										<div class="text-bold text-gray-500 mb-1">{post.author}</div>
+										<div class="text-xs text-gray-500">{post.location}</div>
+									</div>
+									<div class="flex justify-center items-center">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											id="Outline"
+											viewBox="0 0 24 24"
+											width="12"
+											height="12"
+										>
+											<path
+												d="M7,24a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l8.17-8.17a3,3,0,0,0,0-4.24L6.29,1.71A1,1,0,0,1,7.71.29l8.17,8.17a5,5,0,0,1,0,7.08L7.71,23.71A1,1,0,0,1,7,24Z"
+											/>
+										</svg>
 									</div>
 								</div>
-							{/if}
-							<div class="card-body {post.mainImageUrl ? '' : 'pt-1'}">
-								<div class="flex items-center justify-between">
-									<div class="flex items-center">
-										<div class="flex flex-col mr-10">
+								<div class="card-body pt-1">
+									<div class="flex items-center justify-between">
+										<div class="flex items-center">
+											<!-- 메인 이미지가 존재하는 경우 -->
+											{#if post.mainImageUrl}
+												<img
+													src={post.mainImageUrl}
+													alt={post.title}
+													class="mr-4 w-20 h-20 object-cover"
+												/>
+											{/if}
 											<div
-												class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
+												class="flex flex-col max-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
 											>
 												<div class="text-xl font-bold max-w-full line-clamp-2">
 													{post.title}
@@ -154,22 +150,24 @@
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="flex items-center justify-between">
-										<div class="flex flex-col items-center">
-											{#if post.closed}
-												<div class="badge badge-neutral">구했어유</div>
-											{:else}
-												<div class="badge badge-primary my-1">구해유</div>
-												<div class="text-xs text-gray-500">~ {post.deadLine}</div>
-											{/if}
+										<div class="flex items-center justify-between min-w-[77px] ml-4">
+											<div class="flex flex-col items-center flex-nowrap">
+												{#if post.closed}
+													<div class="badge badge-neutral whitespace-nowrap">구했어유</div>
+												{:else}
+													<div class="badge badge-primary my-1 whitespace-nowrap">구해유</div>
+													<div class="text-xs text-gray-500 whitespace-nowrap">
+														~ {post.deadLine}
+													</div>
+												{/if}
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</a>
-				{/each}
+						</a>
+					{/each}
+				</div>
 				<div class="max-w-4xl mx-auto my-5">
 					<button class="w-full btn btn-primary my-5" on:click={JobPostWritePage}>
 						글 작성하기

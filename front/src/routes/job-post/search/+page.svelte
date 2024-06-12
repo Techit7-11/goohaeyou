@@ -61,13 +61,14 @@
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"
-						><path
+					>
+						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
 							stroke-width="2"
 							d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-						/></svg
-					>
+						/>
+					</svg>
 				</button>
 			</div>
 		</div>
@@ -80,88 +81,92 @@
 						<span class="loading loading-dots loading-lg"></span>
 					</div>
 				{:then { data: posts }}
-					{#each posts ?? [] as post, index}
-						<a href="/job-post/{post.id}" class="block">
-							<div class="card relative bg-base-100 shadow-xl my-4">
-								<div class="card-body flex flex-row justify-between">
-									<div>
-										<div class="text-bold text-gray-500 mb-1">{post.author}</div>
-										<div class="text-xs text-gray-500">{post.location}</div>
-									</div>
-									<div class="flex justify-center items-center">
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											id="Outline"
-											viewBox="0 0 24 24"
-											width="12"
-											height="12"
-											><path
-												d="M7,24a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l8.17-8.17a3,3,0,0,0,0-4.24L6.29,1.71A1,1,0,0,1,7.71.29l8.17,8.17a5,5,0,0,1,0,7.08L7.71,23.71A1,1,0,0,1,7,24Z"
-											/></svg
-										>
-									</div>
-								</div>
-								<!-- 메인 이미지가 존재하는 경우 -->
-								{#if post.mainImageUrl}
-									<div
-										class="relative bg-cover bg-center h-60"
-										style="background-image: url('{post.mainImageUrl}')"
-									>
-										<div
-											class="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center"
-										>
-											<div class="text-white text-2xl text-shadow p-4">{post.title}</div>
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+						{#each posts ?? [] as post, index}
+							<a href="/job-post/{post.id}" class="block">
+								<div class="card relative bg-base-100 shadow-xl my-4">
+									<div class="card-body flex flex-row justify-between">
+										<div>
+											<div class="text-bold text-gray-500 mb-1">{post.author}</div>
+											<div class="text-xs text-gray-500">{post.location}</div>
+										</div>
+										<div class="flex justify-center items-center">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												id="Outline"
+												viewBox="0 0 24 24"
+												width="12"
+												height="12"
+												><path
+													d="M7,24a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l8.17-8.17a3,3,0,0,0,0-4.24L6.29,1.71A1,1,0,0,1,7.71.29l8.17,8.17a5,5,0,0,1,0,7.08L7.71,23.71A1,1,0,0,1,7,24Z"
+												/></svg
+											>
 										</div>
 									</div>
-								{/if}
-								<div class="card-body {post.mainImageUrl ? '' : 'pt-1'}">
-									<div class="flex items-center justify-between">
-										<div class="flex items-center">
-											<div class="flex flex-col mr-10">
-												<div
-													class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
-												>
-													<div class="text-xl font-bold max-w-full line-clamp-2">
-														{post.title}
-													</div>
-													<div class="flex mt-2">
-														<div class="flex-shrink">
-															<div class="text-xs mx-2 flex justify-center items-center">
-																{post.incrementViewCount}
-															</div>
-															<div class="text-xs text-gray-500">봤어유</div>
+									<!-- 메인 이미지가 존재하는 경우 -->
+									{#if post.mainImageUrl}
+										<div
+											class="relative bg-cover bg-center h-60"
+											style="background-image: url('{post.mainImageUrl}')"
+										>
+											<div
+												class="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center"
+											>
+												<div class="text-white text-2xl text-shadow p-4">{post.title}</div>
+											</div>
+										</div>
+									{/if}
+									<div class="card-body {post.mainImageUrl ? '' : 'pt-1'}">
+										<div class="flex items-center justify-between">
+											<div class="flex items-center">
+												<div class="flex flex-col mr-10">
+													<div
+														class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
+													>
+														<div class="text-xl font-bold max-w-full line-clamp-2">
+															{post.title}
 														</div>
-														<div class="flex-shrink ml-3">
-															<div class="text-xs mx-2 flex justify-center items-center">
-																{post.commentsCount}
+														<div class="flex mt-2">
+															<div class="flex-shrink">
+																<div class="text-xs mx-2 flex justify-center items-center">
+																	{post.incrementViewCount}
+																</div>
+																<div class="text-xs text-gray-500">봤어유</div>
 															</div>
-															<div class="text-xs text-gray-500">쑥덕쑥덕</div>
-														</div>
-														<div class="flex-shrink ml-3">
-															<div class="text-xs mx-2 flex justify-center items-center">
-																{post.interestsCount}
+															<div class="flex-shrink ml-3">
+																<div class="text-xs mx-2 flex justify-center items-center">
+																	{post.commentsCount}
+																</div>
+																<div class="text-xs text-gray-500">쑥덕쑥덕</div>
 															</div>
-															<div class="text-xs text-gray-500">관심있슈</div>
+															<div class="flex-shrink ml-3">
+																<div class="text-xs mx-2 flex justify-center items-center">
+																	{post.interestsCount}
+																</div>
+																<div class="text-xs text-gray-500">관심있슈</div>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-										</div>
-										<div class="flex items-center justify-between">
-											<div class="flex flex-col items-center">
-												{#if post.closed}
-													<div class="badge badge-neutral">구했어유</div>
-												{:else}
-													<div class="badge badge-primary my-1">구해유</div>
-													<div class="text-xs text-gray-500">~ {post.deadLine}</div>
-												{/if}
+											<div class="flex items-center justify-between min-w-[77px] ml-4">
+												<div class="flex flex-col items-center flex-nowrap">
+													{#if post.closed}
+														<div class="badge badge-neutral whitespace-nowrap">구했어유</div>
+													{:else}
+														<div class="badge badge-primary my-1 whitespace-nowrap">구해유</div>
+														<div class="text-xs text-gray-500 whitespace-nowrap">
+															~ {post.deadLine}
+														</div>
+													{/if}
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						</a>
-					{/each}
+							</a>
+						{/each}
+					</div>
 				{/await}
 			{/if}
 		</div>
