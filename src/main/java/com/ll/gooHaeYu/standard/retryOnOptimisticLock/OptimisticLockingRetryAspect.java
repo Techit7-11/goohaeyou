@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.standard.dto.retryOnOptimisticLock;
+package com.ll.gooHaeYu.standard.retryOnOptimisticLock;
 
 import com.ll.gooHaeYu.global.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
