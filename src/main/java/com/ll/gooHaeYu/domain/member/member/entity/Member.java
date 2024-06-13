@@ -1,6 +1,6 @@
 package com.ll.gooHaeYu.domain.member.member.entity;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.RegionType;
+import com.ll.gooHaeYu.standard.base.RegionType;
 import com.ll.gooHaeYu.domain.member.member.dto.SocialProfileForm;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Level;

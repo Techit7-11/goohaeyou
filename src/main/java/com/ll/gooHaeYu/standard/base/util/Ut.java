@@ -1,12 +1,15 @@
 package com.ll.gooHaeYu.standard.base.util;
 
 import com.ll.gooHaeYu.global.config.AppConfig;
+import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.global.exception.ErrorCode;
+import com.ll.gooHaeYu.standard.base.RegionType;
 import lombok.SneakyThrows;
 
 public class Ut {
     public static class Str {
         public static boolean isBlank(String str) {
-            return str == null || str.trim().length() == 0;
+            return str == null || str.trim().isEmpty();
         }
 
         public static boolean hasLength(String str) {
@@ -18,6 +21,23 @@ public class Ut {
         @SneakyThrows
         public static void sleep(long millis) {
             Thread.sleep(millis);
+        }
+    }
+
+    public static class Region {
+
+        public static RegionType getRegionFromAddress(String roadAddress) {
+             if (roadAddress == null || roadAddress.isEmpty()) {
+                 throw new CustomException(ErrorCode.INVALID_ADDRESS_FORMAT);
+             }
+
+             for (RegionType region : RegionType.values()) {
+                 if (roadAddress.startsWith(region.getName())) {
+                     return region;
+                 }
+             }
+
+            throw new CustomException(ErrorCode.INVALID_ADDRESS_FORMAT);
         }
     }
 

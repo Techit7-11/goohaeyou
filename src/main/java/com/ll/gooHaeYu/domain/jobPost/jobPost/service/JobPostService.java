@@ -13,6 +13,7 @@ import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.event.notification.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -57,6 +58,7 @@ public class JobPostService {
                 .deadline(form.getDeadLine())
                 .jobStartDate(form.getJobStartDate())
                 .taskType(form.getCategory())
+                .regionType(Ut.Region.getRegionFromAddress(form.getLocation()))
                 .build();
 
         JobPostDetail postDetail = JobPostDetail.builder()
@@ -104,7 +106,7 @@ public class JobPostService {
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
-        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate(), form.getCategory());
+        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate(), form.getCategory(), Ut.Region.getRegionFromAddress(form.getLocation()));
         postDetail.updatePostDetail(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
         postDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
@@ -306,7 +308,7 @@ public class JobPostService {
         if (!canEditPost(username, jobPost.getMember().getUsername())) {
             throw new CustomException(NOT_ABLE);
         }
-        jobPost.update();
+        jobPost.SetDeadlineNull();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
 }

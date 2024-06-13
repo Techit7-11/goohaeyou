@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type;
+package com.ll.gooHaeYu.standard.base;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
