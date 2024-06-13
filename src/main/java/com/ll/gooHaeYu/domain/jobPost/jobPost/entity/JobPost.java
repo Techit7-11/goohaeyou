@@ -24,7 +24,7 @@ public class JobPost extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "task_id", nullable = false)
+    @JoinColumn(name = "task_id", nullable = true)
     private Task task;
 
     @ManyToOne
@@ -61,7 +61,7 @@ public class JobPost extends BaseTimeEntity {
     private JobPostDetail jobPostDetail;
 
     @ManyToOne
-    @JoinColumn(name = "region_id")
+    @JoinColumn(name = "region_id", nullable = true)
     private Region region;
 
     public void update(String title, LocalDate deadline, LocalDate jobStartDate) {

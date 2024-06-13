@@ -59,7 +59,7 @@ public class Member extends BaseTimeEntity {
     private String profileImageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id", nullable = false)
+    @JoinColumn(name = "region_id", nullable = true)
     private Region region;
 
     public void update(String password, Gender gender, String location, LocalDate birth) {
