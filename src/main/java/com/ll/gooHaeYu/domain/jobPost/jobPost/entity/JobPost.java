@@ -1,7 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
-import com.ll.gooHaeYu.domain.category.region.entity.Region;
-import com.ll.gooHaeYu.domain.category.task.entity.Task;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.RegionType;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.TaskType;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -22,10 +22,6 @@ public class JobPost extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "task_id", nullable = true)
-    private Task task;
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
@@ -60,13 +56,18 @@ public class JobPost extends BaseTimeEntity {
     @OneToOne(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private JobPostDetail jobPostDetail;
 
-    @ManyToOne
-    @JoinColumn(name = "region_id", nullable = true)
-    private Region region;
+    @Enumerated(EnumType.STRING)
+    private RegionType regionType;
 
-    public void update(String title, LocalDate deadline, LocalDate jobStartDate) {
+    @Enumerated(EnumType.STRING)
+    private TaskType taskType;
+
+    public void update(String title, LocalDate deadline, LocalDate jobStartDate, TaskType taskType) {
         if (title != null && !title.isBlank()) {
             this.title = title;
+        }
+        if (taskType != null) {
+            this.taskType = taskType;
         }
         this.deadline = deadline;
         this.jobStartDate = jobStartDate;

@@ -1,4 +1,4 @@
-package com.ll.gooHaeYu.domain.category.task.entity.type;
+package com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
