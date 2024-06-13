@@ -59,6 +59,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .workTime(wage.getWorkTime())
                 .workDays(wage.getWorkDays())
                 .wagePaymentMethod(wage.getWagePaymentMethod())
+                .category(jobPost.getTaskType())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .modifiedAt(mostRecentModifiedDate.format(formatter))
                 .build();

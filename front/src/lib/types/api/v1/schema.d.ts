@@ -586,7 +586,9 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
-      employed: boolean;
+      /** @enum {string} */
+      category?: "PERSONAL_ASSISTANCE" | "CLEANING_AND_ORGANIZATION" | "LOGISTICS_AND_DELIVERY" | "TECHNICAL_TASKS" | "STORE_MANAGEMENT" | "OFFICE_AND_EDUCATION" | "EVENT_SUPPORT" | "OTHERS";
+      employed?: boolean;
       /** Format: date */
       deadLine?: string;
       /** Format: date */
@@ -656,7 +658,9 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
-      employed: boolean;
+      /** @enum {string} */
+      category?: "PERSONAL_ASSISTANCE" | "CLEANING_AND_ORGANIZATION" | "LOGISTICS_AND_DELIVERY" | "TECHNICAL_TASKS" | "STORE_MANAGEMENT" | "OFFICE_AND_EDUCATION" | "EVENT_SUPPORT" | "OTHERS";
+      employed?: boolean;
       /** Format: date */
       deadLine?: string;
       /** Format: date */

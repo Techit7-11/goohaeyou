@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.PayBasis;
+import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.TaskType;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.WagePaymentMethod;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import jakarta.validation.constraints.*;
@@ -18,6 +19,9 @@ public class JobPostForm {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Register {
+
+        private TaskType category;
+
         @NotBlank(message = "제목은 필수 입력 항목입니다.")
         private String title;
 
@@ -57,6 +61,8 @@ public class JobPostForm {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Modify {
+        private TaskType category;
+
         @NotBlank(message = "제목은 필수 입력 항목입니다.")
         private String title;
 
