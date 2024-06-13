@@ -135,6 +135,15 @@
 						>
 					</div>
 				</div>
+				<div class="form-group">
+					<label class="label" for="jobStartDate">* 시작 일자</label>
+					<input
+						type="date"
+						id="jobStartDate"
+						class="input input-bordered w-full"
+						bind:value={jobPostData.jobStartDate}
+					/>
+				</div>
 				<div class="divider mt-10"></div>
 				<div class="form-group flex-1">
 					<label class="label" for="category">* 카테고리</label>
