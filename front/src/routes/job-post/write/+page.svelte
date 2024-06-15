@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import rq from '$lib/rq/rq.svelte';
 
-	// 회원 정보 데이터
 	let newJobPostData = {
 		title: '',
 		body: '',
@@ -174,7 +173,7 @@
 				<div class="form-group">
 					<label class="label" for="category">* 카테고리 선택</label>
 					<select class="input input-bordered w-full" id="category" bind:value={selectedCategoryId}>
-						<option value="" disabled selected>- 카테고리를 선택하세요 -</option>
+						<option value="" disabled selected>- 선택하세요 -</option>
 						{#each subCategories as category}
 							<option value={category.id}>{category.name}</option>
 						{/each}
