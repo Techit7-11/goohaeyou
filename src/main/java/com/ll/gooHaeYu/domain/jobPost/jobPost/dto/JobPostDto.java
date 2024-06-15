@@ -37,7 +37,6 @@ public class JobPostDto extends AbstractJobPostDto{
                 .deadLine(jobPost.getDeadline())
                 .isClosed(jobPost.isClosed())
                 .mainImageUrl(mainImageUrl.orElse(null))
-                .category(jobPost.getTaskType())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
                 .build();
     }
