@@ -9,6 +9,8 @@ public class CategoryForm {
     @Builder
     @Getter
     public static class Add {
+
+        private String parentName;
         @NotBlank
         private String name;
         @NotNull
