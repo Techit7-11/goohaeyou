@@ -119,6 +119,9 @@ export interface paths {
     /** 인증 메일 전송 */
     post: operations["sendAuthEmail"];
   };
+  "/admin/category/add": {
+    post: operations["addCategory"];
+  };
   "/api/members/verify/{code}": {
     /** 인증코드 확인 */
     patch: operations["verifyCode"];
@@ -419,6 +422,14 @@ export interface components {
       errorCode?: string;
       data: components["schemas"]["JoinForm"];
     };
+    Add: {
+      name: string;
+      /** Format: int32 */
+      code: number;
+      /** Format: int32 */
+      level: number;
+      enabled?: boolean;
+    };
     ApiResponseListCommentDto: {
       /** Format: int32 */
       statusCode?: number;
@@ -586,8 +597,6 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
-      /** @enum {string} */
-      category?: "PERSONAL_ASSISTANCE" | "CLEANING_AND_ORGANIZATION" | "LOGISTICS_AND_DELIVERY" | "TECHNICAL_TASKS" | "STORE_MANAGEMENT" | "OFFICE_AND_EDUCATION" | "EVENT_SUPPORT" | "OTHERS";
       employed?: boolean;
       /** Format: date */
       deadLine?: string;
@@ -658,8 +667,6 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
-      /** @enum {string} */
-      category?: "PERSONAL_ASSISTANCE" | "CLEANING_AND_ORGANIZATION" | "LOGISTICS_AND_DELIVERY" | "TECHNICAL_TASKS" | "STORE_MANAGEMENT" | "OFFICE_AND_EDUCATION" | "EVENT_SUPPORT" | "OTHERS";
       employed?: boolean;
       /** Format: date */
       deadLine?: string;
@@ -1351,6 +1358,21 @@ export interface operations {
   };
   /** 인증 메일 전송 */
   sendAuthEmail: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
+      };
+    };
+  };
+  addCategory: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Add"];
+      };
+    };
     responses: {
       /** @description OK */
       200: {
