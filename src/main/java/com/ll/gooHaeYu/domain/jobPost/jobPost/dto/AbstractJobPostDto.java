@@ -1,6 +1,5 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.TaskType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -27,7 +26,6 @@ public class AbstractJobPostDto {
     @NotNull
     private String createdAt;
 
-    private TaskType category;
     private boolean employed;
     private boolean isClosed;
     private LocalDate deadLine;

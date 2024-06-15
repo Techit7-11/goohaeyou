@@ -57,7 +57,6 @@ public class JobPostService {
                 .location(form.getLocation())
                 .deadline(form.getDeadLine())
                 .jobStartDate(form.getJobStartDate())
-                .taskType(form.getCategory())
                 .regionType(Ut.Region.getRegionFromAddress(form.getLocation()))
                 .build();
 
@@ -106,7 +105,7 @@ public class JobPostService {
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
-        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate(), form.getCategory(), Ut.Region.getRegionFromAddress(form.getLocation()));
+        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate(), Ut.Region.getRegionFromAddress(form.getLocation()));
         postDetail.updatePostDetail(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
         postDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());

@@ -1,9 +1,8 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
-import com.ll.gooHaeYu.standard.base.RegionType;
-import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.TaskType;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
+import com.ll.gooHaeYu.standard.base.RegionType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -59,15 +58,9 @@ public class JobPost extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private RegionType regionType;
 
-    @Enumerated(EnumType.STRING)
-    private TaskType taskType;
-
-    public void update(String title, LocalDate deadline, LocalDate jobStartDate, TaskType taskType, RegionType regionType) {
+    public void update(String title, LocalDate deadline, LocalDate jobStartDate, RegionType regionType) {
         if (title != null && !title.isBlank()) {
             this.title = title;
-        }
-        if (taskType != null) {
-            this.taskType = taskType;
         }
         if (regionType != null) {
             this.regionType = regionType;
