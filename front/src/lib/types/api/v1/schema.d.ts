@@ -150,9 +150,6 @@ export interface paths {
     /** 소셜 로그인 */
     get: operations["socialLogin"];
   };
-  "/category/get": {
-    get: operations["getSubCategories"];
-  };
   "/api/post-comment/{postId}": {
     /** 해당 공고에 달린 댓글 목록 */
     get: operations["findByPostId"];
@@ -238,6 +235,9 @@ export interface paths {
   "/api/chat": {
     /** 채팅방 목록 */
     get: operations["showRoomList"];
+  };
+  "/api/categories/sub-categories": {
+    get: operations["getSubCategories"];
   };
   "/": {
     get: operations["showMain"];
@@ -433,26 +433,6 @@ export interface components {
       /** Format: int32 */
       level: number;
       enabled?: boolean;
-    };
-    ApiResponseListCategoryDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["CategoryDto"][];
-    };
-    CategoryDto: {
-      /** Format: int64 */
-      id?: number;
-      name?: string;
-      /** Format: int32 */
-      code?: number;
-      /** Format: int32 */
-      level?: number;
-      /** Format: int64 */
-      parentId?: number;
     };
     ApiResponseListCommentDto: {
       /** Format: int32 */
@@ -807,6 +787,26 @@ export interface components {
       sender: string;
       text: string;
       createdAt?: string;
+    };
+    ApiResponseListCategoryDto: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
+      data: components["schemas"]["CategoryDto"][];
+    };
+    CategoryDto: {
+      /** Format: int64 */
+      id?: number;
+      name?: string;
+      /** Format: int32 */
+      code?: number;
+      /** Format: int32 */
+      level?: number;
+      /** Format: int64 */
+      parentId?: number;
     };
     ApiResponseApplicationDto: {
       /** Format: int32 */
@@ -1521,21 +1521,6 @@ export interface operations {
       };
     };
   };
-  getSubCategories: {
-    parameters: {
-      query: {
-        categoryName: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListCategoryDto"];
-        };
-      };
-    };
-  };
   /** 해당 공고에 달린 댓글 목록 */
   findByPostId: {
     parameters: {
@@ -1858,6 +1843,21 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["ApiResponseListRoomListDto"];
+        };
+      };
+    };
+  };
+  getSubCategories: {
+    parameters: {
+      query: {
+        category_name: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseListCategoryDto"];
         };
       };
     };

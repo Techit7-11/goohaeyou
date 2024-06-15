@@ -21,6 +21,8 @@ public class JobPostForm {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Register {
+        @NotNull(message = "카테고리 설정은 필수입니다.")
+        private Long categoryId;
 
         @NotBlank(message = "제목은 필수 입력 항목입니다.")
         private String title;

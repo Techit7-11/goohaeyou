@@ -25,7 +25,7 @@ public class CategoryDto {
                 .name(category.getName())
                 .code(category.getCode())
                 .level(category.getLevel())
-                .parentId(category.getParent().getId())
+                .parentId(category.getParent() != null ? category.getParent().getId() : null)
                 .build();
     }
 

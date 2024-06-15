@@ -1,5 +1,6 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 
+import com.ll.gooHaeYu.domain.category.entity.Category;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
 import com.ll.gooHaeYu.standard.base.RegionType;
@@ -57,6 +58,10 @@ public class JobPost extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private RegionType regionType;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     public void update(String title, LocalDate deadline, LocalDate jobStartDate, RegionType regionType) {
         if (title != null && !title.isBlank()) {

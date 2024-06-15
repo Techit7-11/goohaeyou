@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.category.repository.CategoryRepository;
 import com.ll.gooHaeYu.domain.fileupload.service.S3ImageService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
@@ -48,6 +49,7 @@ public class JobPostService {
     private final ApplicationEventPublisher publisher;
     private final WageRepository wageRepository;
     private final S3ImageService s3ImageService;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
@@ -58,6 +60,8 @@ public class JobPostService {
                 .deadline(form.getDeadLine())
                 .jobStartDate(form.getJobStartDate())
                 .regionType(Ut.Region.getRegionFromAddress(form.getLocation()))
+                .category(categoryRepository.findById(form.getCategoryId())
+                        .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY)))
                 .build();
 
         JobPostDetail postDetail = JobPostDetail.builder()
