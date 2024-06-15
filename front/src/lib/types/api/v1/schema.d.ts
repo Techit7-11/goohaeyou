@@ -150,6 +150,9 @@ export interface paths {
     /** 소셜 로그인 */
     get: operations["socialLogin"];
   };
+  "/category/get": {
+    get: operations["getSubCategories"];
+  };
   "/api/post-comment/{postId}": {
     /** 해당 공고에 달린 댓글 목록 */
     get: operations["findByPostId"];
@@ -423,12 +426,33 @@ export interface components {
       data: components["schemas"]["JoinForm"];
     };
     Add: {
+      parentName?: string;
       name: string;
       /** Format: int32 */
       code: number;
       /** Format: int32 */
       level: number;
       enabled?: boolean;
+    };
+    ApiResponseListCategoryDto: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
+      data: components["schemas"]["CategoryDto"][];
+    };
+    CategoryDto: {
+      /** Format: int64 */
+      id?: number;
+      name?: string;
+      /** Format: int32 */
+      code?: number;
+      /** Format: int32 */
+      level?: number;
+      /** Format: int64 */
+      parentId?: number;
     };
     ApiResponseListCommentDto: {
       /** Format: int32 */
@@ -1493,6 +1517,21 @@ export interface operations {
       200: {
         content: {
           "*/*": string;
+        };
+      };
+    };
+  };
+  getSubCategories: {
+    parameters: {
+      query: {
+        categoryName: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseListCategoryDto"];
         };
       };
     };
