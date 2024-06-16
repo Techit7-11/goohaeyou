@@ -32,6 +32,10 @@
 		window.location.href = '/maps';
 	}
 
+	function JobPostWritePage() {
+		rq.goTo('/job-post/write');
+	}
+
 	function backToPreviousPage() {
 		window.history.back();
 	}
@@ -151,18 +155,44 @@
 			</div>
 			<div class="navbar-center"></div>
 			<div class="navbar-end">
+				<!-- 검색 버튼 -->
+				<button
+					on:click={NavSearch}
+					class="btn btn-ghost"
+					style="margin-right: -12px;"
+					title="검색"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-6 w-6 text-gray-700"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+						/>
+					</svg>
+				</button>
+
+				<!-- 로그인/아웃 버튼 -->
 				{#if rq.isLogout()}
 					<a
-						class="btn btn-ghost mx-3"
+						class="btn btn-ghost mx-1"
 						href="/member/login"
-						style="font-family: 'Arial', sans-serif; color: #228B22;">로그인</a
+						style="font-family: 'Arial', sans-serif; color: #228B22; padding: 4px 8px; font-size: 14px;"
+						>로그인</a
 					>
 				{/if}
 				{#if rq.isLogin()}
 					<button
-						class="btn btn-ghost mx-3"
+						class="btn btn-ghost mx-1"
 						on:click={() => rq.logoutAndRedirect('/')}
-						style="font-family: 'Arial', sans-serif; color: #228B22;">로그아웃</button
+						style="font-family: 'Arial', sans-serif; color: #228B22; padding: 4px 8px; font-size: 14px;"
+						>로그아웃</button
 					>
 				{/if}
 			</div>
@@ -226,32 +256,6 @@
 	</aside>
 </footer>
 <div class="btm-nav" style="z-index: 1;">
-	<button on:click={NavMaps}>
-		<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 576 512"
-			><path
-				fill="#000000"
-				d="M565.6 36.2C572.1 40.7 576 48.1 576 56V392c0 10-6.2 18.9-15.5 22.4l-168 64c-5.2 2-10.9 2.1-16.1 .3L192.5 417.5l-160 61c-7.4 2.8-15.7 1.8-22.2-2.7S0 463.9 0 456V120c0-10 6.1-18.9 15.5-22.4l168-64c5.2-2 10.9-2.1 16.1-.3L383.5 94.5l160-61c7.4-2.8 15.7-1.8 22.2 2.7zM48 136.5V421.2l120-45.7V90.8L48 136.5zM360 422.7V137.3l-144-48V374.7l144 48zm48-1.5l120-45.7V90.8L408 136.5V421.2z"
-			/></svg
-		>
-		<span class="btm-nav-label">지도</span>
-	</button>
-
-	<button on:click={NavSearch}>
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			class="h-6 w-6"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke="currentColor"
-			><path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-			/></svg
-		>
-		<span class="btm-nav-label">검색</span>
-	</button>
 	<button on:click={NavCategories}>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -268,6 +272,29 @@
 			/>
 		</svg>
 		<span class="btm-nav-label">카테고리</span>
+	</button>
+
+	<button on:click={NavMaps}>
+		<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 576 512"
+			><path
+				fill="#000000"
+				d="M565.6 36.2C572.1 40.7 576 48.1 576 56V392c0 10-6.2 18.9-15.5 22.4l-168 64c-5.2 2-10.9 2.1-16.1 .3L192.5 417.5l-160 61c-7.4 2.8-15.7 1.8-22.2-2.7S0 463.9 0 456V120c0-10 6.1-18.9 15.5-22.4l168-64c5.2-2 10.9-2.1 16.1-.3L383.5 94.5l160-61c7.4-2.8 15.7-1.8 22.2 2.7zM48 136.5V421.2l120-45.7V90.8L48 136.5zM360 422.7V137.3l-144-48V374.7l144 48zm48-1.5l120-45.7V90.8L408 136.5V421.2z"
+			/></svg
+		>
+		<span class="btm-nav-label">지도</span>
+	</button>
+
+	<button on:click={JobPostWritePage}>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-6 w-6 text-gray-700"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+		>
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+		</svg>
+		<span class="btm-nav-label">글 작성</span>
 	</button>
 
 	<!-- {#if a} -->
