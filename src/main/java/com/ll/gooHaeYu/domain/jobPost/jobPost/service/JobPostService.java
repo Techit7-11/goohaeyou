@@ -1,6 +1,7 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.category.entity.Category;
 import com.ll.gooHaeYu.domain.category.repository.CategoryRepository;
 import com.ll.gooHaeYu.domain.fileupload.service.S3ImageService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
@@ -313,5 +314,14 @@ public class JobPostService {
         }
         jobPost.SetDeadlineNull();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
+    }
+
+    public List<JobPostDto> getPostsByCategory(String categoryName) {
+        Category category = categoryRepository.findByName(categoryName)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY));
+
+        List<JobPost> jobPosts = jobPostRepository.findAllByCategoryOrderByCreatedAtDesc(category);
+
+        return JobPostDto.toDtoList(jobPosts);
     }
 }

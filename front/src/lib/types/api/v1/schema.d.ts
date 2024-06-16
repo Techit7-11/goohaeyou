@@ -228,6 +228,10 @@ export interface paths {
     /** 구인공고 검색 */
     get: operations["postSearchAndSort"];
   };
+  "/api/job-posts/by-category": {
+    /** 카테고리의 글 목록 불러오기 */
+    get: operations["getPostsByCategory"];
+  };
   "/api/employ/{postId}": {
     /** 공고 별 지원리스트 */
     get: operations["getList_1"];
@@ -236,8 +240,17 @@ export interface paths {
     /** 채팅방 목록 */
     get: operations["showRoomList"];
   };
+  "/api/categories/top-level": {
+    /** 최상단 카테고리 목록 불러오기 */
+    get: operations["getTopCategories"];
+  };
   "/api/categories/sub-categories": {
+    /** 하위 카테고리 목록 불러오기 */
     get: operations["getSubCategories"];
+  };
+  "/api/categories/is-leaf": {
+    /** 가장 최하단의 카테고리인지 확인 */
+    get: operations["isLeafCategory"];
   };
   "/": {
     get: operations["showMain"];
@@ -1820,6 +1833,22 @@ export interface operations {
       };
     };
   };
+  /** 카테고리의 글 목록 불러오기 */
+  getPostsByCategory: {
+    parameters: {
+      query: {
+        category_name: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
+        };
+      };
+    };
+  };
   /** 공고 별 지원리스트 */
   getList_1: {
     parameters: {
@@ -1847,6 +1876,18 @@ export interface operations {
       };
     };
   };
+  /** 최상단 카테고리 목록 불러오기 */
+  getTopCategories: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseListCategoryDto"];
+        };
+      };
+    };
+  };
+  /** 하위 카테고리 목록 불러오기 */
   getSubCategories: {
     parameters: {
       query: {
@@ -1858,6 +1899,22 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["ApiResponseListCategoryDto"];
+        };
+      };
+    };
+  };
+  /** 가장 최하단의 카테고리인지 확인 */
+  isLeafCategory: {
+    parameters: {
+      query: {
+        category_id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseBoolean"];
         };
       };
     };
