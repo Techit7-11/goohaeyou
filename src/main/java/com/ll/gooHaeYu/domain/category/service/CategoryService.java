@@ -33,4 +33,17 @@ public class CategoryService {
         return categoryRepository.findByName(categoryName)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY));
     }
+
+    public Boolean isLeafCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY));
+
+        return category.getSubCategories().isEmpty();
+    }
+
+    public List<CategoryDto> getTopCategories() {
+        List<Category> categories = categoryRepository.findAllByLevel(1);
+
+        return CategoryDto.toList(categories);
+    }
 }
