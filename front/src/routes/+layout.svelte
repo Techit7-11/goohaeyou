@@ -19,7 +19,7 @@
 	function NavMyPage() {
 		window.location.href = '/member/me';
 	}
-	function NavHomepage() {
+	function NavCategories() {
 		window.location.href = '/';
 	}
 	function NavAlert() {
@@ -30,6 +30,10 @@
 	}
 	function NavMaps() {
 		window.location.href = '/maps';
+	}
+
+	function backToPreviousPage() {
+		window.history.back();
 	}
 
 	const firebaseConfig = {
@@ -110,6 +114,9 @@
 	// }
 
 	// runMethodPeriodically();
+	function scrollToTop() {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
 </script>
 
 <header>
@@ -119,6 +126,28 @@
 				<a class="btn btn-ghost text-xl font-mono" href="/"
 					><img src="/logo.png" alt="GooHaeYou Logo" class="h-10 w-auto" /></a
 				>
+				<!-- 뒤로가기 버튼 -->
+				<button
+					on:click={backToPreviousPage}
+					class="fixed bottom-20 left-3 bg-gray-100 text-black rounded-full p-2 shadow-lg z-50"
+					style="display: flex; align-items: center; justify-content: center; border: none; opacity: 0.8;"
+					title="뒤로가기"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-6 w-6"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M15 19l-7-7 7-7"
+						/>
+					</svg>
+				</button>
 			</div>
 			<div class="navbar-center"></div>
 			<div class="navbar-end">
@@ -223,21 +252,22 @@
 		>
 		<span class="btm-nav-label">검색</span>
 	</button>
-	<button on:click={NavHomepage}>
+	<button on:click={NavCategories}>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			class="h-6 w-6"
 			fill="none"
 			viewBox="0 0 24 24"
 			stroke="currentColor"
-			><path
+		>
+			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
 				stroke-width="2"
-				d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-			/></svg
-		>
-		<span class="btm-nav-label">홈</span>
+				d="M3 7h18M3 12h18m-9 5h9"
+			/>
+		</svg>
+		<span class="btm-nav-label">카테고리</span>
 	</button>
 
 	<!-- {#if a} -->
@@ -309,6 +339,25 @@
 		<span class="btm-nav-label">내 정보</span>
 	</button>
 </div>
+
+<!-- 페이지 최상단으로 이동 버튼 -->
+<button
+	on:click={scrollToTop}
+	class="fixed bottom-20 right-3 bg-gray-00 text-white rounded-full p-2 shadow-lg z-50"
+	style="display: flex; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.5); border: none; opacity: 0.6;"
+	title="페이지 최상단으로 이동"
+>
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		class="h-6 w-6"
+		fill="none"
+		viewBox="0 0 24 24"
+		stroke="currentColor"
+		style="stroke: rgba(255, 255, 255, 0.7);"
+		><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg
+	>
+</button>
+
 <svelte:head>
 	<script>
 		var global = window;
