@@ -20,7 +20,7 @@
 		window.location.href = '/member/me';
 	}
 	function NavCategories() {
-		window.location.href = '/';
+		window.location.href = '/categories';
 	}
 	function NavAlert() {
 		window.location.href = '/notification/list';

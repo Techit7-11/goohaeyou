@@ -34,7 +34,7 @@ public class CategoryService {
                 .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY));
     }
 
-    public Boolean isLeafCategory(Long categoryId) {
+    public boolean isLeafCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY));
 

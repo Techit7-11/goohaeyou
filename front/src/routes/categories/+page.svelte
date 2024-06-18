@@ -1,0 +1,241 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import rq from '$lib/rq/rq.svelte';
+	import type { components } from '$lib/types/api/v1/schema';
+
+	let categories: components['schemas']['CategoryDto'][] = [];
+	let subCategories: components['schemas']['CategoryDto'][] = [];
+	let posts: components['schemas']['JobPostDto'][] = [];
+	let selectedCategoryName = '';
+	let isLeafCategory = false;
+	let error = '';
+
+	async function loadCategories() {
+		try {
+			const { data } = await rq.apiEndPoints().GET('/api/categories/top-level');
+			categories = data?.data ?? [];
+			if (categories.length === 0) {
+				error = '카테고리가 없습니다.';
+			}
+		} catch (e) {
+			console.error('Error loading categories:', e);
+			error = '카테고리를 로드하는 중 오류가 발생했습니다.';
+		}
+	}
+
+	async function loadSubCategories(categoryName: string) {
+		try {
+			const params = new URLSearchParams({ category_name: categoryName });
+			const { data } = await rq.apiEndPoints().GET(`/api/categories/sub-categories?${params}`);
+			subCategories = data?.data ?? [];
+			isLeafCategory = subCategories.length === 0;
+		} catch (e) {
+			console.error('Error loading subcategories:', e);
+			error = '하위 카테고리를 로드하는 중 오류가 발생했습니다.';
+		}
+	}
+
+	async function loadPosts(categoryName: string) {
+		try {
+			const params = new URLSearchParams({ category_name: categoryName });
+			const { data } = await rq.apiEndPoints().GET(`/api/job-posts/by-category?${params}`);
+			posts = data?.data ?? [];
+		} catch (e) {
+			console.error('Error loading posts:', e);
+			error = '글 목록을 로드하는 중 오류가 발생했습니다.';
+		}
+	}
+
+	async function handleCategoryClick(category) {
+		selectedCategoryName = category.name;
+		await loadSubCategories(category.name);
+		if (isLeafCategory) {
+			await loadPosts(category.name);
+		}
+	}
+
+	async function initialize() {
+		try {
+			await loadCategories();
+			if (categories.length > 0) {
+				selectedCategoryName = categories[0].name;
+				await handleCategoryClick(categories[0]);
+			}
+		} catch (e) {
+			console.error('Error during load:', e);
+			error = '데이터를 로드하는 중 오류가 발생했습니다.';
+		}
+	}
+
+	onMount(() => {
+		initialize();
+	});
+</script>
+
+<svelte:head>
+	<title>구해유 - 카테고리</title>
+</svelte:head>
+
+{#await initialize()}
+	<div class="flex items-center justify-center min-h-screen">
+		<span class="loading loading-dots loading-lg"></span>
+	</div>
+{:then}
+	<div class="flex flex-col items-center p-4 space-y-4">
+		<div class="menu bg-base-200 w-full rounded-box p-4 shadow-lg">
+			{#if categories.length > 0}
+				{#each categories as category}
+					<details class="mb-2">
+						<summary
+							on:click={() => handleCategoryClick(category)}
+							class="cursor-pointer bg-primary text-white rounded-md p-2"
+						>
+							{category.name}
+						</summary>
+						{#if subCategories.length > 0 && selectedCategoryName === category.name}
+							<ul class="list-disc list-inside pl-4 space-y-2 mt-2">
+								{#each subCategories as subCategory}
+									<li>
+										<a
+											href="#"
+											on:click|preventDefault={() => handleCategoryClick(subCategory)}
+											class="text-gray-900 hover:underline"
+										>
+											{subCategory.name}
+										</a>
+									</li>
+								{/each}
+							</ul>
+						{/if}
+					</details>
+				{/each}
+			{:else}
+				<p class="text-center p-4 text-red-500">카테고리가 없습니다.</p>
+			{/if}
+		</div>
+
+		<div class="w-full p-4 max-w-4xl mx-auto">
+			{#if error}
+				<p class="text-red-500">{error}</p>
+			{:else if isLeafCategory && posts.length === 0}
+				<p class="text-center p-4 text-500">해당 카테고리에 글이 없습니다.</p>
+			{:else if posts.length > 0}
+				<h2 class="text-2xl font-bold mb-4">{selectedCategoryName}</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					{#each posts as post}
+						<a href="/job-post/{post.id}" class="block">
+							<div class="card relative bg-base-100 shadow-xl my-4">
+								<div class="card-body flex flex-row justify-between">
+									<div>
+										<div class="text-bold text-gray-500 mb-1">{post.author}</div>
+										<div class="text-xs text-gray-500">{post.location}</div>
+									</div>
+									<div class="flex justify-center items-center">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											id="Outline"
+											viewBox="0 0 24 24"
+											width="12"
+											height="12"
+										>
+											<path
+												d="M7,24a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l8.17-8.17a3,3,0,0,0,0-4.24L6.29,1.71A1,1,0,0,1,7.71.29l8.17,8.17a5,5,0,0,1,0,7.08L7.71,23.71A1,1,0,0,1,7,24Z"
+											/>
+										</svg>
+									</div>
+								</div>
+								<div class="card-body pt-1">
+									<div class="flex items-center justify-between">
+										<div class="flex items-center">
+											{#if post.mainImageUrl}
+												<img
+													src={post.mainImageUrl}
+													alt={post.title}
+													class="mr-4 w-20 h-20 object-cover"
+												/>
+											{/if}
+											<div
+												class="flex flex-col max-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
+											>
+												<div class="text-xl font-bold max-w-full line-clamp-2">{post.title}</div>
+												<div class="flex mt-2">
+													<div class="flex-shrink">
+														<div class="text-xs mx-2 flex justify-center items-center">
+															{post.incrementViewCount}
+														</div>
+														<div class="text-xs text-gray-500">봤어유</div>
+													</div>
+													<div class="flex-shrink ml-3">
+														<div class="text-xs mx-2 flex justify-center items-center">
+															{post.commentsCount}
+														</div>
+														<div class="text-xs text-gray-500">쑥덕쑥덕</div>
+													</div>
+													<div class="flex-shrink ml-3">
+														<div class="text-xs mx-2 flex justify-center items-center">
+															{post.interestsCount}
+														</div>
+														<div class="text-xs text-gray-500">관심있슈</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="flex items-center justify-between min-w-[77px] ml-4">
+											<div class="flex flex-col items-center flex-nowrap">
+												{#if post.closed}
+													<div class="badge badge-neutral whitespace-nowrap">구했어유</div>
+												{:else}
+													<div class="badge badge-primary my-1 whitespace-nowrap">구해유</div>
+													<div class="text-xs text-gray-500 whitespace-nowrap">
+														~ {post.deadLine}
+													</div>
+												{/if}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	</div>
+{/await}
+
+<style>
+	.menu details[open] > summary {
+		cursor: pointer;
+	}
+
+	.card:hover {
+		background-color: rgba(245, 245, 245, 0.5);
+	}
+
+	.badge-primary {
+		border-color: oklch(0.77 0.2 132.02);
+		background-color: oklch(0.77 0.2 132.02);
+		color: white;
+	}
+
+	.badge-neutral {
+		border-color: oklch(0.57 0.02 72.86);
+		background-color: oklch(0.57 0.02 72.86);
+		color: white;
+	}
+
+	.btn-primary {
+		border-color: oklch(0.77 0.2 132.02);
+		background-color: oklch(0.77 0.2 132.02);
+		color: white;
+	}
+
+	.select-bordered {
+		background-color: oklch(0.98 0 0);
+		border: 1px solid oklch(0.77 0.2 132.02);
+	}
+
+	.text-shadow {
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+	}
+</style>
