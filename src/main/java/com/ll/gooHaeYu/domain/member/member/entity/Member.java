@@ -1,6 +1,5 @@
 package com.ll.gooHaeYu.domain.member.member.entity;
 
-import com.ll.gooHaeYu.standard.base.RegionType;
 import com.ll.gooHaeYu.domain.member.member.dto.SocialProfileForm;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Level;
@@ -58,8 +57,7 @@ public class Member extends BaseTimeEntity {
 
     private String profileImageUrl;
 
-    @Enumerated(EnumType.STRING)
-    private RegionType regionType;
+    private int regionCode;
 
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {
