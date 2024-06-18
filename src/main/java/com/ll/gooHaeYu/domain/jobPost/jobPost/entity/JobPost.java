@@ -3,7 +3,6 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.entity;
 import com.ll.gooHaeYu.domain.category.entity.Category;
 import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.global.jpa.BaseTimeEntity;
-import com.ll.gooHaeYu.standard.base.RegionType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -56,19 +55,18 @@ public class JobPost extends BaseTimeEntity {
     @OneToOne(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private JobPostDetail jobPostDetail;
 
-    @Enumerated(EnumType.STRING)
-    private RegionType regionType;
+    private int regionCode;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    public void update(String title, LocalDate deadline, LocalDate jobStartDate, RegionType regionType) {
+    public void update(String title, LocalDate deadline, LocalDate jobStartDate, int regionCode) {
         if (title != null && !title.isBlank()) {
             this.title = title;
         }
-        if (regionType != null) {
-            this.regionType = regionType;
+        if (regionCode != 0) {
+            this.regionCode = regionCode;
         }
         this.deadline = deadline;
         this.jobStartDate = jobStartDate;

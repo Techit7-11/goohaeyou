@@ -26,14 +26,14 @@ public class Ut {
 
     public static class Region {
 
-        public static RegionType getRegionFromAddress(String roadAddress) {
+        public static int getRegionCodeFromAddress(String roadAddress) {
              if (roadAddress == null || roadAddress.isEmpty()) {
                  throw new CustomException(ErrorCode.INVALID_ADDRESS_FORMAT);
              }
 
              for (RegionType region : RegionType.values()) {
                  if (roadAddress.startsWith(region.getName())) {
-                     return region;
+                     return region.getCode();
                  }
              }
 
