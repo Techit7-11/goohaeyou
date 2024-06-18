@@ -17,4 +17,6 @@ public interface JobPostRepository extends JpaRepository<JobPost, Long>, JpaSpec
     List<JobPost> findByClosedFalseAndDeadlineBefore(LocalDate currentDate); //    LocalDate
 
     List<JobPost> findAllByCategoryOrderByCreatedAtDesc(Category category);
+
+    List<JobPost> findAllByCategory_CodeOrderByCreatedAtDesc(int categoryCode);
 }

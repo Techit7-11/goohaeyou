@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.POST_MODIFICATION;
@@ -320,8 +321,16 @@ public class JobPostService {
         Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY));
 
-        List<JobPost> jobPosts = jobPostRepository.findAllByCategoryOrderByCreatedAtDesc(category);
+        List<JobPost> jobPosts = null;
 
-        return JobPostDto.toDtoList(jobPosts);
+        if (category.getParent().getId() == 1) {   // 업무
+            jobPosts = jobPostRepository.findAllByCategoryOrderByCreatedAtDesc(category);
+        }
+
+        if (category.getParent().getId() == 2) {   // 지역
+            jobPosts =  jobPostRepository.findAllByCategory_CodeOrderByCreatedAtDesc(category.getCode());
+        }
+
+        return JobPostDto.toDtoList(Objects.requireNonNull(jobPosts));
     }
 }
