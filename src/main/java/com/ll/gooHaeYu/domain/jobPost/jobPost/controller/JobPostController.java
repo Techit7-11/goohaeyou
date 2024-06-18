@@ -193,4 +193,10 @@ public class JobPostController {
 
         return ApiResponse.noContent();
     }
+
+    @GetMapping("/by-category")
+    @Operation(summary = "카테고리의 글 목록 불러오기")
+    public ApiResponse<List<JobPostDto>> getPostsByCategory(@RequestParam("category_name") String categoryName) {
+        return ApiResponse.ok(jobPostService.getPostsByCategory(categoryName));
+    }
 }

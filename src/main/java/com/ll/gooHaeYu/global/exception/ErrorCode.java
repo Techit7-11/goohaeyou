@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
-    DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, "중복된 ID입니다."),
+    DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, "이미 존재하는 아이디 입니다."),
 
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "일치하는 회원정보가 없습니다."),
 
@@ -93,7 +93,13 @@ public enum ErrorCode {
 
     POST_IMAGES_NOT_FOUND(HttpStatus.NOT_FOUND, "공고에 등록된 이미지가 없습니다."),
 
-    NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "이미지가 존재하지 않습니다.");
+    NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "이미지가 존재하지 않습니다."),
+
+    INVALID_ADDRESS_FORMAT(HttpStatus.NOT_FOUND, "올바른 주소 형식이 아닙니다."),
+
+    INVALID_CATEGORY_FORMAT(HttpStatus.BAD_REQUEST, "잘못된 카테고리 형식입니다."),
+
+    NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리입니다.");
 
     private final HttpStatus status;
     private final String message;

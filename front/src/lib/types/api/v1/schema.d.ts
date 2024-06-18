@@ -119,6 +119,9 @@ export interface paths {
     /** 인증 메일 전송 */
     post: operations["sendAuthEmail"];
   };
+  "/admin/category/add": {
+    post: operations["addCategory"];
+  };
   "/api/members/verify/{code}": {
     /** 인증코드 확인 */
     patch: operations["verifyCode"];
@@ -225,6 +228,10 @@ export interface paths {
     /** 구인공고 검색 */
     get: operations["postSearchAndSort"];
   };
+  "/api/job-posts/by-category": {
+    /** 카테고리의 글 목록 불러오기 */
+    get: operations["getPostsByCategory"];
+  };
   "/api/employ/{postId}": {
     /** 공고 별 지원리스트 */
     get: operations["getList_1"];
@@ -232,6 +239,18 @@ export interface paths {
   "/api/chat": {
     /** 채팅방 목록 */
     get: operations["showRoomList"];
+  };
+  "/api/categories/top-level": {
+    /** 최상단 카테고리 목록 불러오기 */
+    get: operations["getTopCategories"];
+  };
+  "/api/categories/sub-categories": {
+    /** 하위 카테고리 목록 불러오기 */
+    get: operations["getSubCategories"];
+  };
+  "/api/categories/is-leaf": {
+    /** 가장 최하단의 카테고리인지 확인 */
+    get: operations["isLeafCategory"];
   };
   "/": {
     get: operations["showMain"];
@@ -419,6 +438,15 @@ export interface components {
       errorCode?: string;
       data: components["schemas"]["JoinForm"];
     };
+    Add: {
+      parentName?: string;
+      name: string;
+      /** Format: int32 */
+      code: number;
+      /** Format: int32 */
+      level: number;
+      enabled?: boolean;
+    };
     ApiResponseListCommentDto: {
       /** Format: int32 */
       statusCode?: number;
@@ -586,7 +614,7 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
-      employed: boolean;
+      employed?: boolean;
       /** Format: date */
       deadLine?: string;
       /** Format: date */
@@ -656,7 +684,7 @@ export interface components {
       /** Format: int64 */
       interestsCount: number;
       createdAt: string;
-      employed: boolean;
+      employed?: boolean;
       /** Format: date */
       deadLine?: string;
       /** Format: date */
@@ -772,6 +800,26 @@ export interface components {
       sender: string;
       text: string;
       createdAt?: string;
+    };
+    ApiResponseListCategoryDto: {
+      /** Format: int32 */
+      statusCode?: number;
+      message: string;
+      /** @enum {string} */
+      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+      errorCode?: string;
+      data: components["schemas"]["CategoryDto"][];
+    };
+    CategoryDto: {
+      /** Format: int64 */
+      id?: number;
+      name?: string;
+      /** Format: int32 */
+      code?: number;
+      /** Format: int32 */
+      level?: number;
+      /** Format: int64 */
+      parentId?: number;
     };
     ApiResponseApplicationDto: {
       /** Format: int32 */
@@ -1356,6 +1404,21 @@ export interface operations {
       };
     };
   };
+  addCategory: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Add"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseEmpty"];
+        };
+      };
+    };
+  };
   /** 인증코드 확인 */
   verifyCode: {
     parameters: {
@@ -1770,6 +1833,22 @@ export interface operations {
       };
     };
   };
+  /** 카테고리의 글 목록 불러오기 */
+  getPostsByCategory: {
+    parameters: {
+      query: {
+        category_name: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
+        };
+      };
+    };
+  };
   /** 공고 별 지원리스트 */
   getList_1: {
     parameters: {
@@ -1793,6 +1872,49 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["ApiResponseListRoomListDto"];
+        };
+      };
+    };
+  };
+  /** 최상단 카테고리 목록 불러오기 */
+  getTopCategories: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseListCategoryDto"];
+        };
+      };
+    };
+  };
+  /** 하위 카테고리 목록 불러오기 */
+  getSubCategories: {
+    parameters: {
+      query: {
+        category_name: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseListCategoryDto"];
+        };
+      };
+    };
+  };
+  /** 가장 최하단의 카테고리인지 확인 */
+  isLeafCategory: {
+    parameters: {
+      query: {
+        category_id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiResponseBoolean"];
         };
       };
     };

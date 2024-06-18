@@ -14,7 +14,8 @@
 		payBasis: '',
 		workTime: '',
 		workDays: '',
-		cost: ''
+		cost: '',
+		category: ''
 	};
 	let postId;
 
@@ -134,7 +135,30 @@
 						>
 					</div>
 				</div>
+				<div class="form-group">
+					<label class="label" for="jobStartDate">* 시작 일자</label>
+					<input
+						type="date"
+						id="jobStartDate"
+						class="input input-bordered w-full"
+						bind:value={jobPostData.jobStartDate}
+					/>
+				</div>
 				<div class="divider mt-10"></div>
+				<div class="form-group flex-1">
+					<label class="label" for="category">* 카테고리</label>
+					<select class="input input-bordered w-full" id="gender" bind:value={jobPostData.category}>
+						<option value="" disabled selected>- 선택하세요 -</option>
+						<option value="PERSONAL_ASSISTANCE">일상 도움</option>
+						<option value="CLEANING_AND_ORGANIZATION">정리 및 청소</option>
+						<option value="LOGISTICS_AND_DELIVERY">물류 및 배송</option>
+						<option value="TECHNICAL_TASKS">기술 작업</option>
+						<option value="STORE_MANAGEMENT">매장</option>
+						<option value="OFFICE_AND_EDUCATION">사무 및 교육</option>
+						<option value="EVENT_SUPPORT">행사</option>
+						<option value="OTHERS">(기타)</option>
+					</select>
+				</div>
 				<div class="form-group">
 					<label class="label" for="title">* 제목</label>
 					<input

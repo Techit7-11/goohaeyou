@@ -25,7 +25,6 @@ public class AbstractJobPostDto {
     private long interestsCount;
     @NotNull
     private String createdAt;
-    @NotNull
 
     private boolean employed;
     private boolean isClosed;

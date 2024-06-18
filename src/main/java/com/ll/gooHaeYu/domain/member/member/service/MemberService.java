@@ -5,6 +5,7 @@ import com.ll.gooHaeYu.domain.member.member.entity.Member;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Role;
 import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ public class MemberService {
                 .location(form.getLocation())
                 .birth(form.getBirth())
                 .role(role)
+                .regionCode(Ut.Region.getRegionCodeFromAddress(form.getLocation()))
                 .build());
         return form;
     }

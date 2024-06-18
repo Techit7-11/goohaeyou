@@ -1,6 +1,8 @@
 package com.ll.gooHaeYu.domain.jobPost.jobPost.service;
 
 import com.ll.gooHaeYu.domain.application.application.entity.Application;
+import com.ll.gooHaeYu.domain.category.entity.Category;
+import com.ll.gooHaeYu.domain.category.repository.CategoryRepository;
 import com.ll.gooHaeYu.domain.fileupload.service.S3ImageService;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.dto.JobPostDto;
@@ -13,6 +15,7 @@ import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.event.notification.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -28,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.ll.gooHaeYu.domain.notification.entity.type.CauseTypeCode.POST_MODIFICATION;
@@ -47,6 +51,7 @@ public class JobPostService {
     private final ApplicationEventPublisher publisher;
     private final WageRepository wageRepository;
     private final S3ImageService s3ImageService;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
@@ -56,6 +61,9 @@ public class JobPostService {
                 .location(form.getLocation())
                 .deadline(form.getDeadLine())
                 .jobStartDate(form.getJobStartDate())
+                .regionCode(Ut.Region.getRegionCodeFromAddress(form.getLocation()))
+                .category(categoryRepository.findById(form.getCategoryId())
+                        .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY)))
                 .build();
 
         JobPostDetail postDetail = JobPostDetail.builder()
@@ -103,7 +111,7 @@ public class JobPostService {
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
             throw new CustomException(NOT_ABLE);
 
-        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate());
+        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate(), Ut.Region.getRegionCodeFromAddress(form.getLocation()));
         postDetail.updatePostDetail(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
         postDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
@@ -305,7 +313,24 @@ public class JobPostService {
         if (!canEditPost(username, jobPost.getMember().getUsername())) {
             throw new CustomException(NOT_ABLE);
         }
-        jobPost.update();
+        jobPost.SetDeadlineNull();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
+    }
+
+    public List<JobPostDto> getPostsByCategory(String categoryName) {
+        Category category = categoryRepository.findByName(categoryName)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY));
+
+        List<JobPost> jobPosts = null;
+
+        if (category.getParent().getId() == 1) {   // 업무
+            jobPosts = jobPostRepository.findAllByCategoryOrderByCreatedAtDesc(category);
+        }
+
+        if (category.getParent().getId() == 2) {   // 지역
+            jobPosts =  jobPostRepository.findAllByCategory_CodeOrderByCreatedAtDesc(category.getCode());
+        }
+
+        return JobPostDto.toDtoList(Objects.requireNonNull(jobPosts));
     }
 }

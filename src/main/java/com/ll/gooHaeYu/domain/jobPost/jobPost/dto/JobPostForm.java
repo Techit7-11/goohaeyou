@@ -3,7 +3,10 @@ package com.ll.gooHaeYu.domain.jobPost.jobPost.dto;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.PayBasis;
 import com.ll.gooHaeYu.domain.jobPost.jobPost.entity.type.WagePaymentMethod;
 import com.ll.gooHaeYu.domain.member.member.entity.type.Gender;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +21,9 @@ public class JobPostForm {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Register {
+        @NotNull(message = "카테고리 설정은 필수입니다.")
+        private Long categoryId;
+
         @NotBlank(message = "제목은 필수 입력 항목입니다.")
         private String title;
 
@@ -57,6 +63,7 @@ public class JobPostForm {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Modify {
+
         @NotBlank(message = "제목은 필수 입력 항목입니다.")
         private String title;
 

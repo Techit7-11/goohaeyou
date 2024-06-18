@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import rq from '$lib/rq/rq.svelte';
 
-	// 회원 정보 데이터
 	let newJobPostData = {
 		title: '',
 		body: '',
@@ -16,6 +15,9 @@
 		cost: '',
 		payBasis: ''
 	};
+
+	let subCategories = []; // 하위 카테고리 목록을 저장
+	let selectedCategoryId = ''; // 선택한 카테고리의 ID를 저장
 
 	onMount(async () => {
 		try {
@@ -42,6 +44,13 @@
 			rq.msgError('인증 과정에서 오류가 발생했습니다.');
 			rq.goTo('/member/login');
 		}
+
+		const params = new URLSearchParams({
+			category_name: '업무'
+		}).toString();
+
+		const response = await rq.apiEndPoints().GET(`/api/categories/sub-categories?${params}`);
+		subCategories = response.data.data;
 	});
 
 	// 글 작성 버튼을 클릭하면 실행될 함수
@@ -67,6 +76,8 @@
 			rq.msgError('급여 지급 기준을 선택해주세요.');
 			return;
 		}
+
+		newJobPostData.categoryId = selectedCategoryId; // 선택된 카테고리 ID 설정
 
 		const response = await rq.apiEndPoints().POST('/api/job-posts', { body: newJobPostData });
 
@@ -158,6 +169,17 @@
 					</div>
 				</div>
 				<div class="divider mt-10"></div>
+
+				<div class="form-group">
+					<label class="label" for="category">* 카테고리 선택</label>
+					<select class="input input-bordered w-full" id="category" bind:value={selectedCategoryId}>
+						<option value="" disabled selected>- 선택하세요 -</option>
+						{#each subCategories as category}
+							<option value={category.id}>{category.name}</option>
+						{/each}
+					</select>
+				</div>
+
 				<div class="form-group">
 					<label class="label" for="title">* 제목</label>
 					<input

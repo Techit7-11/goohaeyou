@@ -54,5 +54,8 @@
 		"stompjs": "^2.3.3",
 		"sweetalert2": "^11.10.5",
 		"ws": "^8.16.0"
-	}
+	},
+	"optionalDependencies": {
+            "@rollup/rollup-darwin-arm64": "^4.18.0"
+    }
 }

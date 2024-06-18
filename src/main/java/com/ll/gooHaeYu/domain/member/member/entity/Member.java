@@ -57,6 +57,8 @@ public class Member extends BaseTimeEntity {
 
     private String profileImageUrl;
 
+    private int regionCode;
+
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {
             this.location = location;

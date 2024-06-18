@@ -6,10 +6,6 @@
 	import Pagination from '$lib/components/Pagination.svelte';
 	let posts: components['schemas']['JobPostDto'][] = $state([]);
 
-	function JobPostWritePage() {
-		rq.goTo('/job-post/write');
-	}
-
 	let sortBy_: string = 'createdAt'; // 초기 정렬 기준
 	let sortOrder_: string = 'desc'; // 초기 정렬 순서
 
@@ -167,12 +163,6 @@
 							</div>
 						</a>
 					{/each}
-				</div>
-				<div class="max-w-4xl mx-auto my-5">
-					<button class="w-full btn btn-primary my-5" on:click={JobPostWritePage}>
-						글 작성하기
-					</button>
-					<Pagination page={itemPage} />
 				</div>
 			</div>
 		</div>

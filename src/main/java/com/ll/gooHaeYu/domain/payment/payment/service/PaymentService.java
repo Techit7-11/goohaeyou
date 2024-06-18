@@ -13,7 +13,7 @@ import com.ll.gooHaeYu.domain.payment.payment.repository.PaymentRepository;
 import com.ll.gooHaeYu.global.config.TossPaymentsConfig;
 import com.ll.gooHaeYu.global.exception.CustomException;
 import com.ll.gooHaeYu.standard.base.util.TossPaymentUtil;
-import com.ll.gooHaeYu.standard.dto.retryOnOptimisticLock.RetryOnOptimisticLock;
+import com.ll.gooHaeYu.standard.retryOnOptimisticLock.RetryOnOptimisticLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;

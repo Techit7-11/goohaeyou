@@ -44,7 +44,7 @@ public class ImageController {
         return ApiResponse.ok(profileImageService.getMemberImageByPostId(postId));
     }
 
-    @DeleteMapping(value = "api/members/image")
+    @DeleteMapping(value = "/api/members/image")
     @Operation(summary = "프로필 이미지 삭제")
     public ApiResponse<Empty> deleteMemberImage(@AuthenticationPrincipal MemberDetails memberDetail) {
         profileImageService.deleteProfileImage(memberDetail.getUsername());
@@ -52,7 +52,7 @@ public class ImageController {
         return ApiResponse.noContent();
     }
 
-    @PostMapping(value = "api/job-post/images")
+    @PostMapping(value = "/api/job-post/images")
     @Operation(summary = "공고에 이미지 등록")
     public ApiResponse<Empty> registerPostImages(@AuthenticationPrincipal MemberDetails memberDetails,
                                                 Long postDetailId,
@@ -62,7 +62,7 @@ public class ImageController {
         return ApiResponse.created();
     }
 
-    @GetMapping(value = "api/job-posts/{postId}/images")
+    @GetMapping(value = "/api/job-posts/{postId}/images")
     @Operation(summary = "공고에 등록된 이미지 불러오기")
     public ApiResponse<List<String>> getPostImages(@PathVariable(name = "postId") Long postId) {
         List<String> jobPostImages = jobPostImageService.getJobPostImages(postId);
@@ -70,7 +70,7 @@ public class ImageController {
         return ApiResponse.ok(jobPostImages);
     }
 
-    @PatchMapping(value = "api/job-post/{postId}/main-image")
+    @PatchMapping(value = "/api/job-post/{postId}/main-image")
     @Operation(summary = "공고의 대표 이미지 변경")
     public ApiResponse<Empty> changeMainImage(@AuthenticationPrincipal MemberDetails memberDetails,
                                               @PathVariable(name = "postId") Long postId,
@@ -80,7 +80,7 @@ public class ImageController {
         return ApiResponse.noContent();
     }
 
-    @DeleteMapping(value = "api/job-post/{postId}/images")
+    @DeleteMapping(value = "/api/job-post/{postId}/images")
     @Operation(summary = "공고에 등록된 이미지 삭제")
     public ApiResponse<Empty> deletePostImages(@AuthenticationPrincipal MemberDetails memberDetails,
                                                @PathVariable(name = "postId") Long postId) {
