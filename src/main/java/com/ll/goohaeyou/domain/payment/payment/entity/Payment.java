@@ -17,7 +17,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @Getter
 public class Payment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

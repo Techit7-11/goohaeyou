@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @Getter
 @Table(name = "application")
 public class Application extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

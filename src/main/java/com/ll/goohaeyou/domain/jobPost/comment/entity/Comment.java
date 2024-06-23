@@ -13,7 +13,6 @@ import lombok.*;
 @Getter
 @Table(name = "comment")
 public class Comment extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

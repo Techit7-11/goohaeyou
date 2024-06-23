@@ -19,7 +19,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @Table(name = "cash_log")
 public class CashLog extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

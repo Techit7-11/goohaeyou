@@ -19,7 +19,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @ToString(callSuper = true)
 public class Room {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
