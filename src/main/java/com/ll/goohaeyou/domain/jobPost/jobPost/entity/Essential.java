@@ -13,7 +13,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @Table(name = "essential")
 public class Essential {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

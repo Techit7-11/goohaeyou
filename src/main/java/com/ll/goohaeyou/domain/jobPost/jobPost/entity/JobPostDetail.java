@@ -20,7 +20,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Table(name = "job_post_detail",uniqueConstraints = {@UniqueConstraint(columnNames = {"jobPost_id","author"})})
 public class JobPostDetail extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

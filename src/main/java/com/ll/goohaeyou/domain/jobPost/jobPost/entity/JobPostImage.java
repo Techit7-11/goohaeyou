@@ -15,7 +15,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @Table(name = "job_post_image")
 public class JobPostImage {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

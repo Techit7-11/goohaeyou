@@ -17,7 +17,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Table(name = "wage")
 public class Wage {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
