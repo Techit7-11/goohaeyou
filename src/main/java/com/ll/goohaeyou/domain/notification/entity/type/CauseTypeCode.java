@@ -1,0 +1,15 @@
+package com.ll.goohaeyou.domain.notification.entity.type;
+
+public enum CauseTypeCode {
+    POST_MODIFICATION,
+    POST_DELETED,
+    POST_INTERESTED,
+    POST_DEADLINE,
+    COMMENT_CREATED,
+    APPLICATION_CREATED,
+    APPLICATION_MODIFICATION,
+    APPLICATION_APPROVED,
+    APPLICATION_UNAPPROVE,
+    CHATROOM_CREATED,
+    CALCULATE_PAYMENT
+}
