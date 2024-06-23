@@ -91,5 +91,4 @@
 
 ## 📝 ERD
 
-
-![erd_0610](https://github.com/Techit7-11/GooHaeYou/assets/76129297/2239c19a-2748-47b7-b57d-61eea0a2d476)
+![goohaeyou](https://github.com/Techit7-11/goohaeyou/assets/76129297/d54779d1-da84-4e91-b7be-d39969c5da18)
