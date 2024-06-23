@@ -17,7 +17,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Table(name = "job_post")
 public class JobPost extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
