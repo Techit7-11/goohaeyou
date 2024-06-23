@@ -15,6 +15,7 @@ import com.ll.gooHaeYu.domain.member.member.repository.MemberRepository;
 import com.ll.gooHaeYu.domain.member.member.service.MemberService;
 import com.ll.gooHaeYu.global.event.notification.*;
 import com.ll.gooHaeYu.global.exception.CustomException;
+import com.ll.gooHaeYu.standard.base.RegionType;
 import com.ll.gooHaeYu.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -328,7 +329,8 @@ public class JobPostService {
         }
 
         if (category.getParent().getId() == 2) {   // 지역
-            jobPosts =  jobPostRepository.findAllByCategory_CodeOrderByCreatedAtDesc(category.getCode());
+            int regionCode = RegionType.getCodeByName(categoryName);
+            jobPosts =  jobPostRepository.findAllByRegionCodeOrderByCreatedAtDesc(regionCode);
         }
 
         return JobPostDto.toDtoList(Objects.requireNonNull(jobPosts));

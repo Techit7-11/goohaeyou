@@ -18,5 +18,5 @@ public interface JobPostRepository extends JpaRepository<JobPost, Long>, JpaSpec
 
     List<JobPost> findAllByCategoryOrderByCreatedAtDesc(Category category);
 
-    List<JobPost> findAllByCategory_CodeOrderByCreatedAtDesc(int categoryCode);
+    List<JobPost> findAllByRegionCodeOrderByCreatedAtDesc(int regionCode);
 }
