@@ -9,7 +9,5 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    List<Message> findByRoomIdAndIdAfter(long roomId, long afterId);
-
     List<Message> findByRoomIdAndCreatedAtAfter(Long roomId, LocalDateTime createdAt);
 }
