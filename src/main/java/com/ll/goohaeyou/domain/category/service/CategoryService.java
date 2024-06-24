@@ -2,7 +2,7 @@ package com.ll.goohaeyou.domain.category.service;
 
 import com.ll.goohaeyou.domain.category.dto.CategoryDto;
 import com.ll.goohaeyou.domain.category.entity.Category;
-import com.ll.goohaeyou.domain.category.repository.CategoryRepository;
+import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
 import com.ll.goohaeyou.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

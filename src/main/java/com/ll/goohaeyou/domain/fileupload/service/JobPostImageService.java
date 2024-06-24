@@ -2,8 +2,8 @@ package com.ll.goohaeyou.domain.fileupload.service;
 
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostImage;
-import com.ll.goohaeyou.domain.jobPost.jobPost.repository.JobPostDetailRepository;
-import com.ll.goohaeyou.domain.jobPost.jobPost.repository.JobPostImageRepository;
+import com.ll.goohaeyou.domain.jobPost.jobPost.entity.repository.JobPostDetailRepository;
+import com.ll.goohaeyou.domain.jobPost.jobPost.entity.repository.JobPostImageRepository;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;

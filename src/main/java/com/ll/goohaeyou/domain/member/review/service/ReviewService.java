@@ -1,13 +1,13 @@
 package com.ll.goohaeyou.domain.member.review.service;
 
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
-import com.ll.goohaeyou.domain.jobPost.jobPost.repository.JobPostRepository;
+import com.ll.goohaeyou.domain.jobPost.jobPost.entity.repository.JobPostRepository;
 import com.ll.goohaeyou.domain.mapper.ReviewMapper;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
-import com.ll.goohaeyou.domain.member.member.repository.MemberRepository;
+import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
 import com.ll.goohaeyou.domain.member.review.dto.ApplicantReviewDto;
 import com.ll.goohaeyou.domain.member.review.entity.Review;
-import com.ll.goohaeyou.domain.member.review.repository.ReviewRepository;
+import com.ll.goohaeyou.domain.member.review.entity.repository.ReviewRepository;
 import com.ll.goohaeyou.global.exception.CustomException;
 import com.ll.goohaeyou.global.exception.ErrorCode;
 import org.springframework.transaction.annotation.Transactional;

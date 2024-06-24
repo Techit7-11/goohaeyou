@@ -4,7 +4,7 @@ import com.ll.goohaeyou.domain.application.application.entity.Application;
 import com.ll.goohaeyou.domain.payment.cashLog.dto.CashLogDto;
 import com.ll.goohaeyou.domain.payment.cashLog.entity.CashLog;
 import com.ll.goohaeyou.domain.payment.cashLog.entity.type.EventType;
-import com.ll.goohaeyou.domain.payment.cashLog.repository.CashLogRepository;
+import com.ll.goohaeyou.domain.payment.cashLog.entity.repository.CashLogRepository;
 import com.ll.goohaeyou.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
 import com.ll.goohaeyou.domain.payment.payment.entity.type.PayStatus;

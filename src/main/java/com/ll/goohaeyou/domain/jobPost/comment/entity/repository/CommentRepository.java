@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.domain.jobPost.comment.repository;
+package com.ll.goohaeyou.domain.jobPost.comment.entity.repository;
 
 import com.ll.goohaeyou.domain.jobPost.comment.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;

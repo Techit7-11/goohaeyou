@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.domain.member.review.repository;
+package com.ll.goohaeyou.domain.member.review.entity.repository;
 
 import com.ll.goohaeyou.domain.member.review.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;

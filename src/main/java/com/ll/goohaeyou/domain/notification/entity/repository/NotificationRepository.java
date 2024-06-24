@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.domain.notification.repository;
+package com.ll.goohaeyou.domain.notification.entity.repository;
 
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.notification.entity.Notification;

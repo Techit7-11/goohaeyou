@@ -2,9 +2,9 @@ package com.ll.goohaeyou.domain.calculate.calculate.itemProcessor;
 
 import com.ll.goohaeyou.domain.application.application.entity.Application;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.Wage;
-import com.ll.goohaeyou.domain.jobPost.jobPost.repository.WageRepository;
+import com.ll.goohaeyou.domain.jobPost.jobPost.entity.repository.WageRepository;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
-import com.ll.goohaeyou.domain.member.member.repository.MemberRepository;
+import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
 import com.ll.goohaeyou.domain.payment.cashLog.entity.CashLog;
 import com.ll.goohaeyou.domain.payment.cashLog.service.CashLogService;
 import com.ll.goohaeyou.global.event.cashLog.CashLogEvent;

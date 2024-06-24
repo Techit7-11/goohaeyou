@@ -4,7 +4,7 @@ import com.ll.goohaeyou.domain.application.application.dto.ApplicationDto;
 import com.ll.goohaeyou.domain.application.application.dto.ApplicationForm;
 import com.ll.goohaeyou.domain.application.application.entity.Application;
 import com.ll.goohaeyou.domain.application.application.entity.type.WageStatus;
-import com.ll.goohaeyou.domain.application.application.repository.ApplicationRepository;
+import com.ll.goohaeyou.domain.application.application.entity.repository.ApplicationRepository;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.domain.member.member.entity.Member;

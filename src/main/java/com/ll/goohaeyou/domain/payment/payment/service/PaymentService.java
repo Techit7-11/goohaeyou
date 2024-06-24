@@ -9,7 +9,7 @@ import com.ll.goohaeyou.domain.payment.payment.dto.request.PaymentResDto;
 import com.ll.goohaeyou.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
 import com.ll.goohaeyou.domain.payment.payment.entity.type.PayStatus;
-import com.ll.goohaeyou.domain.payment.payment.repository.PaymentRepository;
+import com.ll.goohaeyou.domain.payment.payment.entity.repository.PaymentRepository;
 import com.ll.goohaeyou.global.config.TossPaymentsConfig;
 import com.ll.goohaeyou.global.exception.CustomException;
 import com.ll.goohaeyou.standard.base.util.TossPaymentUtil;

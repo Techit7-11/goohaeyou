@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.domain.jobPost.jobPost.repository;
+package com.ll.goohaeyou.domain.jobPost.jobPost.entity.repository;
 
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.Wage;

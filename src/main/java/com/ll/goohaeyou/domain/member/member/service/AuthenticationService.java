@@ -3,7 +3,7 @@ package com.ll.goohaeyou.domain.member.member.service;
 import com.ll.goohaeyou.domain.member.member.dto.MemberDto;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.entity.RefreshToken;
-import com.ll.goohaeyou.domain.member.member.repository.RefreshTokenRepository;
+import com.ll.goohaeyou.domain.member.member.entity.repository.RefreshTokenRepository;
 import com.ll.goohaeyou.global.config.AppConfig;
 import com.ll.goohaeyou.global.security.JwtTokenProvider;
 import com.ll.goohaeyou.standard.base.util.CookieUtil;

@@ -3,7 +3,7 @@ package com.ll.goohaeyou.domain.chat.message.service;
 import com.ll.goohaeyou.domain.chat.message.dto.MessageDto;
 import com.ll.goohaeyou.domain.chat.message.dto.MessageForm;
 import com.ll.goohaeyou.domain.chat.message.entity.Message;
-import com.ll.goohaeyou.domain.chat.message.repository.MessageRepository;
+import com.ll.goohaeyou.domain.chat.message.entity.repository.MessageRepository;
 import com.ll.goohaeyou.domain.chat.room.entity.Room;
 import com.ll.goohaeyou.domain.chat.room.service.RoomService;
 import com.ll.goohaeyou.global.exception.CustomException;

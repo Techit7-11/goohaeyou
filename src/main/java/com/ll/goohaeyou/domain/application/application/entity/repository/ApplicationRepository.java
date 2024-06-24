@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.domain.application.application.repository;
+package com.ll.goohaeyou.domain.application.application.entity.repository;
 
 import com.ll.goohaeyou.domain.application.application.entity.Application;
 import org.springframework.data.jpa.repository.JpaRepository;

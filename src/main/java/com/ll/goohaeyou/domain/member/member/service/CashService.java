@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.domain.member.member.service;
 
 import com.ll.goohaeyou.domain.member.member.entity.Member;
-import com.ll.goohaeyou.domain.member.member.repository.MemberRepository;
+import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
 import com.ll.goohaeyou.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

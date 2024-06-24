@@ -5,7 +5,7 @@ import com.ll.goohaeyou.domain.chat.message.entity.Message;
 import com.ll.goohaeyou.domain.chat.room.dto.RoomDto;
 import com.ll.goohaeyou.domain.chat.room.dto.RoomListDto;
 import com.ll.goohaeyou.domain.chat.room.entity.Room;
-import com.ll.goohaeyou.domain.chat.room.repository.RoomRepository;
+import com.ll.goohaeyou.domain.chat.room.entity.repository.RoomRepository;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.global.exception.CustomException;

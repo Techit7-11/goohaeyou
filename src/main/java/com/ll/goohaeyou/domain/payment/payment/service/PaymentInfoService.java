@@ -2,7 +2,7 @@ package com.ll.goohaeyou.domain.payment.payment.service;
 
 import com.ll.goohaeyou.domain.payment.payment.dto.PaymentDto;
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
-import com.ll.goohaeyou.domain.payment.payment.repository.PaymentRepository;
+import com.ll.goohaeyou.domain.payment.payment.entity.repository.PaymentRepository;
 import com.ll.goohaeyou.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

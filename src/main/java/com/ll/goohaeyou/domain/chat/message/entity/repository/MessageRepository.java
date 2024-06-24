@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.domain.chat.message.repository;
+package com.ll.goohaeyou.domain.chat.message.entity.repository;
 
 import com.ll.goohaeyou.domain.chat.message.entity.Message;
 import org.springframework.data.jpa.repository.JpaRepository;

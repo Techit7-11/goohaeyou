@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.domain.jobPost.jobPost.repository;
+package com.ll.goohaeyou.domain.jobPost.jobPost.entity.repository;
 
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostImage;
 import org.springframework.data.jpa.repository.JpaRepository;

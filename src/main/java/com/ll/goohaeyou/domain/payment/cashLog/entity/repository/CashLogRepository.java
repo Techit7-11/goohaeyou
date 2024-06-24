@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.domain.payment.cashLog.repository;
+package com.ll.goohaeyou.domain.payment.cashLog.entity.repository;
 
 import com.ll.goohaeyou.domain.payment.cashLog.entity.CashLog;
 import org.springframework.data.jpa.repository.JpaRepository;

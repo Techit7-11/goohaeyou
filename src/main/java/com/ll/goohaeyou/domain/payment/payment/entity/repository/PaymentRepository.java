@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.domain.payment.payment.repository;
+package com.ll.goohaeyou.domain.payment.payment.entity.repository;
 
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
