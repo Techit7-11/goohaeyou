@@ -16,7 +16,6 @@ import java.util.List;
 @RequestMapping("/api/member/review")
 @RestController
 public class ReviewController {
-
     private final ReviewService reviewService;
 
     @PostMapping("/{jobPostingId}")

@@ -15,7 +15,6 @@ import static com.ll.goohaeyou.global.exception.ErrorCode.INVALID_LOGIN_REQUEST;
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class OAuthController {
-
     @GetMapping("/socialLogin/{providerTypeCode}")
     @Operation(summary = "소셜 로그인")
     public String socialLogin(String redirectUrl, @PathVariable String providerTypeCode) {

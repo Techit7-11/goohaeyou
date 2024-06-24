@@ -5,7 +5,6 @@ import com.ll.goohaeyou.domain.jobPost.comment.dto.CommentForm;
 import com.ll.goohaeyou.domain.jobPost.comment.entity.Comment;
 import com.ll.goohaeyou.domain.jobPost.comment.repository.CommentRepository;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostDetail;
-import com.ll.goohaeyou.domain.jobPost.jobPost.repository.JobPostRepository;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.entity.type.Role;
@@ -29,9 +28,6 @@ public class CommentService {
     private final JobPostService jobPostService;
     private final MemberService memberService;
     private final CommentRepository commentRepository;
-
-    private final JobPostRepository jobPostRepository;
-
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
 

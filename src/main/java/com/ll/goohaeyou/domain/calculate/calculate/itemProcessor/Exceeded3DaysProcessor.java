@@ -8,7 +8,6 @@ import static com.ll.goohaeyou.domain.application.application.entity.type.WageSt
 
 @Component
 public class Exceeded3DaysProcessor implements ItemProcessor<Application, Application> {
-
     @Override
     public Application process(Application application) throws Exception {
         System.out.println(application.getWageStatus());

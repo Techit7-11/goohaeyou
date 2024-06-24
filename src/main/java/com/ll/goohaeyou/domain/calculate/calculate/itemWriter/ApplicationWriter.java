@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ApplicationWriter implements ItemWriter<Application> {
-
     @Autowired
     private EntityManager entityManager;
 

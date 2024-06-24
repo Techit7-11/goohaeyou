@@ -19,7 +19,6 @@ public class WorkCompletionService {
     private final ApplicationService applicationService;
     private final JobPostService jobPostService;
 
-    // 수동 알바완료 처리
     @Transactional
     public void completeJobManually(String username, Long applicationId) {
         Application application = getApplicationWithAuthorizationCheck(username, applicationId);

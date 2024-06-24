@@ -17,7 +17,6 @@ import java.time.Duration;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     public static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(1);

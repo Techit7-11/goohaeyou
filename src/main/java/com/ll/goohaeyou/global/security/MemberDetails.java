@@ -15,7 +15,6 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 public class MemberDetails implements OAuth2User, UserDetails {
-
     private final Member member;
 
     @Override

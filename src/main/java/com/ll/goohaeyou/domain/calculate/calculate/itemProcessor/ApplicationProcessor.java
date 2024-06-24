@@ -20,7 +20,6 @@ import static com.ll.goohaeyou.global.exception.ErrorCode.AMOUNT_MISMATCH;
 @Component
 @RequiredArgsConstructor
 public class ApplicationProcessor implements ItemProcessor<Application, Application> {
-
     private final WageRepository wageRepository;
     private final MemberRepository memberRepository;
     private final CashLogService cashLogService;

@@ -11,7 +11,6 @@ import java.sql.Statement;
 @Service
 @RequiredArgsConstructor
 public class ReadinessService {
-
     private final DataSource dataSource;
 
     public boolean checkApplicationReadiness() {

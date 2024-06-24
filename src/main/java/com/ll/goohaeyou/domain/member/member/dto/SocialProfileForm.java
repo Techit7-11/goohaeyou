@@ -20,7 +20,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SocialProfileForm {   // JorinForm에서 username, password 제외
-
     @NotBlank(message = "이름은 필수 항목입니다.")
     @Pattern(regexp = "^[가-힣a-zA-Z]+$", message = "이름은 한글 또는 영문만 가능합니다.")
     private String name;

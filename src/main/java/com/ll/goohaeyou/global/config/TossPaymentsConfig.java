@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Getter
 public class TossPaymentsConfig {
-
     @Value("${tossPayments.clientKey}")
     private String tossClientKey;
 

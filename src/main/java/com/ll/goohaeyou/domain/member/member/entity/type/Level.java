@@ -1,7 +1,6 @@
 package com.ll.goohaeyou.domain.member.member.entity.type;
 
 public enum Level {
-
     LV1(10),
     LV2(30),
     LV3(60),

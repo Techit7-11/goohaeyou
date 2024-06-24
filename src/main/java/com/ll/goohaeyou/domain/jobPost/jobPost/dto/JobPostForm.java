@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 public class JobPostForm {
-
     @Builder
     @Getter
     @NoArgsConstructor
@@ -56,6 +55,9 @@ public class JobPostForm {
         private int cost;
 
         private WagePaymentMethod wagePaymentMethod;
+
+        public Register(String title, String body, String location, int minAge, Gender gender, LocalDate deadLine, LocalDate jobStartDate, int workTime, int workDays, PayBasis payBasis, int cost, WagePaymentMethod wagePaymentMethod) {
+        }
     }
 
     @Builder

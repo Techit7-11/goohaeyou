@@ -10,13 +10,9 @@ import java.util.List;
 @Builder
 public class CategoryDto {
     private Long id;
-
     private String name;
-
     private int code;
-
     private int level;
-
     private Long parentId;
 
     public static CategoryDto from(Category category) {

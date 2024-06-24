@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/job-posts")
 public class InterestController {
-
     private final JobPostService jobPostService;
 
     @PostMapping("/{id}/interest")

@@ -29,7 +29,6 @@ import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EmployService {
-
     private final JobPostService jobPostService;
     private final ApplicationEventPublisher publisher;
 

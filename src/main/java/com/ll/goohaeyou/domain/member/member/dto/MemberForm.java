@@ -8,7 +8,6 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 public class MemberForm {
-
     @Getter
     @Setter
     public static class Modify {

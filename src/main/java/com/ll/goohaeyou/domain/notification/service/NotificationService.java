@@ -21,9 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode.*;
 import static com.ll.goohaeyou.domain.notification.entity.type.ResultTypeCode.*;
@@ -40,8 +38,6 @@ public class NotificationService {
     private final JobPostService jobPostService;
     private final FCMService fcmService;
     private final MemberRepository memberRepository;
-
-    private final Map<Long, String> tokenMap = new HashMap<>();
 
     @Transactional
     public void notifyApplicantsAboutPost(ChangeOfPostEvent event) {

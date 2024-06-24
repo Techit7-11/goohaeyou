@@ -75,14 +75,6 @@ public class MemberService {
         member.update(password, form.getGender(), form.getLocation(), form.getBirth());
     }
 
-    public String findUsernameById(Long id) {
-        Member member = memberRepository.findById(id)
-                .orElseThrow(() ->
-                        new CustomException(MEMBER_NOT_FOUND));
-
-        return member.getUsername();
-    }
-
     public Member findById(Long userId) {
         return memberRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));

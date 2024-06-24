@@ -13,27 +13,17 @@ import lombok.Setter;
 public class PaymentResDto {
     @NotNull
     private PayStatus payStatus;
-
     @NotNull
     private Long amount;
-
     @NotBlank
     private String orderId;
-
     @NotBlank
     private String orderName;
-
     @NotBlank
     private String payer;
-
     private String successUrl;
-
     private String failUrl;
-
     private String failReason;
-
     private boolean canceled;
-
     private String cancelReason;
-
 }

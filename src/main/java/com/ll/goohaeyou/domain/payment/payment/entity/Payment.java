@@ -26,21 +26,14 @@ public class Payment {
     private Member member;
 
     private String paymentKey;
-
     private Long totalAmount;
-
     private String payStatus;
-
     private String orderId;
-
     private String orderName;
 
     private boolean paid;
-
     private boolean canceled;
-
     private String cancelReason;
-
     private Long applicationId;
 
     @Version

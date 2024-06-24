@@ -13,7 +13,6 @@ import java.io.IOException;
 @Configuration
 @ComponentScan(basePackages = "com.ll")
 public class AppConfig {
-
     @Getter
     private static String siteFrontUrl;
 

@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Builder
 public class RoomDto {
-
     private String username1;
     private String username2;
     private List<Message> messages;

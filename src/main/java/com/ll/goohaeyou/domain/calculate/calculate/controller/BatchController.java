@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class BatchController {
-
     private final Job exceeded3DaysJob;
     private final JobLauncher jobLauncher;
 

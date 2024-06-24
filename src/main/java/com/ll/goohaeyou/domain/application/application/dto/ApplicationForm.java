@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 public class ApplicationForm {
-
     @Getter
     @Setter
     @Builder

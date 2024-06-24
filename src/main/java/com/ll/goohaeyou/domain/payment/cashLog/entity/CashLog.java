@@ -41,5 +41,4 @@ public class CashLog extends BaseTimeEntity {
     private Member member;
 
     private Long applicationId;
-
 }

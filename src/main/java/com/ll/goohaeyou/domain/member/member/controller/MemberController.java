@@ -29,7 +29,6 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
 public class MemberController {
-
     private final MemberService memberService;
     private final AuthenticationService authenticationService;
     private final NotificationService notificationService;

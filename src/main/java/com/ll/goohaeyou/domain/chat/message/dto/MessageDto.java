@@ -11,7 +11,6 @@ import java.util.List;
 @Getter
 @Builder
 public class MessageDto {
-
     private Long id;
     @NotNull
     private String sender;

@@ -12,7 +12,6 @@ import java.util.Map;
 
 @Component
 public class ApplicationReader {
-
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 

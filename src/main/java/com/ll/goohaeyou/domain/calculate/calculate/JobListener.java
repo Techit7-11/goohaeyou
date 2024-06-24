@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JobListener implements JobExecutionListener {
-
     private long startTime;
     private long endTime;
 

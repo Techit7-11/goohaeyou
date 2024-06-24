@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEvent;
 public class CreateChatRoomEvent extends ApplicationEvent {
     private final Long memberId1,memberId2;
     private final String postTitle;
+
     public CreateChatRoomEvent(Object source, Long memberId1, Long memberId2, String postTitle) {
         super(source);
         this.memberId1 = memberId1;

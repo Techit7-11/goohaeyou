@@ -13,7 +13,6 @@ import java.util.List;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResponse<Empty> handleValidException(MethodArgumentNotValidException e) {
 

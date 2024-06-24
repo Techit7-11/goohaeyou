@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JobScheduler {
-
     private final JobLauncher jobLauncher;
     private final Job calculateJob;
     private final Job exceeded3DaysJob;

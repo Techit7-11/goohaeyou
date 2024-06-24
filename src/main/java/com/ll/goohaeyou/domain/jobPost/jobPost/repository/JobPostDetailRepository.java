@@ -13,6 +13,4 @@ public interface JobPostDetailRepository extends JpaRepository<JobPostDetail, Lo
     Optional<JobPostDetail> findByJobPostAndAuthor(JobPost post, String author);
 
     List<JobPostDetail> findByInterestsMemberId(Long memberId);
-
-//    Optional<JobPostDetail> findByApplication(Application application);
 }

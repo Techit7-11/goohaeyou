@@ -15,7 +15,6 @@ import java.util.List;
 @Builder
 @Getter
 public class ApplicationDto {
-
     @NotNull
     private Long id;
     @NotBlank

@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 public class FCMService {
-
     public void send(String token, String postTitle, CauseTypeCode causeTypeCode) {
         Message message = Message.builder()
                 .setToken(token)

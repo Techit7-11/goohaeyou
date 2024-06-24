@@ -27,7 +27,6 @@ public class JobPostRepositoryImpl implements JobPostRepositoryCustom {
     public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int[] min_Ages, List<String> locations, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        //kw 조건 리스트에 담기
         List<BooleanExpression> kwList = new ArrayList<>();
 
         if (kwTypes.contains("title")) {
