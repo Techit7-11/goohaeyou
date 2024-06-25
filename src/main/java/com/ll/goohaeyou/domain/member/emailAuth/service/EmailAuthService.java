@@ -2,7 +2,7 @@ package com.ll.goohaeyou.domain.member.emailAuth.service;
 
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.global.standard.base.util.RedisUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -47,7 +47,7 @@ public class EmailAuthService {
         Member member = memberService.getMember(username);
 
         if (member.isAuthenticated()) {
-            throw new CustomException(EMAIL_ALREADY_AUTHENTICATED);
+            throw new GoohaeyouException(EMAIL_ALREADY_AUTHENTICATED);
         }
     }
 
@@ -83,7 +83,7 @@ public class EmailAuthService {
         String authCode = redisUtil.getData(username);
 
         if (authCode == null) {
-            throw new CustomException(INITIATE_EMAIL_REQUEST);
+            throw new GoohaeyouException(INITIATE_EMAIL_REQUEST);
         }
 
         verifyCode(inputCode, authCode);
@@ -96,7 +96,7 @@ public class EmailAuthService {
 
     private void verifyCode(String inputCode, String authCode) {
         if (!inputCode.equals(authCode)) {
-            throw new CustomException(INVALID_AUTH_CODE);
+            throw new GoohaeyouException(INVALID_AUTH_CODE);
         }
     }
 }

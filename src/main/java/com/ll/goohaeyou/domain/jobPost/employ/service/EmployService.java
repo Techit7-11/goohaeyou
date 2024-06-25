@@ -10,7 +10,7 @@ import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;
 import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class EmployService {
 
         WageStatus updateWageStatus = determineWageStatus(postDetail.getWage().getWagePaymentMethod());
 
-        if (!jobPost.isClosed()) throw new CustomException(NOT_POSSIBLE_TO_APPROVE_IT_YET);
+        if (!jobPost.isClosed()) throw new GoohaeyouException(NOT_POSSIBLE_TO_APPROVE_IT_YET);
         checkPermissions(username,postDetail.getAuthor());
 
         List<Application> applicationList = new ArrayList<>();
@@ -80,14 +80,14 @@ public class EmployService {
     }
 
     public void checkPermissions (String username, String author){
-        if (!username.equals(author)) throw new CustomException(NOT_ABLE);
+        if (!username.equals(author)) throw new GoohaeyouException(NOT_ABLE);
     }
 
     private WageStatus determineWageStatus(WagePaymentMethod wagePaymentMethod) {
         return switch (wagePaymentMethod) {
             case SERVICE_PAYMENT -> WageStatus.PAYMENT_PENDING;
             case INDIVIDUAL_PAYMENT -> WageStatus.APPLICATION_APPROVED;
-            default -> throw new CustomException(INVALID_WAGE_PAYMENT_METHOD);
+            default -> throw new GoohaeyouException(INVALID_WAGE_PAYMENT_METHOD);
         };
     }
 

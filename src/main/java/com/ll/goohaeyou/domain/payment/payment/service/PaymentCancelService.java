@@ -6,7 +6,7 @@ import com.ll.goohaeyou.domain.payment.cashLog.service.CashLogService;
 import com.ll.goohaeyou.domain.payment.payment.dto.cancel.PaymentCancelResDto;
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
 import com.ll.goohaeyou.domain.payment.payment.entity.repository.PaymentRepository;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
@@ -29,7 +29,7 @@ public class PaymentCancelService {
     @Transactional
     public PaymentCancelResDto tossPaymentCancel(String username, String paymentKey, String cancelReason) {
         Payment payment = paymentRepository.findByPaymentKeyAndMemberUsername(paymentKey, username)
-                .orElseThrow(() -> new CustomException(PAYMENT_NOT_FOUND));
+                .orElseThrow(() -> new GoohaeyouException(PAYMENT_NOT_FOUND));
 
         checkPaymentCancelable(username, payment);
 
@@ -52,13 +52,13 @@ public class PaymentCancelService {
 
     private void checkPaymentCancelable(String username, Payment payment) {
         if (payment.isCanceled()) {
-            throw new CustomException(ALREADY_CANCELED);
+            throw new GoohaeyouException(ALREADY_CANCELED);
         }
         if (!payment.getMember().getUsername().equals(username)) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
         if (!payment.isPaid()) {
-            throw new CustomException(BAD_REQUEST);
+            throw new GoohaeyouException(BAD_REQUEST);
         }
     }
 

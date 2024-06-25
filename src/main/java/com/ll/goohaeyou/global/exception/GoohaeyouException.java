@@ -3,10 +3,10 @@ package com.ll.goohaeyou.global.exception;
 import lombok.Getter;
 
 @Getter
-public class CustomException extends RuntimeException {
+public class GoohaeyouException extends RuntimeException {
     private final ErrorCode errorCode;
 
-    public CustomException(ErrorCode e) {
+    public GoohaeyouException(ErrorCode e) {
         super(e.getMessage());
         this.errorCode = e;
     }

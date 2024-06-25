@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.global.standard.retryOnOptimisticLock;
 
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -40,6 +40,6 @@ public class OptimisticLockingRetryAspect {
         }
         // 모든 시도가 실패했을 때의 예외 처리
         log.error("Optimistic locking failure: Max attempts exceeded.");
-        throw new CustomException(PAYMENT_REQUEST_CONFLICT);
+        throw new GoohaeyouException(PAYMENT_REQUEST_CONFLICT);
     }
 }

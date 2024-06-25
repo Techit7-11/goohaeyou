@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.domain.payment.payment.entity.type;
 
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -21,14 +21,14 @@ public enum PayStatus {
         return Arrays.stream(PayStatus.values())
                 .filter(type -> type.getDescription().equals(description))
                 .findFirst()
-                .orElseThrow(() -> new CustomException(NO_ENUM_CONSTANT_FOUND));
+                .orElseThrow(() -> new GoohaeyouException(NO_ENUM_CONSTANT_FOUND));
     }
 
     public static PayStatus findByMethod(String method) {
         return switch (method) {
             case "카드" -> CARD;
             case "간편결제" -> EASY_PAY;
-            default -> throw new CustomException(NO_ENUM_CONSTANT_FOUND);
+            default -> throw new GoohaeyouException(NO_ENUM_CONSTANT_FOUND);
         };
     }
 }

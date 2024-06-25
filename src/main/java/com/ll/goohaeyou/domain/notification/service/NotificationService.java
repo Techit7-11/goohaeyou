@@ -10,11 +10,11 @@ import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.domain.notification.dto.NotificationDto;
 import com.ll.goohaeyou.domain.notification.entity.Notification;
+import com.ll.goohaeyou.domain.notification.entity.repository.NotificationRepository;
 import com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode;
 import com.ll.goohaeyou.domain.notification.entity.type.ResultTypeCode;
-import com.ll.goohaeyou.domain.notification.entity.repository.NotificationRepository;
 import com.ll.goohaeyou.global.event.notification.*;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -168,7 +168,7 @@ public class NotificationService {
 
     private Notification findByIdAndValidate (Long notificationId) {
         return notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new CustomException(NOTIFICATION_NOT_EXIST));
+                .orElseThrow(() -> new GoohaeyouException(NOTIFICATION_NOT_EXIST));
     }
 
     public Boolean unreadNotification(String username) {

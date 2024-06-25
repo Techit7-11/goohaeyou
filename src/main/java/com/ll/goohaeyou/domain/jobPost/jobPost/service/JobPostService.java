@@ -14,7 +14,7 @@ import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
 import com.ll.goohaeyou.domain.member.member.entity.type.Role;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.global.event.notification.*;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
 import com.ll.goohaeyou.global.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class JobPostService {
                 .jobStartDate(form.getJobStartDate())
                 .regionCode(Ut.Region.getRegionCodeFromAddress(form.getLocation()))
                 .category(categoryRepository.findById(form.getCategoryId())
-                        .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY)))
+                        .orElseThrow(() -> new GoohaeyouException(NOT_FOUND_CATEGORY)))
                 .build();
 
         JobPostDetail postDetail = JobPostDetail.builder()
@@ -110,7 +110,7 @@ public class JobPostService {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
         JobPost jobPost = postDetail.getJobPost();
         if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
 
         postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate(), Ut.Region.getRegionCodeFromAddress(form.getLocation()));
         postDetail.updatePostDetail(form.getBody());
@@ -149,13 +149,13 @@ public class JobPostService {
             }
             jobPostRepository.deleteById(postId);
         } else {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
     }
 
     private Member findUserByUserNameValidate(String username) {
         return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new GoohaeyouException(MEMBER_NOT_FOUND));
     }
 
 
@@ -165,13 +165,13 @@ public class JobPostService {
 
     public JobPost findByIdAndValidate(Long id) {
         return jobPostRepository.findById(id)
-                .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
+                .orElseThrow(() -> new GoohaeyouException(POST_NOT_EXIST));
     }
 
     public JobPostDetail findByJobPostAndNameAndValidate(Long postId) {
         JobPost post = findByIdAndValidate(postId);
         return jobPostdetailRepository.findByJobPostAndAuthor(post,post.getMember().getUsername())
-                .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
+                .orElseThrow(() -> new GoohaeyouException(POST_NOT_EXIST));
     }
 
     @Transactional
@@ -179,7 +179,7 @@ public class JobPostService {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
-        if (hasInterest(postDetail,member)) throw new CustomException(NOT_ABLE);
+        if (hasInterest(postDetail,member)) throw new GoohaeyouException(NOT_ABLE);
 
         postDetail.getInterests().add(Interest.builder()
                 .jobPostDetail(postDetail)
@@ -197,7 +197,7 @@ public class JobPostService {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
-        if (!hasInterest(postDetail,member)) throw new CustomException(NOT_ABLE);
+        if (!hasInterest(postDetail,member)) throw new GoohaeyouException(NOT_ABLE);
 
         postDetail.getInterests().removeIf(interest -> interest.getMember().equals(member));
         postDetail.getJobPost().decreaseInterestCount();
@@ -239,7 +239,7 @@ public class JobPostService {
     @Transactional
     public void increaseViewCount(Long jobPostId) {
         JobPost jobPost = jobPostRepository.findById(jobPostId)
-                .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
+                .orElseThrow(() -> new GoohaeyouException(POST_NOT_EXIST));
         jobPost.increaseViewCount();
     }
 
@@ -311,7 +311,7 @@ public class JobPostService {
     public void postEarlyClosing(String username, Long id) {
         JobPost jobPost = findByIdAndValidate(id);
         if (!canEditPost(username, jobPost.getMember().getUsername())) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
         jobPost.SetDeadlineNull();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
@@ -319,7 +319,7 @@ public class JobPostService {
 
     public List<JobPostDto> getPostsByCategory(String categoryName) {
         Category category = categoryRepository.findByName(categoryName)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_CATEGORY));
+                .orElseThrow(() -> new GoohaeyouException(NOT_FOUND_CATEGORY));
 
         List<JobPost> jobPosts = null;
 

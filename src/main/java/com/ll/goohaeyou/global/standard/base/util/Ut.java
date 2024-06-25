@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.global.standard.base.util;
 
 import com.ll.goohaeyou.global.config.AppConfig;
-import com.ll.goohaeyou.global.exception.CustomException;
 import com.ll.goohaeyou.global.exception.ErrorCode;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
 import lombok.SneakyThrows;
 
@@ -28,7 +28,7 @@ public class Ut {
 
         public static int getRegionCodeFromAddress(String roadAddress) {
              if (roadAddress == null || roadAddress.isEmpty()) {
-                 throw new CustomException(ErrorCode.INVALID_ADDRESS_FORMAT);
+                 throw new GoohaeyouException(ErrorCode.INVALID_ADDRESS_FORMAT);
              }
 
              for (RegionType region : RegionType.values()) {
@@ -37,7 +37,7 @@ public class Ut {
                  }
              }
 
-            throw new CustomException(ErrorCode.INVALID_ADDRESS_FORMAT);
+            throw new GoohaeyouException(ErrorCode.INVALID_ADDRESS_FORMAT);
         }
     }
 

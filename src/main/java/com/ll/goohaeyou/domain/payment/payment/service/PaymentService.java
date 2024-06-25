@@ -8,10 +8,10 @@ import com.ll.goohaeyou.domain.payment.payment.dto.request.PaymentReqDto;
 import com.ll.goohaeyou.domain.payment.payment.dto.request.PaymentResDto;
 import com.ll.goohaeyou.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
-import com.ll.goohaeyou.domain.payment.payment.entity.type.PayStatus;
 import com.ll.goohaeyou.domain.payment.payment.entity.repository.PaymentRepository;
+import com.ll.goohaeyou.domain.payment.payment.entity.type.PayStatus;
 import com.ll.goohaeyou.global.config.TossPaymentsConfig;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import com.ll.goohaeyou.global.standard.retryOnOptimisticLock.RetryOnOptimisticLock;
 import lombok.RequiredArgsConstructor;
@@ -74,10 +74,10 @@ public class PaymentService {
 
     public Payment verifyPayment(String orderId, Long amount) {
         Payment payment = paymentRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new GoohaeyouException(MEMBER_NOT_FOUND));
 
         if (!payment.getTotalAmount().equals(amount)) {
-            throw new CustomException(PAYMENT_AMOUNT_MISMATCH);
+            throw new GoohaeyouException(PAYMENT_AMOUNT_MISMATCH);
         }
 
         return payment;
@@ -135,6 +135,6 @@ public class PaymentService {
 
     private Payment findPaymentByOrderId(String orderId) {
         return paymentRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new CustomException(PAYMENT_NOT_FOUND));
+                .orElseThrow(() -> new GoohaeyouException(PAYMENT_NOT_FOUND));
     }
 }

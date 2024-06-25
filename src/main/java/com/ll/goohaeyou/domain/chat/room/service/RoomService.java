@@ -8,7 +8,7 @@ import com.ll.goohaeyou.domain.chat.room.entity.Room;
 import com.ll.goohaeyou.domain.chat.room.entity.repository.RoomRepository;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
+import static com.ll.goohaeyou.global.exception.ErrorCode.CHATROOM_NOT_EXITS;
+import static com.ll.goohaeyou.global.exception.ErrorCode.NOT_ABLE;
 
 @Service
 @RequiredArgsConstructor
@@ -65,19 +66,19 @@ public class RoomService {
     public RoomDto findById(Long roomId, String username) {
         Room room = findByIdAndValidate(roomId);
         if (!username.equals(room.getUsername1())&&!username.equals(room.getUsername2())) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
         if (username.equals(room.getUsername1()) && room.isUser1HasExit()) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         } else if (username.equals(room.getUsername2()) && room.isUser2HasExit()) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
         return RoomDto.from(room);
     }
 
     public Room findByIdAndValidate(Long roomId) {
         return roomRepository.findById(roomId)
-                .orElseThrow(() -> new CustomException(CHATROOM_NOT_EXITS));
+                .orElseThrow(() -> new GoohaeyouException(CHATROOM_NOT_EXITS));
     }
 
     public List<RoomListDto> getRoomList(String username) {
@@ -99,7 +100,7 @@ public class RoomService {
     public Room findByUsername1AndUsername2(String username1, String username2) {
         return roomRepository.findByUsername1AndUsername2(username1, username2)
                 .orElseGet(() -> roomRepository.findByUsername1AndUsername2(username2, username1)
-                        .orElseThrow(() -> new CustomException(CHATROOM_NOT_EXITS)));
+                        .orElseThrow(() -> new GoohaeyouException(CHATROOM_NOT_EXITS)));
     }
 
     public boolean checkTheChatroom(String username1, String username2) {

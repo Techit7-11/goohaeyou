@@ -30,11 +30,11 @@ public class GlobalExceptionHandler {
         return ApiResponse.validationException(customHttpStatus);
     }
 
-    @ExceptionHandler(CustomException.class)
-    public ApiResponse<Empty> handleCustomException(CustomException customException) {
+    @ExceptionHandler(GoohaeyouException.class)
+    public ApiResponse<Empty> handleCustomException(GoohaeyouException goohaeyouException) {
 
-        log.error(customException.getErrorCode() + ": " + customException.getMessage());
+        log.error(goohaeyouException.getErrorCode() + ": " + goohaeyouException.getMessage());
 
-        return ApiResponse.customException(customException.getErrorCode());
+        return ApiResponse.customException(goohaeyouException.getErrorCode());
     }
 }

@@ -5,12 +5,12 @@ import com.ll.goohaeyou.domain.application.application.entity.type.WageStatus;
 import com.ll.goohaeyou.domain.application.application.service.ApplicationService;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ll.goohaeyou.domain.application.application.entity.type.WageStatus.*;
+import static com.ll.goohaeyou.domain.application.application.entity.type.WageStatus.APPLICATION_APPROVED;
 import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
@@ -37,7 +37,7 @@ public class WorkCompletionService {
 
     private void checkAuthorization(String username, JobPost jobPost) {
         if (!jobPost.getJobPostDetail().getAuthor().equals(username)) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
     }
 
@@ -50,7 +50,7 @@ public class WorkCompletionService {
                 application.updateWageStatus(WageStatus.WAGE_PAID);
                 application.setReceive(true);
             }
-            default -> throw new CustomException(COMPLETION_NOT_POSSIBLE);
+            default -> throw new GoohaeyouException(COMPLETION_NOT_POSSIBLE);
         }
     }
 
@@ -60,7 +60,7 @@ public class WorkCompletionService {
         Application application = getApplicationWithAuthorizationCheck(username, applicationId);
 
         if (!application.getWageStatus().equals(APPLICATION_APPROVED)) {
-            throw new CustomException(BAD_REQUEST);
+            throw new GoohaeyouException(BAD_REQUEST);
         }
 
         updateApplicationByCancel(application);

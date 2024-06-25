@@ -9,7 +9,7 @@ import com.ll.goohaeyou.domain.payment.cashLog.entity.CashLog;
 import com.ll.goohaeyou.domain.payment.cashLog.service.CashLogService;
 import com.ll.goohaeyou.global.event.cashLog.CashLogEvent;
 import com.ll.goohaeyou.global.event.notification.CalculateNotificationEvent;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -44,7 +44,7 @@ public class ApplicationProcessor implements ItemProcessor<Application, Applicat
             application.setReceive(true);
             memberRepository.save(member);
             publisher.publishEvent(new CalculateNotificationEvent(this, application));
-        }else throw new CustomException(AMOUNT_MISMATCH);
+        } else throw new GoohaeyouException(AMOUNT_MISMATCH);
         return application;
     }
 }

@@ -3,15 +3,15 @@ package com.ll.goohaeyou.domain.application.application.service;
 import com.ll.goohaeyou.domain.application.application.dto.ApplicationDto;
 import com.ll.goohaeyou.domain.application.application.dto.ApplicationForm;
 import com.ll.goohaeyou.domain.application.application.entity.Application;
-import com.ll.goohaeyou.domain.application.application.entity.type.WageStatus;
 import com.ll.goohaeyou.domain.application.application.entity.repository.ApplicationRepository;
+import com.ll.goohaeyou.domain.application.application.entity.type.WageStatus;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.global.event.notification.ApplicationCreateAndChangedEvent;
-import com.ll.goohaeyou.global.exception.CustomException;
 import com.ll.goohaeyou.global.exception.ErrorCode;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -66,7 +66,7 @@ public class ApplicationService {
 
     public Application findByIdAndValidate(Long id) {
         return applicationRepository.findById(id)
-                .orElseThrow(() -> new CustomException(POST_NOT_EXIST));
+                .orElseThrow(() -> new GoohaeyouException(POST_NOT_EXIST));
     }
 
     @Transactional
@@ -74,7 +74,7 @@ public class ApplicationService {
         Application application = findByIdAndValidate(id);
 
         if (!isApplicationAuthor(username, application.getMember().getUsername()))
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
 
         application.updateBody(form.getBody());
         publisher.publishEvent(new ApplicationCreateAndChangedEvent(this, application, APPLICATION_MODIFICATION));
@@ -96,10 +96,10 @@ public class ApplicationService {
 
     public boolean canDelete(String username, Application application) {
         if (application.getApprove()) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
         if (!isApplicationAuthor(username, application.getMember().getUsername()))
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
 
         return true;
     }
@@ -113,16 +113,16 @@ public class ApplicationService {
 
     private void canWrite(JobPostDetail postDetail, Member member) {
         if (postDetail.getJobPost().isClosed()){ // 공고 지원 마감
-            throw new CustomException(ErrorCode.CLOSED_POST);
+            throw new GoohaeyouException(ErrorCode.CLOSED_POST);
         }
 
         if (postDetail.getAuthor().equals(member.getUsername())) { // 자신의 공고에 지원 불가능
-            throw new CustomException(ErrorCode.NOT_ELIGIBLE_FOR_OWN_JOB);
+            throw new GoohaeyouException(ErrorCode.NOT_ELIGIBLE_FOR_OWN_JOB);
         }
 
         for (Application application : postDetail.getApplications()) { // 지원서 중복 불가능
             if (application.getMember().equals(member)) {
-                throw new CustomException(ErrorCode.DUPLICATE_SUBMISSION);
+                throw new GoohaeyouException(ErrorCode.DUPLICATE_SUBMISSION);
             }
         }
     }
