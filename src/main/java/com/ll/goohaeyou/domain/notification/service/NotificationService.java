@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.domain.notification.service;
 
-import com.ll.goohaeyou.domain.application.application.entity.Application;
+import com.ll.goohaeyou.domain.application.entity.Application;
 import com.ll.goohaeyou.domain.chat.room.service.RoomService;
 import com.ll.goohaeyou.domain.jobPost.comment.entity.Comment;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;

@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.domain.member.member.controller;
 
-import com.ll.goohaeyou.domain.application.application.dto.ApplicationDto;
-import com.ll.goohaeyou.domain.application.application.service.ApplicationService;
+import com.ll.goohaeyou.domain.application.dto.ApplicationDto;
+import com.ll.goohaeyou.domain.application.service.ApplicationService;
 import com.ll.goohaeyou.domain.jobPost.comment.dto.CommentDto;
 import com.ll.goohaeyou.domain.jobPost.comment.service.CommentService;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDto;

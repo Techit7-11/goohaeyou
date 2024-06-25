@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.global.event.notification;
 
-import com.ll.goohaeyou.domain.application.application.entity.Application;
+import com.ll.goohaeyou.domain.application.entity.Application;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode;
 import com.ll.goohaeyou.domain.notification.entity.type.ResultTypeCode;

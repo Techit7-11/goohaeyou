@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.domain.payment.payment.service;
 
-import com.ll.goohaeyou.domain.application.application.service.ApplicationService;
+import com.ll.goohaeyou.domain.application.service.ApplicationService;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.domain.payment.cashLog.service.CashLogService;
 import com.ll.goohaeyou.domain.payment.payment.dto.fail.PaymentFailDto;

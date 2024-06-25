@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.domain.jobPost.employ.service;
 
-import com.ll.goohaeyou.domain.application.application.entity.Application;
-import com.ll.goohaeyou.domain.application.application.entity.type.WageStatus;
-import com.ll.goohaeyou.domain.application.application.service.ApplicationService;
+import com.ll.goohaeyou.domain.application.entity.Application;
+import com.ll.goohaeyou.domain.application.entity.type.WageStatus;
+import com.ll.goohaeyou.domain.application.service.ApplicationService;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ll.goohaeyou.domain.application.application.entity.type.WageStatus.APPLICATION_APPROVED;
+import static com.ll.goohaeyou.domain.application.entity.type.WageStatus.APPLICATION_APPROVED;
 import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service

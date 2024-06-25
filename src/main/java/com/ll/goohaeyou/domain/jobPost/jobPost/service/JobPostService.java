@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.domain.jobPost.jobPost.service;
 
-import com.ll.goohaeyou.domain.application.application.entity.Application;
+import com.ll.goohaeyou.domain.application.entity.Application;
 import com.ll.goohaeyou.domain.category.entity.Category;
 import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
 import com.ll.goohaeyou.domain.fileupload.service.S3ImageService;

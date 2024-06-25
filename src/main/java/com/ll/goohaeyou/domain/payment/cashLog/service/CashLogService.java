@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.domain.payment.cashLog.service;
 
-import com.ll.goohaeyou.domain.application.application.entity.Application;
+import com.ll.goohaeyou.domain.application.entity.Application;
 import com.ll.goohaeyou.domain.payment.cashLog.dto.CashLogDto;
 import com.ll.goohaeyou.domain.payment.cashLog.entity.CashLog;
 import com.ll.goohaeyou.domain.payment.cashLog.entity.repository.CashLogRepository;

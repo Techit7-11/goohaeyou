@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.domain.jobPost.employ.service;
 
-import com.ll.goohaeyou.domain.application.application.dto.ApplicationDto;
-import com.ll.goohaeyou.domain.application.application.entity.Application;
-import com.ll.goohaeyou.domain.application.application.entity.type.WageStatus;
+import com.ll.goohaeyou.domain.application.dto.ApplicationDto;
+import com.ll.goohaeyou.domain.application.entity.Application;
+import com.ll.goohaeyou.domain.application.entity.type.WageStatus;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.type.WagePaymentMethod;

@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.domain.jobPost.jobPost.entity;
 
-import com.ll.goohaeyou.domain.application.application.entity.Application;
+import com.ll.goohaeyou.domain.application.entity.Application;
 import com.ll.goohaeyou.domain.jobPost.comment.entity.Comment;
 import com.ll.goohaeyou.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;

@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.domain.payment.payment.service;
 
-import com.ll.goohaeyou.domain.application.application.entity.Application;
-import com.ll.goohaeyou.domain.application.application.service.ApplicationService;
+import com.ll.goohaeyou.domain.application.entity.Application;
+import com.ll.goohaeyou.domain.application.service.ApplicationService;
 import com.ll.goohaeyou.domain.payment.cashLog.service.CashLogService;
 import com.ll.goohaeyou.domain.payment.payment.dto.cancel.PaymentCancelResDto;
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import static com.ll.goohaeyou.domain.application.application.entity.type.WageStatus.PAYMENT_CANCELLED;
+import static com.ll.goohaeyou.domain.application.entity.type.WageStatus.PAYMENT_CANCELLED;
 import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
