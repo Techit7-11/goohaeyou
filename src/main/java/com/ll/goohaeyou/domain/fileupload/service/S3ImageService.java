@@ -9,7 +9,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostImage;
 import com.ll.goohaeyou.global.exception.CustomException;
-import com.ll.goohaeyou.standard.base.util.MIMETypeUtil;
+import com.ll.goohaeyou.global.standard.base.util.MIMETypeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

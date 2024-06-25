@@ -11,7 +11,7 @@ import com.ll.goohaeyou.domain.member.member.dto.MemberForm;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.security.MemberDetails;
-import com.ll.goohaeyou.standard.base.Empty;
+import com.ll.goohaeyou.global.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

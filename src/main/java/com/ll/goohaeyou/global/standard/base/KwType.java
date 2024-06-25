@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.standard.base;
+package com.ll.goohaeyou.global.standard.base;
 
 import lombok.AllArgsConstructor;
 

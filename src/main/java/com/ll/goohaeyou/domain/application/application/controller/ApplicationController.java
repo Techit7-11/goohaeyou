@@ -5,7 +5,7 @@ import com.ll.goohaeyou.domain.application.application.dto.ApplicationForm;
 import com.ll.goohaeyou.domain.application.application.service.ApplicationService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.security.MemberDetails;
-import com.ll.goohaeyou.standard.base.Empty;
+import com.ll.goohaeyou.global.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

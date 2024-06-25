@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.standard.base.util;
+package com.ll.goohaeyou.global.standard.base.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;

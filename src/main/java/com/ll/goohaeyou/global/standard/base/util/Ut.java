@@ -1,9 +1,9 @@
-package com.ll.goohaeyou.standard.base.util;
+package com.ll.goohaeyou.global.standard.base.util;
 
 import com.ll.goohaeyou.global.config.AppConfig;
 import com.ll.goohaeyou.global.exception.CustomException;
 import com.ll.goohaeyou.global.exception.ErrorCode;
-import com.ll.goohaeyou.standard.base.RegionType;
+import com.ll.goohaeyou.global.standard.base.RegionType;
 import lombok.SneakyThrows;
 
 public class Ut {

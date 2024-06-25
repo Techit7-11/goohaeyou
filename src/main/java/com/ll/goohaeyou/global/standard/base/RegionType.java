@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.standard.base;
+package com.ll.goohaeyou.global.standard.base;
 
 import com.ll.goohaeyou.global.exception.CustomException;
 import lombok.Getter;

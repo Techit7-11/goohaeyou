@@ -3,7 +3,7 @@ package com.ll.goohaeyou.domain.member.emailAuth.service;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.global.exception.CustomException;
-import com.ll.goohaeyou.standard.base.util.RedisUtil;
+import com.ll.goohaeyou.global.standard.base.util.RedisUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

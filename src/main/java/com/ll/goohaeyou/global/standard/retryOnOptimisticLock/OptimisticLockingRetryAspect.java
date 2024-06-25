@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.standard.retryOnOptimisticLock;
+package com.ll.goohaeyou.global.standard.retryOnOptimisticLock;
 
 import com.ll.goohaeyou.global.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;

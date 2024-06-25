@@ -7,7 +7,7 @@ import com.ll.goohaeyou.domain.payment.payment.dto.cancel.PaymentCancelResDto;
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
 import com.ll.goohaeyou.domain.payment.payment.entity.repository.PaymentRepository;
 import com.ll.goohaeyou.global.exception.CustomException;
-import com.ll.goohaeyou.standard.base.util.TossPaymentUtil;
+import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;

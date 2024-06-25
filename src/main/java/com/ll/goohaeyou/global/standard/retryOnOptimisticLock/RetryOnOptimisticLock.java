@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.standard.retryOnOptimisticLock;
+package com.ll.goohaeyou.global.standard.retryOnOptimisticLock;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

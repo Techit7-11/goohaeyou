@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.global.security.OAuth;
 
-import com.ll.goohaeyou.standard.base.util.CookieUtil;
+import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
