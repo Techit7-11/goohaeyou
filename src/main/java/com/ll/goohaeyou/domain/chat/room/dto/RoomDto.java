@@ -14,7 +14,7 @@ public class RoomDto {
     private String username2;
     private List<Message> messages;
 
-    public static RoomDto fromEntity(Room room) {
+    public static RoomDto from(Room room) {
         return RoomDto.builder()
                 .username1(room.getUsername1())
                 .username2(room.getUsername2())
@@ -22,9 +22,9 @@ public class RoomDto {
                 .build();
     }
 
-    public static List<RoomDto> toDtoList(List<Room> rooms) {
+    public static List<RoomDto> convertToDtoList(List<Room> rooms) {
         return rooms.stream()
-                .map(RoomDto::fromEntity)
+                .map(RoomDto::from)
                 .toList();
     }
 }

@@ -4,7 +4,7 @@ import com.ll.goohaeyou.domain.category.dto.CategoryForm;
 import com.ll.goohaeyou.domain.category.service.CategoryAdminService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.security.MemberDetails;
-import com.ll.goohaeyou.standard.base.Empty;
+import com.ll.goohaeyou.global.standard.base.Empty;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

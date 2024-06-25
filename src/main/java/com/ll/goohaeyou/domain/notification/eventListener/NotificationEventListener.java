@@ -21,7 +21,7 @@ public class NotificationEventListener {
     public void postCorrectionEventListen(ChangeOfPostEvent event) {
         if (event.getResultTypeCode() == NOTICE) {
             notificationService.notifyApplicantsAboutPost(event);
-        }else {
+        } else {
             notificationService.deleteApplicationNotification(event);
         }
     }

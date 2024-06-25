@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.global.initData;
 
 import com.ll.goohaeyou.global.config.AppConfig;
-import com.ll.goohaeyou.standard.base.util.Ut;
+import com.ll.goohaeyou.global.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;

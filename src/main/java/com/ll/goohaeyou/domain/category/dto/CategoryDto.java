@@ -25,7 +25,7 @@ public class CategoryDto {
                 .build();
     }
 
-    public static List<CategoryDto> toList(List<Category> categories) {
+    public static List<CategoryDto> convertToDtoList(List<Category> categories) {
         return categories.stream()
                 .map(CategoryDto::from)
                 .toList();

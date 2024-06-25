@@ -8,9 +8,9 @@ import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.config.AppConfig;
 import com.ll.goohaeyou.global.security.MemberDetails;
-import com.ll.goohaeyou.standard.base.Empty;
-import com.ll.goohaeyou.standard.base.util.CookieUtil;
-import com.ll.goohaeyou.standard.dto.PageDto;
+import com.ll.goohaeyou.global.standard.base.Empty;
+import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
+import com.ll.goohaeyou.global.standard.dto.PageDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
@@ -146,7 +146,7 @@ public class JobPostController {
 
         Page<JobPost> itemPage = jobPostService.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable);
 
-        Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
+        Page<JobPostDto> _itemPage = JobPostDto.convertToDtoPage(itemPage);
 
         return ApiResponse.ok(
                 new GetPostsResponseBody(
@@ -176,7 +176,7 @@ public class JobPostController {
         Pageable pageable = PageRequest.of(page - 1, AppConfig.getBasePageSize(), Sort.by(sorts));
 
         Page<JobPost> itemPage = jobPostService.findBySort(pageable);
-        Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
+        Page<JobPostDto> _itemPage = JobPostDto.convertToDtoPage(itemPage);
 
         return ApiResponse.ok(
                 new GetPostsResponseBody(

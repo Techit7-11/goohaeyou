@@ -6,7 +6,7 @@ import com.ll.goohaeyou.domain.chat.message.entity.Message;
 import com.ll.goohaeyou.domain.chat.message.service.MessageService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.security.MemberDetails;
-import com.ll.goohaeyou.standard.base.Empty;
+import com.ll.goohaeyou.global.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class MessageController {
                                         @RequestBody MessageForm.Register form) {
         Message message = messageService.write(memberDetails.getUsername(), roomId, form);
 
-        messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.fromEntity(message));
+        messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.from(message));
 
         return ApiResponse.noContent();
     }

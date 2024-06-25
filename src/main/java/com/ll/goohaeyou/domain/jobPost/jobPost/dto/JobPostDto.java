@@ -17,7 +17,7 @@ import java.util.Optional;
 public class JobPostDto extends AbstractJobPostDto{
     private String mainImageUrl = null;
 
-    public static JobPostDto fromEntity(JobPost jobPost) {
+    public static JobPostDto from(JobPost jobPost) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
 
         Optional<String> mainImageUrl = jobPost.getJobPostDetail().getJobPostImages().stream()
@@ -41,16 +41,16 @@ public class JobPostDto extends AbstractJobPostDto{
                 .build();
     }
 
-    public static List<JobPostDto> toDtoList(List<JobPost> jobPosts) {
+    public static List<JobPostDto> convertToDtoList(List<JobPost> jobPosts) {
         return jobPosts.stream()
-                .map(JobPostDto::fromEntity)
+                .map(JobPostDto::from)
                 .toList();
     }
 
 
-    public static Page<JobPostDto> toDtoListPage(Page<JobPost> jobPosts) {
+    public static Page<JobPostDto> convertToDtoPage(Page<JobPost> jobPosts) {
         List<JobPostDto> jobPostDtos = jobPosts
-                .map(JobPostDto::fromEntity)
+                .map(JobPostDto::from)
                 .toList();
 
         return new PageImpl<>(jobPostDtos, PageRequest.of(jobPosts.getNumber(), jobPosts.getSize()), jobPosts.getTotalElements());

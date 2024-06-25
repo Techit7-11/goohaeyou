@@ -3,7 +3,7 @@ package com.ll.goohaeyou.domain.fileupload.service;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class ProfileImageService {
         Member member = memberService.getMember(username);
 
         if (profileImageFile == null ||  profileImageFile.isEmpty()) {
-            throw new CustomException(FILE_IS_EMPTY);
+            throw new GoohaeyouException(FILE_IS_EMPTY);
         }
 
         if (member.getProfileImageUrl() != null) {
@@ -52,7 +52,7 @@ public class ProfileImageService {
         Member member = memberService.getMember(username);
 
         if (member.getProfileImageUrl() == null) {
-            throw new CustomException(PROFILE_IMAGE_NOT_FOUND);
+            throw new GoohaeyouException(PROFILE_IMAGE_NOT_FOUND);
         }
 
         s3ImageService.deleteImageFromS3(member.getProfileImageUrl());

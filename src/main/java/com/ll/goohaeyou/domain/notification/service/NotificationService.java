@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.domain.notification.service;
 
-import com.ll.goohaeyou.domain.application.application.entity.Application;
+import com.ll.goohaeyou.domain.application.entity.Application;
 import com.ll.goohaeyou.domain.chat.room.service.RoomService;
 import com.ll.goohaeyou.domain.jobPost.comment.entity.Comment;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
@@ -10,11 +10,11 @@ import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.domain.notification.dto.NotificationDto;
 import com.ll.goohaeyou.domain.notification.entity.Notification;
+import com.ll.goohaeyou.domain.notification.entity.repository.NotificationRepository;
 import com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode;
 import com.ll.goohaeyou.domain.notification.entity.type.ResultTypeCode;
-import com.ll.goohaeyou.domain.notification.entity.repository.NotificationRepository;
 import com.ll.goohaeyou.global.event.notification.*;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -142,7 +142,7 @@ public class NotificationService {
     public List<NotificationDto> getList(String username) {
         Member member = memberService.getMember(username);
         List<Notification> notificationList = notificationRepository.findByToMemberOrderByCreateAtDesc(member);
-        return NotificationDto.toDtoList(notificationList);
+        return NotificationDto.convertToDtoList(notificationList);
     }
 
     @Transactional
@@ -168,7 +168,7 @@ public class NotificationService {
 
     private Notification findByIdAndValidate (Long notificationId) {
         return notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new CustomException(NOTIFICATION_NOT_EXIST));
+                .orElseThrow(() -> new GoohaeyouException(NOTIFICATION_NOT_EXIST));
     }
 
     public Boolean unreadNotification(String username) {

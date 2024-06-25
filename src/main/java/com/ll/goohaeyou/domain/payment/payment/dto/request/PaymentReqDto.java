@@ -11,17 +11,12 @@ import java.util.UUID;
 @Getter
 @Builder
 public class PaymentReqDto {
-
     @NotNull
     private PayStatus payStatus;
-
     @NotNull
     private Long amount;
-
     private String orderId;
-
     private String orderName;
-
     private Long applicationId;
 
     public Payment toEntity() {

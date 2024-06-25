@@ -29,7 +29,7 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     private PayBasis payBasis;
     private WagePaymentMethod wagePaymentMethod;
 
-    public static JobPostDetailDto fromEntity(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential, Wage wage) {
+    public static JobPostDetailDto from(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential, Wage wage) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
         List<String> interestedUsernames = jobPostDetail.getInterests().stream()
                 .map(Interest::getMember)

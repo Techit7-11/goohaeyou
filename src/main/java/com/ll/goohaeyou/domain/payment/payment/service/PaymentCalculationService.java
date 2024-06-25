@@ -2,7 +2,7 @@ package com.ll.goohaeyou.domain.payment.payment.service;
 
 import com.ll.goohaeyou.domain.payment.payment.entity.type.PayStatus;
 import com.ll.goohaeyou.domain.payment.payment.entity.type.PayTypeFee;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class PaymentCalculationService {
         return Arrays.stream(PayTypeFee.values())
                 .filter(payTypeFee -> payTypeFee.getTypeName().equals(payStatus.getDescription()))
                 .findFirst()
-                .orElseThrow(() -> new CustomException(NO_ENUM_CONSTANT_FOUND));   // 매칭되는 PayTypeFee가 없는 경우
+                .orElseThrow(() -> new GoohaeyouException(NO_ENUM_CONSTANT_FOUND));   // 매칭되는 PayTypeFee가 없는 경우
     }
 
     // 부가세와 결제 수수료의 합 반환

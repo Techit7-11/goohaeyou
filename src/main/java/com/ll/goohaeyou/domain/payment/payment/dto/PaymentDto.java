@@ -1,6 +1,5 @@
 package com.ll.goohaeyou.domain.payment.payment.dto;
 
-import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,16 +13,4 @@ public class PaymentDto {
     private boolean canceled;
     private Long applicationId;
     private String payStatus;
-
-    public static PaymentDto fromEntity(Payment payment) {
-        return PaymentDto.builder()
-                .paymentKey(payment.getPaymentKey())
-                .canceled(payment.isCanceled())
-                .paid(payment.isPaid())
-                .totalAmount(payment.getTotalAmount())
-                .applicationId(payment.getApplicationId())
-                .orderName(payment.getOrderName())
-                .payStatus(payment.getPayStatus())
-                .build();
-    }
 }

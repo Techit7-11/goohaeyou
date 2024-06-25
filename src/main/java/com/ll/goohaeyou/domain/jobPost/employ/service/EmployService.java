@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.domain.jobPost.employ.service;
 
-import com.ll.goohaeyou.domain.application.application.dto.ApplicationDto;
-import com.ll.goohaeyou.domain.application.application.entity.Application;
-import com.ll.goohaeyou.domain.application.application.entity.type.WageStatus;
+import com.ll.goohaeyou.domain.application.dto.ApplicationDto;
+import com.ll.goohaeyou.domain.application.entity.Application;
+import com.ll.goohaeyou.domain.application.entity.type.WageStatus;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostDetail;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.type.WagePaymentMethod;
@@ -10,7 +10,7 @@ import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;
 import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class EmployService {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
         checkPermissions(username,postDetail.getAuthor());
 
-        return ApplicationDto.toDtoList(postDetail.getApplications());
+        return ApplicationDto.convertToDtoList(postDetail.getApplications());
     }
 
     @Transactional
@@ -47,7 +47,7 @@ public class EmployService {
 
         WageStatus updateWageStatus = determineWageStatus(postDetail.getWage().getWagePaymentMethod());
 
-        if (!jobPost.isClosed()) throw new CustomException(NOT_POSSIBLE_TO_APPROVE_IT_YET);
+        if (!jobPost.isClosed()) throw new GoohaeyouException(NOT_POSSIBLE_TO_APPROVE_IT_YET);
         checkPermissions(username,postDetail.getAuthor());
 
         List<Application> applicationList = new ArrayList<>();
@@ -67,7 +67,7 @@ public class EmployService {
                 publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
                 publisher.publishEvent(new CreateChatRoomEvent(this,postWriterId,receiverId,jobPost.getTitle()));
 
-            }else {
+            } else {
                 application.reject();
                 applicationList.add(application);
                 publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_UNAPPROVE, DELETE));
@@ -80,14 +80,14 @@ public class EmployService {
     }
 
     public void checkPermissions (String username, String author){
-        if (!username.equals(author)) throw new CustomException(NOT_ABLE);
+        if (!username.equals(author)) throw new GoohaeyouException(NOT_ABLE);
     }
 
     private WageStatus determineWageStatus(WagePaymentMethod wagePaymentMethod) {
         return switch (wagePaymentMethod) {
             case SERVICE_PAYMENT -> WageStatus.PAYMENT_PENDING;
             case INDIVIDUAL_PAYMENT -> WageStatus.APPLICATION_APPROVED;
-            default -> throw new CustomException(INVALID_WAGE_PAYMENT_METHOD);
+            default -> throw new GoohaeyouException(INVALID_WAGE_PAYMENT_METHOD);
         };
     }
 

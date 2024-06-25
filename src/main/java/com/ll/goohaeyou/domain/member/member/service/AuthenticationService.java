@@ -6,7 +6,7 @@ import com.ll.goohaeyou.domain.member.member.entity.RefreshToken;
 import com.ll.goohaeyou.domain.member.member.entity.repository.RefreshTokenRepository;
 import com.ll.goohaeyou.global.config.AppConfig;
 import com.ll.goohaeyou.global.security.JwtTokenProvider;
-import com.ll.goohaeyou.standard.base.util.CookieUtil;
+import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class AuthenticationService {
         String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
         addTokenToCookie(request, response, ACCESS_TOKEN_COOKIE_NAME, accessToken, ACCESS_TOKEN_DURATION);
 
-        return MemberDto.fromEntity(member);
+        return MemberDto.from(member);
     }
 
     // 리프레쉬 토큰 DB 저장

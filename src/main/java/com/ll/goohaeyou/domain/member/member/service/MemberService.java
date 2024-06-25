@@ -2,10 +2,10 @@ package com.ll.goohaeyou.domain.member.member.service;
 
 import com.ll.goohaeyou.domain.member.member.dto.*;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
-import com.ll.goohaeyou.domain.member.member.entity.type.Role;
 import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
-import com.ll.goohaeyou.global.exception.CustomException;
-import com.ll.goohaeyou.standard.base.util.Ut;
+import com.ll.goohaeyou.domain.member.member.entity.type.Role;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class MemberService {
     public JoinForm join(JoinForm form) {
         memberRepository.findByUsername(form.getUsername())
                 .ifPresent(member -> {
-                    throw new CustomException(DUPLICATE_USERNAME);
+                    throw new GoohaeyouException(DUPLICATE_USERNAME);
                 });
 
         Role role = form.getUsername().equals("admin") ? Role.ADMIN : Role.USER;
@@ -49,19 +49,19 @@ public class MemberService {
         Member member = getMember(form.getUsername());
 
         if (!bCryptPasswordEncoder.matches(form.getPassword(), member.getPassword())) {
-            throw new CustomException(INVALID_PASSWORD);
+            throw new GoohaeyouException(INVALID_PASSWORD);
         }
     }
 
     public Member getMember(String username) {
         return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new GoohaeyouException(MEMBER_NOT_FOUND));
     }
 
     public MemberDto findByUsername(String username) {
         Member member = getMember(username);
 
-        return MemberDto.fromEntity(member);
+        return MemberDto.from(member);
     }
 
     @Transactional
@@ -77,7 +77,7 @@ public class MemberService {
 
     public Member findById(Long userId) {
         return memberRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new GoohaeyouException(MEMBER_NOT_FOUND));
     }
 
     @Transactional
@@ -91,6 +91,6 @@ public class MemberService {
         member.oauthDetailUpdate(form);
         member.updateRole(Role.USER);
 
-        return MemberDto.fromEntity(member);
+        return MemberDto.from(member);
     }
 }

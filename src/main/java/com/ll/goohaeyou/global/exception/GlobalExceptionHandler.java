@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.global.exception;
 
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
-import com.ll.goohaeyou.standard.base.Empty;
+import com.ll.goohaeyou.global.standard.base.Empty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,11 +30,11 @@ public class GlobalExceptionHandler {
         return ApiResponse.validationException(customHttpStatus);
     }
 
-    @ExceptionHandler(CustomException.class)
-    public ApiResponse<Empty> handleCustomException(CustomException customException) {
+    @ExceptionHandler(GoohaeyouException.class)
+    public ApiResponse<Empty> handleCustomException(GoohaeyouException goohaeyouException) {
 
-        log.error(customException.getErrorCode() + ": " + customException.getMessage());
+        log.error(goohaeyouException.getErrorCode() + ": " + goohaeyouException.getMessage());
 
-        return ApiResponse.customException(customException.getErrorCode());
+        return ApiResponse.customException(goohaeyouException.getErrorCode());
     }
 }

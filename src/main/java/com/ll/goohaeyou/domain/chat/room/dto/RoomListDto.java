@@ -16,21 +16,20 @@ public class RoomListDto {
     private String lastChat;
     private String lastChatDate;
 
-    public static RoomListDto fromEntity(Room room) {
+    public static RoomListDto from(Room room) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
         return RoomListDto.builder()
                 .roomId(room.getId())
                 .username1(room.getUsername1())
                 .username2(room.getUsername2())
-
                 .lastChat(room.getMessages().isEmpty() ? "메세지가 아직 없습니다." : room.getMessages().getLast().getContent())
                 .lastChatDate(room.getMessages().isEmpty() ? "" : room.getMessages().getLast().getCreatedAt().format(formatter))
                 .build();
     }
 
-    public static List<RoomListDto> toDtoList(List<Room> rooms) {
+    public static List<RoomListDto> convertToDtoList(List<Room> rooms) {
         return rooms.stream()
-                .map(RoomListDto::fromEntity)
+                .map(RoomListDto::from)
                 .toList();
     }
 }

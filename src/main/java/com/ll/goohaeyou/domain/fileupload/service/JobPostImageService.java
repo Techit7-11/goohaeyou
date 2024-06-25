@@ -5,7 +5,7 @@ import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostImage;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.repository.JobPostImageRepository;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,11 +30,11 @@ public class JobPostImageService {
         JobPostDetail jobPostDetail = jobPostService.findByIdAndValidate(postDetailId).getJobPostDetail();
 
         if (!jobPostDetail.getAuthor().equals(username)) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
 
         if (jobPostImageFiles.length == 0) {
-            throw new CustomException(FILE_IS_EMPTY);
+            throw new GoohaeyouException(FILE_IS_EMPTY);
         }
 
         if (!jobPostDetail.getJobPostImages().isEmpty()) {
@@ -65,7 +65,7 @@ public class JobPostImageService {
         List<JobPostImage> postImages = jobPostImageRepository.findByJobPostDetailId(postDetailId);
 
         if (postImages.isEmpty()) {
-            throw new CustomException(POST_IMAGES_NOT_FOUND);
+            throw new GoohaeyouException(POST_IMAGES_NOT_FOUND);
         }
 
         return postImages.stream()
@@ -79,11 +79,11 @@ public class JobPostImageService {
         List<JobPostImage> jobPostImages = jobPostDetail.getJobPostImages();
 
         if (!jobPostDetail.getAuthor().equals(username)) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
 
         if (jobPostImages.isEmpty()) {
-            throw new CustomException(POST_IMAGES_NOT_FOUND);
+            throw new GoohaeyouException(POST_IMAGES_NOT_FOUND);
         }
 
         for (JobPostImage jobPostImage : jobPostImages) {
@@ -98,13 +98,13 @@ public class JobPostImageService {
         String author = jobPostService.findByJobPostAndNameAndValidate(postId).getAuthor();
 
         if (!author.equals(username)) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
 
         JobPostImage currentMainImage = jobPostImageRepository.findById(currentImageId)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_IMAGE));
+                .orElseThrow(() -> new GoohaeyouException(NOT_FOUND_IMAGE));
         JobPostImage newMainImage = jobPostImageRepository.findById(newImageId)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_IMAGE));
+                .orElseThrow(() -> new GoohaeyouException(NOT_FOUND_IMAGE));
 
         currentMainImage.unsetMain();
         newMainImage.setMain();

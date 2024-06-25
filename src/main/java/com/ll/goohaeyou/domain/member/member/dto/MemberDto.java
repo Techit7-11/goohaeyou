@@ -29,8 +29,8 @@ public class MemberDto {
     private boolean authenticated;
     private String profileImageUrl;
 
-    public static MemberDto fromEntity(Member member) {
-        MemberDto dto = MemberDto.builder()
+    public static MemberDto from(Member member) {
+        return MemberDto.builder()
                 .id(member.getId())
                 .username(member.getUsername())
                 .gender(member.getGender())
@@ -42,6 +42,5 @@ public class MemberDto {
                 .authenticated(member.isAuthenticated())
                 .profileImageUrl(member.getProfileImageUrl())
                 .build();
-        return dto;
     }
 }

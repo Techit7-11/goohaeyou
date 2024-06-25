@@ -6,7 +6,7 @@ import com.ll.goohaeyou.domain.chat.message.entity.Message;
 import com.ll.goohaeyou.domain.chat.message.entity.repository.MessageRepository;
 import com.ll.goohaeyou.domain.chat.room.entity.Room;
 import com.ll.goohaeyou.domain.chat.room.service.RoomService;
-import com.ll.goohaeyou.global.exception.CustomException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
+import static com.ll.goohaeyou.global.exception.ErrorCode.NOT_ABLE;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class MessageService {
         Room room = roomService.findByIdAndValidate(roomId);
 
         if (!username.equals(room.getUsername1())&&!username.equals(room.getUsername2())) {
-            throw new CustomException(NOT_ABLE);
+            throw new GoohaeyouException(NOT_ABLE);
         }
 
         Message message = Message.builder()
@@ -50,6 +50,6 @@ public class MessageService {
         List<Message> messages = messageRepository.findByRoomIdAndCreatedAtAfter(roomId, enterDate);
         Collections.reverse(messages);
 
-        return MessageDto.toDtoList(messages);
+        return MessageDto.convertToDtoList(messages);
     }
 }
