@@ -12,8 +12,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Builder
 @Getter
+@Builder
 public class ApplicationDto {
     @NotNull
     private Long id;
@@ -44,7 +44,7 @@ public class ApplicationDto {
     private LocalDateTime createdAt;
     private Boolean approve;
 
-    public static ApplicationDto fromEntity(Application application) {
+    public static ApplicationDto from(Application application) {
         JobPostDetail jobPostDetail = application.getJobPostDetail();
         Member member = application.getMember();
 
@@ -67,9 +67,9 @@ public class ApplicationDto {
                 .build();
     }
 
-    public static List<ApplicationDto> toDtoList(List<Application> applications) {
+    public static List<ApplicationDto> convertToDtoList(List<Application> applications) {
         return applications.stream()
-                .map(ApplicationDto::fromEntity)
+                .map(ApplicationDto::from)
                 .toList();
     }
 }

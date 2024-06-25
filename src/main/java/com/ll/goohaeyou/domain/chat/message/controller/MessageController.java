@@ -31,7 +31,7 @@ public class MessageController {
                                         @RequestBody MessageForm.Register form) {
         Message message = messageService.write(memberDetails.getUsername(), roomId, form);
 
-        messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.fromEntity(message));
+        messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.from(message));
 
         return ApiResponse.noContent();
     }

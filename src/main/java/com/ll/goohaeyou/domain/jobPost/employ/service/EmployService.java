@@ -36,7 +36,7 @@ public class EmployService {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
         checkPermissions(username,postDetail.getAuthor());
 
-        return ApplicationDto.toDtoList(postDetail.getApplications());
+        return ApplicationDto.convertToDtoList(postDetail.getApplications());
     }
 
     @Transactional

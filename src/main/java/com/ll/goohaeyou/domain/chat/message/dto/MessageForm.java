@@ -13,7 +13,6 @@ public class MessageForm {
 
         public Register() {}
 
-
         public Register(String content) {
             this.content = content;
         }

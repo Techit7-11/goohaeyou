@@ -24,7 +24,7 @@ public class CategoryService {
         if (categories.isEmpty()) {
             return null;
         } else {
-            return CategoryDto.toList(categories);
+            return CategoryDto.convertToDtoList(categories);
         }
     }
 
@@ -44,6 +44,6 @@ public class CategoryService {
     public List<CategoryDto> getTopCategories() {
         List<Category> categories = categoryRepository.findAllByLevel(1);
 
-        return CategoryDto.toList(categories);
+        return CategoryDto.convertToDtoList(categories);
     }
 }

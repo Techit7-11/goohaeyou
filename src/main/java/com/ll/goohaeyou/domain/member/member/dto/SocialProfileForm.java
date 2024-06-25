@@ -38,5 +38,4 @@ public class SocialProfileForm {   // JorinForm에서 username, password 제외
     @Past(message = "생년월일은 현재보다 앞선 날짜여야 합니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birth;
-
 }

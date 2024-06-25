@@ -61,7 +61,7 @@ public class MemberService {
     public MemberDto findByUsername(String username) {
         Member member = getMember(username);
 
-        return MemberDto.fromEntity(member);
+        return MemberDto.from(member);
     }
 
     @Transactional
@@ -91,6 +91,6 @@ public class MemberService {
         member.oauthDetailUpdate(form);
         member.updateRole(Role.USER);
 
-        return MemberDto.fromEntity(member);
+        return MemberDto.from(member);
     }
 }

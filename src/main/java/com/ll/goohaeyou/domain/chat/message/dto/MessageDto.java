@@ -18,7 +18,7 @@ public class MessageDto {
     private String text;
     private String createdAt;
 
-    public static MessageDto fromEntity(Message message) {
+    public static MessageDto from(Message message) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
         return MessageDto.builder()
                 .id(message.getId())
@@ -28,9 +28,9 @@ public class MessageDto {
                 .build();
     }
 
-    public static List<MessageDto> toDtoList(List<Message> messages) {
+    public static List<MessageDto> convertToDtoList(List<Message> messages) {
         return messages.stream()
-                .map(MessageDto::fromEntity)
+                .map(MessageDto::from)
                 .toList();
     }
 }

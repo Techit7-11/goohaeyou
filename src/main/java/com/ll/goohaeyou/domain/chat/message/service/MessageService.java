@@ -50,6 +50,6 @@ public class MessageService {
         List<Message> messages = messageRepository.findByRoomIdAndCreatedAtAfter(roomId, enterDate);
         Collections.reverse(messages);
 
-        return MessageDto.toDtoList(messages);
+        return MessageDto.convertToDtoList(messages);
     }
 }

@@ -146,7 +146,7 @@ public class JobPostController {
 
         Page<JobPost> itemPage = jobPostService.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable);
 
-        Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
+        Page<JobPostDto> _itemPage = JobPostDto.convertToDtoPage(itemPage);
 
         return ApiResponse.ok(
                 new GetPostsResponseBody(
@@ -176,7 +176,7 @@ public class JobPostController {
         Pageable pageable = PageRequest.of(page - 1, AppConfig.getBasePageSize(), Sort.by(sorts));
 
         Page<JobPost> itemPage = jobPostService.findBySort(pageable);
-        Page<JobPostDto> _itemPage = JobPostDto.toDtoListPage(itemPage);
+        Page<JobPostDto> _itemPage = JobPostDto.convertToDtoPage(itemPage);
 
         return ApiResponse.ok(
                 new GetPostsResponseBody(

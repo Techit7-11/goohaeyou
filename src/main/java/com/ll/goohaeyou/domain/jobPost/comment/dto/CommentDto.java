@@ -30,7 +30,7 @@ public class CommentDto {
     @NotNull
     private LocalDateTime modifyAt;
 
-    public static CommentDto formEntity(Comment comment) {
+    public static CommentDto form(Comment comment) {
         return CommentDto.builder()
                 .id(comment.getId())
                 .jobPostId(comment.getJobPostDetail().getJobPost().getId())
@@ -42,9 +42,9 @@ public class CommentDto {
                 .build();
     }
 
-    public static List<CommentDto> toDtoList(List<Comment> comments) {
+    public static List<CommentDto> convertToDtoList(List<Comment> comments) {
         return comments.stream()
-                .map(CommentDto::formEntity)
+                .map(CommentDto::form)
                 .toList();
     }
 }

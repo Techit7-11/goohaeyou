@@ -61,7 +61,7 @@ public class ApplicationService {
     public ApplicationDto findById(Long id) {
         Application application = findByIdAndValidate(id);
 
-        return ApplicationDto.fromEntity(application);
+        return ApplicationDto.from(application);
     }
 
     public Application findByIdAndValidate(Long id) {
@@ -108,7 +108,7 @@ public class ApplicationService {
 
         Member member = memberService.getMember(username);
 
-        return ApplicationDto.toDtoList(applicationRepository.findByMemberId(member.getId()));
+        return ApplicationDto.convertToDtoList(applicationRepository.findByMemberId(member.getId()));
     }
 
     private void canWrite(JobPostDetail postDetail, Member member) {

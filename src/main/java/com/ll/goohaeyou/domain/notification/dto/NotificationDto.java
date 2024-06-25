@@ -22,8 +22,9 @@ public class NotificationDto {
     private boolean seen;
     private String url;
 
-    public static NotificationDto fromEntity(Notification notification) {
+    public static NotificationDto from(Notification notification) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         return NotificationDto.builder()
                 .id(notification.getId())
                 .createAt(notification.getCreateAt().format(formatter))
@@ -37,10 +38,9 @@ public class NotificationDto {
                 .build();
     }
 
-    public static List<NotificationDto> toDtoList(List<Notification> notifications) {
+    public static List<NotificationDto> convertToDtoList(List<Notification> notifications) {
         return notifications.stream()
-                .map(NotificationDto::fromEntity)
+                .map(NotificationDto::from)
                 .toList();
     }
-
 }

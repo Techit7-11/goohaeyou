@@ -39,7 +39,7 @@ public class AuthenticationService {
         String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
         addTokenToCookie(request, response, ACCESS_TOKEN_COOKIE_NAME, accessToken, ACCESS_TOKEN_DURATION);
 
-        return MemberDto.fromEntity(member);
+        return MemberDto.from(member);
     }
 
     // 리프레쉬 토큰 DB 저장

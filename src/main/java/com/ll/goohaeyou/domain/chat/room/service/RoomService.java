@@ -72,7 +72,7 @@ public class RoomService {
         } else if (username.equals(room.getUsername2()) && room.isUser2HasExit()) {
             throw new CustomException(NOT_ABLE);
         }
-        return RoomDto.fromEntity(room);
+        return RoomDto.from(room);
     }
 
     public Room findByIdAndValidate(Long roomId) {
@@ -82,7 +82,7 @@ public class RoomService {
 
     public List<RoomListDto> getRoomList(String username) {
         List<Room> rooms = roomRepository.findActiveRoomsByUsername(username);
-        return RoomListDto.toDtoList(rooms);
+        return RoomListDto.convertToDtoList(rooms);
     }
 
     @Transactional
@@ -118,6 +118,6 @@ public class RoomService {
 
         room.getMessages().add(message);
 
-        messagingTemplate.convertAndSend("/queue/api/chat/"+room.getId()+ "/newMessage", MessageDto.fromEntity(message));
+        messagingTemplate.convertAndSend("/queue/api/chat/"+room.getId()+ "/newMessage", MessageDto.from(message));
     }
 }

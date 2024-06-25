@@ -76,7 +76,7 @@ public class CommentService {
         jobPostService.findByIdAndValidate(postId);
         // 공고 유효성 체크를 위해 추가
 
-        return CommentDto.toDtoList(commentRepository.findAllByJobPostDetailId(postId));
+        return CommentDto.convertToDtoList(commentRepository.findAllByJobPostDetailId(postId));
     }
 
     public Comment findByIdAndValidate(Long id) {
@@ -105,6 +105,6 @@ public class CommentService {
 
         Member member = memberService.getMember(username);
 
-        return CommentDto.toDtoList(commentRepository.findByMemberId(member.getId()));
+        return CommentDto.convertToDtoList(commentRepository.findByMemberId(member.getId()));
     }
 }

@@ -98,11 +98,11 @@ public class JobPostService {
 
     public JobPostDetailDto findById(Long id) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
-        return JobPostDetailDto.fromEntity(postDetail.getJobPost(), postDetail, postDetail.getEssential(), postDetail.getWage());
+        return JobPostDetailDto.from(postDetail.getJobPost(), postDetail, postDetail.getEssential(), postDetail.getWage());
     }
 
     public List<JobPostDto> findAll() {
-        return JobPostDto.toDtoList(jobPostRepository.findAll());
+        return JobPostDto.convertToDtoList(jobPostRepository.findAll());
     }
 
     @Transactional
@@ -217,7 +217,7 @@ public class JobPostService {
 
         Member member = memberService.getMember(username);
 
-        return JobPostDto.toDtoList(jobPostRepository.findByMemberId(member.getId()));
+        return JobPostDto.convertToDtoList(jobPostRepository.findByMemberId(member.getId()));
     }
 
     public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int[] min_Age, List<String> location, Pageable pageable) {
@@ -232,7 +232,7 @@ public class JobPostService {
         return jobPostdetailRepository.findByInterestsMemberId(memberId)
                 .stream()
                 .map(JobPostDetail::getJobPost)
-                .map(JobPostDto::fromEntity)
+                .map(JobPostDto::from)
                 .collect(Collectors.toList());
     }
 
@@ -252,7 +252,7 @@ public class JobPostService {
 
         return jobPostRepository.findAll(spec)
                 .stream()
-                .map(JobPostDto::fromEntity)
+                .map(JobPostDto::from)
                 .collect(Collectors.toList());
     }
 
@@ -299,8 +299,7 @@ public class JobPostService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 00:00:00.000000에 실행
-//    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")    // 00:00:00.000000에 실행
     public void checkAndCloseExpiredJobPosts() {
         List<JobPost> expiredJobPosts = findExpiredJobPosts(LocalDate.now());
         for (JobPost jobPost : expiredJobPosts) {
@@ -333,6 +332,6 @@ public class JobPostService {
             jobPosts =  jobPostRepository.findAllByRegionCodeOrderByCreatedAtDesc(regionCode);
         }
 
-        return JobPostDto.toDtoList(Objects.requireNonNull(jobPosts));
+        return JobPostDto.convertToDtoList(Objects.requireNonNull(jobPosts));
     }
 }

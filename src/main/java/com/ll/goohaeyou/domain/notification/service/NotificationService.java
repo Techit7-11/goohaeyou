@@ -142,7 +142,7 @@ public class NotificationService {
     public List<NotificationDto> getList(String username) {
         Member member = memberService.getMember(username);
         List<Notification> notificationList = notificationRepository.findByToMemberOrderByCreateAtDesc(member);
-        return NotificationDto.toDtoList(notificationList);
+        return NotificationDto.convertToDtoList(notificationList);
     }
 
     @Transactional
