@@ -47,7 +47,7 @@ public class Room {
         if (username.equals(username1)) {
             this.user1HasExit = true;
             this.user1Enter = null;
-        }else if (username.equals(username2)) {
+        } else if (username.equals(username2)) {
             this.user2HasExit = true;
             this.user2Enter = null;
         }
@@ -57,7 +57,7 @@ public class Room {
         if (this.user1HasExit) {
             this.user1HasExit = false;
             this.user1Enter = LocalDateTime.now();
-        }else if (this.user2HasExit){
+        } else if (this.user2HasExit){
             this.user2HasExit = false;
             this.user2Enter = LocalDateTime.now();
         }

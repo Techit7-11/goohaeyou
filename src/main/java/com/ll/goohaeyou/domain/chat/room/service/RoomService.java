@@ -49,7 +49,7 @@ public class RoomService {
             room.recreate();
 
             return room.getId();
-        }else {
+        } else {
             Room newRoom = Room.builder()
                     .username1(member1.getUsername())
                     .username2(member2.getUsername())

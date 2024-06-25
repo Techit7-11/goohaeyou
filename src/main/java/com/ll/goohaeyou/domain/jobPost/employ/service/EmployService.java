@@ -67,7 +67,7 @@ public class EmployService {
                 publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
                 publisher.publishEvent(new CreateChatRoomEvent(this,postWriterId,receiverId,jobPost.getTitle()));
 
-            }else {
+            } else {
                 application.reject();
                 applicationList.add(application);
                 publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_UNAPPROVE, DELETE));
