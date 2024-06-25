@@ -10,8 +10,9 @@ import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.global.event.notification.ApplicationCreateAndChangedEvent;
-import com.ll.goohaeyou.global.exception.ErrorCode;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.application.ApplicationException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.jobPost.JobPostException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,6 @@ import java.util.List;
 
 import static com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode.APPLICATION_CREATED;
 import static com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode.APPLICATION_MODIFICATION;
-import static com.ll.goohaeyou.global.exception.ErrorCode.NOT_ABLE;
-import static com.ll.goohaeyou.global.exception.ErrorCode.POST_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
@@ -66,15 +65,16 @@ public class ApplicationService {
 
     public Application findByIdAndValidate(Long id) {
         return applicationRepository.findById(id)
-                .orElseThrow(() -> new GoohaeyouException(POST_NOT_EXIST));
+                .orElseThrow(JobPostException.PostNotExistsException::new);
     }
 
     @Transactional
     public void modifyApplication(String username, Long id, ApplicationForm.Modify form) {
         Application application = findByIdAndValidate(id);
 
-        if (!isApplicationAuthor(username, application.getMember().getUsername()))
-            throw new GoohaeyouException(NOT_ABLE);
+        if (!isApplicationAuthor(username, application.getMember().getUsername())) {
+            throw new AuthException.NotAuthorizedException();
+        }
 
         application.updateBody(form.getBody());
         publisher.publishEvent(new ApplicationCreateAndChangedEvent(this, application, APPLICATION_MODIFICATION));
@@ -96,10 +96,11 @@ public class ApplicationService {
 
     public boolean canDelete(String username, Application application) {
         if (application.getApprove()) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
+
         if (!isApplicationAuthor(username, application.getMember().getUsername()))
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
 
         return true;
     }
@@ -113,16 +114,16 @@ public class ApplicationService {
 
     private void canWrite(JobPostDetail postDetail, Member member) {
         if (postDetail.getJobPost().isClosed()){ // 공고 지원 마감
-            throw new GoohaeyouException(ErrorCode.CLOSED_POST);
+            throw new ApplicationException.ClosedPostException();
         }
 
         if (postDetail.getAuthor().equals(member.getUsername())) { // 자신의 공고에 지원 불가능
-            throw new GoohaeyouException(ErrorCode.NOT_ELIGIBLE_FOR_OWN_JOB);
+            throw new ApplicationException.NotEligibleForOwnJobException();
         }
 
         for (Application application : postDetail.getApplications()) { // 지원서 중복 불가능
             if (application.getMember().equals(member)) {
-                throw new GoohaeyouException(ErrorCode.DUPLICATE_SUBMISSION);
+                throw new ApplicationException.DuplicateSubmissionException();
             }
         }
     }
@@ -131,6 +132,6 @@ public class ApplicationService {
     public void updateApplicationOnPaymentSuccess(Long applicationId, Long amount) {
         Application application = findByIdAndValidate(applicationId);
         application.updateWageStatus(WageStatus.PAYMENT_COMPLETED);
-        application.setEarn(Math.toIntExact(amount));    // 지원서의 earn에 급여 추가
+        application.setEarn(Math.toIntExact(amount));
     }
 }

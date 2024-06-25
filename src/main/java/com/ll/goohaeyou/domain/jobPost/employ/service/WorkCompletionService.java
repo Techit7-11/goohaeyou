@@ -6,6 +6,8 @@ import com.ll.goohaeyou.domain.application.service.ApplicationService;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.jobPost.EmployException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +39,7 @@ public class WorkCompletionService {
 
     private void checkAuthorization(String username, JobPost jobPost) {
         if (!jobPost.getJobPostDetail().getAuthor().equals(username)) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
     }
 
@@ -50,7 +52,7 @@ public class WorkCompletionService {
                 application.updateWageStatus(WageStatus.WAGE_PAID);
                 application.setReceive(true);
             }
-            default -> throw new GoohaeyouException(COMPLETION_NOT_POSSIBLE);
+            default -> throw new EmployException.CompletionNotPossibleException();
         }
     }
 

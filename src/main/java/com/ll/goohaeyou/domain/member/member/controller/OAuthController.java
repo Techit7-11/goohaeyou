@@ -1,15 +1,13 @@
 package com.ll.goohaeyou.domain.member.member.controller;
 
 import com.ll.goohaeyou.global.config.AppConfig;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.INVALID_LOGIN_REQUEST;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,7 +17,7 @@ public class OAuthController {
     @Operation(summary = "소셜 로그인")
     public String socialLogin(String redirectUrl, @PathVariable String providerTypeCode) {
         if (!redirectUrl.startsWith(AppConfig.getSiteFrontUrl())) {
-            throw new GoohaeyouException(INVALID_LOGIN_REQUEST);
+            throw new AuthException.InvalidLoginRequestException();
         }
 
         return "redirect:/oauth2/authorization/" + providerTypeCode;

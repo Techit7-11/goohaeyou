@@ -3,12 +3,11 @@ package com.ll.goohaeyou.domain.payment.payment.service;
 import com.ll.goohaeyou.domain.payment.payment.dto.PaymentDto;
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
 import com.ll.goohaeyou.domain.payment.payment.entity.repository.PaymentRepository;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.payment.PaymentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,17 +21,17 @@ public class PaymentInfoService {
                     validatePayer(payment, username);
 
                     if (payment.isCanceled()) {
-                        throw new GoohaeyouException(ALREADY_CANCELED);
+                        throw new PaymentException.AlreadyCanceledException();
                     }
 
                     return buildPaymentDto(payment);
                 })
-                .orElseThrow(() -> new GoohaeyouException(PAYMENT_INFO_NOT_FOUND));
+                .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
     }
 
     private void validatePayer(Payment payment, String username) {
         if (!payment.getMember().getUsername().equals(username)) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
     }
 

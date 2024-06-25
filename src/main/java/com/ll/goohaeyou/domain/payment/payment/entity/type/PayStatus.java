@@ -1,12 +1,10 @@
 package com.ll.goohaeyou.domain.payment.payment.entity.type;
 
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.payment.PaymentException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.NO_ENUM_CONSTANT_FOUND;
 
 @Getter
 @RequiredArgsConstructor
@@ -21,14 +19,14 @@ public enum PayStatus {
         return Arrays.stream(PayStatus.values())
                 .filter(type -> type.getDescription().equals(description))
                 .findFirst()
-                .orElseThrow(() -> new GoohaeyouException(NO_ENUM_CONSTANT_FOUND));
+                .orElseThrow(PaymentException.NoEnumConstantFoundException::new);
     }
 
     public static PayStatus findByMethod(String method) {
         return switch (method) {
             case "카드" -> CARD;
             case "간편결제" -> EASY_PAY;
-            default -> throw new GoohaeyouException(NO_ENUM_CONSTANT_FOUND);
+            default -> throw new PaymentException.NoEnumConstantFoundException();
         };
     }
 }

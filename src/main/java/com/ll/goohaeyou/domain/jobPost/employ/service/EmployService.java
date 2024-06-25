@@ -10,7 +10,8 @@ import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;
 import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.jobPost.EmployException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode.APPLICATION_APPROVED;
-import static com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode.APPLICATION_UNAPPROVE;
+import static com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode.APPLICATION_UNAPPROVED;
 import static com.ll.goohaeyou.domain.notification.entity.type.ResultTypeCode.DELETE;
 import static com.ll.goohaeyou.domain.notification.entity.type.ResultTypeCode.NOTICE;
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +47,10 @@ public class EmployService {
 
         WageStatus updateWageStatus = determineWageStatus(postDetail.getWage().getWagePaymentMethod());
 
-        if (!jobPost.isClosed()) throw new GoohaeyouException(NOT_POSSIBLE_TO_APPROVE_IT_YET);
+        if (!jobPost.isClosed()) {
+            throw new EmployException.NotPossibleToApproveItYetException();
+        }
+
         checkPermissions(username,postDetail.getAuthor());
 
         List<Application> applicationList = new ArrayList<>();
@@ -70,24 +73,28 @@ public class EmployService {
             } else {
                 application.reject();
                 applicationList.add(application);
-                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_UNAPPROVE, DELETE));
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application, APPLICATION_UNAPPROVED, DELETE));
             }
         }
+
         for (Application application : applicationList) {
             postDetail.getApplications().remove(application);
         }
+
         publisher.publishEvent(new PostEmployedEvent(this, jobPost));
     }
 
     public void checkPermissions (String username, String author){
-        if (!username.equals(author)) throw new GoohaeyouException(NOT_ABLE);
+        if (!username.equals(author)) {
+            throw new AuthException.NotAuthorizedException();
+        }
     }
 
     private WageStatus determineWageStatus(WagePaymentMethod wagePaymentMethod) {
         return switch (wagePaymentMethod) {
             case SERVICE_PAYMENT -> WageStatus.PAYMENT_PENDING;
             case INDIVIDUAL_PAYMENT -> WageStatus.APPLICATION_APPROVED;
-            default -> throw new GoohaeyouException(INVALID_WAGE_PAYMENT_METHOD);
+            default -> throw new EmployException.InvalidWagePaymentMethodException();
         };
     }
 
@@ -110,5 +117,4 @@ public class EmployService {
     private boolean isValidJobPost(JobPost jobPost) {
         return jobPost != null && jobPost.getMember() != null;
     }
-
 }

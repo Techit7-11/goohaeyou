@@ -11,7 +11,8 @@ import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
 import com.ll.goohaeyou.domain.payment.payment.entity.repository.PaymentRepository;
 import com.ll.goohaeyou.domain.payment.payment.entity.type.PayStatus;
 import com.ll.goohaeyou.global.config.TossPaymentsConfig;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.member.MemberException;
+import com.ll.goohaeyou.global.exception.payment.PaymentException;
 import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import com.ll.goohaeyou.global.standard.retryOnOptimisticLock.RetryOnOptimisticLock;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
 @Slf4j
@@ -74,10 +73,10 @@ public class PaymentService {
 
     public Payment verifyPayment(String orderId, Long amount) {
         Payment payment = paymentRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new GoohaeyouException(MEMBER_NOT_FOUND));
+                .orElseThrow(MemberException.MemberNotFoundException::new);
 
         if (!payment.getTotalAmount().equals(amount)) {
-            throw new GoohaeyouException(PAYMENT_AMOUNT_MISMATCH);
+            throw new PaymentException.PaymentAmountMismatchException();
         }
 
         return payment;
@@ -135,6 +134,6 @@ public class PaymentService {
 
     private Payment findPaymentByOrderId(String orderId) {
         return paymentRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new GoohaeyouException(PAYMENT_NOT_FOUND));
+                .orElseThrow(PaymentException.PaymentNotFoundException::new);
     }
 }

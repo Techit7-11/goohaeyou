@@ -3,14 +3,11 @@ package com.ll.goohaeyou.domain.fileupload.service;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.image.ImageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.FILE_IS_EMPTY;
-import static com.ll.goohaeyou.global.exception.ErrorCode.PROFILE_IMAGE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +22,7 @@ public class ProfileImageService {
         Member member = memberService.getMember(username);
 
         if (profileImageFile == null ||  profileImageFile.isEmpty()) {
-            throw new GoohaeyouException(FILE_IS_EMPTY);
+            throw new ImageException.FileIsEmptyException();
         }
 
         if (member.getProfileImageUrl() != null) {
@@ -52,7 +49,7 @@ public class ProfileImageService {
         Member member = memberService.getMember(username);
 
         if (member.getProfileImageUrl() == null) {
-            throw new GoohaeyouException(PROFILE_IMAGE_NOT_FOUND);
+            throw new ImageException.ProfileImageNotFoundException();
         }
 
         s3ImageService.deleteImageFromS3(member.getProfileImageUrl());

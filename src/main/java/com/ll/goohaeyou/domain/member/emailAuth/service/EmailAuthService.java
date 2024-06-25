@@ -2,7 +2,7 @@ package com.ll.goohaeyou.domain.member.emailAuth.service;
 
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.member.EmailAuthException;
 import com.ll.goohaeyou.global.standard.base.util.RedisUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -15,15 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EmailAuthService {
     private static final String EMAIL_SUBJECT = "[From 구해유] 이메일 인증을 위한 인증코드가 발급되었습니다.";
     private static final String EMAIL_TEMPLATE = "emailTemplate";
-    private static final long EXPIRATION_IN_SECONDS = 1800; // 30 minutes
+    private static final long EXPIRATION_IN_SECONDS = 1800;   // 30 minutes
 
     private final MemberService memberService;
     private final TemplateEngine templateEngine;
@@ -47,7 +45,7 @@ public class EmailAuthService {
         Member member = memberService.getMember(username);
 
         if (member.isAuthenticated()) {
-            throw new GoohaeyouException(EMAIL_ALREADY_AUTHENTICATED);
+            throw new EmailAuthException.EmailAlreadyAuthenticatedException();
         }
     }
 
@@ -83,7 +81,7 @@ public class EmailAuthService {
         String authCode = redisUtil.getData(username);
 
         if (authCode == null) {
-            throw new GoohaeyouException(INITIATE_EMAIL_REQUEST);
+            throw new EmailAuthException.InitiateEmailRequestException();
         }
 
         verifyCode(inputCode, authCode);
@@ -96,7 +94,7 @@ public class EmailAuthService {
 
     private void verifyCode(String inputCode, String authCode) {
         if (!inputCode.equals(authCode)) {
-            throw new GoohaeyouException(INVALID_AUTH_CODE);
+            throw new EmailAuthException.InvalidAuthCodeException();
         }
     }
 }

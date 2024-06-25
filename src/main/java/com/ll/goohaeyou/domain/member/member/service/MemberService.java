@@ -4,14 +4,13 @@ import com.ll.goohaeyou.domain.member.member.dto.*;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
 import com.ll.goohaeyou.domain.member.member.entity.type.Role;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.member.MemberException;
 import com.ll.goohaeyou.global.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class MemberService {
     public JoinForm join(JoinForm form) {
         memberRepository.findByUsername(form.getUsername())
                 .ifPresent(member -> {
-                    throw new GoohaeyouException(DUPLICATE_USERNAME);
+                    throw new MemberException.DuplicateUsernameException();
                 });
 
         Role role = form.getUsername().equals("admin") ? Role.ADMIN : Role.USER;
@@ -42,6 +41,7 @@ public class MemberService {
                 .role(role)
                 .regionCode(Ut.Region.getRegionCodeFromAddress(form.getLocation()))
                 .build());
+
         return form;
     }
 
@@ -49,13 +49,13 @@ public class MemberService {
         Member member = getMember(form.getUsername());
 
         if (!bCryptPasswordEncoder.matches(form.getPassword(), member.getPassword())) {
-            throw new GoohaeyouException(INVALID_PASSWORD);
+            throw new AuthException.InvalidPasswordException();
         }
     }
 
     public Member getMember(String username) {
         return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new GoohaeyouException(MEMBER_NOT_FOUND));
+                .orElseThrow(MemberException.MemberNotFoundException::new);
     }
 
     public MemberDto findByUsername(String username) {
@@ -77,14 +77,14 @@ public class MemberService {
 
     public Member findById(Long userId) {
         return memberRepository.findById(userId)
-                .orElseThrow(() -> new GoohaeyouException(MEMBER_NOT_FOUND));
+                .orElseThrow(MemberException.MemberNotFoundException::new);
     }
 
     @Transactional
     public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form) {
         Member member = getMember(username);
 
-        if (member.getEmail() == null) {    // 소셜 회원은 본인인증을 할 필요가 없다
+        if (member.getEmail() == null) {
             member.authenticate();
         }
 
