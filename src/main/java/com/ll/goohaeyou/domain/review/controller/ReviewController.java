@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Review", description = "리뷰 API")
-@RequiredArgsConstructor
-@RequestMapping("/api/member/review")
 @RestController
+@RequestMapping("/api/member/review")
+@RequiredArgsConstructor
+@Tag(name = "Review", description = "리뷰 API")
 public class ReviewController {
     private final ReviewService reviewService;
 

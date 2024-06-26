@@ -18,10 +18,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Payment", description = "결제 관련 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/payments")
+@RequiredArgsConstructor
+@Tag(name = "Payment", description = "결제 관련 API")
 public class PaymentController {
     private final PaymentService paymentService;
     private final PaymentCancelService paymentCancelService;

@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Notification", description = "알림 관련 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/notification")
+@RequiredArgsConstructor
+@Tag(name = "Notification", description = "알림 관련 API")
 public class NotificationController {
     private final NotificationService notificationService;
 

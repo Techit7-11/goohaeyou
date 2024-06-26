@@ -14,9 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Tag(name = "Image", description = "이미지 관련 API")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Image", description = "이미지 관련 API")
 public class ImageController {
     private final ProfileImageService profileImageService;
     private final JobPostImageService jobPostImageService;

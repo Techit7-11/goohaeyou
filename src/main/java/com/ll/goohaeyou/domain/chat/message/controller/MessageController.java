@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Chatting", description = "채팅 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/chat/{roomId}/message")
+@RequiredArgsConstructor
+@Tag(name = "Chatting", description = "채팅 API")
 public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;

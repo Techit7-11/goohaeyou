@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "WorkCompletion", description = "알바완료 처리 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/jobs")
+@RequiredArgsConstructor
+@Tag(name = "WorkCompletion", description = "알바완료 처리 API")
 public class WorkCompletionController {
     private final WorkCompletionService workCompletionService;
 

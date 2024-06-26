@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Comment", description = "구인공고 댓글 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/post-comment/{postId}")
+@RequiredArgsConstructor
+@Tag(name = "Comment", description = "구인공고 댓글 API")
 public class CommentController {
     private final CommentService commentService;
 

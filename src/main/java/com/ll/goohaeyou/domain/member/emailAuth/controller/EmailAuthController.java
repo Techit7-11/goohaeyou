@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "EmailAuth", description = "이메일 인증 API")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "EmailAuth", description = "이메일 인증 API")
 public class EmailAuthController {
     private final EmailAuthService emailAuthService;
 
