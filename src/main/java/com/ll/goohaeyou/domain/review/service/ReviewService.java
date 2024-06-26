@@ -8,8 +8,10 @@ import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
 import com.ll.goohaeyou.domain.review.dto.ApplicantReviewDto;
 import com.ll.goohaeyou.domain.review.entity.Review;
 import com.ll.goohaeyou.domain.review.entity.repository.ReviewRepository;
-import com.ll.goohaeyou.global.exception.ErrorCode;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.jobPost.JobPostException;
+import com.ll.goohaeyou.global.exception.member.MemberException;
+import com.ll.goohaeyou.global.exception.review.ReviewException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,46 +33,51 @@ public class ReviewService {
     @Transactional
     public ApplicantReviewDto saveReview(ApplicantReviewDto applicantReviewDto) {
         JobPost jobPostId = jobPostRepository.findById(applicantReviewDto.getJobPostingId())
-                .orElseThrow(() -> new GoohaeyouException(ErrorCode.POST_NOT_EXIST));
+                .orElseThrow(JobPostException.PostNotExistsException::new);
 
         Member applicantId = memberRepository.findByUsername(getCurrentUsername())
-                .orElseThrow(() -> new GoohaeyouException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(MemberException.MemberNotFoundException::new);
 
         // TODO 지원서 승인한 것만 후기 작성 가능하도록 OR 정산 이후 후기 작성 api 요청 하도록
-        boolean exists = reviewRepository.existsByJobPostingId_IdAndApplicantId_Id(jobPostId.getId(), applicantId.getId());
+        boolean exists = reviewRepository.existsByJobPostingId_IdAndApplicantId_Id(jobPostId.getId(),
+                applicantId.getId());
+
         if (exists) {
-            throw new GoohaeyouException(ErrorCode.REVIEW_ALREADY_EXISTS);
+            throw new ReviewException.ReviewAlreadyExistsException();
         }
 
-        Review review = reviewMapper.toEntity(applicantReviewDto);
+        Review review = reviewMapper.toReviewEntity(applicantReviewDto);
 
         review.setJobPostingId(jobPostId);
         review.setApplicantId(applicantId);
 
         review = reviewRepository.save(review);
-        return reviewMapper.toDto(review);
+
+        return reviewMapper.toApplicantReviewDto(review);
     }
 
     public ApplicantReviewDto findReviewById(Long id) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new GoohaeyouException(ErrorCode.NOT_ABLE));
-        return reviewMapper.toDto(review);
+                .orElseThrow(AuthException.NotAuthorizedException::new);
+
+        return reviewMapper.toApplicantReviewDto(review);
     }
 
     public List<ApplicantReviewDto> findReviewsByCurrentUser() {
         List<Review> reviews = reviewRepository.findByApplicantId_Username(getCurrentUsername());
+
         return reviews.stream()
-                .map(reviewMapper::toDto)
+                .map(reviewMapper::toApplicantReviewDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public void deleteReview(Long id) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new GoohaeyouException(ErrorCode.REVIEW_NOT_EXIST));
+                .orElseThrow(ReviewException.ReviewNotExistsException::new);
 
         if (!review.getApplicantId().getUsername().equals(getCurrentUsername())) {
-            throw new GoohaeyouException(ErrorCode.NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
 
         reviewRepository.deleteById(id);
@@ -78,6 +85,7 @@ public class ReviewService {
 
     public String getCurrentUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         return authentication.getName();
     }
 }

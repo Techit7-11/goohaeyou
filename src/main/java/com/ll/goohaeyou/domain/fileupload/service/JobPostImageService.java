@@ -5,7 +5,8 @@ import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostImage;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.repository.JobPostImageRepository;
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.image.ImageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +29,11 @@ public class JobPostImageService {
         JobPostDetail jobPostDetail = jobPostService.findByIdAndValidate(postDetailId).getJobPostDetail();
 
         if (!jobPostDetail.getAuthor().equals(username)) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
 
         if (jobPostImageFiles.length == 0) {
-            throw new GoohaeyouException(FILE_IS_EMPTY);
+            throw new ImageException.FileIsEmptyException();
         }
 
         if (!jobPostDetail.getJobPostImages().isEmpty()) {
@@ -44,6 +43,7 @@ public class JobPostImageService {
         List<JobPostImage> jobPostImages = new ArrayList<>();
 
         boolean isMainNotSet = true;
+
         for (MultipartFile imageFile : jobPostImageFiles) {
             String imageUrl = s3ImageService.upload(imageFile);
 
@@ -65,7 +65,7 @@ public class JobPostImageService {
         List<JobPostImage> postImages = jobPostImageRepository.findByJobPostDetailId(postDetailId);
 
         if (postImages.isEmpty()) {
-            throw new GoohaeyouException(POST_IMAGES_NOT_FOUND);
+            throw new ImageException.PostImagesNotFoundException();
         }
 
         return postImages.stream()
@@ -79,16 +79,17 @@ public class JobPostImageService {
         List<JobPostImage> jobPostImages = jobPostDetail.getJobPostImages();
 
         if (!jobPostDetail.getAuthor().equals(username)) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
 
         if (jobPostImages.isEmpty()) {
-            throw new GoohaeyouException(POST_IMAGES_NOT_FOUND);
+            throw new ImageException.PostImagesNotFoundException();
         }
 
         for (JobPostImage jobPostImage : jobPostImages) {
             s3ImageService.deleteImageFromS3(jobPostImage.getJobPostImageUrl());
         }
+
         jobPostImageRepository.deleteAll(jobPostImages);
         jobPostDetail.getJobPostImages().clear();
     }
@@ -98,13 +99,14 @@ public class JobPostImageService {
         String author = jobPostService.findByJobPostAndNameAndValidate(postId).getAuthor();
 
         if (!author.equals(username)) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
 
         JobPostImage currentMainImage = jobPostImageRepository.findById(currentImageId)
-                .orElseThrow(() -> new GoohaeyouException(NOT_FOUND_IMAGE));
+                .orElseThrow(ImageException.ImageNotFoundException::new);
+
         JobPostImage newMainImage = jobPostImageRepository.findById(newImageId)
-                .orElseThrow(() -> new GoohaeyouException(NOT_FOUND_IMAGE));
+                .orElseThrow(ImageException.ImageNotFoundException::new);
 
         currentMainImage.unsetMain();
         newMainImage.setMain();

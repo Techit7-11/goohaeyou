@@ -14,7 +14,10 @@ import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
 import com.ll.goohaeyou.domain.member.member.entity.type.Role;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.global.event.notification.*;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.category.CategoryException;
+import com.ll.goohaeyou.global.exception.jobPost.JobPostException;
+import com.ll.goohaeyou.global.exception.member.MemberException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
 import com.ll.goohaeyou.global.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -38,7 +40,6 @@ import java.util.stream.Collectors;
 import static com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode.POST_MODIFICATION;
 import static com.ll.goohaeyou.domain.notification.entity.type.ResultTypeCode.DELETE;
 import static com.ll.goohaeyou.domain.notification.entity.type.ResultTypeCode.NOTICE;
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +65,7 @@ public class JobPostService {
                 .jobStartDate(form.getJobStartDate())
                 .regionCode(Ut.Region.getRegionCodeFromAddress(form.getLocation()))
                 .category(categoryRepository.findById(form.getCategoryId())
-                        .orElseThrow(() -> new GoohaeyouException(NOT_FOUND_CATEGORY)))
+                        .orElseThrow(CategoryException.NotFoundCategoryException::new))
                 .build();
 
         JobPostDetail postDetail = JobPostDetail.builder()
@@ -98,6 +99,7 @@ public class JobPostService {
 
     public JobPostDetailDto findById(Long id) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+
         return JobPostDetailDto.from(postDetail.getJobPost(), postDetail, postDetail.getEssential(), postDetail.getWage());
     }
 
@@ -109,29 +111,28 @@ public class JobPostService {
     public JobPostForm.Modify modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
         JobPost jobPost = postDetail.getJobPost();
-        if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername()))
-            throw new GoohaeyouException(NOT_ABLE);
+
+        if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername())) {
+            throw new AuthException.NotAuthorizedException();
+        }
 
         postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate(), Ut.Region.getRegionCodeFromAddress(form.getLocation()));
         postDetail.updatePostDetail(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
         postDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
 
-
-
-        // TODO : 삭제 후 알림 날리기
         List<Application> applicationsToRemove = new ArrayList<>();
-        Iterator<Application> iterator = postDetail.getApplications().iterator();
-       while (iterator.hasNext()) {
-           Application application = iterator.next();
-           if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - application.getMember().getBirth().getYear()){
-               applicationsToRemove.add(application);
-               publisher.publishEvent(new ChangeOfPostEvent(this,jobPost,application, POST_MODIFICATION,DELETE));
-           } else {
-               publisher.publishEvent(new ChangeOfPostEvent(this,jobPost,application,POST_MODIFICATION,NOTICE));
-           }
-       }
-       postDetail.getApplications().removeAll(applicationsToRemove);
+        for (Application application : postDetail.getApplications()) {
+            if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - application.getMember().getBirth().getYear()) {
+                applicationsToRemove.add(application);
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application, POST_MODIFICATION, DELETE));
+            } else {
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application, POST_MODIFICATION, NOTICE));
+            }
+        }
+
+        postDetail.getApplications().removeAll(applicationsToRemove);
+
         return form;
     }
 
@@ -147,15 +148,16 @@ public class JobPostService {
             if (!jobPostImages.isEmpty()) {
                 s3ImageService.deletePostImagesFromS3(jobPostImages);
             }
+
             jobPostRepository.deleteById(postId);
         } else {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
     }
 
     private Member findUserByUserNameValidate(String username) {
         return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new GoohaeyouException(MEMBER_NOT_FOUND));
+                .orElseThrow(MemberException.MemberNotFoundException::new);
     }
 
 
@@ -165,13 +167,14 @@ public class JobPostService {
 
     public JobPost findByIdAndValidate(Long id) {
         return jobPostRepository.findById(id)
-                .orElseThrow(() -> new GoohaeyouException(POST_NOT_EXIST));
+                .orElseThrow(JobPostException.PostNotExistsException::new);
     }
 
     public JobPostDetail findByJobPostAndNameAndValidate(Long postId) {
         JobPost post = findByIdAndValidate(postId);
+
         return jobPostdetailRepository.findByJobPostAndAuthor(post,post.getMember().getUsername())
-                .orElseThrow(() -> new GoohaeyouException(POST_NOT_EXIST));
+                .orElseThrow(JobPostException.PostNotExistsException::new);
     }
 
     @Transactional
@@ -179,7 +182,9 @@ public class JobPostService {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
-        if (hasInterest(postDetail,member)) throw new GoohaeyouException(NOT_ABLE);
+        if (hasInterest(postDetail,member)) {
+            throw new AuthException.NotAuthorizedException();
+        }
 
         postDetail.getInterests().add(Interest.builder()
                 .jobPostDetail(postDetail)
@@ -187,6 +192,7 @@ public class JobPostService {
                 .build());
 
         postDetail.getJobPost().increaseInterestCount();
+
         if (!postDetail.getAuthor().equals(username)) {
             publisher.publishEvent(new PostGetInterestedEvent(this, postDetail, member));
         }
@@ -197,20 +203,24 @@ public class JobPostService {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
-        if (!hasInterest(postDetail,member)) throw new GoohaeyouException(NOT_ABLE);
+        if (!hasInterest(postDetail,member)) {
+            throw new AuthException.NotAuthorizedException();
+        }
 
         postDetail.getInterests().removeIf(interest -> interest.getMember().equals(member));
         postDetail.getJobPost().decreaseInterestCount();
     }
 
     public boolean hasInterest(JobPostDetail post, Member member) {
-        return post.getInterests().stream().anyMatch(interest -> interest.getMember().equals(member));
+        return post.getInterests().stream()
+                .anyMatch(interest -> interest.getMember().equals(member));
     }
 
     public boolean isInterested(String username, Long id) {
         List<String> interestedUsernames = findById(id).getInterestedUsernames();
 
-        return interestedUsernames.stream().anyMatch(username::equals);
+        return interestedUsernames.stream()
+                .anyMatch(username::equals);
     }
 
     public List<JobPostDto> findByUsername(String username) {
@@ -239,7 +249,8 @@ public class JobPostService {
     @Transactional
     public void increaseViewCount(Long jobPostId) {
         JobPost jobPost = jobPostRepository.findById(jobPostId)
-                .orElseThrow(() -> new GoohaeyouException(POST_NOT_EXIST));
+                .orElseThrow(JobPostException.PostNotExistsException::new);
+
         jobPost.increaseViewCount();
     }
 
@@ -308,18 +319,20 @@ public class JobPostService {
     }
 
     @Transactional
-    public void postEarlyClosing(String username, Long id) {
+    public void closeJobPostEarly(String username, Long id) {
         JobPost jobPost = findByIdAndValidate(id);
+
         if (!canEditPost(username, jobPost.getMember().getUsername())) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
+
         jobPost.SetDeadlineNull();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
 
     public List<JobPostDto> getPostsByCategory(String categoryName) {
         Category category = categoryRepository.findByName(categoryName)
-                .orElseThrow(() -> new GoohaeyouException(NOT_FOUND_CATEGORY));
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
 
         List<JobPost> jobPosts = null;
 

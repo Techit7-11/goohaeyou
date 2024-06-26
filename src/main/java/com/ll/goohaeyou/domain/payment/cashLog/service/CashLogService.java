@@ -1,7 +1,6 @@
 package com.ll.goohaeyou.domain.payment.cashLog.service;
 
 import com.ll.goohaeyou.domain.application.entity.Application;
-import com.ll.goohaeyou.domain.payment.cashLog.dto.CashLogDto;
 import com.ll.goohaeyou.domain.payment.cashLog.entity.CashLog;
 import com.ll.goohaeyou.domain.payment.cashLog.entity.repository.CashLogRepository;
 import com.ll.goohaeyou.domain.payment.cashLog.entity.type.EventType;
@@ -9,12 +8,10 @@ import com.ll.goohaeyou.domain.payment.payment.dto.success.PaymentSuccessDto;
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
 import com.ll.goohaeyou.domain.payment.payment.entity.type.PayStatus;
 import com.ll.goohaeyou.domain.payment.payment.service.PaymentCalculationService;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.jobPost.JobPostException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.POST_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
@@ -23,15 +20,9 @@ public class CashLogService {
     private final PaymentCalculationService paymentCalculationService;
     private final CashLogRepository cashLogRepository;
 
-    public CashLogDto findByApplicationId(Long id) {
-        CashLog cashLog = findByApplicationIdAndValidate(id);
-
-        return CashLogDto.fromEntity(cashLog);
-    }
-
     public CashLog findByApplicationIdAndValidate(Long id) {
         return cashLogRepository.findByApplicationId(id)
-                .orElseThrow(() -> new GoohaeyouException(POST_NOT_EXIST));
+                .orElseThrow(JobPostException.PostNotExistsException::new);
     }
 
     private void addCashLog(CashLog cashLog) {
@@ -41,6 +32,7 @@ public class CashLogService {
     @Transactional
     public void createCashLogOnSettled(Application application) {
         long earn = application.getEarn();
+
         CashLog newCashLog =  CashLog.builder()
                 .member(application.getMember())
                 .description("지원서_" + application.getId() + "_대금_결제")

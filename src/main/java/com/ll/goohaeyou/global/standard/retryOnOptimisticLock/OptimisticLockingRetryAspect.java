@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.global.standard.retryOnOptimisticLock;
 
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.payment.PaymentException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -9,8 +9,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.PAYMENT_REQUEST_CONFLICT;
 
 @Aspect   // AOP를 통해 추가적인 행동 정의
 @Order(Ordered.LOWEST_PRECEDENCE - 1) // @Transactional보다 더 먼저 메서드에 적용되어야 해서, 우선순위를 높게 설정
@@ -40,6 +38,6 @@ public class OptimisticLockingRetryAspect {
         }
         // 모든 시도가 실패했을 때의 예외 처리
         log.error("Optimistic locking failure: Max attempts exceeded.");
-        throw new GoohaeyouException(PAYMENT_REQUEST_CONFLICT);
+        throw new PaymentException.PaymentRequestConflictException();
     }
 }

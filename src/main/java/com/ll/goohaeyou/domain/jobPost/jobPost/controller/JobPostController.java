@@ -189,7 +189,7 @@ public class JobPostController {
     @Operation(summary = "조기 마감")
     public ApiResponse<Empty> postEarlyClosing(@AuthenticationPrincipal MemberDetails memberDetails,
                                                @PathVariable(name = "id") Long id) {
-        jobPostService.postEarlyClosing(memberDetails.getUsername(), id);
+        jobPostService.closeJobPostEarly(memberDetails.getUsername(), id);
 
         return ApiResponse.noContent();
     }

@@ -11,15 +11,15 @@ import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
 import com.ll.goohaeyou.domain.member.member.entity.type.Role;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.global.event.notification.CommentCreatedEvent;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.jobPost.CommentException;
+import com.ll.goohaeyou.global.exception.member.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,16 +34,20 @@ public class CommentService {
     @Transactional
     public CommentForm.Register writeComment(Long postId, String username, CommentForm.Register form) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
+
         Comment comment = Comment.builder()
                 .jobPostDetail(postDetail)
                 .member(memberService.getMember(username))
                 .content(form.getContent())
                 .build();
+
         postDetail.getComments().add(comment);
         postDetail.getJobPost().increaseCommentsCount();
+
         if(!postDetail.getAuthor().equals(username)) {
             publisher.publishEvent(new CommentCreatedEvent(this,postDetail,comment));
         }
+
         return form;
     }
 
@@ -52,7 +56,9 @@ public class CommentService {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
         Comment comment = findByIdAndValidate(commentId);
 
-        if (!canEditeComment(username, comment, postDetail)) throw new GoohaeyouException(NOT_ABLE);
+        if (!canEditComment(username, comment, postDetail)) {
+            throw new AuthException.NotAuthorizedException();
+        }
 
         comment.update(form.getContent());
     }
@@ -64,8 +70,9 @@ public class CommentService {
         Member member = findUserByUserNameValidate(username);
 
         if (!isAdminOrNot(comment, member)) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
+
         commentRepository.deleteById(commentId);
 
         postDetail.getJobPost().decreaseCommentsCount();
@@ -74,19 +81,18 @@ public class CommentService {
 
     public List<CommentDto> findByPostId(Long postId) {
         jobPostService.findByIdAndValidate(postId);
-        // 공고 유효성 체크를 위해 추가
 
         return CommentDto.convertToDtoList(commentRepository.findAllByJobPostDetailId(postId));
     }
 
     public Comment findByIdAndValidate(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new GoohaeyouException(COMMENT_NOT_EXIST));
+                .orElseThrow(CommentException.CommentNotExistsException::new);
     }
 
-    private boolean canEditeComment(String username, Comment comment, JobPostDetail post) {
+    private boolean canEditComment(String username, Comment comment, JobPostDetail post) {
         if (!post.getComments().contains(comment)) {
-            throw new GoohaeyouException(COMMENT_NOT_EXIST);
+            throw new CommentException.CommentNotExistsException();
         }
 
         return username.equals(comment.getMember().getUsername());
@@ -94,7 +100,7 @@ public class CommentService {
 
     private Member findUserByUserNameValidate(String username) {
         return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new GoohaeyouException(MEMBER_NOT_FOUND));
+                .orElseThrow(MemberException.MemberNotFoundException::new);
     }
 
     private boolean isAdminOrNot(Comment comment, Member member) {

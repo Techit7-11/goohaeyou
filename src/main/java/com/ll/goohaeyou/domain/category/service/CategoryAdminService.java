@@ -3,13 +3,11 @@ package com.ll.goohaeyou.domain.category.service;
 import com.ll.goohaeyou.domain.category.dto.CategoryForm;
 import com.ll.goohaeyou.domain.category.entity.Category;
 import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.category.CategoryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.INVALID_CATEGORY_FORMAT;
-import static com.ll.goohaeyou.global.exception.ErrorCode.NOT_ABLE;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +20,13 @@ public class CategoryAdminService {
     @Transactional
     public void addCategory(String username, CategoryForm.Add form) {
         if (!username.equals(ADMIN_USERNAME)) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
 
         Category parent = getParent(form.getParentName());
 
         if (parent == null && form.getLevel() > 1) {
-            throw new GoohaeyouException(INVALID_CATEGORY_FORMAT);
+            throw new CategoryException.InvalidCategoryFormatException();
         }
 
         Category newCategory = Category.builder()

@@ -2,12 +2,10 @@ package com.ll.goohaeyou.domain.member.member.service;
 
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.entity.repository.MemberRepository;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.payment.PaymentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.INSUFFICIENT_BALANCE;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +37,7 @@ public class CashService {
 
     private void checkEnoughBalance(long currentCash, long amount) {
         if (currentCash < amount) {
-            throw new GoohaeyouException(INSUFFICIENT_BALANCE);
+            throw new PaymentException.InsufficientBalance();
         }
     }
 }

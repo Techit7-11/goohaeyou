@@ -7,12 +7,13 @@ import com.ll.goohaeyou.domain.payment.payment.dto.cancel.PaymentCancelResDto;
 import com.ll.goohaeyou.domain.payment.payment.entity.Payment;
 import com.ll.goohaeyou.domain.payment.payment.entity.repository.PaymentRepository;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.payment.PaymentException;
 import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import static com.ll.goohaeyou.domain.application.entity.type.WageStatus.PAYMENT_CANCELLED;
 import static com.ll.goohaeyou.global.exception.ErrorCode.*;
@@ -21,7 +22,6 @@ import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class PaymentCancelService {
     private final PaymentRepository paymentRepository;
-    private final RestTemplate restTemplate;
     private final TossPaymentUtil tossPaymentUtil;
     private final ApplicationService applicationService;
     private final CashLogService cashLogService;
@@ -29,7 +29,7 @@ public class PaymentCancelService {
     @Transactional
     public PaymentCancelResDto tossPaymentCancel(String username, String paymentKey, String cancelReason) {
         Payment payment = paymentRepository.findByPaymentKeyAndMemberUsername(paymentKey, username)
-                .orElseThrow(() -> new GoohaeyouException(PAYMENT_NOT_FOUND));
+                .orElseThrow(PaymentException.PaymentNotFoundException::new);
 
         checkPaymentCancelable(username, payment);
 
@@ -52,11 +52,13 @@ public class PaymentCancelService {
 
     private void checkPaymentCancelable(String username, Payment payment) {
         if (payment.isCanceled()) {
-            throw new GoohaeyouException(ALREADY_CANCELED);
+            throw new PaymentException.AlreadyCanceledException();
         }
+
         if (!payment.getMember().getUsername().equals(username)) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
+
         if (!payment.isPaid()) {
             throw new GoohaeyouException(BAD_REQUEST);
         }

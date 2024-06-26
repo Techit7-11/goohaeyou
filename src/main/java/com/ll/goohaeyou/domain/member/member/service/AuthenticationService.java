@@ -4,7 +4,6 @@ import com.ll.goohaeyou.domain.member.member.dto.MemberDto;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.entity.RefreshToken;
 import com.ll.goohaeyou.domain.member.member.entity.repository.RefreshTokenRepository;
-import com.ll.goohaeyou.global.config.AppConfig;
 import com.ll.goohaeyou.global.security.JwtTokenProvider;
 import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +20,6 @@ public class AuthenticationService {
     public static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(1);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(1);
-    public static final String REDIRECT_PATH = AppConfig.getSiteFrontUrl();
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -42,7 +40,7 @@ public class AuthenticationService {
         return MemberDto.from(member);
     }
 
-    // 리프레쉬 토큰 DB 저장
+    // 리프레쉬 토큰을 DB에 저장
     private void saveRefreshToken(Long userId, String newRefreshToken) {
         RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
                 .map(entity -> entity.update(newRefreshToken))
@@ -51,7 +49,7 @@ public class AuthenticationService {
         refreshTokenRepository.save(refreshToken);
     }
 
-    // 토큰 쿠키 저장
+    // 토큰을 쿠키에 저장
     private void addTokenToCookie(HttpServletRequest request, HttpServletResponse response, String cookieName, String token, Duration duration) {
         int cookieMaxAge = (int) duration.toSeconds();
         CookieUtil.deleteCookie(request, response, cookieName);

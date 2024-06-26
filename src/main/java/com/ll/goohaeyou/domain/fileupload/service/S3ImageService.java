@@ -8,7 +8,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostImage;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.image.ImageException;
 import com.ll.goohaeyou.global.standard.base.util.MIMETypeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -43,7 +41,7 @@ public class S3ImageService {
     @Transactional
     public String upload(MultipartFile image) {
         if (image == null || image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
-            throw new GoohaeyouException(FILE_IS_EMPTY);
+            throw new ImageException.FileIsEmptyException();
         }
         return uploadImage(image);
     }
@@ -54,7 +52,7 @@ public class S3ImageService {
         try {
             return uploadImageToS3(image);   // AWS S3에 이미지 업로드
         } catch (IOException e) {
-            throw new GoohaeyouException(IO_EXCEPTION_ON_IMAGE_DELETE);
+            throw new ImageException.IOExceptionOnImageDeleteException();
         }
     }
 
@@ -62,14 +60,14 @@ public class S3ImageService {
     private void validateImageFileExtension(String filename) {
         int lastDotIndex = filename.lastIndexOf(".");
         if (lastDotIndex == -1) {   // 파일명에 점이 없으면 예외 발생
-            throw new GoohaeyouException(NO_FILE_EXTENSION);
+            throw new ImageException.NoFileExtensionException();
         }
 
         String extension = filename.substring(lastDotIndex + 1).toLowerCase();   // 확장자를 추출하여 소문자로 변환
         List<String> allowedExtensionList = Arrays.asList("jpg", "jpeg", "png", "gif");
 
         if (!allowedExtensionList.contains(extension)) {   // 허용된 확장자 목록에 속하지 않으면 예외 발생
-            throw new GoohaeyouException(INVALID_FILE_EXTENSION);
+            throw new ImageException.InvalidFileExtensionException();
         }
     }
 
@@ -86,7 +84,7 @@ public class S3ImageService {
         ObjectMetadata metadata = new ObjectMetadata();
         MIMETypeUtil.getMimeType(extension).ifPresentOrElse(
             metadata::setContentType,   // 메타데이터 설정 ex) image/png
-            () -> { throw new GoohaeyouException(INVALID_FILE_EXTENSION); }
+            () -> { throw new ImageException.InvalidFileExtensionException(); }
         );
         metadata.setContentLength(bytes.length);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
@@ -95,9 +93,9 @@ public class S3ImageService {
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata);
             amazonS3.putObject(putObjectRequest);
         } catch (AmazonServiceException e) {
-            throw new GoohaeyouException(AWS_SERVICE_EXCEPTION);
+            throw new ImageException.AWSServiceException();
         } catch (SdkClientException e) {
-            throw new GoohaeyouException(AWS_CLIENT_EXCEPTION);
+            throw new ImageException.AWSClientException();
         } finally {
             byteArrayInputStream.close();
             inputStream.close();
@@ -109,38 +107,38 @@ public class S3ImageService {
     // AWS S3에서 이미지 삭제
     @Transactional
     public void deleteImageFromS3(String imageAddress) {
-        String fileName = getKeyFromImageAddress(imageAddress);   // 이미지 주소에서 파일명 추출
+        String fileName = getFileNameFromImageAddress(imageAddress);   // 이미지 주소에서 파일명 추출
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));   // S3에서 이미지 삭제 요청
         } catch (Exception e) {
-            throw new GoohaeyouException(IO_EXCEPTION_ON_IMAGE_DELETE);
+            throw new ImageException.IOExceptionOnImageDeleteException();
         }
     }
 
     @Transactional
     public void deletePostImagesFromS3(List<JobPostImage> jobPostImages) {
         if (jobPostImages.isEmpty()) {
-            throw new GoohaeyouException(POST_IMAGES_NOT_FOUND);
+            throw new ImageException.PostImagesNotFoundException();
         }
 
         for (JobPostImage jobPostImage : jobPostImages) {
-            String fileName = getKeyFromImageAddress(jobPostImage.getJobPostImageUrl());   // 이미지 주소에서 파일명 추출
+            String fileName = getFileNameFromImageAddress(jobPostImage.getJobPostImageUrl());   // 이미지 주소에서 파일명 추출
             try {
                 amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));   // S3에서 이미지 삭제 요청
             } catch (Exception e) {
-                throw new GoohaeyouException(IO_EXCEPTION_ON_IMAGE_DELETE);
+                throw new ImageException.IOExceptionOnImageDeleteException();
             }
         }
     }
 
     // 이미지 주소로부터 파일명을 추출
-    private String getKeyFromImageAddress(String imageAddress) {
+    private String getFileNameFromImageAddress(String imageAddress) {
         try {
             URI uri = new URI(imageAddress);
             String decodingKey = URLDecoder.decode(uri.getPath(), StandardCharsets.UTF_8);
             return decodingKey.substring(1);  // 맨 앞의 '/' 제거
         } catch (URISyntaxException e) {
-            throw new GoohaeyouException(IO_EXCEPTION_ON_IMAGE_DELETE);
+            throw new ImageException.IOExceptionOnImageDeleteException();
         }
     }
 }

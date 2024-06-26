@@ -1,10 +1,8 @@
 package com.ll.goohaeyou.global.standard.base;
 
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.category.CategoryException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.NOT_FOUND_CATEGORY;
 
 @Getter
 @RequiredArgsConstructor
@@ -36,6 +34,6 @@ public enum RegionType {
                 return region.getCode();
             }
         }
-        throw new GoohaeyouException(NOT_FOUND_CATEGORY);
+        throw new CategoryException.NotFoundCategoryException();
     }
 }

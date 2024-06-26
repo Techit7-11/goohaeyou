@@ -3,13 +3,11 @@ package com.ll.goohaeyou.domain.category.service;
 import com.ll.goohaeyou.domain.category.dto.CategoryDto;
 import com.ll.goohaeyou.domain.category.entity.Category;
 import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.category.CategoryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.NOT_FOUND_CATEGORY;
 
 @Service
 @RequiredArgsConstructor
@@ -31,12 +29,12 @@ public class CategoryService {
     private Category getCategoryByName(String categoryName) {
 
         return categoryRepository.findByName(categoryName)
-                .orElseThrow(() -> new GoohaeyouException(NOT_FOUND_CATEGORY));
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
     }
 
     public boolean isLeafCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new GoohaeyouException(NOT_FOUND_CATEGORY));
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
 
         return category.getSubCategories().isEmpty();
     }

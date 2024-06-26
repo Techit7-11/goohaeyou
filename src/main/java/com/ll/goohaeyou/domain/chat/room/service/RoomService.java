@@ -8,7 +8,8 @@ import com.ll.goohaeyou.domain.chat.room.entity.Room;
 import com.ll.goohaeyou.domain.chat.room.entity.repository.RoomRepository;
 import com.ll.goohaeyou.domain.member.member.entity.Member;
 import com.ll.goohaeyou.domain.member.member.service.MemberService;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.global.exception.chat.ChatException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -18,9 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
-import static com.ll.goohaeyou.global.exception.ErrorCode.CHATROOM_NOT_EXITS;
-import static com.ll.goohaeyou.global.exception.ErrorCode.NOT_ABLE;
 
 @Service
 @RequiredArgsConstructor
@@ -33,13 +31,13 @@ public class RoomService {
 
     @Transactional
     public Long createRoom(Long memberId1, Long memberId2) {
-
         Member member1 = memberService.findById(memberId1);
         String member1Username = member1.getUsername();
+
         Member member2 = memberService.findById(memberId2);
         String member2Username = member2.getUsername();
 
-        if(checkTheChatroom(member1.getUsername(),member2.getUsername())) {
+        if (checkTheChatroom(member1.getUsername(),member2.getUsername())) {
             Room room = findByUsername1AndUsername2(member1Username, member2Username);
 
             String content = "매칭이 되었습니다.";
@@ -65,20 +63,23 @@ public class RoomService {
 
     public RoomDto findById(Long roomId, String username) {
         Room room = findByIdAndValidate(roomId);
+
         if (!username.equals(room.getUsername1())&&!username.equals(room.getUsername2())) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
+
         if (username.equals(room.getUsername1()) && room.isUser1HasExit()) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         } else if (username.equals(room.getUsername2()) && room.isUser2HasExit()) {
-            throw new GoohaeyouException(NOT_ABLE);
+            throw new AuthException.NotAuthorizedException();
         }
+
         return RoomDto.from(room);
     }
 
     public Room findByIdAndValidate(Long roomId) {
         return roomRepository.findById(roomId)
-                .orElseThrow(() -> new GoohaeyouException(CHATROOM_NOT_EXITS));
+                .orElseThrow(ChatException.ChatroomNotExistsException::new);
     }
 
     public List<RoomListDto> getRoomList(String username) {
@@ -100,7 +101,7 @@ public class RoomService {
     public Room findByUsername1AndUsername2(String username1, String username2) {
         return roomRepository.findByUsername1AndUsername2(username1, username2)
                 .orElseGet(() -> roomRepository.findByUsername1AndUsername2(username2, username1)
-                        .orElseThrow(() -> new GoohaeyouException(CHATROOM_NOT_EXITS)));
+                        .orElseThrow(ChatException.ChatroomNotExistsException::new));
     }
 
     public boolean checkTheChatroom(String username1, String username2) {
