@@ -46,10 +46,10 @@ src/main/generated
 
 ### terraform ###
 .terraform
-terraform/main.tf
-terraform/terraform.tfstate
-terraform/terraform.tfstate.backup
-terraform/.terraform.lock.hcl
+back/terraform/main.tf
+back/terraform/terraform.tfstate
+back/terraform/terraform.tfstate.backup
+back/terraform/.terraform.lock.hcl
 
 ### firebase ###
 firebase/goohaeyou-firebase-adminsdk.json
