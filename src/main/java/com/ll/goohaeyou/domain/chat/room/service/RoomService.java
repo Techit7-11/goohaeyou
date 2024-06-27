@@ -11,7 +11,6 @@ import com.ll.goohaeyou.domain.member.member.service.MemberService;
 import com.ll.goohaeyou.global.exception.auth.AuthException;
 import com.ll.goohaeyou.global.exception.chat.ChatException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,17 +19,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
+@Service
 public class RoomService {
     private final RoomRepository roomRepository;
     private final MemberService memberService;
     private final SimpMessagingTemplate messagingTemplate;
 
     @Transactional
-    public Long createRoom(Long memberId1, Long memberId2) {
+    public void createRoom(Long memberId1, Long memberId2) {
         Member member1 = memberService.findById(memberId1);
         String member1Username = member1.getUsername();
 
@@ -45,8 +43,6 @@ public class RoomService {
             createInfoMessage(room, "admin", content);
 
             room.recreate();
-
-            return room.getId();
         } else {
             Room newRoom = Room.builder()
                     .username1(member1.getUsername())
@@ -56,8 +52,6 @@ public class RoomService {
                     .build();
 
             roomRepository.save(newRoom);
-
-            return newRoom.getId();
         }
     }
 

@@ -13,10 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Application", description = "지원서 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/applications")
+@RequiredArgsConstructor
+@Tag(name = "Application", description = "지원서 API")
 public class ApplicationController {
     private final ApplicationService applicationService;
 

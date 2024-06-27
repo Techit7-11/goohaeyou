@@ -10,10 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Interest", description = "관심 공고 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/job-posts")
+@RequiredArgsConstructor
+@Tag(name = "Interest", description = "관심 공고 API")
 public class InterestController {
     private final JobPostService jobPostService;
 

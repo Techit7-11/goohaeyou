@@ -30,10 +30,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Tag(name = "JobPost", description = "구인공고 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/job-posts")
+@RequiredArgsConstructor
+@Tag(name = "JobPost", description = "구인공고 API")
 public class JobPostController {
     private final JobPostService jobPostService;
 

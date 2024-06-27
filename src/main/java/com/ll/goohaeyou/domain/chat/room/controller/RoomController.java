@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Chatting", description = "채팅 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/chat")
+@RequiredArgsConstructor
+@Tag(name = "Chatting", description = "채팅 API")
 public class RoomController {
     private final RoomService roomService;
 

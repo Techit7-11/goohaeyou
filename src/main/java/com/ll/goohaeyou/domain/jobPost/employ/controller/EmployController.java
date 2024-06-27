@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Employ", description = "구인 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/employ/{postId}")
+@RequiredArgsConstructor
+@Tag(name = "Employ", description = "구인 API")
 public class EmployController {
     private final EmployService employService;
 
