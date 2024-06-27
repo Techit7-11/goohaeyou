@@ -164,6 +164,9 @@
 						</a>
 					{/each}
 				</div>
+				<div class="pagination-container my-5">
+					<Pagination page={itemPage} />
+				</div>
 			</div>
 		</div>
 	</div>

@@ -164,10 +164,7 @@
 						</a>
 					{/each}
 				</div>
-				<div class="max-w-4xl mx-auto my-5">
-					<button class="w-full btn btn-primary my-5" on:click={JobPostWritePage}>
-						글 작성하기
-					</button>
+				<div class="pagination-container my-5">
 					<Pagination page={itemPage} />
 				</div>
 			</div>
