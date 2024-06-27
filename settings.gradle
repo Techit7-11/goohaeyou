@@ -1,1 +1,3 @@
 rootProject.name = 'goohaeyou'
+include 'back'
+include 'front'
