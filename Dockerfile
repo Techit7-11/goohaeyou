@@ -5,9 +5,9 @@ FROM gradle:jdk21-graal-jammy as builder
 WORKDIR /app
 
 # 소스 코드와 Gradle 래퍼 복사
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
+COPY back/gradlew .
+COPY back/gradle gradle
+COPY back/build.gradle .
 COPY settings.gradle .
 
 # Gradle 래퍼에 실행 권한 부여
