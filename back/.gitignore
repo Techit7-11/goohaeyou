@@ -1,0 +1,57 @@
+# Gradle
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+/src/main/**/build/
+/src/test/**/build/
+
+# STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+/bin/
+/src/main/**/bin/
+/src/test/**/bin/
+
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+/out/
+/src/main/**/out/
+/src/test/**/out/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Ignore application secret
+/src/main/resources/application-secret.yml
+
+# Ignore database files
+/db_dev.mv.db
+/db_dev.trace.db
+
+# Ignore generated files
+/src/main/generated
+
+# Security
+*/application-secret.yml
+
+# Terraform
+/.terraform/
+/terraform/main.tf
+/terraform/terraform.tfstate
+/terraform/terraform.tfstate.backup
+/terraform/.terraform.lock.hcl
