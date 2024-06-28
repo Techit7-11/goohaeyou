@@ -9,5 +9,4 @@ class GoohaeyouApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
