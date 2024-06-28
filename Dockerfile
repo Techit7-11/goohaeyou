@@ -18,7 +18,7 @@ RUN chmod +x ./back/gradlew
 RUN ./back/gradlew -p back dependencies --no-daemon
 
 # 소스 코드 복사
-COPY back/src ./back/src
+COPY back/src /back/src
 
 # 애플리케이션 빌드
 RUN ./back/gradlew -p back build --no-daemon -x test

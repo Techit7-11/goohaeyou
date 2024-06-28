@@ -27,6 +27,10 @@ gradlew.bat
 out/
 **/out/
 
+# Ignore database files
+/db_dev.mv.db
+/db_dev.trace.db
+
 # Ignore application secret
 /src/main/resources/application-secret.yml
 
