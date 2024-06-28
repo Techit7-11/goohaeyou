@@ -31,6 +31,3 @@ build/
 
 # VS Code
 .vscode/
-
-# Firebase
-firebase/goohaeyou-firebase-adminsdk.json

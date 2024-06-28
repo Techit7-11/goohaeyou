@@ -46,3 +46,6 @@ out/
 /terraform/terraform.tfstate
 /terraform/terraform.tfstate.backup
 /terraform/.terraform.lock.hcl
+
+# Firebase
+firebase/goohaeyou-firebase-adminsdk.json
