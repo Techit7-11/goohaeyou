@@ -5,9 +5,9 @@ on:
       - .github/workflows/deploy-aws.yml
       - back/src/**
       - back/build.gradle
-      - Dockerfile
+      - back/docker/Dockerfile
       - readme.md
-      - infraScript/**
+      - back/infraScript/**
     branches:
       - feature/refactor-structure
 
