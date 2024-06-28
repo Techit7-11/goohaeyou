@@ -8,7 +8,7 @@ build/
 **/node_modules/
 
 # Gradle wrapper
-!back/gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.jar
 
 # IntelliJ IDEA
 *.iws
