@@ -4,23 +4,23 @@ FROM gradle:jdk21-graal-jammy as builder
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# 소스 코드와 Gradle 래퍼 복사
+# Gradle Wrapper 및 설정 파일 복사
 COPY gradlew .
 COPY gradle gradle
-COPY back/build.gradle .
+COPY back/build.gradle back/
 COPY settings.gradle .
 
-# Gradle 래퍼에 실행 권한 부여
+# Gradle Wrapper에 실행 권한 부여
 RUN chmod +x ./gradlew
 
 # 종속성 설치
-RUN ./gradlew dependencies --no-daemon
+RUN ./gradlew -p back dependencies --no-daemon
 
 # 소스 코드 복사
-COPY back/src src
+COPY back/src back/src
 
 # 애플리케이션 빌드
-RUN ./gradlew build --no-daemon -x test
+RUN ./gradlew -p back build --no-daemon -x test
 
 # 두 번째 스테이지: 실행 스테이지
 FROM ghcr.io/graalvm/jdk-community:21
@@ -29,7 +29,7 @@ FROM ghcr.io/graalvm/jdk-community:21
 WORKDIR /app
 
 # 첫 번째 스테이지에서 빌드된 JAR 파일 복사
-COPY --from=builder /app/build/libs/*.jar app.jar
+COPY --from=builder /app/back/build/libs/*.jar app.jar
 
 # 서버 시간대를 아시아/서울로 설정
 ENV TZ=Asia/Seoul
