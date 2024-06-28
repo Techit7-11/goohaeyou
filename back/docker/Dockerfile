@@ -5,23 +5,23 @@ FROM gradle:jdk21-graal-jammy as builder
 WORKDIR /app
 
 # Gradle Wrapper 및 설정 파일 복사
-COPY back/gradlew ./back/gradlew
-COPY back/gradlew.bat ./back/gradlew.bat
-COPY back/gradle ./back/gradle
-COPY back/build.gradle ./back/build.gradle
-COPY settings.gradle .
+COPY ../gradlew ./gradlew
+COPY ../gradlew.bat ./gradlew.bat
+COPY ../gradle ./gradle
+COPY ../build.gradle ./build.gradle
+COPY ../settings.gradle ./settings.gradle
 
 # Gradle Wrapper에 실행 권한 부여
-RUN chmod +x ./back/gradlew
+RUN chmod +x ./gradlew
 
 # 종속성 설치
-RUN ./back/gradlew -p back dependencies --no-daemon
+RUN ./gradlew dependencies --no-daemon
 
 # 소스 코드 복사
-COPY back/src /back/src
+COPY ../src ./src
 
 # 애플리케이션 빌드
-RUN ./back/gradlew -p back build --no-daemon -x test
+RUN ./gradlew build --no-daemon -x test
 
 # 두 번째 스테이지: 실행 스테이지
 FROM ghcr.io/graalvm/jdk-community:21
@@ -30,7 +30,7 @@ FROM ghcr.io/graalvm/jdk-community:21
 WORKDIR /app
 
 # 첫 번째 스테이지에서 빌드된 JAR 파일 복사
-COPY --from=builder /app/back/build/libs/*.jar app.jar
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 # 서버 시간대를 아시아/서울로 설정
 ENV TZ=Asia/Seoul

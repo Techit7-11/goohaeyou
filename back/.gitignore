@@ -39,3 +39,10 @@ out/
 
 # Security
 */application-secret.yml
+
+# Terraform
+.terraform
+/terraform/main.tf
+/terraform/terraform.tfstate
+/terraform/terraform.tfstate.backup
+/terraform/.terraform.lock.hcl
