@@ -68,8 +68,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           instance-ids: "i-04750d527ac3ba112"
-          context: back/docker
-          file: back/docker/Dockerfile
+          context: back
+          file: docker/Dockerfile
           push: true
           tags: |
             ghcr.io/${{ env.OWNER_LC }}/goohaeyou:${{ needs.makeTagAndRelease.outputs.tag_name }},
