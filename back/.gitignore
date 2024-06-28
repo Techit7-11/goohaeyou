@@ -39,19 +39,8 @@
 # Ignore application secret
 /src/main/resources/application-secret.yml
 
-# Ignore database files
-/db_dev.mv.db
-/db_dev.trace.db
-
 # Ignore generated files
 /src/main/generated
 
 # Security
 */application-secret.yml
-
-# Terraform
-/.terraform/
-/terraform/main.tf
-/terraform/terraform.tfstate
-/terraform/terraform.tfstate.backup
-/terraform/.terraform.lock.hcl

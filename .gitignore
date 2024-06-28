@@ -3,12 +3,13 @@ HELP.md
 .gradle
 build/
 **/build/
-**/.gradle/
 **/.idea/
 **/node_modules/
 
-# Gradle wrapper
+# Gradle
 !gradle/wrapper/gradle-wrapper.jar
+!gradlew
+!gradlew.bat
 
 # IntelliJ IDEA
 *.iws
@@ -23,6 +24,10 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+# Ignore database files
+/db_dev.mv.db
+/db_dev.trace.db
 
 # VS Code
 .vscode/
