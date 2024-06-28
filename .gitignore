@@ -6,17 +6,17 @@ build/
 **/.idea/
 **/node_modules/
 
-# Gradle
-!gradle/wrapper/gradle-wrapper.jar
-!gradlew
-!gradlew.bat
-
 # IntelliJ IDEA
-*.iws
-*.iml
-*.ipr
-out/
-**/out/
+/.idea/*
+!.idea/inspectionProfiles
+/.idea/*.iml
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/tasks.xml
+/.idea/dictionaries
+/.idea/shelf
+/.idea/gradle.xml
+/.idea/libraries
 
 # NetBeans
 /nbproject/private/
