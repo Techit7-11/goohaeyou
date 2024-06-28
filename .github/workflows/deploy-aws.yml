@@ -68,7 +68,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           instance-ids: "i-04750d527ac3ba112"
-          context: .
+          context: back/docker
+          file: back/docker/Dockerfile
           push: true
           tags: |
             ghcr.io/${{ env.OWNER_LC }}/goohaeyou:${{ needs.makeTagAndRelease.outputs.tag_name }},
@@ -86,7 +87,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           instance-ids: "i-04750d527ac3ba112"
           working-directory: /
-          comment: Deploy-aws
+          comment: AWS Zero Downtime Deployment
           command: |
             mkdir -p /docker_projects/goohaeyou
             curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/goohaeyou/feature/refactor-structure/infraScript/zero_downtime_deploy.py
