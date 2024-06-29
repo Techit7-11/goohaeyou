@@ -29,5 +29,5 @@ build/
 /db_dev.mv.db
 /db_dev.trace.db
 
-# VS Code
-.vscode/
+# macOS
+.DS_Store
