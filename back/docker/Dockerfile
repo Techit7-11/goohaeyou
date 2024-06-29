@@ -6,7 +6,6 @@ WORKDIR /app
 
 # Gradle Wrapper 및 설정 파일 복사
 COPY ../gradlew ./gradlew
-COPY ../gradlew.bat ./gradlew.bat
 COPY ../gradle ./gradle
 COPY ../build.gradle ./build.gradle
 COPY ../settings.gradle ./settings.gradle
