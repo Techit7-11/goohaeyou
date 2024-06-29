@@ -6,7 +6,7 @@ on:
       - back/src/**
       - back/build.gradle
       - back/docker/Dockerfile
-      - readme.md
+      - README.md
       - back/infraScript/**
     branches:
       - feature/refactor-structure
