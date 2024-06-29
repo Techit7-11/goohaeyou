@@ -3,10 +3,10 @@ spring:
     ansi:
       enabled: always
   datasource:
-    url: jdbc:h2:./db_dev;MODE=MYSQL
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3307/goohaeyou_dev?serverTimezone=Asia/Seoul
+    username: root
+    password: 1
+    driver-class-name: com.mysql.cj.jdbc.Driver
   batch:
     jdbc:
       initialize-schema: always
@@ -27,10 +27,6 @@ spring:
   h2:
     console:
       enabled: true
-  autoconfigure:   # 운영환경에서만 redis를 사용하도록 설정
-    exclude:
-      #- org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
-      #- org.springframework.boot.autoconfigure.session.SessionAutoConfiguration   # 세션을 redis에 저장
 logging:
   level:
     com.ll.gooHaeYu: DEBUG

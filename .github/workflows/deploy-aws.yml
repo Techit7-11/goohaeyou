@@ -3,11 +3,11 @@ on:
   push:
     paths:
       - .github/workflows/deploy-aws.yml
-      - src/**
-      - build.gradle
-      - Dockerfile
-      - readme.md
-      - infraScript/**
+      - back/src/**
+      - back/build.gradle
+      - back/docker/Dockerfile
+      - README.md
+      - back/infraScript/**
     branches:
       - dev
 
@@ -63,12 +63,13 @@ jobs:
         env:
           ACTIONS_STEP_DEBUG: true
           APPLICATION_SECRET: ${{ secrets.APPLICATION_SECRET_YML }}
-        run: echo "$APPLICATION_SECRET" > src/main/resources/application-secret.yml
+        run: echo "$APPLICATION_SECRET" > back/src/main/resources/application-secret.yml
       - name: 빌드 앤 푸시
         uses: docker/build-push-action@v3
         with:
           instance-ids: "i-04750d527ac3ba112"
-          context: .
+          context: ./back
+          file: ./back/docker/Dockerfile
           push: true
           tags: |
             ghcr.io/${{ env.OWNER_LC }}/goohaeyou:${{ needs.makeTagAndRelease.outputs.tag_name }},
@@ -86,9 +87,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           instance-ids: "i-04750d527ac3ba112"
           working-directory: /
-          comment: Deploy-aws
+          comment: AWS Zero Downtime Deployment
           command: |
             mkdir -p /docker_projects/goohaeyou
-            curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/goohaeyou/dev/infraScript/zero_downtime_deploy.py
+            curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/dev/feature/refactor-structure/infraScript/zero_downtime_deploy.py
             chmod +x /docker_projects/goohaeyou/zero_downtime_deploy.py
             /docker_projects/goohaeyou/zero_downtime_deploy.py

@@ -1,55 +1,33 @@
+# Common
 HELP.md
 .gradle
 build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+**/build/
+**/.idea/
+**/node_modules/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# IntelliJ IDEA
+/.idea/*
+!.idea/inspectionProfiles
+/.idea/*.iml
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/tasks.xml
+/.idea/dictionaries
+/.idea/shelf
+/.idea/gradle.xml
+/.idea/libraries
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+# Ignore database files
+/db_dev.mv.db
+/db_dev.trace.db
 
-src/main/resources/application-secret.yml
-db_dev.mv.db
-db_dev.trace.db
-src/main/generated
-
-### security ###
-*/application-secret.yml
-
-### terraform ###
-.terraform
-terraform/main.tf
-terraform/terraform.tfstate
-terraform/terraform.tfstate.backup
-terraform/.terraform.lock.hcl
-
-### firebase ###
-firebase/goohaeyou-firebase-adminsdk.json
+# macOS
+.DS_Store
