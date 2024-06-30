@@ -5,6 +5,7 @@
 <p align="center">
   <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/0d344997-8b50-4120-b493-62acd810ae54" width="300px"/><br><br>
   <a href="https://www.goohaeyou.site/">사이트 바로가기</a>
+  <br/>혹은 <a href="https://www.google.com/search?q=%EA%B5%AC%ED%95%B4%EC%9C%A0">Google에 '구해유' 검색</a>
 </p>
 
 <br/><br/>
@@ -31,7 +32,7 @@
     - 구인 공고 검색, 정렬, 필터
     - 1:1 채팅
     - 결제, 정산
-    - 알림
+    - 알림, 웹 푸시
     - 지도
     - 이미지 업로드
 
@@ -91,4 +92,4 @@
 
 ## 📝 ERD
 
-![goohaeyou](https://github.com/Techit7-11/goohaeyou/assets/76129297/d54779d1-da84-4e91-b7be-d39969c5da18)
+![goohaeyou](https://github.com/Techit7-11/goohaeyou/assets/76129297/78d995fa-0ffd-48df-a762-c56ba8458537)
