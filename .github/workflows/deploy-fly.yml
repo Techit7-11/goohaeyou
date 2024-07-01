@@ -1,0 +1,33 @@
+name: Fly Deploy
+on:
+  push:
+    paths:
+      - settings.gradle
+      - build.gradle
+      - src/**
+      - fly.toml
+      - Dockerfile
+      - .github/workflows/deploy-fly.yml
+    branches:
+      - release/1
+
+permissions:
+  contents: write
+  packages: write
+  actions: write
+  deployments: write
+
+jobs:
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: application-secret.yml 생성
+        env:
+          APPLICATION_SECRET: ${{ secrets.APPLICATION_SECRET_YML }}
+        run: echo "$APPLICATION_SECRET" > src/main/resources/application-secret.yml
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

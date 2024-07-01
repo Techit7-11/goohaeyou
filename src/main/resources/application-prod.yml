@@ -1,0 +1,49 @@
+server:
+  port: 8080
+  shutdown: graceful   # 스프링부트가 꺼질 때 현재 하던일(요청응답, 배치작업)을 모두 마치고 꺼진다
+spring:
+  lifecycle:
+    # 스프링부트가 종료 요청을 받은 후 기다려줄 수 있는 최대한의 시간
+    timeout-per-shutdown-phase: 1h
+  servlet:
+    multipart:  # 파일 업로드 관련
+      max-file-size: 5MB
+      max-request-size: 5MB
+  datasource:
+    url: jdbc:mysql://172.17.0.1:3306/goohaeyou_prod
+    username: root
+    password: ${custom.datasource.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 172.17.0.1
+      port: 6379
+      password: ${custom.data.redis.password}
+  jpa:
+    hibernate:
+      ddl-auto: update # `prod` 환경에서는 주로 validate 또는 none을 사용
+    properties:
+      hibernate: # 운영모드에서는 sql문이 필요없으니 모두 끈다
+        format_sql: false
+        highlight_sql: false
+        use_sql_comments: false
+  h2:
+    console:
+      enabled: false # H2 콘솔 비활성화
+  autoconfigure:
+    exclude:
+logging:
+  level:
+    com.ll.gooHaeYu: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: DEBUG
+    org.hibernate.orm.jdbc.extract: DEBUG
+    org.springframework.transaction.interceptor: DEBUG
+custom:
+  site:
+    cookieDomain: "${custom.prod.cookieDomain}"
+    frontUrl: "${custom.prod.frontUrl}"
+    backUrl: "${custom.prod.backUrl}"
+tossPayments:
+  successUrl: "https://www.goohaeyou.site/payment/success"
+  failUrl: "https://www.goohaeyou.site/payment/fail"
