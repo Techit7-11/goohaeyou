@@ -1,10 +1,7 @@
 package com.ll.goohaeyou.domain.category.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +20,6 @@ public class Category {
 
     @Column(unique = true, nullable = false)
     private String name;
-
-    @Column(nullable = false)
-    private int code = 0;
 
     @Column(nullable = false)
     private int level = 0;

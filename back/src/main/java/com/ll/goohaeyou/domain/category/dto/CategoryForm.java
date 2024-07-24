@@ -14,8 +14,6 @@ public class CategoryForm {
         @NotBlank
         private String name;
         @NotNull
-        private int code = 0;
-        @NotNull
         private int level = 0;
 
         private boolean enabled = true;
