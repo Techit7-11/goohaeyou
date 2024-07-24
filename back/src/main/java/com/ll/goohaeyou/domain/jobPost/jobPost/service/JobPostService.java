@@ -187,6 +187,7 @@ public class JobPostService {
                 s3ImageService.deletePostImagesFromS3(jobPostImages);
             }
 
+            jobPostCategoryRepository.deleteAllByJobPost(post);
             jobPostRepository.deleteById(postId);
         } else {
             throw new AuthException.NotAuthorizedException();
