@@ -36,4 +36,13 @@ public enum RegionType {
         }
         throw new CategoryException.NotFoundCategoryException();
     }
+
+    public static String GetNameByCode(int code) {
+        for (RegionType region : RegionType.values()) {
+            if (region.getCode() == code) {
+                return region.getName();
+            }
+        }
+        throw new CategoryException.NotFoundCategoryException();
+    }
 }
