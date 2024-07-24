@@ -2,7 +2,9 @@ package com.ll.goohaeyou.domain.jobPost.jobPost.service;
 
 import com.ll.goohaeyou.domain.application.entity.Application;
 import com.ll.goohaeyou.domain.category.entity.Category;
+import com.ll.goohaeyou.domain.category.entity.JobPostCategory;
 import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
+import com.ll.goohaeyou.domain.category.entity.repository.JobPostCategoryRepository;
 import com.ll.goohaeyou.domain.fileupload.service.S3ImageService;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDto;
@@ -34,7 +36,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode.POST_MODIFICATION;
@@ -54,45 +55,27 @@ public class JobPostService {
     private final WageRepository wageRepository;
     private final S3ImageService s3ImageService;
     private final CategoryRepository categoryRepository;
+    private final JobPostCategoryRepository jobPostCategoryRepository;
 
     @Transactional
     public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
-        JobPost newPost = JobPost.builder()
-                .member(memberService.getMember(username))
-                .title(form.getTitle())
-                .location(form.getLocation())
-                .deadline(form.getDeadLine())
-                .jobStartDate(form.getJobStartDate())
-                .regionCode(Ut.Region.getRegionCodeFromAddress(form.getLocation()))
-                .category(categoryRepository.findById(form.getCategoryId())
-                        .orElseThrow(CategoryException.NotFoundCategoryException::new))
-                .build();
+        // 지역 코드 및 카테고리 찾기
+        int regionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
+        Category taskCategory = categoryRepository.findById(form.getCategoryId())
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+        Category regionCategory = categoryRepository.findByName(RegionType.GetNameByCode(regionCode))
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
 
-        JobPostDetail postDetail = JobPostDetail.builder()
-                .jobPost(newPost)
-                .author(username)
-                .body(form.getBody())
-                .build();
+        JobPost newPost = createAndSaveJobPost(username, form, regionCode);
 
-        Essential essential = Essential.builder()
-                .minAge(form.getMinAge())
-                .gender(form.getGender())
-                .jobPostDetail(postDetail)
-                .build();
+        createAndSaveJobPostCategory(newPost, taskCategory);
+        createAndSaveJobPostCategory(newPost, regionCategory);
 
-        Wage wage = Wage.builder()
-                .cost(form.getCost())
-                .workTime(form.getWorkTime())
-                .workDays(form.getWorkDays())
-                .payBasis(form.getPayBasis())
-                .wagePaymentMethod(form.getWagePaymentMethod())
-                .jobPostDetail(postDetail)
-                .build();
+        JobPostDetail postDetail = createAndSaveJobPostDetail(newPost, username, form);
 
-        jobPostRepository.save(newPost);
-        jobPostdetailRepository.save(postDetail);
-        essentialRepository.save(essential);
-        wageRepository.save(wage);
+        createAndSaveEssential(postDetail, form);
+
+        createAndSaveWage(postDetail, form);
 
         return form;
     }
@@ -105,6 +88,61 @@ public class JobPostService {
 
     public List<JobPostDto> findAll() {
         return JobPostDto.convertToDtoList(jobPostRepository.findAll());
+    }
+
+    private JobPost createAndSaveJobPost(String username, JobPostForm.Register form, int regionCode) {
+        JobPost newPost = JobPost.builder()
+                .member(memberService.getMember(username))
+                .title(form.getTitle())
+                .location(form.getLocation())
+                .deadline(form.getDeadLine())
+                .jobStartDate(form.getJobStartDate())
+                .regionCode(regionCode)
+                .build();
+
+        return jobPostRepository.save(newPost);
+    }
+
+    private void createAndSaveJobPostCategory(JobPost newPost, Category category) {
+        JobPostCategory jobPostCategory = JobPostCategory.builder()
+                .jobPost(newPost)
+                .category(category)
+                .build();
+
+        jobPostCategoryRepository.save(jobPostCategory);
+    }
+
+    private JobPostDetail createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
+        JobPostDetail postDetail = JobPostDetail.builder()
+                .jobPost(newPost)
+                .author(username)
+                .body(form.getBody())
+                .build();
+
+        return jobPostdetailRepository.save(postDetail);
+    }
+
+    private void createAndSaveEssential(JobPostDetail postDetail, JobPostForm.Register form) {
+        Essential essential = Essential.builder()
+                .minAge(form.getMinAge())
+                .gender(form.getGender())
+                .jobPostDetail(postDetail)
+                .build();
+
+        essentialRepository.save(essential);
+    }
+
+    private void createAndSaveWage(JobPostDetail postDetail, JobPostForm.Register form) {
+        Wage wage = Wage.builder()
+                .cost(form.getCost())
+                .workTime(form.getWorkTime())
+                .workDays(form.getWorkDays())
+                .payBasis(form.getPayBasis())
+                .wagePaymentMethod(form.getWagePaymentMethod())
+                .jobPostDetail(postDetail)
+                .build();
+
+        wageRepository.save(wage);
     }
 
     @Transactional
@@ -326,7 +364,7 @@ public class JobPostService {
             throw new AuthException.NotAuthorizedException();
         }
 
-        jobPost.SetDeadlineNull();
+        jobPost.setDeadlineNull();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
 
