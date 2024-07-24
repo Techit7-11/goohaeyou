@@ -154,7 +154,7 @@ public class JobPostService {
             throw new AuthException.NotAuthorizedException();
         }
 
-        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate(), Ut.Region.getRegionCodeFromAddress(form.getLocation()));
+        postDetail.getJobPost().update(form.getTitle(), form.getDeadLine(), form.getJobStartDate(), Ut.Region.getRegionCodeFromAddress(form.getLocation()));
         postDetail.updatePostDetail(form.getBody());
         postDetail.getEssential().update(form.getMinAge(), form.getGender());
         postDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
@@ -180,7 +180,7 @@ public class JobPostService {
         List<JobPostImage> jobPostImages = post.getJobPostDetail().getJobPostImages();
         Member member = findUserByUserNameValidate(username);
 
-        publisher.publishEvent(new PostDeletedEvent(this,post,member,DELETE));
+        publisher.publishEvent(new PostDeletedEvent(this, post, member, DELETE));
 
         if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
             if (!jobPostImages.isEmpty()) {
@@ -212,16 +212,16 @@ public class JobPostService {
     public JobPostDetail findByJobPostAndNameAndValidate(Long postId) {
         JobPost post = findByIdAndValidate(postId);
 
-        return jobPostdetailRepository.findByJobPostAndAuthor(post,post.getMember().getUsername())
+        return jobPostdetailRepository.findByJobPostAndAuthor(post, post.getMember().getUsername())
                 .orElseThrow(JobPostException.PostNotExistsException::new);
     }
 
     @Transactional
-    public void interest(String username, Long postId){
+    public void interest(String username, Long postId) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
-        if (hasInterest(postDetail,member)) {
+        if (hasInterest(postDetail, member)) {
             throw new AuthException.NotAuthorizedException();
         }
 
@@ -238,11 +238,11 @@ public class JobPostService {
     }
 
     @Transactional
-    public void disinterest(String username, Long postId){
+    public void disinterest(String username, Long postId) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
-        if (!hasInterest(postDetail,member)) {
+        if (!hasInterest(postDetail, member)) {
             throw new AuthException.NotAuthorizedException();
         }
 
@@ -369,21 +369,12 @@ public class JobPostService {
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
 
-    public List<JobPostDto> getPostsByCategory(String categoryName) {
+    public Page<JobPostDto> getPostsByCategory(String categoryName, Pageable pageable) {
         Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(CategoryException.NotFoundCategoryException::new);
 
-        List<JobPost> jobPosts = null;
+        Page<JobPost> jobPosts = jobPostCategoryRepository.findJobPostsByCategoryId(category.getId(), pageable);
 
-        if (category.getParent().getId() == 1) {   // 업무
-            jobPosts = jobPostRepository.findAllByCategoryOrderByCreatedAtDesc(category);
-        }
-
-        if (category.getParent().getId() == 2) {   // 지역
-            int regionCode = RegionType.getCodeByName(categoryName);
-            jobPosts =  jobPostRepository.findAllByRegionCodeOrderByCreatedAtDesc(regionCode);
-        }
-
-        return JobPostDto.convertToDtoList(Objects.requireNonNull(jobPosts));
+        return JobPostDto.convertToDtoPage(jobPosts);
     }
 }

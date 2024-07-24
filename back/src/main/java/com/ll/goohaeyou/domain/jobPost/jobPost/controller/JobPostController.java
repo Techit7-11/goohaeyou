@@ -196,7 +196,12 @@ public class JobPostController {
 
     @GetMapping("/by-category")
     @Operation(summary = "카테고리의 글 목록 불러오기")
-    public ApiResponse<List<JobPostDto>> getPostsByCategory(@RequestParam("category_name") String categoryName) {
-        return ApiResponse.ok(jobPostService.getPostsByCategory(categoryName));
+    public ApiResponse<Page<JobPostDto>> getPostsByCategory(@RequestParam("category-name") String categoryName,
+                                                            @RequestParam(value = "page", defaultValue = "1") int page) {
+        Pageable pageable = PageRequest.of(page - 1, 10);
+
+        Page<JobPostDto> jobPostDtoPage = jobPostService.getPostsByCategory(categoryName, pageable);
+
+        return ApiResponse.ok(jobPostDtoPage);
     }
 }
