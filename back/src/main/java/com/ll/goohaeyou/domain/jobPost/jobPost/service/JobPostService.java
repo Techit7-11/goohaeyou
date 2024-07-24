@@ -63,7 +63,7 @@ public class JobPostService {
         int regionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
         Category taskCategory = categoryRepository.findById(form.getCategoryId())
                 .orElseThrow(CategoryException.NotFoundCategoryException::new);
-        Category regionCategory = categoryRepository.findByName(RegionType.GetNameByCode(regionCode))
+        Category regionCategory = categoryRepository.findByName(RegionType.getNameByCode(regionCode))
                 .orElseThrow(CategoryException.NotFoundCategoryException::new);
 
         JobPost newPost = createAndSaveJobPost(username, form, regionCode);

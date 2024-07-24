@@ -37,7 +37,7 @@ public enum RegionType {
         throw new CategoryException.NotFoundCategoryException();
     }
 
-    public static String GetNameByCode(int code) {
+    public static String getNameByCode(int code) {
         for (RegionType region : RegionType.values()) {
             if (region.getCode() == code) {
                 return region.getName();
