@@ -15,9 +15,10 @@
 		workTime: '',
 		workDays: '',
 		cost: '',
-		category: ''
+		categoryId: ''
 	};
 	let postId;
+	let subCategories = []; // 하위 카테고리 목록 저장
 
 	onMount(async () => {
 		postId = parseInt($page.params.id);
@@ -26,6 +27,14 @@
 			console.log('Valid postId, loading job post detail...');
 			await loadJobPostDetail(postId);
 		}
+
+		// 하위 카테고리 로드
+		const params = new URLSearchParams({
+			category_name: '업무'
+		}).toString();
+
+		const response = await rq.apiEndPoints().GET(`/api/categories/sub-categories?${params}`);
+		subCategories = response.data.data;
 	});
 
 	async function loadJobPostDetail(postId) {
@@ -144,19 +153,20 @@
 						bind:value={jobPostData.jobStartDate}
 					/>
 				</div>
+
 				<div class="divider mt-10"></div>
-				<div class="form-group flex-1">
-					<label class="label" for="category">* 카테고리</label>
-					<select class="input input-bordered w-full" id="gender" bind:value={jobPostData.category}>
+
+				<div class="form-group">
+					<label class="label" for="category">* 카테고리 선택</label>
+					<select
+						class="input input-bordered w-full"
+						id="category"
+						bind:value={jobPostData.categoryId}
+					>
 						<option value="" disabled selected>- 선택하세요 -</option>
-						<option value="PERSONAL_ASSISTANCE">일상 도움</option>
-						<option value="CLEANING_AND_ORGANIZATION">정리 및 청소</option>
-						<option value="LOGISTICS_AND_DELIVERY">물류 및 배송</option>
-						<option value="TECHNICAL_TASKS">기술 작업</option>
-						<option value="STORE_MANAGEMENT">매장</option>
-						<option value="OFFICE_AND_EDUCATION">사무 및 교육</option>
-						<option value="EVENT_SUPPORT">행사</option>
-						<option value="OTHERS">(기타)</option>
+						{#each subCategories as category}
+							<option value={category.id}>{category.name}</option>
+						{/each}
 					</select>
 				</div>
 				<div class="form-group">
