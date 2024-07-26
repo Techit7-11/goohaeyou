@@ -1,5 +1,6 @@
 package com.ll.goohaeyou.domain.category.entity;
 
+import com.ll.goohaeyou.domain.category.entity.type.CategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,9 @@ public class Category {
     private int level = 0;
 
     private boolean enabled = true;
+
+    @Enumerated(EnumType.STRING)
+    private CategoryType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")

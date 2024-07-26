@@ -34,6 +34,7 @@ public class CategoryAdminService {
                 .level(form.getLevel())
                 .enabled(form.isEnabled())
                 .parent(parent)
+                .type(form.getType())
                 .build();
 
         categoryRepository.save(newCategory);
