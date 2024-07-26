@@ -55,13 +55,12 @@ public class JobPost extends BaseTimeEntity {
 
     private int regionCode;
 
-    public void update(String title, LocalDate deadline, LocalDate jobStartDate, int regionCode) {
+    public void update(String title, LocalDate deadline, LocalDate jobStartDate, String location, int regionCode) {
         if (title != null && !title.isBlank()) {
             this.title = title;
         }
-        if (regionCode != 0) {
-            this.regionCode = regionCode;
-        }
+        this.location = location;
+        this.regionCode = regionCode;
         this.deadline = deadline;
         this.jobStartDate = jobStartDate;
     }
