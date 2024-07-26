@@ -5,8 +5,7 @@
 <p align="center"
   <img src="https://github.com/user-attachments/assets/ed6b02b9-88ac-47dd-9f41-d52170425b0c" width="250px"/><br><br>
   <a href="https://www.goohaeyou.site/">사이트 바로가기</a>
-  <br/>혹은 <a href="https://www.google.com/search?q=%EA%B5%AC%ED%95%B4%EC%9C%A0">Google에 '구해유' 검색</a>
-  <br/>(PC/모바일 겸용)<br/>
+  <br/>PC/모바일 겸용<br/>
 </p>
 
 <br/><br/>
