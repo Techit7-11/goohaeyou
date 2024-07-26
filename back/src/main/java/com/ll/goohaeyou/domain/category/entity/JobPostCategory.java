@@ -23,4 +23,8 @@ public class JobPostCategory {
     @ManyToOne
     @JoinColumn(name = "job_post_id", nullable = false)
     private JobPost jobPost;
+
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
 }

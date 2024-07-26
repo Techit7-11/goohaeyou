@@ -5,6 +5,8 @@ import com.ll.goohaeyou.domain.category.entity.Category;
 import com.ll.goohaeyou.domain.category.entity.JobPostCategory;
 import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
 import com.ll.goohaeyou.domain.category.entity.repository.JobPostCategoryRepository;
+import com.ll.goohaeyou.domain.category.entity.type.CategoryType;
+import com.ll.goohaeyou.domain.category.service.JobPostCategoryService;
 import com.ll.goohaeyou.domain.fileupload.service.S3ImageService;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDto;
@@ -56,6 +58,7 @@ public class JobPostService {
     private final S3ImageService s3ImageService;
     private final CategoryRepository categoryRepository;
     private final JobPostCategoryRepository jobPostCategoryRepository;
+    private final JobPostCategoryService jobPostCategoryService;
 
     @Transactional
     public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
@@ -150,28 +153,55 @@ public class JobPostService {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
         JobPost jobPost = postDetail.getJobPost();
 
-        if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername())) {
+        validateModificationPermission(username, jobPost);
+
+        int newRegionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
+
+        Category newTaskCategory = categoryRepository.findById(form.getCategoryId())
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+        Category newRegionCategory = categoryRepository.findByName(RegionType.getNameByCode(newRegionCode))
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+
+        jobPost.update(form.getTitle(), form.getDeadLine(), form.getJobStartDate(), form.getLocation(), newRegionCode);
+        updateJobPostCategories(jobPost, newTaskCategory, newRegionCategory);
+        updateJobPostDetails(postDetail, form, newRegionCode);
+        updateApplications(postDetail, form);
+
+        return form;
+    }
+
+    private void validateModificationPermission(String username, JobPost jobPost) {
+        if (!canEditPost(username, jobPost.getMember().getUsername())) {
             throw new AuthException.NotAuthorizedException();
         }
+    }
 
-        postDetail.getJobPost().update(form.getTitle(), form.getDeadLine(), form.getJobStartDate(), Ut.Region.getRegionCodeFromAddress(form.getLocation()));
-        postDetail.updatePostDetail(form.getBody());
-        postDetail.getEssential().update(form.getMinAge(), form.getGender());
-        postDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
+    private void updateJobPostCategories(JobPost jobPost, Category newTaskCategory, Category newRegionCategory) {
+        JobPostCategory taskJobPostCategory = jobPostCategoryService.findByJobPostAndCategoryType(jobPost, CategoryType.TASK);
+        JobPostCategory regionJobPostCategory = jobPostCategoryService.findByJobPostAndCategoryType(jobPost, CategoryType.REGION);
 
+        taskJobPostCategory.updateCategory(newTaskCategory);
+        regionJobPostCategory.updateCategory(newRegionCategory);
+    }
+
+    private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form, int newRegionCode) {
+        jobPostDetail.updatePostDetail(form.getBody());
+        jobPostDetail.getEssential().update(form.getMinAge(), form.getGender());
+        jobPostDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
+    }
+
+    private void updateApplications(JobPostDetail postDetail, JobPostForm.Modify form) {
         List<Application> applicationsToRemove = new ArrayList<>();
         for (Application application : postDetail.getApplications()) {
             if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - application.getMember().getBirth().getYear()) {
                 applicationsToRemove.add(application);
-                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application, POST_MODIFICATION, DELETE));
+                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), application, POST_MODIFICATION, DELETE));
             } else {
-                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application, POST_MODIFICATION, NOTICE));
+                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), application, POST_MODIFICATION, NOTICE));
             }
         }
 
         postDetail.getApplications().removeAll(applicationsToRemove);
-
-        return form;
     }
 
     @Transactional

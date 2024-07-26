@@ -1,6 +1,7 @@
 package com.ll.goohaeyou.domain.category.entity.repository;
 
 import com.ll.goohaeyou.domain.category.entity.JobPostCategory;
+import com.ll.goohaeyou.domain.category.entity.type.CategoryType;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +16,6 @@ public interface JobPostCategoryRepository extends JpaRepository<JobPostCategory
     Page<JobPost> findJobPostsByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
 
     void deleteAllByJobPost(JobPost jobPost);
+
+    JobPostCategory findByJobPostAndCategory_Type(JobPost jobPost, CategoryType categoryType);
 }
