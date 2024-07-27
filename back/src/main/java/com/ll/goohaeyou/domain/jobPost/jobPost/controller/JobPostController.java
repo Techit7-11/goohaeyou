@@ -39,20 +39,21 @@ public class JobPostController {
 
     @PostMapping
     @Operation(summary = "구인공고 작성")
-    public ApiResponse<JobPostForm.Register> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
+    public ApiResponse<Empty> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
                                                        @Valid @RequestBody JobPostForm.Register form) {
-        JobPostForm.Register jobPostForm = jobPostService.writePost(memberDetails.getUsername(), form);
+        jobPostService.writePost(memberDetails.getUsername(), form);
 
-        return ApiResponse.ok(jobPostForm);
+        return ApiResponse.created();
     }
     @PutMapping("/{id}")
     @Operation(summary = "구인공고 수정")
-    public ApiResponse<JobPostForm.Modify> modifyPost(@AuthenticationPrincipal MemberDetails memberDetails,
+    public ApiResponse<Empty> modifyPost(@AuthenticationPrincipal MemberDetails memberDetails,
                                                       @PathVariable(name = "id") Long id,
                                                       @Valid @RequestBody JobPostForm.Modify form) {
-       JobPostForm.Modify jobPostForm = jobPostService.modifyPost(memberDetails.getUsername(), id, form);
 
-        return ApiResponse.ok(jobPostForm);
+        jobPostService.modifyPost(memberDetails.getUsername(), id, form);
+
+        return ApiResponse.noContent();
     }
 
     @GetMapping
@@ -109,7 +110,7 @@ public class JobPostController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "구인공고 삭제")
-    public ResponseEntity<Void> deleteJobPost(@AuthenticationPrincipal MemberDetails memberDetails,
+    public ResponseEntity<Empty> deleteJobPost(@AuthenticationPrincipal MemberDetails memberDetails,
                                               @PathVariable(name = "id") Long id) {
         jobPostService.deleteJobPost(memberDetails.getUsername(), id);
 

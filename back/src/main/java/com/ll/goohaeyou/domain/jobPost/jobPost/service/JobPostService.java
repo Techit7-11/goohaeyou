@@ -61,7 +61,7 @@ public class JobPostService {
     private final JobPostCategoryService jobPostCategoryService;
 
     @Transactional
-    public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
+    public void writePost(String username, JobPostForm.Register form) {
         // 지역 코드 및 카테고리 찾기
         int regionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
         Category taskCategory = categoryRepository.findById(form.getCategoryId())
@@ -79,8 +79,6 @@ public class JobPostService {
         createAndSaveEssential(postDetail, form);
 
         createAndSaveWage(postDetail, form);
-
-        return form;
     }
 
     public JobPostDetailDto findById(Long id) {
@@ -149,7 +147,7 @@ public class JobPostService {
     }
 
     @Transactional
-    public JobPostForm.Modify modifyPost(String username, Long id, JobPostForm.Modify form) {
+    public void modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
         JobPost jobPost = postDetail.getJobPost();
 
@@ -166,8 +164,6 @@ public class JobPostService {
         updateJobPostCategories(jobPost, newTaskCategory, newRegionCategory);
         updateJobPostDetails(postDetail, form, newRegionCode);
         updateApplications(postDetail, form);
-
-        return form;
     }
 
     private void validateModificationPermission(String username, JobPost jobPost) {
