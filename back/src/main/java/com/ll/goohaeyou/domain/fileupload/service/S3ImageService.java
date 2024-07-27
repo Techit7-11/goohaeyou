@@ -9,7 +9,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPostImage;
 import com.ll.goohaeyou.global.exception.image.ImageException;
-import com.ll.goohaeyou.global.standard.base.util.MIMETypeUtil;
+import com.ll.goohaeyou.global.standard.base.util.MimeTypeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -82,7 +82,7 @@ public class S3ImageService {
         byte[] bytes = IOUtils.toByteArray(inputStream);  // 이미지 데이터를 바이트 배열로 변환
 
         ObjectMetadata metadata = new ObjectMetadata();
-        MIMETypeUtil.getMimeType(extension).ifPresentOrElse(
+        MimeTypeUtil.getMimeType(extension).ifPresentOrElse(
             metadata::setContentType,   // 메타데이터 설정 ex) image/png
             () -> { throw new ImageException.InvalidFileExtensionException(); }
         );
