@@ -2,12 +2,11 @@ package com.ll.goohaeyou.domain.jobPost.jobPost.service;
 
 import com.ll.goohaeyou.domain.application.entity.Application;
 import com.ll.goohaeyou.domain.category.entity.Category;
-import com.ll.goohaeyou.domain.category.entity.JobPostCategory;
 import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
 import com.ll.goohaeyou.domain.category.entity.repository.JobPostCategoryRepository;
-import com.ll.goohaeyou.domain.category.entity.type.CategoryType;
+import com.ll.goohaeyou.domain.category.service.CategoryService;
 import com.ll.goohaeyou.domain.category.service.JobPostCategoryService;
-import com.ll.goohaeyou.domain.fileupload.service.S3ImageService;
+import com.ll.goohaeyou.domain.image.service.S3ImageService;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostForm;
@@ -23,7 +22,6 @@ import com.ll.goohaeyou.global.exception.category.CategoryException;
 import com.ll.goohaeyou.global.exception.jobPost.JobPostException;
 import com.ll.goohaeyou.global.exception.member.MemberException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
-import com.ll.goohaeyou.global.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -52,35 +50,31 @@ public class JobPostService {
     private final JobPostDetailRepository jobPostdetailRepository;
     private final MemberService memberService;
     private final MemberRepository memberRepository;
-    private final EssentialRepository essentialRepository;
     private final ApplicationEventPublisher publisher;
-    private final WageRepository wageRepository;
     private final S3ImageService s3ImageService;
     private final CategoryRepository categoryRepository;
     private final JobPostCategoryRepository jobPostCategoryRepository;
     private final JobPostCategoryService jobPostCategoryService;
+    private final CategoryService categoryService;
+    private final EssentialService essentialService;
+    private final WageService wageService;
 
     @Transactional
-    public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
-        // 지역 코드 및 카테고리 찾기
-        int regionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
-        Category taskCategory = categoryRepository.findById(form.getCategoryId())
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
-        Category regionCategory = categoryRepository.findByName(RegionType.getNameByCode(regionCode))
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+    public void writePost(String username, JobPostForm.Register form) {
+        int regionCode = categoryService.getRegionCodeFromLocation(form.getLocation());
+        Category taskCategory = categoryService.getCategoryById(form.getCategoryId());
+        Category regionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(regionCode));
 
         JobPost newPost = createAndSaveJobPost(username, form, regionCode);
 
-        createAndSaveJobPostCategory(newPost, taskCategory);
-        createAndSaveJobPostCategory(newPost, regionCategory);
+        jobPostCategoryService.createAndSaveJobPostCategory(newPost, taskCategory);
+        jobPostCategoryService.createAndSaveJobPostCategory(newPost, regionCategory);
 
         JobPostDetail postDetail = createAndSaveJobPostDetail(newPost, username, form);
 
-        createAndSaveEssential(postDetail, form);
+        essentialService.createAndSaveEssential(postDetail, form);
 
-        createAndSaveWage(postDetail, form);
-
-        return form;
+        wageService.createAndSaveWage(postDetail, form);
     }
 
     public JobPostDetailDto findById(Long id) {
@@ -106,15 +100,6 @@ public class JobPostService {
         return jobPostRepository.save(newPost);
     }
 
-    private void createAndSaveJobPostCategory(JobPost newPost, Category category) {
-        JobPostCategory jobPostCategory = JobPostCategory.builder()
-                .jobPost(newPost)
-                .category(category)
-                .build();
-
-        jobPostCategoryRepository.save(jobPostCategory);
-    }
-
     private JobPostDetail createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
         JobPostDetail postDetail = JobPostDetail.builder()
                 .jobPost(newPost)
@@ -125,49 +110,22 @@ public class JobPostService {
         return jobPostdetailRepository.save(postDetail);
     }
 
-    private void createAndSaveEssential(JobPostDetail postDetail, JobPostForm.Register form) {
-        Essential essential = Essential.builder()
-                .minAge(form.getMinAge())
-                .gender(form.getGender())
-                .jobPostDetail(postDetail)
-                .build();
-
-        essentialRepository.save(essential);
-    }
-
-    private void createAndSaveWage(JobPostDetail postDetail, JobPostForm.Register form) {
-        Wage wage = Wage.builder()
-                .cost(form.getCost())
-                .workTime(form.getWorkTime())
-                .workDays(form.getWorkDays())
-                .payBasis(form.getPayBasis())
-                .wagePaymentMethod(form.getWagePaymentMethod())
-                .jobPostDetail(postDetail)
-                .build();
-
-        wageRepository.save(wage);
-    }
-
     @Transactional
-    public JobPostForm.Modify modifyPost(String username, Long id, JobPostForm.Modify form) {
+    public void modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
         JobPost jobPost = postDetail.getJobPost();
 
         validateModificationPermission(username, jobPost);
 
-        int newRegionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
+        int newRegionCode = categoryService.getRegionCodeFromLocation(form.getLocation());
 
-        Category newTaskCategory = categoryRepository.findById(form.getCategoryId())
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
-        Category newRegionCategory = categoryRepository.findByName(RegionType.getNameByCode(newRegionCode))
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+        Category newTaskCategory = categoryService.getCategoryById(form.getCategoryId());
+        Category newRegionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(newRegionCode));
 
         jobPost.update(form.getTitle(), form.getDeadLine(), form.getJobStartDate(), form.getLocation(), newRegionCode);
-        updateJobPostCategories(jobPost, newTaskCategory, newRegionCategory);
+        jobPostCategoryService.updateJobPostCategories(jobPost, newTaskCategory, newRegionCategory);
         updateJobPostDetails(postDetail, form, newRegionCode);
         updateApplications(postDetail, form);
-
-        return form;
     }
 
     private void validateModificationPermission(String username, JobPost jobPost) {
@@ -176,18 +134,10 @@ public class JobPostService {
         }
     }
 
-    private void updateJobPostCategories(JobPost jobPost, Category newTaskCategory, Category newRegionCategory) {
-        JobPostCategory taskJobPostCategory = jobPostCategoryService.findByJobPostAndCategoryType(jobPost, CategoryType.TASK);
-        JobPostCategory regionJobPostCategory = jobPostCategoryService.findByJobPostAndCategoryType(jobPost, CategoryType.REGION);
-
-        taskJobPostCategory.updateCategory(newTaskCategory);
-        regionJobPostCategory.updateCategory(newRegionCategory);
-    }
-
     private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form, int newRegionCode) {
         jobPostDetail.updatePostDetail(form.getBody());
-        jobPostDetail.getEssential().update(form.getMinAge(), form.getGender());
-        jobPostDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
+        essentialService.updateEssential(jobPostDetail.getEssential(), form);
+        wageService.updateWage(jobPostDetail.getWage(), form);
     }
 
     private void updateApplications(JobPostDetail postDetail, JobPostForm.Modify form) {
@@ -246,52 +196,6 @@ public class JobPostService {
                 .orElseThrow(JobPostException.PostNotExistsException::new);
     }
 
-    @Transactional
-    public void interest(String username, Long postId) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
-        Member member = memberService.getMember(username);
-
-        if (hasInterest(postDetail, member)) {
-            throw new AuthException.NotAuthorizedException();
-        }
-
-        postDetail.getInterests().add(Interest.builder()
-                .jobPostDetail(postDetail)
-                .member(member)
-                .build());
-
-        postDetail.getJobPost().increaseInterestCount();
-
-        if (!postDetail.getAuthor().equals(username)) {
-            publisher.publishEvent(new PostGetInterestedEvent(this, postDetail, member));
-        }
-    }
-
-    @Transactional
-    public void disinterest(String username, Long postId) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
-        Member member = memberService.getMember(username);
-
-        if (!hasInterest(postDetail, member)) {
-            throw new AuthException.NotAuthorizedException();
-        }
-
-        postDetail.getInterests().removeIf(interest -> interest.getMember().equals(member));
-        postDetail.getJobPost().decreaseInterestCount();
-    }
-
-    public boolean hasInterest(JobPostDetail post, Member member) {
-        return post.getInterests().stream()
-                .anyMatch(interest -> interest.getMember().equals(member));
-    }
-
-    public boolean isInterested(String username, Long id) {
-        List<String> interestedUsernames = findById(id).getInterestedUsernames();
-
-        return interestedUsernames.stream()
-                .anyMatch(username::equals);
-    }
-
     public List<JobPostDto> findByUsername(String username) {
 
         Member member = memberService.getMember(username);
@@ -299,7 +203,8 @@ public class JobPostService {
         return JobPostDto.convertToDtoList(jobPostRepository.findByMemberId(member.getId()));
     }
 
-    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int[] min_Age, List<String> location, Pageable pageable) {
+    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int[] min_Age,
+                                  List<String> location, Pageable pageable) {
         return jobPostRepository.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable);
     }
 
@@ -379,7 +284,7 @@ public class JobPostService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")    // 00:00:00.000000에 실행
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void checkAndCloseExpiredJobPosts() {
         List<JobPost> expiredJobPosts = findExpiredJobPosts(LocalDate.now());
         for (JobPost jobPost : expiredJobPosts) {

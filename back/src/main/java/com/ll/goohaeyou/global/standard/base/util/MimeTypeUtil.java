@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class MIMETypeUtil {
+public class MimeTypeUtil {
     private static final Map<String, String> EXTENSION_TO_MIME_MAP = new HashMap<>();
 
     static {

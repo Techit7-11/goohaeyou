@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.domain.fileupload.service;
+package com.ll.goohaeyou.domain.image.service;
 
 import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 import com.ll.goohaeyou.domain.member.member.entity.Member;

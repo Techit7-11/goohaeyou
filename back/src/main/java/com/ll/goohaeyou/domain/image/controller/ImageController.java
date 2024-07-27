@@ -1,7 +1,7 @@
-package com.ll.goohaeyou.domain.fileupload.controller;
+package com.ll.goohaeyou.domain.image.controller;
 
-import com.ll.goohaeyou.domain.fileupload.service.JobPostImageService;
-import com.ll.goohaeyou.domain.fileupload.service.ProfileImageService;
+import com.ll.goohaeyou.domain.image.service.JobPostImageService;
+import com.ll.goohaeyou.domain.image.service.ProfileImageService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.security.MemberDetails;
 import com.ll.goohaeyou.global.standard.base.Empty;

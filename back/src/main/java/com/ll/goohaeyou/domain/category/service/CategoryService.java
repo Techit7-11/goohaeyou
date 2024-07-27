@@ -4,6 +4,7 @@ import com.ll.goohaeyou.domain.category.dto.CategoryDto;
 import com.ll.goohaeyou.domain.category.entity.Category;
 import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
 import com.ll.goohaeyou.global.exception.category.CategoryException;
+import com.ll.goohaeyou.global.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +27,19 @@ public class CategoryService {
         }
     }
 
-    private Category getCategoryByName(String categoryName) {
+    public Category getCategoryByName(String categoryName) {
 
         return categoryRepository.findByName(categoryName)
                 .orElseThrow(CategoryException.NotFoundCategoryException::new);
+    }
+
+    public Category getCategoryById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+    }
+
+    public int getRegionCodeFromLocation(String location) {
+        return Ut.Region.getRegionCodeFromAddress(location);
     }
 
     public boolean isLeafCategory(Long categoryId) {
