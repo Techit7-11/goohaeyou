@@ -2,10 +2,9 @@ package com.ll.goohaeyou.domain.jobPost.jobPost.service;
 
 import com.ll.goohaeyou.domain.application.entity.Application;
 import com.ll.goohaeyou.domain.category.entity.Category;
-import com.ll.goohaeyou.domain.category.entity.JobPostCategory;
 import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
 import com.ll.goohaeyou.domain.category.entity.repository.JobPostCategoryRepository;
-import com.ll.goohaeyou.domain.category.entity.type.CategoryType;
+import com.ll.goohaeyou.domain.category.service.CategoryService;
 import com.ll.goohaeyou.domain.category.service.JobPostCategoryService;
 import com.ll.goohaeyou.domain.fileupload.service.S3ImageService;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDetailDto;
@@ -23,7 +22,6 @@ import com.ll.goohaeyou.global.exception.category.CategoryException;
 import com.ll.goohaeyou.global.exception.jobPost.JobPostException;
 import com.ll.goohaeyou.global.exception.member.MemberException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
-import com.ll.goohaeyou.global.standard.base.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -59,20 +57,18 @@ public class JobPostService {
     private final CategoryRepository categoryRepository;
     private final JobPostCategoryRepository jobPostCategoryRepository;
     private final JobPostCategoryService jobPostCategoryService;
+    private final CategoryService categoryService;
 
     @Transactional
     public void writePost(String username, JobPostForm.Register form) {
-        // 지역 코드 및 카테고리 찾기
-        int regionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
-        Category taskCategory = categoryRepository.findById(form.getCategoryId())
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
-        Category regionCategory = categoryRepository.findByName(RegionType.getNameByCode(regionCode))
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+        int regionCode = categoryService.getRegionCodeFromLocation(form.getLocation());
+        Category taskCategory = categoryService.getCategoryById(form.getCategoryId());
+        Category regionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(regionCode));
 
         JobPost newPost = createAndSaveJobPost(username, form, regionCode);
 
-        createAndSaveJobPostCategory(newPost, taskCategory);
-        createAndSaveJobPostCategory(newPost, regionCategory);
+        jobPostCategoryService.createAndSaveJobPostCategory(newPost, taskCategory);
+        jobPostCategoryService.createAndSaveJobPostCategory(newPost, regionCategory);
 
         JobPostDetail postDetail = createAndSaveJobPostDetail(newPost, username, form);
 
@@ -102,15 +98,6 @@ public class JobPostService {
                 .build();
 
         return jobPostRepository.save(newPost);
-    }
-
-    private void createAndSaveJobPostCategory(JobPost newPost, Category category) {
-        JobPostCategory jobPostCategory = JobPostCategory.builder()
-                .jobPost(newPost)
-                .category(category)
-                .build();
-
-        jobPostCategoryRepository.save(jobPostCategory);
     }
 
     private JobPostDetail createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
@@ -153,15 +140,13 @@ public class JobPostService {
 
         validateModificationPermission(username, jobPost);
 
-        int newRegionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
+        int newRegionCode = categoryService.getRegionCodeFromLocation(form.getLocation());
 
-        Category newTaskCategory = categoryRepository.findById(form.getCategoryId())
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
-        Category newRegionCategory = categoryRepository.findByName(RegionType.getNameByCode(newRegionCode))
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+        Category newTaskCategory = categoryService.getCategoryById(form.getCategoryId());
+        Category newRegionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(newRegionCode));
 
         jobPost.update(form.getTitle(), form.getDeadLine(), form.getJobStartDate(), form.getLocation(), newRegionCode);
-        updateJobPostCategories(jobPost, newTaskCategory, newRegionCategory);
+        jobPostCategoryService.updateJobPostCategories(jobPost, newTaskCategory, newRegionCategory);
         updateJobPostDetails(postDetail, form, newRegionCode);
         updateApplications(postDetail, form);
     }
@@ -170,14 +155,6 @@ public class JobPostService {
         if (!canEditPost(username, jobPost.getMember().getUsername())) {
             throw new AuthException.NotAuthorizedException();
         }
-    }
-
-    private void updateJobPostCategories(JobPost jobPost, Category newTaskCategory, Category newRegionCategory) {
-        JobPostCategory taskJobPostCategory = jobPostCategoryService.findByJobPostAndCategoryType(jobPost, CategoryType.TASK);
-        JobPostCategory regionJobPostCategory = jobPostCategoryService.findByJobPostAndCategoryType(jobPost, CategoryType.REGION);
-
-        taskJobPostCategory.updateCategory(newTaskCategory);
-        regionJobPostCategory.updateCategory(newRegionCategory);
     }
 
     private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form, int newRegionCode) {
@@ -295,7 +272,8 @@ public class JobPostService {
         return JobPostDto.convertToDtoList(jobPostRepository.findByMemberId(member.getId()));
     }
 
-    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int[] min_Age, List<String> location, Pageable pageable) {
+    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int[] min_Age,
+                                  List<String> location, Pageable pageable) {
         return jobPostRepository.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable);
     }
 
@@ -375,7 +353,7 @@ public class JobPostService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")    // 00:00:00.000000에 실행
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void checkAndCloseExpiredJobPosts() {
         List<JobPost> expiredJobPosts = findExpiredJobPosts(LocalDate.now());
         for (JobPost jobPost : expiredJobPosts) {
