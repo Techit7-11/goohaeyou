@@ -210,52 +210,6 @@ public class JobPostService {
                 .orElseThrow(JobPostException.PostNotExistsException::new);
     }
 
-    @Transactional
-    public void interest(String username, Long postId) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
-        Member member = memberService.getMember(username);
-
-        if (hasInterest(postDetail, member)) {
-            throw new AuthException.NotAuthorizedException();
-        }
-
-        postDetail.getInterests().add(Interest.builder()
-                .jobPostDetail(postDetail)
-                .member(member)
-                .build());
-
-        postDetail.getJobPost().increaseInterestCount();
-
-        if (!postDetail.getAuthor().equals(username)) {
-            publisher.publishEvent(new PostGetInterestedEvent(this, postDetail, member));
-        }
-    }
-
-    @Transactional
-    public void disinterest(String username, Long postId) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
-        Member member = memberService.getMember(username);
-
-        if (!hasInterest(postDetail, member)) {
-            throw new AuthException.NotAuthorizedException();
-        }
-
-        postDetail.getInterests().removeIf(interest -> interest.getMember().equals(member));
-        postDetail.getJobPost().decreaseInterestCount();
-    }
-
-    public boolean hasInterest(JobPostDetail post, Member member) {
-        return post.getInterests().stream()
-                .anyMatch(interest -> interest.getMember().equals(member));
-    }
-
-    public boolean isInterested(String username, Long id) {
-        List<String> interestedUsernames = findById(id).getInterestedUsernames();
-
-        return interestedUsernames.stream()
-                .anyMatch(username::equals);
-    }
-
     public List<JobPostDto> findByUsername(String username) {
 
         Member member = memberService.getMember(username);
