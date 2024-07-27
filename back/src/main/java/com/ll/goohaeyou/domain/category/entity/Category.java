@@ -1,10 +1,8 @@
 package com.ll.goohaeyou.domain.category.entity;
 
+import com.ll.goohaeyou.domain.category.entity.type.CategoryType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +23,12 @@ public class Category {
     private String name;
 
     @Column(nullable = false)
-    private int code = 0;
-
-    @Column(nullable = false)
     private int level = 0;
 
     private boolean enabled = true;
+
+    @Enumerated(EnumType.STRING)
+    private CategoryType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")

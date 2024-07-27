@@ -2,7 +2,11 @@ package com.ll.goohaeyou.domain.jobPost.jobPost.service;
 
 import com.ll.goohaeyou.domain.application.entity.Application;
 import com.ll.goohaeyou.domain.category.entity.Category;
+import com.ll.goohaeyou.domain.category.entity.JobPostCategory;
 import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
+import com.ll.goohaeyou.domain.category.entity.repository.JobPostCategoryRepository;
+import com.ll.goohaeyou.domain.category.entity.type.CategoryType;
+import com.ll.goohaeyou.domain.category.service.JobPostCategoryService;
 import com.ll.goohaeyou.domain.fileupload.service.S3ImageService;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDto;
@@ -34,7 +38,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.ll.goohaeyou.domain.notification.entity.type.CauseTypeCode.POST_MODIFICATION;
@@ -54,45 +57,28 @@ public class JobPostService {
     private final WageRepository wageRepository;
     private final S3ImageService s3ImageService;
     private final CategoryRepository categoryRepository;
+    private final JobPostCategoryRepository jobPostCategoryRepository;
+    private final JobPostCategoryService jobPostCategoryService;
 
     @Transactional
     public JobPostForm.Register writePost(String username, JobPostForm.Register form) {
-        JobPost newPost = JobPost.builder()
-                .member(memberService.getMember(username))
-                .title(form.getTitle())
-                .location(form.getLocation())
-                .deadline(form.getDeadLine())
-                .jobStartDate(form.getJobStartDate())
-                .regionCode(Ut.Region.getRegionCodeFromAddress(form.getLocation()))
-                .category(categoryRepository.findById(form.getCategoryId())
-                        .orElseThrow(CategoryException.NotFoundCategoryException::new))
-                .build();
+        // 지역 코드 및 카테고리 찾기
+        int regionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
+        Category taskCategory = categoryRepository.findById(form.getCategoryId())
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+        Category regionCategory = categoryRepository.findByName(RegionType.getNameByCode(regionCode))
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
 
-        JobPostDetail postDetail = JobPostDetail.builder()
-                .jobPost(newPost)
-                .author(username)
-                .body(form.getBody())
-                .build();
+        JobPost newPost = createAndSaveJobPost(username, form, regionCode);
 
-        Essential essential = Essential.builder()
-                .minAge(form.getMinAge())
-                .gender(form.getGender())
-                .jobPostDetail(postDetail)
-                .build();
+        createAndSaveJobPostCategory(newPost, taskCategory);
+        createAndSaveJobPostCategory(newPost, regionCategory);
 
-        Wage wage = Wage.builder()
-                .cost(form.getCost())
-                .workTime(form.getWorkTime())
-                .workDays(form.getWorkDays())
-                .payBasis(form.getPayBasis())
-                .wagePaymentMethod(form.getWagePaymentMethod())
-                .jobPostDetail(postDetail)
-                .build();
+        JobPostDetail postDetail = createAndSaveJobPostDetail(newPost, username, form);
 
-        jobPostRepository.save(newPost);
-        jobPostdetailRepository.save(postDetail);
-        essentialRepository.save(essential);
-        wageRepository.save(wage);
+        createAndSaveEssential(postDetail, form);
+
+        createAndSaveWage(postDetail, form);
 
         return form;
     }
@@ -107,33 +93,115 @@ public class JobPostService {
         return JobPostDto.convertToDtoList(jobPostRepository.findAll());
     }
 
+    private JobPost createAndSaveJobPost(String username, JobPostForm.Register form, int regionCode) {
+        JobPost newPost = JobPost.builder()
+                .member(memberService.getMember(username))
+                .title(form.getTitle())
+                .location(form.getLocation())
+                .deadline(form.getDeadLine())
+                .jobStartDate(form.getJobStartDate())
+                .regionCode(regionCode)
+                .build();
+
+        return jobPostRepository.save(newPost);
+    }
+
+    private void createAndSaveJobPostCategory(JobPost newPost, Category category) {
+        JobPostCategory jobPostCategory = JobPostCategory.builder()
+                .jobPost(newPost)
+                .category(category)
+                .build();
+
+        jobPostCategoryRepository.save(jobPostCategory);
+    }
+
+    private JobPostDetail createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
+        JobPostDetail postDetail = JobPostDetail.builder()
+                .jobPost(newPost)
+                .author(username)
+                .body(form.getBody())
+                .build();
+
+        return jobPostdetailRepository.save(postDetail);
+    }
+
+    private void createAndSaveEssential(JobPostDetail postDetail, JobPostForm.Register form) {
+        Essential essential = Essential.builder()
+                .minAge(form.getMinAge())
+                .gender(form.getGender())
+                .jobPostDetail(postDetail)
+                .build();
+
+        essentialRepository.save(essential);
+    }
+
+    private void createAndSaveWage(JobPostDetail postDetail, JobPostForm.Register form) {
+        Wage wage = Wage.builder()
+                .cost(form.getCost())
+                .workTime(form.getWorkTime())
+                .workDays(form.getWorkDays())
+                .payBasis(form.getPayBasis())
+                .wagePaymentMethod(form.getWagePaymentMethod())
+                .jobPostDetail(postDetail)
+                .build();
+
+        wageRepository.save(wage);
+    }
+
     @Transactional
     public JobPostForm.Modify modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
         JobPost jobPost = postDetail.getJobPost();
 
-        if (!canEditPost(username, postDetail.getJobPost().getMember().getUsername())) {
+        validateModificationPermission(username, jobPost);
+
+        int newRegionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
+
+        Category newTaskCategory = categoryRepository.findById(form.getCategoryId())
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+        Category newRegionCategory = categoryRepository.findByName(RegionType.getNameByCode(newRegionCode))
+                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+
+        jobPost.update(form.getTitle(), form.getDeadLine(), form.getJobStartDate(), form.getLocation(), newRegionCode);
+        updateJobPostCategories(jobPost, newTaskCategory, newRegionCategory);
+        updateJobPostDetails(postDetail, form, newRegionCode);
+        updateApplications(postDetail, form);
+
+        return form;
+    }
+
+    private void validateModificationPermission(String username, JobPost jobPost) {
+        if (!canEditPost(username, jobPost.getMember().getUsername())) {
             throw new AuthException.NotAuthorizedException();
         }
+    }
 
-        postDetail.getJobPost().update(form.getTitle(),form.getDeadLine(), form.getJobStartDate(), Ut.Region.getRegionCodeFromAddress(form.getLocation()));
-        postDetail.updatePostDetail(form.getBody());
-        postDetail.getEssential().update(form.getMinAge(), form.getGender());
-        postDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
+    private void updateJobPostCategories(JobPost jobPost, Category newTaskCategory, Category newRegionCategory) {
+        JobPostCategory taskJobPostCategory = jobPostCategoryService.findByJobPostAndCategoryType(jobPost, CategoryType.TASK);
+        JobPostCategory regionJobPostCategory = jobPostCategoryService.findByJobPostAndCategoryType(jobPost, CategoryType.REGION);
 
+        taskJobPostCategory.updateCategory(newTaskCategory);
+        regionJobPostCategory.updateCategory(newRegionCategory);
+    }
+
+    private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form, int newRegionCode) {
+        jobPostDetail.updatePostDetail(form.getBody());
+        jobPostDetail.getEssential().update(form.getMinAge(), form.getGender());
+        jobPostDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
+    }
+
+    private void updateApplications(JobPostDetail postDetail, JobPostForm.Modify form) {
         List<Application> applicationsToRemove = new ArrayList<>();
         for (Application application : postDetail.getApplications()) {
             if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - application.getMember().getBirth().getYear()) {
                 applicationsToRemove.add(application);
-                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application, POST_MODIFICATION, DELETE));
+                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), application, POST_MODIFICATION, DELETE));
             } else {
-                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application, POST_MODIFICATION, NOTICE));
+                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), application, POST_MODIFICATION, NOTICE));
             }
         }
 
         postDetail.getApplications().removeAll(applicationsToRemove);
-
-        return form;
     }
 
     @Transactional
@@ -142,13 +210,14 @@ public class JobPostService {
         List<JobPostImage> jobPostImages = post.getJobPostDetail().getJobPostImages();
         Member member = findUserByUserNameValidate(username);
 
-        publisher.publishEvent(new PostDeletedEvent(this,post,member,DELETE));
+        publisher.publishEvent(new PostDeletedEvent(this, post, member, DELETE));
 
         if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
             if (!jobPostImages.isEmpty()) {
                 s3ImageService.deletePostImagesFromS3(jobPostImages);
             }
 
+            jobPostCategoryRepository.deleteAllByJobPost(post);
             jobPostRepository.deleteById(postId);
         } else {
             throw new AuthException.NotAuthorizedException();
@@ -173,16 +242,16 @@ public class JobPostService {
     public JobPostDetail findByJobPostAndNameAndValidate(Long postId) {
         JobPost post = findByIdAndValidate(postId);
 
-        return jobPostdetailRepository.findByJobPostAndAuthor(post,post.getMember().getUsername())
+        return jobPostdetailRepository.findByJobPostAndAuthor(post, post.getMember().getUsername())
                 .orElseThrow(JobPostException.PostNotExistsException::new);
     }
 
     @Transactional
-    public void interest(String username, Long postId){
+    public void interest(String username, Long postId) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
-        if (hasInterest(postDetail,member)) {
+        if (hasInterest(postDetail, member)) {
             throw new AuthException.NotAuthorizedException();
         }
 
@@ -199,11 +268,11 @@ public class JobPostService {
     }
 
     @Transactional
-    public void disinterest(String username, Long postId){
+    public void disinterest(String username, Long postId) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
-        if (!hasInterest(postDetail,member)) {
+        if (!hasInterest(postDetail, member)) {
             throw new AuthException.NotAuthorizedException();
         }
 
@@ -326,25 +395,16 @@ public class JobPostService {
             throw new AuthException.NotAuthorizedException();
         }
 
-        jobPost.SetDeadlineNull();
+        jobPost.setDeadlineNull();
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
 
-    public List<JobPostDto> getPostsByCategory(String categoryName) {
+    public Page<JobPostDto> getPostsByCategory(String categoryName, Pageable pageable) {
         Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(CategoryException.NotFoundCategoryException::new);
 
-        List<JobPost> jobPosts = null;
+        Page<JobPost> jobPosts = jobPostCategoryRepository.findJobPostsByCategoryId(category.getId(), pageable);
 
-        if (category.getParent().getId() == 1) {   // 업무
-            jobPosts = jobPostRepository.findAllByCategoryOrderByCreatedAtDesc(category);
-        }
-
-        if (category.getParent().getId() == 2) {   // 지역
-            int regionCode = RegionType.getCodeByName(categoryName);
-            jobPosts =  jobPostRepository.findAllByRegionCodeOrderByCreatedAtDesc(regionCode);
-        }
-
-        return JobPostDto.convertToDtoList(Objects.requireNonNull(jobPosts));
+        return JobPostDto.convertToDtoPage(jobPosts);
     }
 }

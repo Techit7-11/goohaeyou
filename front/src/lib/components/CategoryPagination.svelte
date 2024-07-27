@@ -1,8 +1,9 @@
 <script lang="ts">
-	import rq from '$lib/rq/rq.svelte';
-	import type { PageDto } from '$lib/types';
-
-	const { page, pageDelta = 1 } = $props<{ page: PageDto; pageDelta?: number }>();
+	import { createEventDispatcher } from 'svelte';
+	export let currentPage: number = 1;
+	export let totalPages: number = 1;
+	export let pageDelta: number = 1;
+	const dispatch = createEventDispatcher();
 
 	// 페이지네이션 범위 계산 함수
 	function calculatePaginationRange(current: number, total: number, delta = 4) {
@@ -31,10 +32,10 @@
 
 <div class="flex justify-center">
 	<div class="join">
-		{#each calculatePaginationRange(page.number, page.totalPagesCount, pageDelta) as pageNumber}
+		{#each calculatePaginationRange(currentPage, totalPages, pageDelta) as pageNumber}
 			<button
-				class={`join-item btn ${pageNumber.no == page.number ? 'text-green5' : ''}`}
-				on:click={() => rq.goToCurrentPageWithNewParam('page', `${pageNumber.no}`)}
+				class={`join-item btn ${pageNumber.no == currentPage ? 'text-green5' : ''}`}
+				on:click={() => dispatch('pageChange', pageNumber.no)}
 			>
 				{pageNumber.text}
 			</button>

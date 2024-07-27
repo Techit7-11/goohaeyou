@@ -31,10 +31,10 @@ public class CategoryAdminService {
 
         Category newCategory = Category.builder()
                 .name(form.getName())
-                .code(form.getCode())
                 .level(form.getLevel())
                 .enabled(form.isEnabled())
                 .parent(parent)
+                .type(form.getType())
                 .build();
 
         categoryRepository.save(newCategory);

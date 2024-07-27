@@ -1,5 +1,6 @@
 package com.ll.goohaeyou.domain.category.dto;
 
+import com.ll.goohaeyou.domain.category.entity.type.CategoryType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -14,10 +15,9 @@ public class CategoryForm {
         @NotBlank
         private String name;
         @NotNull
-        private int code = 0;
-        @NotNull
         private int level = 0;
 
+        private CategoryType type;
         private boolean enabled = true;
     }
 }

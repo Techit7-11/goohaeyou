@@ -99,6 +99,9 @@ dependencies {
 
 	// S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// Slack
+	implementation 'com.slack.api:slack-api-client:1.40.2'
 }
 
 // 테스트를 실행할때마다 jacoco 리포트 생성

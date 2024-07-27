@@ -11,7 +11,6 @@ import java.util.List;
 public class CategoryDto {
     private Long id;
     private String name;
-    private int code;
     private int level;
     private Long parentId;
 
@@ -19,7 +18,6 @@ public class CategoryDto {
         return CategoryDto.builder()
                 .id(category.getId())
                 .name(category.getName())
-                .code(category.getCode())
                 .level(category.getLevel())
                 .parentId(category.getParent() != null ? category.getParent().getId() : null)
                 .build();
