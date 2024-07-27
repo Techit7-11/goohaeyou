@@ -2,8 +2,8 @@
 
 <br/>
 
-<p align="center"
-  <img src="https://github.com/user-attachments/assets/ed6b02b9-88ac-47dd-9f41-d52170425b0c" width="250px"/><br><br>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/a754ade8-e469-4533-8cd9-a08e806d1521" width="700px"/><br/><br/><br/>
   <a href="https://www.goohaeyou.site/">사이트 바로가기</a>
   <br/>PC/모바일 겸용<br/>
 </p>
@@ -88,4 +88,4 @@
 
 ## 📝 ERD
 
-![erd_0726](https://github.com/user-attachments/assets/dc22116b-25da-4663-b06c-90fb6d12c6af)
+![erd_0727](https://github.com/user-attachments/assets/4dee13ce-97aa-4448-a26f-874f509a18dd)
