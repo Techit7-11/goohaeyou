@@ -49,7 +49,7 @@
 			case 'NOTICE':
 				return '';
 			case 'DELETE':
-				return '삭제 되었습니다.';
+				return '';
 			case 'APPROVE':
 				return '지원서를 승인 해 주세요.';
 		}
