@@ -51,10 +51,10 @@ public class SecurityConfig {
                             .requestMatchers("/h2-console/**").permitAll()
                             .requestMatchers("/api/member/socialLogin/**").permitAll()
                             .requestMatchers("/oauth2/authorization/**").permitAll() // OAuth 2.0 인증 엔드포인트에 대한 접근 허용
-                            .requestMatchers("/login", "/api/member/join", "api/member/login").permitAll()
+                            .requestMatchers("/login", "/api/member/join", "/api/member/login").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/job-posts/**",
                                     "/api/post-comment/{postId}", "/api/members/image/**",
-                                    "api/job-post/images/**", "api/categories/**").permitAll()
+                                    "/api/job-post/images/**", "/api/categories/**").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                             .requestMatchers("/ready").permitAll()
                             .anyRequest()
