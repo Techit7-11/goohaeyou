@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JobPostCategoryRepository extends JpaRepository<JobPostCategory, Long> {
-    @Query("SELECT jpc.jobPost FROM JobPostCategory jpc WHERE jpc.category.id = :categoryId")
+    @Query("SELECT jpc.jobPost FROM JobPostCategory jpc WHERE jpc.category.id = :categoryId ORDER BY jpc.jobPost.createdAt DESC")
     Page<JobPost> findJobPostsByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
 
     void deleteAllByJobPost(JobPost jobPost);
