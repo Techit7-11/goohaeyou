@@ -50,15 +50,14 @@ public class JobPostService {
     private final JobPostDetailRepository jobPostdetailRepository;
     private final MemberService memberService;
     private final MemberRepository memberRepository;
-    private final EssentialRepository essentialRepository;
     private final ApplicationEventPublisher publisher;
-    private final WageRepository wageRepository;
     private final S3ImageService s3ImageService;
     private final CategoryRepository categoryRepository;
     private final JobPostCategoryRepository jobPostCategoryRepository;
     private final JobPostCategoryService jobPostCategoryService;
     private final CategoryService categoryService;
     private final EssentialService essentialService;
+    private final WageService wageService;
 
     @Transactional
     public void writePost(String username, JobPostForm.Register form) {
@@ -75,7 +74,7 @@ public class JobPostService {
 
         essentialService.createAndSaveEssential(postDetail, form);
 
-        createAndSaveWage(postDetail, form);
+        wageService.createAndSaveWage(postDetail, form);
     }
 
     public JobPostDetailDto findById(Long id) {
@@ -111,19 +110,6 @@ public class JobPostService {
         return jobPostdetailRepository.save(postDetail);
     }
 
-    private void createAndSaveWage(JobPostDetail postDetail, JobPostForm.Register form) {
-        Wage wage = Wage.builder()
-                .cost(form.getCost())
-                .workTime(form.getWorkTime())
-                .workDays(form.getWorkDays())
-                .payBasis(form.getPayBasis())
-                .wagePaymentMethod(form.getWagePaymentMethod())
-                .jobPostDetail(postDetail)
-                .build();
-
-        wageRepository.save(wage);
-    }
-
     @Transactional
     public void modifyPost(String username, Long id, JobPostForm.Modify form) {
         JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
@@ -151,7 +137,7 @@ public class JobPostService {
     private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form, int newRegionCode) {
         jobPostDetail.updatePostDetail(form.getBody());
         essentialService.updateEssential(jobPostDetail.getEssential(), form);
-        jobPostDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
+        wageService.updateWage(jobPostDetail.getWage(), form);
     }
 
     private void updateApplications(JobPostDetail postDetail, JobPostForm.Modify form) {
