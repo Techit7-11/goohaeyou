@@ -6,7 +6,7 @@ import com.ll.goohaeyou.domain.category.entity.repository.CategoryRepository;
 import com.ll.goohaeyou.domain.category.entity.repository.JobPostCategoryRepository;
 import com.ll.goohaeyou.domain.category.service.CategoryService;
 import com.ll.goohaeyou.domain.category.service.JobPostCategoryService;
-import com.ll.goohaeyou.domain.fileupload.service.S3ImageService;
+import com.ll.goohaeyou.domain.image.service.S3ImageService;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDto;
 import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostForm;
