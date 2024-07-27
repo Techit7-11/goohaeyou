@@ -58,6 +58,7 @@ public class JobPostService {
     private final JobPostCategoryRepository jobPostCategoryRepository;
     private final JobPostCategoryService jobPostCategoryService;
     private final CategoryService categoryService;
+    private final EssentialService essentialService;
 
     @Transactional
     public void writePost(String username, JobPostForm.Register form) {
@@ -72,7 +73,7 @@ public class JobPostService {
 
         JobPostDetail postDetail = createAndSaveJobPostDetail(newPost, username, form);
 
-        createAndSaveEssential(postDetail, form);
+        essentialService.createAndSaveEssential(postDetail, form);
 
         createAndSaveWage(postDetail, form);
     }
@@ -108,16 +109,6 @@ public class JobPostService {
                 .build();
 
         return jobPostdetailRepository.save(postDetail);
-    }
-
-    private void createAndSaveEssential(JobPostDetail postDetail, JobPostForm.Register form) {
-        Essential essential = Essential.builder()
-                .minAge(form.getMinAge())
-                .gender(form.getGender())
-                .jobPostDetail(postDetail)
-                .build();
-
-        essentialRepository.save(essential);
     }
 
     private void createAndSaveWage(JobPostDetail postDetail, JobPostForm.Register form) {
@@ -159,7 +150,7 @@ public class JobPostService {
 
     private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form, int newRegionCode) {
         jobPostDetail.updatePostDetail(form.getBody());
-        jobPostDetail.getEssential().update(form.getMinAge(), form.getGender());
+        essentialService.updateEssential(jobPostDetail.getEssential(), form);
         jobPostDetail.getWage().updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
     }
 
