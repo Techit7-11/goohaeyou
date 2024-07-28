@@ -4,6 +4,7 @@ import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -16,11 +17,11 @@ public class JobPostCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "job_post_id", nullable = false)
     private JobPost jobPost;
 
