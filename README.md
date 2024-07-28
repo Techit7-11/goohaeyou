@@ -88,4 +88,4 @@
 
 ## 📝 ERD
 
-![erd_0727](https://github.com/user-attachments/assets/4dee13ce-97aa-4448-a26f-874f509a18dd)
+![erd_0727](https://github.com/user-attachments/assets/ebcc167d-70b7-404c-94ca-a94838381e9b)
