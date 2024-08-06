@@ -209,6 +209,7 @@ public class JobPostService {
         return jobPostRepository.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable);
     }
 
+    @Cacheable(value = "jobPostsBySort", key = "#sortName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
     public Page<JobPost> findBySort(Pageable pageable) {
         return jobPostRepository.findBySort(pageable);
     }
@@ -229,6 +230,7 @@ public class JobPostService {
         jobPost.increaseViewCount();
     }
 
+    @Cacheable(value = "jobPostsBySearch", key = "#titleAndBody + '_' + #titleOnly + '_' + #bodyOnly")
     public List<JobPostDto> searchJobPostsByTitleAndBody(String titleAndBody, String titleOnly, String bodyOnly) {
         Specification<JobPost> spec = Specification.where(null);
 
@@ -305,7 +307,7 @@ public class JobPostService {
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
 
-    @Cacheable(value = "jobPostsByCategory", key = "#categoryName")
+    //@Cacheable(value = "jobPostsByCategory", key = "#categoryName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
     public Page<JobPostDto> getPostsByCategory(String categoryName, Pageable pageable) {
         Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(CategoryException.NotFoundCategoryException::new);
