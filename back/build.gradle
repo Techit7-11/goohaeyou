@@ -102,6 +102,9 @@ dependencies {
 
 	// Slack
 	implementation 'com.slack.api:slack-api-client:1.40.2'
+
+	// Cache
+	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.1'
 }
 
 // 테스트를 실행할때마다 jacoco 리포트 생성
