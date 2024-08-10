@@ -23,6 +23,7 @@ import com.ll.goohaeyou.global.exception.jobPost.JobPostException;
 import com.ll.goohaeyou.global.exception.member.MemberException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
@@ -208,6 +209,7 @@ public class JobPostService {
         return jobPostRepository.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable);
     }
 
+    @Cacheable(value = "jobPostsBySort", key = "#sortName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
     public Page<JobPost> findBySort(Pageable pageable) {
         return jobPostRepository.findBySort(pageable);
     }
@@ -228,6 +230,7 @@ public class JobPostService {
         jobPost.increaseViewCount();
     }
 
+    @Cacheable(value = "jobPostsBySearch", key = "#titleAndBody + '_' + #titleOnly + '_' + #bodyOnly")
     public List<JobPostDto> searchJobPostsByTitleAndBody(String titleAndBody, String titleOnly, String bodyOnly) {
         Specification<JobPost> spec = Specification.where(null);
 
@@ -304,6 +307,7 @@ public class JobPostService {
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
 
+    @Cacheable(value = "jobPostsByCategory", key = "#categoryName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
     public Page<JobPostDto> getPostsByCategory(String categoryName, Pageable pageable) {
         Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(CategoryException.NotFoundCategoryException::new);
