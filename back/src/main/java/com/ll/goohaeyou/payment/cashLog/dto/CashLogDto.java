@@ -29,7 +29,7 @@ public class CashLogDto {
     @NotNull
     private Long applicationId;
 
-    public static CashLogDto fromEntity(CashLog cashLog) {
+    public static CashLogDto from(CashLog cashLog) {
         return CashLogDto.builder()
                 .id(cashLog.getId())
                 .description(cashLog.getDescription())

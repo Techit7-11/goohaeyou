@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.notification.eventListener;
 
-import com.ll.goohaeyou.notification.service.NotificationService;
+import com.ll.goohaeyou.notification.application.NotificationService;
 import com.ll.goohaeyou.global.event.notification.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

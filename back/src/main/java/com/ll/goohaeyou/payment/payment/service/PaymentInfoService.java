@@ -4,7 +4,7 @@ import com.ll.goohaeyou.payment.payment.dto.PaymentDto;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.global.exception.auth.AuthException;
-import com.ll.goohaeyou.global.exception.payment.PaymentException;
+import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,14 +1,14 @@
 package com.ll.goohaeyou.payment.payment.service;
 
 import com.ll.goohaeyou.application.domain.Application;
-import com.ll.goohaeyou.application.service.ApplicationService;
-import com.ll.goohaeyou.payment.cashLog.service.CashLogService;
+import com.ll.goohaeyou.application.application.ApplicationService;
+import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.payment.payment.dto.cancel.PaymentCancelResDto;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.global.exception.auth.AuthException;
-import com.ll.goohaeyou.global.exception.payment.PaymentException;
+import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;

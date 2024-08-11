@@ -2,7 +2,7 @@ package com.ll.goohaeyou.payment.payment.service;
 
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import com.ll.goohaeyou.payment.payment.domain.type.PayTypeFee;
-import com.ll.goohaeyou.global.exception.payment.PaymentException;
+import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

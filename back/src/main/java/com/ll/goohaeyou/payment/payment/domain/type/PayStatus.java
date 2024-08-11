@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.payment.payment.domain.type;
 
-import com.ll.goohaeyou.global.exception.payment.PaymentException;
+import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

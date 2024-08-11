@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.chat.room.eventListener;
 
-import com.ll.goohaeyou.chat.room.service.RoomService;
-import com.ll.goohaeyou.notification.service.NotificationService;
+import com.ll.goohaeyou.chat.room.application.RoomService;
+import com.ll.goohaeyou.notification.application.NotificationService;
 import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
