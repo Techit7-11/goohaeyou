@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.global.security;
 
-import com.ll.goohaeyou.domain.member.member.entity.Member;
+import com.ll.goohaeyou.member.member.domain.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

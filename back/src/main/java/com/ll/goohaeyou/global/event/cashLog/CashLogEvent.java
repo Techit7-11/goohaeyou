@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.global.event.cashLog;
 
-import com.ll.goohaeyou.domain.application.entity.Application;
+import com.ll.goohaeyou.application.domain.Application;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

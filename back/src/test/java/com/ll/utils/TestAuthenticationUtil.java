@@ -1,7 +1,7 @@
 package com.ll.utils;
 
-import com.ll.goohaeyou.domain.member.member.dto.JoinForm;
-import com.ll.goohaeyou.domain.member.member.dto.LoginForm;
+import com.ll.goohaeyou.member.member.dto.JoinForm;
+import com.ll.goohaeyou.member.member.dto.LoginForm;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

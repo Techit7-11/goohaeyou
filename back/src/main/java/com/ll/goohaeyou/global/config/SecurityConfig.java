@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.global.config;
 
-import com.ll.goohaeyou.domain.member.member.entity.repository.RefreshTokenRepository;
-import com.ll.goohaeyou.domain.member.member.service.MemberService;
+import com.ll.goohaeyou.member.member.domain.repository.RefreshTokenRepository;
+import com.ll.goohaeyou.member.member.service.MemberService;
 import com.ll.goohaeyou.global.security.CustomUserDetailsService;
 import com.ll.goohaeyou.global.security.JwtFilter;
 import com.ll.goohaeyou.global.security.JwtTokenProvider;
