@@ -1,6 +1,5 @@
-package com.ll.goohaeyou.chat.room.eventListener;
+package com.ll.goohaeyou.chat.room.application;
 
-import com.ll.goohaeyou.chat.room.application.RoomService;
 import com.ll.goohaeyou.notification.application.NotificationService;
 import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,5 @@
-package com.ll.goohaeyou.payment.cashLog.eventListener;
+package com.ll.goohaeyou.payment.cashLog.application;
 
-import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.global.event.cashLog.CashLogEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
