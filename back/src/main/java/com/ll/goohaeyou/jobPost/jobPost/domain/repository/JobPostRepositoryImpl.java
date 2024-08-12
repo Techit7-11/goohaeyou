@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.jobPost.jobPost.domain.repository;
 
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
-import com.ll.goohaeyou.domain.jobPost.jobPost.entity.QJobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.QJobPost;
 import com.ll.goohaeyou.member.member.domain.type.Gender;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
