@@ -83,7 +83,7 @@ jobs:
             ghcr.io/${{ env.OWNER_LC }}/goohaeyou:latest
   deploy:
     runs-on: ubuntu-latest
-    needs: [ buildImageAndPush ]
+    needs: [ dockerImagePreparationBuildAndPush ]
     steps:
       - name: AWS SSM Send-Command
         uses: peterkimzz/aws-ssm-send-command@master
