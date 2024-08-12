@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.global.standard.base;
 
-import com.ll.goohaeyou.global.exception.category.CategoryException;
+import com.ll.goohaeyou.category.exception.CategoryException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

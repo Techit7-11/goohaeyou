@@ -1,9 +1,9 @@
 package com.ll.utils.builder;
 
-import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostForm;
-import com.ll.goohaeyou.domain.jobPost.jobPost.entity.type.PayBasis;
-import com.ll.goohaeyou.domain.jobPost.jobPost.entity.type.WagePaymentMethod;
-import com.ll.goohaeyou.domain.member.member.entity.type.Gender;
+import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.domain.type.PayBasis;
+import com.ll.goohaeyou.jobPost.jobPost.domain.type.WagePaymentMethod;
+import com.ll.goohaeyou.member.member.domain.type.Gender;
 
 import java.time.LocalDate;
 

@@ -1,7 +1,7 @@
 package com.ll.utils.builder;
 
-import com.ll.goohaeyou.domain.member.member.dto.JoinForm;
-import com.ll.goohaeyou.domain.member.member.entity.type.Gender;
+import com.ll.goohaeyou.member.member.dto.JoinForm;
+import com.ll.goohaeyou.member.member.domain.type.Gender;
 
 import java.time.LocalDate;
 

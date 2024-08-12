@@ -2,7 +2,6 @@ package com.ll.goohaeyou.global.apiResponse;
 
 import com.ll.goohaeyou.global.exception.CustomHttpStatus;
 import com.ll.goohaeyou.global.exception.ErrorCode;
-import com.ll.goohaeyou.global.exception.type.ApiResultType;
 import com.ll.goohaeyou.global.standard.base.Empty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

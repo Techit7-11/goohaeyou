@@ -7,7 +7,7 @@
 //import com.ll.goohaeyou.domain.member.member.entity.Member;
 //import com.ll.goohaeyou.domain.member.member.entity.type.Gender;
 //import com.ll.goohaeyou.domain.member.member.service.MemberService;
-//import com.ll.goohaeyou.global.security.JwtTokenProvider;
+//import com.ll.goohaeyou.auth.application.JwtTokenProvider;
 //import com.ll.utils.builder.JobPostWriteFormBuilder;
 //import com.ll.utils.builder.JoinFormBuilder;
 //import jakarta.servlet.http.Cookie;
