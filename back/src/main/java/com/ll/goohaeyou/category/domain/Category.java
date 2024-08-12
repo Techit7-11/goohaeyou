@@ -36,4 +36,8 @@ public class Category {
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Category> subCategories = new ArrayList<>();
+
+    public boolean isLeaf() {
+        return this.getSubCategories().isEmpty();
+    }
 }

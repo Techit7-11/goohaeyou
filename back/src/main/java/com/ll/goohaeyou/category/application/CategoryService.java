@@ -38,15 +38,11 @@ public class CategoryService {
                 .orElseThrow(CategoryException.NotFoundCategoryException::new);
     }
 
-    public int getRegionCodeFromLocation(String location) {
-        return Ut.Region.getRegionCodeFromAddress(location);
-    }
-
     public boolean isLeafCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(CategoryException.NotFoundCategoryException::new);
 
-        return category.getSubCategories().isEmpty();
+        return category.isLeaf();
     }
 
     public List<CategoryDto> getTopCategories() {

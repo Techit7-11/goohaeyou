@@ -6,6 +6,7 @@ import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
 import com.ll.goohaeyou.category.application.CategoryService;
 import com.ll.goohaeyou.category.application.JobPostCategoryService;
+import com.ll.goohaeyou.global.standard.base.util.Ut;
 import com.ll.goohaeyou.image.application.S3ImageService;
 import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostDetailDto;
 import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostDto;
@@ -66,7 +67,7 @@ public class JobPostService {
 
     @Transactional
     public void writePost(String username, JobPostForm.Register form) {
-        int regionCode = categoryService.getRegionCodeFromLocation(form.getLocation());
+        int regionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
         Category taskCategory = categoryService.getCategoryById(form.getCategoryId());
         Category regionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(regionCode));
 
@@ -122,7 +123,7 @@ public class JobPostService {
 
         validateModificationPermission(username, jobPost);
 
-        int newRegionCode = categoryService.getRegionCodeFromLocation(form.getLocation());
+        int newRegionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
 
         Category newTaskCategory = categoryService.getCategoryById(form.getCategoryId());
         Category newRegionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(newRegionCode));
