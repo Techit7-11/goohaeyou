@@ -10,7 +10,7 @@ import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;
 import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
-import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.jobPost.employ.exception.EmployException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

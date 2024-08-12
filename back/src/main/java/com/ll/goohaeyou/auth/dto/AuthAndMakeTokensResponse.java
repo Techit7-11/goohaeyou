@@ -1,5 +1,6 @@
-package com.ll.goohaeyou.member.member.dto;
+package com.ll.goohaeyou.auth.dto;
 
+import com.ll.goohaeyou.member.member.dto.MemberDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;

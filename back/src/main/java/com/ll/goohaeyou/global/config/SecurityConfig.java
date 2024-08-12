@@ -1,13 +1,13 @@
 package com.ll.goohaeyou.global.config;
 
-import com.ll.goohaeyou.member.member.domain.repository.RefreshTokenRepository;
+import com.ll.goohaeyou.auth.domain.RefreshTokenRepository;
 import com.ll.goohaeyou.member.member.application.MemberService;
-import com.ll.goohaeyou.global.security.CustomUserDetailsService;
-import com.ll.goohaeyou.global.security.JwtFilter;
-import com.ll.goohaeyou.global.security.JwtTokenProvider;
-import com.ll.goohaeyou.global.security.OAuth.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import com.ll.goohaeyou.global.security.OAuth.OAuth2SuccessHandler;
-import com.ll.goohaeyou.global.security.OAuth.OAuth2UserCustomService;
+import com.ll.goohaeyou.auth.application.CustomUserDetailsService;
+import com.ll.goohaeyou.auth.infrastructure.JwtFilter;
+import com.ll.goohaeyou.auth.application.JwtTokenProvider;
+import com.ll.goohaeyou.auth.infrastructure.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import com.ll.goohaeyou.auth.application.OAuth2SuccessHandler;
+import com.ll.goohaeyou.auth.application.OAuth2UserCustomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -8,7 +8,7 @@ import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.review.dto.ApplicantReviewDto;
 import com.ll.goohaeyou.review.domain.Review;
 import com.ll.goohaeyou.review.domain.repository.ReviewRepository;
-import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.jobPost.jobPost.exception.JobPostException;
 import com.ll.goohaeyou.member.member.exception.MemberException;
 import com.ll.goohaeyou.review.exception.ReviewException;

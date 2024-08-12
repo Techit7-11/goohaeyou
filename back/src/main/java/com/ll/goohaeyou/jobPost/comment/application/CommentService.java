@@ -11,7 +11,7 @@ import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;
 import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.global.event.notification.CommentCreatedEvent;
-import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.jobPost.comment.exception.CommentException;
 import com.ll.goohaeyou.member.member.exception.MemberException;
 import lombok.RequiredArgsConstructor;

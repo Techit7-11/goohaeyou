@@ -4,7 +4,7 @@ import com.ll.goohaeyou.jobPost.comment.dto.CommentDto;
 import com.ll.goohaeyou.jobPost.comment.dto.CommentForm;
 import com.ll.goohaeyou.jobPost.comment.application.CommentService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
-import com.ll.goohaeyou.global.security.MemberDetails;
+import com.ll.goohaeyou.auth.domain.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

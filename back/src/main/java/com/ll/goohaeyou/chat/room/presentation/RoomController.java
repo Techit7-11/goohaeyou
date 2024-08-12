@@ -4,7 +4,7 @@ import com.ll.goohaeyou.chat.room.dto.RoomDto;
 import com.ll.goohaeyou.chat.room.dto.RoomListDto;
 import com.ll.goohaeyou.chat.room.application.RoomService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
-import com.ll.goohaeyou.global.security.MemberDetails;
+import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.global.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

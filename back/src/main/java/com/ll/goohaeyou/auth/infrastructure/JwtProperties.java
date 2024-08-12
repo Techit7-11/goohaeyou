@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.global.security;
+package com.ll.goohaeyou.auth.infrastructure;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,5 @@
-package com.ll.goohaeyou.member.member.domain.repository;
+package com.ll.goohaeyou.auth.domain;
 
-import com.ll.goohaeyou.member.member.domain.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

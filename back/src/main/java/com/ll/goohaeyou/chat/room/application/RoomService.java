@@ -8,7 +8,7 @@ import com.ll.goohaeyou.chat.room.domain.Room;
 import com.ll.goohaeyou.chat.room.domain.repository.RoomRepository;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.application.MemberService;
-import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.chat.exception.ChatException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

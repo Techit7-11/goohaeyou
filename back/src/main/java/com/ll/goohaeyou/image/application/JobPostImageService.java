@@ -5,7 +5,7 @@ import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostImageRepository;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
-import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.image.exception.ImageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

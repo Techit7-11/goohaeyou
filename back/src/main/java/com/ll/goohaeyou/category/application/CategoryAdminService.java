@@ -3,7 +3,7 @@ package com.ll.goohaeyou.category.application;
 import com.ll.goohaeyou.category.domain.Category;
 import com.ll.goohaeyou.category.dto.CategoryForm;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
-import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.category.exception.CategoryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

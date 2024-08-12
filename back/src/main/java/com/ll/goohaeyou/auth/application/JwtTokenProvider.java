@@ -1,5 +1,6 @@
-package com.ll.goohaeyou.global.security;
+package com.ll.goohaeyou.auth.application;
 
+import com.ll.goohaeyou.auth.infrastructure.JwtProperties;
 import com.ll.goohaeyou.member.member.domain.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

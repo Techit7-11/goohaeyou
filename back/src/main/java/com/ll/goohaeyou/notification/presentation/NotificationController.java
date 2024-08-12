@@ -3,7 +3,7 @@ package com.ll.goohaeyou.notification.presentation;
 import com.ll.goohaeyou.notification.dto.NotificationDto;
 import com.ll.goohaeyou.notification.application.NotificationService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
-import com.ll.goohaeyou.global.security.MemberDetails;
+import com.ll.goohaeyou.auth.domain.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

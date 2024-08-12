@@ -10,7 +10,7 @@ import com.ll.goohaeyou.payment.payment.service.PaymentCancelService;
 import com.ll.goohaeyou.payment.payment.service.PaymentInfoService;
 import com.ll.goohaeyou.payment.payment.service.PaymentService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
-import com.ll.goohaeyou.global.security.MemberDetails;
+import com.ll.goohaeyou.auth.domain.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

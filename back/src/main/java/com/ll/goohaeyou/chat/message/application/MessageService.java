@@ -6,7 +6,7 @@ import com.ll.goohaeyou.chat.message.domain.Message;
 import com.ll.goohaeyou.chat.message.domain.repository.MessageRepository;
 import com.ll.goohaeyou.chat.room.domain.Room;
 import com.ll.goohaeyou.chat.room.application.RoomService;
-import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.auth.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

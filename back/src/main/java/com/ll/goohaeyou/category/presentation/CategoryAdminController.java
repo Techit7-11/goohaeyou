@@ -3,7 +3,7 @@ package com.ll.goohaeyou.category.presentation;
 import com.ll.goohaeyou.category.application.CategoryAdminService;
 import com.ll.goohaeyou.category.dto.CategoryForm;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
-import com.ll.goohaeyou.global.security.MemberDetails;
+import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.global.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

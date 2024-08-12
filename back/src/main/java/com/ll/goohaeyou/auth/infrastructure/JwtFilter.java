@@ -1,5 +1,7 @@
-package com.ll.goohaeyou.global.security;
+package com.ll.goohaeyou.auth.infrastructure;
 
+import com.ll.goohaeyou.auth.application.CustomUserDetailsService;
+import com.ll.goohaeyou.auth.application.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

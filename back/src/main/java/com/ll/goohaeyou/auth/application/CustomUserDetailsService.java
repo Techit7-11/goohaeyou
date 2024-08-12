@@ -1,5 +1,6 @@
-package com.ll.goohaeyou.global.security;
+package com.ll.goohaeyou.auth.application;
 
+import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

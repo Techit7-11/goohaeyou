@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.member.member.dto;
+package com.ll.goohaeyou.auth.dto;
 
 import lombok.Getter;
 import lombok.Setter;

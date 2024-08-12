@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.member.member.domain;
+package com.ll.goohaeyou.auth.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

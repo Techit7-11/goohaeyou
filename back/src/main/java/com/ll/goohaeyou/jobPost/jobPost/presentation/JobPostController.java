@@ -7,7 +7,7 @@ import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.config.AppConfig;
-import com.ll.goohaeyou.global.security.MemberDetails;
+import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.global.standard.base.Empty;
 import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
 import com.ll.goohaeyou.global.standard.dto.PageDto;

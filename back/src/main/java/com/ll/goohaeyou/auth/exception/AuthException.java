@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.global.exception.auth;
+package com.ll.goohaeyou.auth.exception;
 
 import com.ll.goohaeyou.global.exception.ErrorCode;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;

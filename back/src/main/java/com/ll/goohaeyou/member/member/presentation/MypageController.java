@@ -10,7 +10,7 @@ import com.ll.goohaeyou.member.member.dto.MemberDto;
 import com.ll.goohaeyou.member.member.dto.MemberForm;
 import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
-import com.ll.goohaeyou.global.security.MemberDetails;
+import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.global.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

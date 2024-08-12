@@ -1,7 +1,7 @@
-package com.ll.goohaeyou.member.member.presentation;
+package com.ll.goohaeyou.auth.presentation;
 
+import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.config.AppConfig;
-import com.ll.goohaeyou.global.exception.auth.AuthException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

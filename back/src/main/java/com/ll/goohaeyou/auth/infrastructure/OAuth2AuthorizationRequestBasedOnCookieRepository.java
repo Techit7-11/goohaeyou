@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.global.security.OAuth;
+package com.ll.goohaeyou.auth.infrastructure;
 
 import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
 import jakarta.servlet.http.Cookie;

@@ -7,7 +7,7 @@ import com.ll.goohaeyou.payment.payment.dto.cancel.PaymentCancelResDto;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
-import com.ll.goohaeyou.global.exception.auth.AuthException;
+import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
