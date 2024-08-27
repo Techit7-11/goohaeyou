@@ -8,6 +8,9 @@ import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
+@Table(name = "job_post_category", indexes = {
+        @Index(name = "idx_category_id_job_post_id", columnList = "category_id, job_post_id")
+})
 @AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
 @Builder

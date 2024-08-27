@@ -10,11 +10,13 @@ import java.time.LocalDate;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
+@Table(name = "job_post", indexes = {
+        @Index(name = "idx_created_at", columnList = "created_at")
+})
 @AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
 @Builder
 @Getter
-@Table(name = "job_post")
 public class JobPost extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -36,7 +36,7 @@ public class Wage {
     private WagePaymentMethod wagePaymentMethod = WagePaymentMethod.UNDEFINED;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_post_detail", nullable = false)
+    @JoinColumn(name = "job_post_detail_id", nullable = false)
     private JobPostDetail jobPostDetail;
 
     public void updateWageInfo(int cost, PayBasis payBasis, int workTime, int workDays) {
