@@ -27,11 +27,11 @@
 - 프로젝트 이름 : **구해유(GooHaeYou)**
 - 프로젝트 주제 : 스팟 채용 서비스
 - 주요 기능 :
-    - 로그인, 로그아웃, 회원가입, 마이페이지
-    - 구인 공고 CRUD, 댓글 CRUD
+    - 로그인/아웃, 회원가입, 마이페이지
+    - 구인 공고 등록, 지원하기, 댓글 작성
     - 구인 공고 검색, 정렬, 필터
     - 1:1 채팅
-    - 결제, 정산
+    - 알바비 결제, 정산
     - 알림, 웹 푸시
     - 구인 공고 지도
     - 카테고리, 이미지 업로드
@@ -69,22 +69,33 @@
 
 ## ⚒️ 기술스택
 
-
 <br/>
 
-| <h3>백엔드</h3>                                                                                                                   |
-|--------------------------------------------------------------------------------------------------------------------------------|
-| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/5cc54e75-51c5-458b-a79e-e95369dc9401" width=580px alt="백엔드"> |
+### 백엔드
 
-| <h3>인프라</h3>                                                                                                                   | <h3>프론트엔드</h3>                                                                                                                   |
-|--------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
-| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/9976ae98-b37a-4668-b9c0-4af008c47e5a" width=450px alt="인프라"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/81da74fe-b688-4a11-a9e7-e17f644902d5" width=340px alt="프론트엔드"> |
+<img src="https://github.com/user-attachments/assets/b4111338-4cc6-41be-9874-8c21955c0de3" width=650px alt="백엔드">
 
-| <h3>외부 API</h3>                                                                                                                  | <h3>협업</h3>                                                                                                                   |
-|----------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/3b52aa7a-02c5-43e3-a5ac-a57b4201cf5e" width=250px alt="외부API"> | <img src="https://github.com/Techit7-11/GooHaeYou/assets/76129297/7747ea25-e9e0-4f64-9b53-f8e6fa847bf0" width=340px alt="협업"> |
+### 인프라 
 
-<br/>
+<img src="https://github.com/user-attachments/assets/6f01d20b-4c25-4853-a891-3bcd365cad05" width=440px alt="인프라">
+
+### 프론트엔드
+
+<img src="https://github.com/user-attachments/assets/27c36404-914f-4eba-916b-2bfd5985a452" width=335px alt="프론트엔드">
+
+<br/><br/>
+
+## ⚙️ Infrastructure
+
+<img src="https://github.com/user-attachments/assets/c1850aa3-fb86-4f21-bfdc-b0d7c6783794" width=800px alt="인프라아키텍처">
+
+<br/><br/>
+
+## 🚀 CI/CD Pipeline
+
+<img src="https://github.com/user-attachments/assets/e56aa604-bc0f-4a0c-a372-3dc7cd68ee4f" width=800px alt="cicd아키텍처">
+
+<br/><br/>
 
 ## 📝 ERD
 
