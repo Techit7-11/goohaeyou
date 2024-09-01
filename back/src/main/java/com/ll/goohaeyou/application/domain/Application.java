@@ -34,13 +34,15 @@ public class Application extends BaseTimeEntity {
     private String body;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
     private WageStatus wageStatus = WageStatus.UNDEFINED;
 
-    private int earn = 0;
+    private int earn;
 
-    private boolean receive = false;
+    private boolean receive;
 
-    private Boolean jobCompleted = null;
+    private Boolean jobCompleted;
 
     private LocalDate jobEndDate;
 

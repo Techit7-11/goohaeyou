@@ -108,7 +108,7 @@ public class JobPostImageService {
         JobPostImage newMainImage = jobPostImageRepository.findById(newImageId)
                 .orElseThrow(ImageException.ImageNotFoundException::new);
 
-        currentMainImage.unsetMain();
-        newMainImage.setMain();
+        currentMainImage.unsetMainImage();
+        newMainImage.setMainImage();
     }
 }

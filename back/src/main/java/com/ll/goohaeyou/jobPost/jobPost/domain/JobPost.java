@@ -80,27 +80,33 @@ public class JobPost extends BaseTimeEntity {
     }
 
     public void increaseCommentsCount() {
-        commentsCount++;
+        this.commentsCount++;
     }
 
     public void decreaseCommentsCount() {
-        commentsCount--;
+        if (commentsCount > 0) {
+            this.commentsCount--;
+        }
     }
 
     public void increaseApplicationsCount() {
-        applicationCount++;
+        this.applicationCount++;
     }
 
     public void decreaseApplicationsCount() {
-        applicationCount--;
+        if (this.applicationCount > 0) {
+            this.applicationCount--;
+        }
     }
 
     public void increaseInterestCount() {
-        interestsCount++;
+        this.interestsCount++;
     }
 
     public void decreaseInterestCount() {
-        interestsCount--;
+        if (interestsCount > 0) {
+            this.interestsCount--;
+        }
     }
 
     public void increaseViewCount() {

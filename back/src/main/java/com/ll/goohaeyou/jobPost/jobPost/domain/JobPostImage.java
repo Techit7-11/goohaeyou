@@ -23,17 +23,17 @@ public class JobPostImage {
     private String jobPostImageUrl;
 
     @Column(nullable = false)
-    private boolean isMainImage = false;
+    private boolean isMainImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_post_detail_id", nullable = false)
     private JobPostDetail jobPostDetail;
 
-    public void setMain() {
+    public void setMainImage() {
         this.isMainImage = true;
     }
 
-    public void unsetMain() {
+    public void unsetMainImage() {
         this.isMainImage = false;
     }
 }

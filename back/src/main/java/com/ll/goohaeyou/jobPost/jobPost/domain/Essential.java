@@ -21,7 +21,8 @@ public class Essential {
     private int minAge;
 
     @Enumerated(EnumType.STRING)
-    //@Column(nullable = false)
+    @Column(nullable = false)
+    @Builder.Default
     private Gender gender = Gender.UNDEFINED;
 
     @OneToOne(fetch = FetchType.LAZY)

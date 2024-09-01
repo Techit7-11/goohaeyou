@@ -21,18 +21,20 @@ public class Wage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int cost = 0;
+    private int cost;
 
     private boolean paid;
 
-    private int workTime = 0;
+    private int workTime;
 
-    private int workDays = 0;
+    private int workDays;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private PayBasis payBasis = PayBasis.UNDEFINED;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private WagePaymentMethod wagePaymentMethod = WagePaymentMethod.UNDEFINED;
 
     @OneToOne(fetch = FetchType.LAZY)

@@ -23,8 +23,7 @@ public class Category {
     private String name;
 
     @Column(nullable = false)
-    private int level = 0;
-
+    private int level;
     private boolean enabled = true;
 
     @Enumerated(EnumType.STRING)
