@@ -2,7 +2,7 @@ package com.ll.goohaeyou.member.member.presentation;
 
 import com.ll.goohaeyou.application.application.dto.ApplicationDto;
 import com.ll.goohaeyou.application.application.ApplicationService;
-import com.ll.goohaeyou.jobPost.comment.dto.CommentDto;
+import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
 import com.ll.goohaeyou.jobPost.comment.application.CommentService;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;

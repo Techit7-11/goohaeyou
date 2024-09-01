@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.jobPost.comment.application;
 
-import com.ll.goohaeyou.jobPost.comment.dto.CommentDto;
-import com.ll.goohaeyou.jobPost.comment.dto.CommentForm;
+import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
+import com.ll.goohaeyou.jobPost.comment.application.dto.CommentForm;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import com.ll.goohaeyou.jobPost.comment.domain.repository.CommentRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;

@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.jobPost.comment.dto;
+package com.ll.goohaeyou.jobPost.comment.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

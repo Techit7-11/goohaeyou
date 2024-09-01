@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.jobPost.comment.dto;
+package com.ll.goohaeyou.jobPost.comment.application.dto;
 
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import jakarta.validation.constraints.NotBlank;
