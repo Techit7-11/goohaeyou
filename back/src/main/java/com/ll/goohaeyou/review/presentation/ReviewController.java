@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.review.presentation;
 
-import com.ll.goohaeyou.review.dto.ApplicantReviewDto;
+import com.ll.goohaeyou.review.application.dto.ApplicantReviewDto;
 import com.ll.goohaeyou.review.application.ReviewService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

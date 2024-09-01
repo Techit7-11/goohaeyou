@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.application.prsentation;
 
-import com.ll.goohaeyou.application.dto.ApplicationDto;
-import com.ll.goohaeyou.application.dto.ApplicationForm;
+import com.ll.goohaeyou.application.application.dto.ApplicationDto;
+import com.ll.goohaeyou.application.application.dto.ApplicationForm;
 import com.ll.goohaeyou.application.application.ApplicationService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;

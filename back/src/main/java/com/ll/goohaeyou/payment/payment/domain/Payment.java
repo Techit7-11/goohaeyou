@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.payment.payment.domain;
 
 import com.ll.goohaeyou.member.member.domain.Member;
-import com.ll.goohaeyou.payment.payment.dto.request.PaymentResDto;
+import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentResDto;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -8,7 +8,7 @@ import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.application.MemberService;
-import com.ll.goohaeyou.notification.dto.NotificationDto;
+import com.ll.goohaeyou.notification.application.dto.NotificationDto;
 import com.ll.goohaeyou.notification.domain.Notification;
 import com.ll.goohaeyou.notification.domain.repository.NotificationRepository;
 import com.ll.goohaeyou.notification.domain.type.CauseTypeCode;

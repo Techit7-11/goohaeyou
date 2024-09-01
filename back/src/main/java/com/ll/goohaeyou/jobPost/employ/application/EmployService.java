@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobPost.employ.application;
 
-import com.ll.goohaeyou.application.dto.ApplicationDto;
+import com.ll.goohaeyou.application.application.dto.ApplicationDto;
 import com.ll.goohaeyou.application.domain.Application;
 import com.ll.goohaeyou.application.domain.type.WageStatus;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;

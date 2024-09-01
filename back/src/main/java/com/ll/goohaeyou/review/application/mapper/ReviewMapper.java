@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.review.application.mapper;
 
-import com.ll.goohaeyou.review.dto.ApplicantReviewDto;
+import com.ll.goohaeyou.review.application.dto.ApplicantReviewDto;
 import com.ll.goohaeyou.review.domain.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

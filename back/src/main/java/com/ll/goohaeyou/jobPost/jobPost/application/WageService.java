@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
-import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.Wage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.WageRepository;

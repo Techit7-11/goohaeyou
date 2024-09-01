@@ -1,13 +1,13 @@
 package com.ll.goohaeyou.member.member.presentation;
 
-import com.ll.goohaeyou.application.dto.ApplicationDto;
+import com.ll.goohaeyou.application.application.dto.ApplicationDto;
 import com.ll.goohaeyou.application.application.ApplicationService;
 import com.ll.goohaeyou.jobPost.comment.dto.CommentDto;
 import com.ll.goohaeyou.jobPost.comment.application.CommentService;
-import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostDto;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
-import com.ll.goohaeyou.member.member.dto.MemberDto;
-import com.ll.goohaeyou.member.member.dto.MemberForm;
+import com.ll.goohaeyou.member.member.application.dto.MemberDto;
+import com.ll.goohaeyou.member.member.application.dto.MemberForm;
 import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;

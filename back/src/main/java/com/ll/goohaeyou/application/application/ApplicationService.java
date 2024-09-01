@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.application.application;
 
-import com.ll.goohaeyou.application.dto.ApplicationDto;
-import com.ll.goohaeyou.application.dto.ApplicationForm;
+import com.ll.goohaeyou.application.application.dto.ApplicationDto;
+import com.ll.goohaeyou.application.application.dto.ApplicationForm;
 import com.ll.goohaeyou.application.domain.repository.ApplicationRepository;
 import com.ll.goohaeyou.application.domain.Application;
 import com.ll.goohaeyou.application.domain.type.WageStatus;

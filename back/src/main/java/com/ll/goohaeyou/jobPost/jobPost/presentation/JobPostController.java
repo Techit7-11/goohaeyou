@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.jobPost.jobPost.presentation;
 
-import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostDetailDto;
-import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostDto;
-import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;

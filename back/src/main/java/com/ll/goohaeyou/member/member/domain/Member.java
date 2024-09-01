@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.member.member.domain;
 
-import com.ll.goohaeyou.member.member.dto.SocialProfileForm;
+import com.ll.goohaeyou.member.member.application.dto.SocialProfileForm;
 import com.ll.goohaeyou.member.member.domain.type.Gender;
 import com.ll.goohaeyou.member.member.domain.type.Level;
 import com.ll.goohaeyou.member.member.domain.type.Role;

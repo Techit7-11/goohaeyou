@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobPost.employ.presentation;
 
-import com.ll.goohaeyou.application.dto.ApplicationDto;
+import com.ll.goohaeyou.application.application.dto.ApplicationDto;
 import com.ll.goohaeyou.jobPost.employ.application.EmployService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.standard.base.Empty;

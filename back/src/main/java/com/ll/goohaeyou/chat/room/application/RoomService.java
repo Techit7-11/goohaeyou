@@ -1,9 +1,9 @@
 package com.ll.goohaeyou.chat.room.application;
 
-import com.ll.goohaeyou.chat.message.dto.MessageDto;
+import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
 import com.ll.goohaeyou.chat.message.domain.Message;
-import com.ll.goohaeyou.chat.room.dto.RoomDto;
-import com.ll.goohaeyou.chat.room.dto.RoomListDto;
+import com.ll.goohaeyou.chat.room.application.dto.RoomDto;
+import com.ll.goohaeyou.chat.room.application.dto.RoomListDto;
 import com.ll.goohaeyou.chat.room.domain.Room;
 import com.ll.goohaeyou.chat.room.domain.repository.RoomRepository;
 import com.ll.goohaeyou.member.member.domain.Member;
