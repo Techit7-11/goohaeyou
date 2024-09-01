@@ -28,13 +28,13 @@ public class CashLog extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EventType eventType;
 
-    private long totalAmount = 0;    // 거래 금액
+    private long totalAmount;    // 거래 금액
 
-    private long vat = 0;    // 부가세
+    private long vat;    // 부가세
 
-    private long paymentFee = 0;    // 결제수수료
+    private long paymentFee;    // 결제수수료
 
-    private long netAmount = 0;   // 순금액
+    private long netAmount;   // 순금액
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore

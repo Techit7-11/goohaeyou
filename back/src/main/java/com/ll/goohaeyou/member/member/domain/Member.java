@@ -35,24 +35,28 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private Role role = Role.GUEST;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private Gender gender = Gender.UNDEFINED;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private Level level = Level.LV1;
 
-    private int transactionCount = 0;
+    private int transactionCount;
+
     private String location;
 
-    private LocalDate birth;  // yyyy-MM-dd
+    private LocalDate birth;
 
-    private boolean authenticated = false;
+    private boolean authenticated;
 
     private long restCash;
 
-    private String FCMToken = null;
+    private String FCMToken;
 
     private String profileImageUrl;
 
