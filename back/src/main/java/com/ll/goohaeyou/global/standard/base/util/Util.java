@@ -6,23 +6,7 @@ import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
 import lombok.SneakyThrows;
 
-public class Ut {
-    public static class Str {
-        public static boolean isBlank(String str) {
-            return str == null || str.trim().isEmpty();
-        }
-
-        public static boolean hasLength(String str) {
-            return !isBlank(str);
-        }
-    }
-
-    public static class thread {
-        @SneakyThrows
-        public static void sleep(long millis) {
-            Thread.sleep(millis);
-        }
-    }
+public class Util {
 
     public static class Region {
 
