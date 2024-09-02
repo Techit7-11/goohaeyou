@@ -35,17 +35,13 @@ public class CommentService {
     public CommentForm.Register writeComment(Long postId, String username, CommentForm.Register form) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
 
-        Comment comment = Comment.builder()
-                .jobPostDetail(postDetail)
-                .member(memberService.getMember(username))
-                .content(form.getContent())
-                .build();
+        Comment newComment = Comment.createComment(postDetail, memberService.getMember(username), form.getContent());
 
-        postDetail.getComments().add(comment);
+        postDetail.getComments().add(newComment);
         postDetail.getJobPost().increaseCommentsCount();
 
         if(!postDetail.getAuthor().equals(username)) {
-            publisher.publishEvent(new CommentCreatedEvent(this,postDetail,comment));
+            publisher.publishEvent(new CommentCreatedEvent(this,postDetail, newComment));
         }
 
         return form;

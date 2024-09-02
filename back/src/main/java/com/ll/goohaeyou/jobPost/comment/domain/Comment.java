@@ -7,9 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Getter
 @Table(name = "comment")
 public class Comment extends BaseTimeEntity {
@@ -27,6 +25,15 @@ public class Comment extends BaseTimeEntity {
 
     private String content;
 
+    private Comment(JobPostDetail jobPostDetail, Member member, String content) {
+        this.jobPostDetail = jobPostDetail;
+        this.member = member;
+        this.content = content;
+    }
+
+    public static Comment createComment(JobPostDetail jobPostDetail, Member member, String content) {
+        return new Comment(jobPostDetail, member, content);
+    }
 
     public void update(String content) {
         if (content != null && !content.isBlank()) {
