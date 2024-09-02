@@ -29,16 +29,11 @@ public class MessageService {
             throw new AuthException.NotAuthorizedException();
         }
 
-        Message message = Message.builder()
-                .room(room)
-                .sender(username)
-                .content(form.getContent())
-                .createdAt(LocalDateTime.now())
-                .build();
+        Message newMessage = Message.createMessage(room, username, form.getContent(), LocalDateTime.now());
 
-        room.getMessages().add(message);
+        room.getMessages().add(newMessage);
 
-        return message;
+        return newMessage;
     }
 
     public List<MessageDto> findByPostId(String username, Long roomId) {

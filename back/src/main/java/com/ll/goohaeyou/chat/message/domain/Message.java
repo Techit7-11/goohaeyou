@@ -9,11 +9,8 @@ import java.time.LocalDateTime;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Setter
 @Getter
-@AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
-@Builder
 @ToString(callSuper = true)
 public class Message {
     @Id
@@ -28,6 +25,17 @@ public class Message {
     private String content;
 
     private LocalDateTime createdAt;
+
+    private Message(Room room, String sender, String content, LocalDateTime createdAt) {
+        this.room = room;
+        this.sender = sender;
+        this.content = content;
+        this.createdAt = createdAt;
+    }
+
+    public static Message createMessage(Room room, String sender, String content, LocalDateTime createdAt) {
+        return new Message(room, sender, content, createdAt);
+    }
 
     public void update(String content) {
         if (content != null && !content.isBlank()) {

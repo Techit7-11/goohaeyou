@@ -35,7 +35,7 @@ public class RoomService {
         Member member2 = memberService.findById(memberId2);
         String member2Username = member2.getUsername();
 
-        if (checkTheChatroom(member1.getUsername(),member2.getUsername())) {
+        if (checkTheChatroom(member1Username, member2Username)) {
             Room room = findByUsername1AndUsername2(member1Username, member2Username);
 
             String content = "매칭이 되었습니다.";
@@ -44,12 +44,7 @@ public class RoomService {
 
             room.recreate();
         } else {
-            Room newRoom = Room.builder()
-                    .username1(member1.getUsername())
-                    .username2(member2.getUsername())
-                    .user1Enter(LocalDateTime.now())
-                    .user2Enter(LocalDateTime.now())
-                    .build();
+            Room newRoom = Room.createRoom(member1Username, member2Username);
 
             roomRepository.save(newRoom);
         }
@@ -105,15 +100,9 @@ public class RoomService {
     }
 
     public void createInfoMessage(Room room, String username, String content) {
-        Message message = Message.builder()
-                .room(room)
-                .sender(username)
-                .content(content)
-                .createdAt(LocalDateTime.now())
-                .build();
+        Message newMessage = Message.createMessage(room, username, content, LocalDateTime.now());
+        room.getMessages().add(newMessage);
 
-        room.getMessages().add(message);
-
-        messagingTemplate.convertAndSend("/queue/api/chat/"+room.getId()+ "/newMessage", MessageDto.from(message));
+        messagingTemplate.convertAndSend("/queue/api/chat/"+room.getId()+ "/newMessage", MessageDto.from(newMessage));
     }
 }

@@ -12,11 +12,8 @@ import java.util.List;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Setter
 @Getter
-@AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
-@Builder
 @ToString(callSuper = true)
 public class Room {
     @Id
@@ -31,17 +28,30 @@ public class Room {
 
     private LocalDateTime user2Enter;
 
-    @Builder.Default
     private boolean user1HasExit = false;
 
-    @Builder.Default
     private boolean user2HasExit = false;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     @ToString.Exclude
     @JsonIgnore
     private List<Message> messages = new ArrayList<>();
+
+    private Room(String username1, String username2, LocalDateTime user1Enter, LocalDateTime user2Enter,
+                 boolean user1HasExit, boolean user2HasExit, List<Message> messages) {
+        this.username1 = username1;
+        this.username2 = username2;
+        this.user1Enter = user1Enter;
+        this.user2Enter = user2Enter;
+        this.user1HasExit = user1HasExit;
+        this.user2HasExit = user2HasExit;
+        this.messages = messages;
+    }
+
+    public static Room createRoom(String username1, String username2) {
+        return new Room(username1, username2, LocalDateTime.now(), LocalDateTime.now(),
+                false, false, null);
+    }
 
     public void exit(String username) {
         if (username.equals(username1)) {
