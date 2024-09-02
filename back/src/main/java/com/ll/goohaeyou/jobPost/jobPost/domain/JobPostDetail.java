@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobPost.jobPost.domain;
 
-import com.ll.goohaeyou.application.domain.Application;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import com.ll.goohaeyou.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -48,7 +48,7 @@ public class JobPostDetail extends BaseTimeEntity {
     @OneToMany(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     @ToString.Exclude
     @Builder.Default
-    private List<Application> applications = new ArrayList<>();
+    private List<JobApplication> jobApplications = new ArrayList<>();
 
     @OneToMany(mappedBy = "jobPostDetail",cascade = ALL, orphanRemoval = true)
     @ToString.Exclude

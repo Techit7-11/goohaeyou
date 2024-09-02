@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.notification.application;
 
-import com.ll.goohaeyou.application.domain.Application;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.chat.room.application.RoomService;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
@@ -41,20 +41,20 @@ public class NotificationService {
     @Transactional
     public void notifyApplicantsAboutPost(ChangeOfPostEvent event) {
         JobPost jobPost = event.getJobPost();
-        Application application = event.getApplication();
+        JobApplication jobApplication = event.getJobApplication();
         String url = "/job-post/" + jobPost.getId();
 
-        makeNotification(application.getMember(), jobPost.getMember(),
+        makeNotification(jobApplication.getMember(), jobPost.getMember(),
                 jobPost.getTitle(), event.getCauseTypeCode(), NOTICE, url);
     }
 
     @Transactional
     public void deleteApplicationNotification(ChangeOfPostEvent event) {
         JobPost jobPost = event.getJobPost();
-        Application application = event.getApplication();
+        JobApplication jobApplication = event.getJobApplication();
         String url = "/job-post/" + jobPost.getId();
 
-        makeNotification(application.getMember(), jobPost.getMember(), jobPost.getTitle(),
+        makeNotification(jobApplication.getMember(), jobPost.getMember(), jobPost.getTitle(),
                 event.getCauseTypeCode(), DELETE,url);
     }
 
@@ -64,10 +64,10 @@ public class NotificationService {
         Member fromMember = event.getMember();
         String url = "/";
 
-        List<Application> applicationList = jobPost.getJobPostDetail().getApplications();
+        List<JobApplication> jobApplicationList = jobPost.getJobPostDetail().getJobApplications();
 
-        for (Application application : applicationList) {
-            makeNotification(application.getMember(), fromMember, jobPost.getTitle(),
+        for (JobApplication jobApplication : jobApplicationList) {
+            makeNotification(jobApplication.getMember(), fromMember, jobPost.getTitle(),
                     POST_DELETED,DELETE, url);
         }
     }
@@ -93,11 +93,11 @@ public class NotificationService {
     }
 
     @Transactional
-    public void applicationCreatedAndChangedNotification(ApplicationCreateAndChangedEvent event) {
+    public void applicationCreatedAndChangedNotification(JobApplicationCreateAndChangedEvent event) {
         JobPost jobPost = event.getJobPostDetail().getJobPost();
-        Application application = event.getApplication();
-        String url = "/applications/detail/" + application.getId();
-        makeNotification(jobPost.getMember(), application.getMember(), jobPost.getTitle(),
+        JobApplication jobApplication = event.getJobApplication();
+        String url = "/jobApplications/detail/" + jobApplication.getId();
+        makeNotification(jobPost.getMember(), jobApplication.getMember(), jobPost.getTitle(),
                 event.getCauseTypeCode(), NOTICE, url);
     }
 
@@ -110,11 +110,11 @@ public class NotificationService {
     }
 
     @Transactional
-    public void calculateNotificationEventListen(Application application) {
-        Member member = application.getMember();
-        JobPost jobPost = jobPostService.findByIdAndValidate(application.getJobPostDetail().getId());
-        String url = "/applications/detail/" + application.getId();
-        makeNotification(application.getMember(), jobPost.getMember(), jobPost.getTitle(),
+    public void calculateNotificationEventListen(JobApplication jobApplication) {
+        Member member = jobApplication.getMember();
+        JobPost jobPost = jobPostService.findByIdAndValidate(jobApplication.getJobPostDetail().getId());
+        String url = "/jobApplications/detail/" + jobApplication.getId();
+        makeNotification(jobApplication.getMember(), jobPost.getMember(), jobPost.getTitle(),
                 CALCULATE_PAYMENT, NOTICE, url);
     }
 

@@ -30,11 +30,10 @@ public class Payment {
     private String payStatus;
     private String orderId;
     private String orderName;
-
     private boolean paid;
     private boolean canceled;
     private String cancelReason;
-    private Long applicationId;
+    private Long jobApplicationId;
 
     @Version
     private Long version;   // JPA가 관리하는 버전 필드

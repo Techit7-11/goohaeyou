@@ -2,7 +2,7 @@ package com.ll.goohaeyou.jobPost.employ.exception;
 
 import com.ll.goohaeyou.global.exception.ErrorCode;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
-import com.ll.goohaeyou.application.exception.ApplicationException;
+import com.ll.goohaeyou.jobApplication.exception.JobApplicationException;
 
 import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
@@ -12,8 +12,8 @@ public class EmployException extends GoohaeyouException {
         super(e);
     }
 
-    public static class NotPossibleToApproveItYetException extends ApplicationException {
-        public NotPossibleToApproveItYetException() {
+    public static class NotPossibleToApproveItYetExceptionJob extends JobApplicationException {
+        public NotPossibleToApproveItYetExceptionJob() {
             super(NOT_POSSIBLE_TO_APPROVE_IT_YET);
         }
     }

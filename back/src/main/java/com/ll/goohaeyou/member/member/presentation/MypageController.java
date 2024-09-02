@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.member.member.presentation;
 
-import com.ll.goohaeyou.application.application.dto.ApplicationDto;
-import com.ll.goohaeyou.application.application.ApplicationService;
+import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
+import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
 import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
 import com.ll.goohaeyou.jobPost.comment.application.CommentService;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
@@ -28,7 +28,7 @@ import java.util.List;
 public class MypageController {
     private final MemberService memberService;
     private final JobPostService jobPostService;
-    private final ApplicationService applicationService;
+    private final JobApplicationService jobApplicationService;
     private final CommentService commentService;
 
     @GetMapping
@@ -55,8 +55,8 @@ public class MypageController {
 
     @GetMapping("/myapplications")
     @Operation(summary = "내 지원서 조회")
-    public ApiResponse<List<ApplicationDto>> detailMyApplications(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return ApiResponse.ok(applicationService.findByUsername(memberDetails.getUsername()));
+    public ApiResponse<List<JobApplicationDto>> detailMyApplications(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return ApiResponse.ok(jobApplicationService.findByUsername(memberDetails.getUsername()));
     }
 
     @GetMapping("/mycomments")

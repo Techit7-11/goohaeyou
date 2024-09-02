@@ -11,6 +11,6 @@ public class PaymentDto {
     private String orderName;
     private boolean paid;
     private boolean canceled;
-    private Long applicationId;
+    private Long jobApplicationId;
     private String payStatus;
 }

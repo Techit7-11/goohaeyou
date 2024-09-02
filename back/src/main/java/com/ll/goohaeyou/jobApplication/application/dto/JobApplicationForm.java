@@ -1,9 +1,9 @@
-package com.ll.goohaeyou.application.application.dto;
+package com.ll.goohaeyou.jobApplication.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-public class ApplicationForm {
+public class JobApplicationForm {
     @Getter
     @Setter
     @Builder

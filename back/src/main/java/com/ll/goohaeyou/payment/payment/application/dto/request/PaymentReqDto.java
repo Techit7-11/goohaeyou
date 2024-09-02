@@ -17,14 +17,14 @@ public class PaymentReqDto {
     private Long amount;
     private String orderId;
     private String orderName;
-    private Long applicationId;
+    private Long jobApplicationId;
 
     public Payment toEntity() {
         return Payment.builder()
                 .payStatus(payStatus.getDescription())
                 .orderId(UUID.randomUUID().toString())
                 .orderName(orderName)
-                .applicationId(applicationId)
+                .jobApplicationId(jobApplicationId)
                 .totalAmount(amount)
                 .paid(false)
                 .build();

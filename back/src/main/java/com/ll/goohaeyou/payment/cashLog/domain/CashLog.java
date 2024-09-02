@@ -40,5 +40,5 @@ public class CashLog extends BaseTimeEntity {
     @JsonIgnore
     private Member member;
 
-    private Long applicationId;
+    private Long jobApplicationId;
 }

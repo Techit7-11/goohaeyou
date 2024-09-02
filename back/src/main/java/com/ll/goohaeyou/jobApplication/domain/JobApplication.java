@@ -1,6 +1,6 @@
-package com.ll.goohaeyou.application.domain;
+package com.ll.goohaeyou.jobApplication.domain;
 
-import com.ll.goohaeyou.application.domain.type.WageStatus;
+import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.global.jpa.BaseTimeEntity;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @Table(name = "application")
-public class Application extends BaseTimeEntity {
+public class JobApplication extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

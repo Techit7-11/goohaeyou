@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.calculate.itemProcessor;
 
-import com.ll.goohaeyou.application.domain.Application;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.jobPost.domain.Wage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.WageRepository;
 import com.ll.goohaeyou.member.member.domain.Member;
@@ -17,32 +17,32 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ApplicationProcessor implements ItemProcessor<Application, Application> {
+public class JobApplicationProcessor implements ItemProcessor<JobApplication, JobApplication> {
     private final WageRepository wageRepository;
     private final MemberRepository memberRepository;
     private final CashLogService cashLogService;
     private final ApplicationEventPublisher publisher;
 
     @Override
-    public Application process(Application application) throws Exception {
-        Wage wage = wageRepository.findByJobPostDetail(application.getJobPostDetail());
+    public JobApplication process(JobApplication jobApplication) throws Exception {
+        Wage wage = wageRepository.findByJobPostDetail(jobApplication.getJobPostDetail());
 
         if (wage == null) {
             throw new RuntimeException("일치하는 WAGE 없음");
         }
 
-        Member member = application.getMember();
-        CashLog cashLog = cashLogService.findByApplicationIdAndValidate(application.getId());
+        Member member = jobApplication.getMember();
+        CashLog cashLog = cashLogService.findByApplicationIdAndValidate(jobApplication.getId());
         int cost = (int)cashLog.getNetAmount();
 
-        if (wage.getCost() == application.getEarn()) {
+        if (wage.getCost() == jobApplication.getEarn()) {
             member.addRestCash(cost);
-            publisher.publishEvent(new CashLogEvent(this, application));
-            application.setEarn(0);
-            application.setReceive(true);
+            publisher.publishEvent(new CashLogEvent(this, jobApplication));
+            jobApplication.setEarn(0);
+            jobApplication.setReceive(true);
             memberRepository.save(member);
-            publisher.publishEvent(new CalculateNotificationEvent(this, application));
+            publisher.publishEvent(new CalculateNotificationEvent(this, jobApplication));
         } else throw new PaymentException.PaymentAmountMismatchException();
-        return application;
+        return jobApplication;
     }
 }

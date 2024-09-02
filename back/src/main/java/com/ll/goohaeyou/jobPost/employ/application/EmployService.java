@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.jobPost.employ.application;
 
-import com.ll.goohaeyou.application.application.dto.ApplicationDto;
-import com.ll.goohaeyou.application.domain.Application;
-import com.ll.goohaeyou.application.domain.type.WageStatus;
+import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.type.WagePaymentMethod;
@@ -32,11 +32,11 @@ public class EmployService {
     private final JobPostService jobPostService;
     private final ApplicationEventPublisher publisher;
 
-    public List<ApplicationDto> getList(String username, Long postId) {
+    public List<JobApplicationDto> getList(String username, Long postId) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
         checkPermissions(username,postDetail.getAuthor());
 
-        return ApplicationDto.convertToDtoList(postDetail.getApplications());
+        return JobApplicationDto.convertToDtoList(postDetail.getJobApplications());
     }
 
     @Transactional
@@ -48,37 +48,37 @@ public class EmployService {
         WageStatus updateWageStatus = determineWageStatus(postDetail.getWage().getWagePaymentMethod());
 
         if (!jobPost.isClosed()) {
-            throw new EmployException.NotPossibleToApproveItYetException();
+            throw new EmployException.NotPossibleToApproveItYetExceptionJob();
         }
 
         checkPermissions(username,postDetail.getAuthor());
 
-        List<Application> applicationList = new ArrayList<>();
+        List<JobApplication> jobApplicationList = new ArrayList<>();
 
-        for (Application application : postDetail.getApplications()) {
-            if(applicationIds.contains(application.getId())) {
-                Long receiverId = application.getMember().getId();
-                application.approve();
+        for (JobApplication jobApplication : postDetail.getJobApplications()) {
+            if(applicationIds.contains(jobApplication.getId())) {
+                Long receiverId = jobApplication.getMember().getId();
+                jobApplication.approve();
 
-                application.updateWageStatus(updateWageStatus);
-                application.setJobEndDate(jobPost.getJobStartDate()
+                jobApplication.updateWageStatus(updateWageStatus);
+                jobApplication.setJobEndDate(jobPost.getJobStartDate()
                         .plusDays(postDetail.getWage().getWorkDays() - 1));
 
-                increaseApplicantTransactionCount(application);
+                increaseApplicantTransactionCount(jobApplication);
                 increaseAuthorTransactionCount(jobPost);
 
-                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application,APPLICATION_APPROVED, NOTICE));
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, jobApplication,APPLICATION_APPROVED, NOTICE));
                 publisher.publishEvent(new CreateChatRoomEvent(this,postWriterId,receiverId,jobPost.getTitle()));
 
             } else {
-                application.reject();
-                applicationList.add(application);
-                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, application, APPLICATION_UNAPPROVED, DELETE));
+                jobApplication.reject();
+                jobApplicationList.add(jobApplication);
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, jobApplication, APPLICATION_UNAPPROVED, DELETE));
             }
         }
 
-        for (Application application : applicationList) {
-            postDetail.getApplications().remove(application);
+        for (JobApplication jobApplication : jobApplicationList) {
+            postDetail.getJobApplications().remove(jobApplication);
         }
 
         publisher.publishEvent(new PostEmployedEvent(this, jobPost));
@@ -98,9 +98,9 @@ public class EmployService {
         };
     }
 
-    private void increaseApplicantTransactionCount(Application application) {
-        if (isValidApplication(application)) {
-            application.getMember().increaseTransactionCount();
+    private void increaseApplicantTransactionCount(JobApplication jobApplication) {
+        if (isValidApplication(jobApplication)) {
+            jobApplication.getMember().increaseTransactionCount();
         }
     }
 
@@ -110,8 +110,8 @@ public class EmployService {
         }
     }
 
-    private boolean isValidApplication(Application application) {
-        return application != null && application.getMember() != null;
+    private boolean isValidApplication(JobApplication jobApplication) {
+        return jobApplication != null && jobApplication.getMember() != null;
     }
 
     private boolean isValidJobPost(JobPost jobPost) {

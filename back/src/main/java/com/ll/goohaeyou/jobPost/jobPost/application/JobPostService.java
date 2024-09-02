@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
-import com.ll.goohaeyou.application.domain.Application;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.category.domain.Category;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
@@ -147,17 +147,17 @@ public class JobPostService {
     }
 
     private void updateApplications(JobPostDetail postDetail, JobPostForm.Modify form) {
-        List<Application> applicationsToRemove = new ArrayList<>();
-        for (Application application : postDetail.getApplications()) {
-            if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - application.getMember().getBirth().getYear()) {
-                applicationsToRemove.add(application);
-                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), application, POST_MODIFICATION, DELETE));
+        List<JobApplication> applicationsToRemove = new ArrayList<>();
+        for (JobApplication jobApplication : postDetail.getJobApplications()) {
+            if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - jobApplication.getMember().getBirth().getYear()) {
+                applicationsToRemove.add(jobApplication);
+                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), jobApplication, POST_MODIFICATION, DELETE));
             } else {
-                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), application, POST_MODIFICATION, NOTICE));
+                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), jobApplication, POST_MODIFICATION, NOTICE));
             }
         }
 
-        postDetail.getApplications().removeAll(applicationsToRemove);
+        postDetail.getJobApplications().removeAll(applicationsToRemove);
     }
 
     @Transactional

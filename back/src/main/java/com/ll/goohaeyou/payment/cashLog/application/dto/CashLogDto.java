@@ -27,7 +27,7 @@ public class CashLogDto {
     @NotNull
     private Member member;
     @NotNull
-    private Long applicationId;
+    private Long jobApplicationId;
 
     public static CashLogDto from(CashLog cashLog) {
         return CashLogDto.builder()
@@ -39,7 +39,7 @@ public class CashLogDto {
                 .paymentFee(cashLog.getPaymentFee())
                 .netAmount(cashLog.getNetAmount())
                 .member(cashLog.getMember())
-                .applicationId(cashLog.getApplicationId())
+                .jobApplicationId(cashLog.getJobApplicationId())
                 .build();
     }
 }

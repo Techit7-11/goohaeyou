@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.application.domain.type;
+package com.ll.goohaeyou.jobApplication.domain.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

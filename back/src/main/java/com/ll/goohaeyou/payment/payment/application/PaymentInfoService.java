@@ -16,7 +16,7 @@ public class PaymentInfoService {
     private final PaymentRepository paymentRepository;
 
     public PaymentDto getValidPayment(String username, Long applicationId) {
-        return paymentRepository.findByApplicationIdAndPaid(applicationId, true)
+        return paymentRepository.findByJobApplicationIdAndPaid(applicationId, true)
                 .map(payment -> {
                     validatePayer(payment, username);
 
@@ -41,7 +41,7 @@ public class PaymentInfoService {
                 .canceled(payment.isCanceled())
                 .paid(payment.isPaid())
                 .totalAmount(payment.getTotalAmount())
-                .applicationId(payment.getApplicationId())
+                .jobApplicationId(payment.getJobApplicationId())
                 .orderName(payment.getOrderName())
                 .payStatus(payment.getPayStatus())
                 .build();

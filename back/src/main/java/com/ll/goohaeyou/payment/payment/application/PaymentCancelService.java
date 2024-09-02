@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.payment.payment.application;
 
-import com.ll.goohaeyou.application.domain.Application;
-import com.ll.goohaeyou.application.application.ApplicationService;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
 import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResDto;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
@@ -15,7 +15,7 @@ import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ll.goohaeyou.application.domain.type.WageStatus.PAYMENT_CANCELLED;
+import static com.ll.goohaeyou.jobApplication.domain.type.WageStatus.PAYMENT_CANCELLED;
 import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
@@ -23,7 +23,7 @@ import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 public class PaymentCancelService {
     private final PaymentRepository paymentRepository;
     private final TossPaymentUtil tossPaymentUtil;
-    private final ApplicationService applicationService;
+    private final JobApplicationService jobApplicationService;
     private final CashLogService cashLogService;
 
     @Transactional
@@ -68,9 +68,9 @@ public class PaymentCancelService {
         payment.cancelPayment(cancelReason);
         payment.markAsUnpaid();
 
-        Application application = applicationService.findByIdAndValidate(payment.getApplicationId());
-        application.updateWageStatus(PAYMENT_CANCELLED);
-        application.setEarn(0);
-        application.changeToNotCompleted();
+        JobApplication jobApplication = jobApplicationService.findByIdAndValidate(payment.getJobApplicationId());
+        jobApplication.updateWageStatus(PAYMENT_CANCELLED);
+        jobApplication.setEarn(0);
+        jobApplication.changeToNotCompleted();
     }
 }

@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.payment.payment.application;
 
-import com.ll.goohaeyou.application.application.ApplicationService;
+import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
 import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailDto;
@@ -29,7 +29,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final TossPaymentsConfig tossPaymentsConfig;
     private final MemberService memberService;
-    private final ApplicationService applicationService;
+    private final JobApplicationService jobApplicationService;
     private final TossPaymentUtil tossPaymentUtil;
     private final CashLogService cashLogService;
 
@@ -64,7 +64,7 @@ public class PaymentService {
 
         updatePayment(payment, successDto);
 
-        applicationService.updateApplicationOnPaymentSuccess(payment.getApplicationId(), amount);
+        jobApplicationService.updateJobApplicationOnPaymentSuccess(payment.getJobApplicationId(), amount);
 
         cashLogService.createCashLogOnPaid(successDto, payment);
 
@@ -89,7 +89,7 @@ public class PaymentService {
         PaymentSuccessDto paymentSuccessDto = tossPaymentUtil.sendPaymentRequest(
                 paymentKey, params, PaymentSuccessDto.class);
 
-        paymentSuccessDto.setApplicationId(findPaymentByOrderId(orderId).getApplicationId());
+        paymentSuccessDto.setJobApplicationId(findPaymentByOrderId(orderId).getJobApplicationId());
 
         return paymentSuccessDto;
     }
