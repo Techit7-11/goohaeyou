@@ -15,9 +15,10 @@ public class CategoryForm {
         @NotBlank
         private String name;
         @NotNull
-        private int level = 0;
+        private int level;
 
         private CategoryType type;
+        @Builder.Default
         private boolean enabled = true;
     }
 }

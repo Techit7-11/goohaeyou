@@ -29,18 +29,12 @@ public class CategoryAdminService {
             throw new CategoryException.InvalidCategoryFormatException();
         }
 
-        Category newCategory = Category.builder()
-                .name(form.getName())
-                .level(form.getLevel())
-                .enabled(form.isEnabled())
-                .parent(parent)
-                .type(form.getType())
-                .build();
+        Category newCategory = Category.createCategory(form.getName(), form.getLevel(), form.isEnabled(), form.getType(), parent);
 
         categoryRepository.save(newCategory);
     }
 
-    private Category getParent(String name) {
+    public Category getParent(String name) {
         return categoryRepository.findByName(name)
                 .orElse(null);
     }
