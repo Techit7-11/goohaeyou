@@ -134,20 +134,18 @@ public class NotificationService {
         log.info("알림 생성 완료");
     }
 
-    private void makeNotification(Member toMember, Member fromMember, String jobPostTitle, CauseTypeCode causeTypeCode,
-                                  ResultTypeCode resultTypeCode, String url) {
-        Notification notification = Notification.builder()
-                .createAt(LocalDateTime.now())
-                .toMember(toMember)
-                .fromMember(fromMember)
-                .relPostTitle(jobPostTitle)
-                .causeTypeCode(causeTypeCode)
-                .resultTypeCode(resultTypeCode)
-                .seen(false)
-                .url(url)
-                .build();
+    private void makeNotification(Member toMember, Member fromMember, String jobPostTitle,
+                                  CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {
+        Notification newNotification = Notification.create(
+                toMember,
+                fromMember,
+                jobPostTitle,
+                causeTypeCode,
+                resultTypeCode,
+                url
+        );
 
-        notificationRepository.save(notification);
+        notificationRepository.save(newNotification);
 
         if (toMember.getFCMToken() != null) {
             fcmService.send(toMember.getFCMToken(), jobPostTitle, causeTypeCode);
