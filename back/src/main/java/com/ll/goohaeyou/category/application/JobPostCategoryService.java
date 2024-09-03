@@ -22,7 +22,7 @@ public class JobPostCategoryService {
     }
 
     public void createAndSaveJobPostCategory(JobPost jobPost, Category category) {
-        JobPostCategory newJobPostCategory = JobPostCategory.createJobPostCategory(category, jobPost);
+        JobPostCategory newJobPostCategory = JobPostCategory.create(category, jobPost);
 
         jobPostCategoryRepository.save(newJobPostCategory);
     }

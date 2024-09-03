@@ -25,12 +25,22 @@ public class Interest {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private Interest(JobPostDetail jobPostDetail, Member member) {
+    private Interest(
+            JobPostDetail
+                    jobPostDetail,
+            Member member
+    ) {
         this.jobPostDetail = jobPostDetail;
         this.member = member;
     }
 
-    public static Interest create(JobPostDetail jobPostDetail, Member member) {
-        return new Interest(jobPostDetail, member);
+    public static Interest create(
+            JobPostDetail
+                    jobPostDetail,
+            Member member) {
+        return new Interest(
+                jobPostDetail,
+                member
+        );
     }
 }

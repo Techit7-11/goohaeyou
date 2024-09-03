@@ -37,20 +37,26 @@ public class Room {
     @JsonIgnore
     private List<Message> messages = new ArrayList<>();
 
-    private Room(String username1, String username2, LocalDateTime user1Enter, LocalDateTime user2Enter,
-                 boolean user1HasExit, boolean user2HasExit, List<Message> messages) {
+    private Room(
+            String username1,
+            String username2,
+            LocalDateTime user1Enter,
+            LocalDateTime user2Enter
+    ) {
         this.username1 = username1;
         this.username2 = username2;
         this.user1Enter = user1Enter;
         this.user2Enter = user2Enter;
-        this.user1HasExit = user1HasExit;
-        this.user2HasExit = user2HasExit;
-        this.messages = messages;
     }
 
-    public static Room createRoom(String username1, String username2) {
-        return new Room(username1, username2, LocalDateTime.now(), LocalDateTime.now(),
-                false, false, null);
+    public static Room create(
+            String username1,
+            String username2) {
+        return new Room(
+                username1,
+                username2,
+                LocalDateTime.now(),
+                LocalDateTime.now());
     }
 
     public void exit(String username) {

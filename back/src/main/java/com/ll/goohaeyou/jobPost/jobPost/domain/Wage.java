@@ -20,6 +20,7 @@ public class Wage {
     private int cost;
     private int workTime;
     private int workDays;
+    private boolean paid;
 
     @Enumerated(EnumType.STRING)
     private PayBasis payBasis;
@@ -31,8 +32,14 @@ public class Wage {
     @JoinColumn(name = "job_post_detail_id", nullable = false)
     private JobPostDetail jobPostDetail;
 
-    private Wage(int cost, int workTime, int workDays, PayBasis payBasis,
-                 WagePaymentMethod wagePaymentMethod, JobPostDetail jobPostDetail) {
+    private Wage(
+            int cost,
+            int workTime,
+            int workDays,
+            PayBasis payBasis,
+            WagePaymentMethod wagePaymentMethod,
+            JobPostDetail jobPostDetail
+    ) {
         this.cost = cost;
         this.workTime = workTime;
         this.workDays = workDays;
@@ -41,12 +48,25 @@ public class Wage {
         this.jobPostDetail = jobPostDetail;
     }
 
-    public static Wage create(int cost, Integer workTime, Integer workDays, PayBasis payBasis,
-                              WagePaymentMethod wagePaymentMethod, JobPostDetail jobPostDetail) {
+    public static Wage create(
+            int cost,
+            Integer workTime,
+            Integer workDays,
+            PayBasis payBasis,
+            WagePaymentMethod wagePaymentMethod,
+            JobPostDetail jobPostDetail
+    ) {
         int resolveWorkTime = (workTime != null) ? workTime : 0;
         int resolveWorkDays = (workDays != null) ? workDays : 0;
 
-        return new Wage(cost, resolveWorkTime, resolveWorkDays, payBasis, wagePaymentMethod, jobPostDetail);
+        return new Wage(
+                cost,
+                resolveWorkTime,
+                resolveWorkDays,
+                payBasis,
+                wagePaymentMethod,
+                jobPostDetail
+        );
     }
 
     public void updateWageInfo(int cost, PayBasis payBasis, int workTime, int workDays) {

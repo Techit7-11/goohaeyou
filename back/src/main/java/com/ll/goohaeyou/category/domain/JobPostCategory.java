@@ -26,13 +26,22 @@ public class JobPostCategory {
     @JoinColumn(name = "job_post_id", nullable = false)
     private JobPost jobPost;
 
-    private JobPostCategory(Category category, JobPost jobPost) {
+    private JobPostCategory(
+            Category category,
+            JobPost jobPost
+    ) {
         this.category = category;
         this.jobPost = jobPost;
     }
 
-    public static JobPostCategory createJobPostCategory(Category category, JobPost jobPost) {
-        return new JobPostCategory(category, jobPost);
+    public static JobPostCategory create(
+            Category category,
+            JobPost jobPost
+    ) {
+        return new JobPostCategory(
+                category,
+                jobPost
+        );
     }
 
     public void updateCategory(Category category) {

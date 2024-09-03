@@ -29,7 +29,7 @@ public class MessageService {
             throw new AuthException.NotAuthorizedException();
         }
 
-        Message newMessage = Message.createMessage(room, username, form.getContent(), LocalDateTime.now());
+        Message newMessage = Message.create(room, username, form.getContent());
 
         room.getMessages().add(newMessage);
 

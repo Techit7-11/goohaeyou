@@ -26,15 +26,28 @@ public class Message {
 
     private LocalDateTime createdAt;
 
-    private Message(Room room, String sender, String content, LocalDateTime createdAt) {
+    private Message(
+            Room room,
+            String sender,
+            String content,
+            LocalDateTime createdAt
+    ) {
         this.room = room;
         this.sender = sender;
         this.content = content;
         this.createdAt = createdAt;
     }
 
-    public static Message createMessage(Room room, String sender, String content, LocalDateTime createdAt) {
-        return new Message(room, sender, content, createdAt);
+    public static Message create(
+            Room room,
+            String sender,
+            String content) {
+        return new Message(
+                room,
+                sender,
+                content,
+                LocalDateTime.now()
+        );
     }
 
     public void update(String content) {

@@ -29,7 +29,7 @@ public class CategoryAdminService {
             throw new CategoryException.InvalidCategoryFormatException();
         }
 
-        Category newCategory = Category.createCategory(form.getName(), form.getLevel(), form.isEnabled(), form.getType(), parent);
+        Category newCategory = Category.create(form.getName(), form.getLevel(), form.isEnabled(), form.getType(), parent);
 
         categoryRepository.save(newCategory);
     }

@@ -1,7 +1,6 @@
 package com.ll.goohaeyou.category.domain;
 
 import com.ll.goohaeyou.category.domain.type.CategoryType;
-import com.ll.goohaeyou.member.member.domain.type.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,17 +34,34 @@ public class Category {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Category> subCategories = new ArrayList<>();
 
-    private Category(String name, int level, boolean enabled, CategoryType type, Category parent, List<Category> subCategories) {
+    private Category(
+            String name,
+            int level,
+            boolean enabled,
+            CategoryType type,
+            Category parent
+    ) {
         this.name = name;
         this.level = level;
         this.enabled = enabled;
         this.type = type;
         this.parent = parent;
-        this.subCategories = subCategories;
     }
 
-    public static Category createCategory(String name, int level, boolean enabled, CategoryType type, Category parent) {
-        return new Category(name, level, enabled, type, parent, null);
+    public static Category create(
+            String name,
+            int level,
+            boolean enabled,
+            CategoryType type,
+            Category parent
+    ) {
+        return new Category(
+                name,
+                level,
+                enabled,
+                type,
+                parent
+        );
     }
 
     public boolean isLeaf() {

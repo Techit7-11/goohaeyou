@@ -25,14 +25,26 @@ public class JobPostImage {
     @JoinColumn(name = "job_post_detail_id", nullable = false)
     private JobPostDetail jobPostDetail;
 
-    private JobPostImage(String jobPostImageUrl, boolean isMainImage, JobPostDetail jobPostDetail) {
+    private JobPostImage(
+            String jobPostImageUrl,
+            boolean isMainImage,
+            JobPostDetail jobPostDetail
+    ) {
         this.jobPostImageUrl = jobPostImageUrl;
         this.isMainImage = isMainImage;
         this.jobPostDetail = jobPostDetail;
     }
 
-    public static JobPostImage create(String jobPostImageUrl, boolean isMainImage, JobPostDetail jobPostDetail) {
-        return new JobPostImage(jobPostImageUrl, isMainImage, jobPostDetail);
+    public static JobPostImage create(
+            String jobPostImageUrl,
+            boolean isMainImage,
+            JobPostDetail jobPostDetail
+    ) {
+        return new JobPostImage(
+                jobPostImageUrl,
+                isMainImage,
+                jobPostDetail
+        );
     }
 
     public void setMainImage() {

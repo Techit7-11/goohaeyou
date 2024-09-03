@@ -44,7 +44,7 @@ public class RoomService {
 
             room.recreate();
         } else {
-            Room newRoom = Room.createRoom(member1Username, member2Username);
+            Room newRoom = Room.create(member1Username, member2Username);
 
             roomRepository.save(newRoom);
         }
@@ -100,7 +100,7 @@ public class RoomService {
     }
 
     public void createInfoMessage(Room room, String username, String content) {
-        Message newMessage = Message.createMessage(room, username, content, LocalDateTime.now());
+        Message newMessage = Message.create(room, username, content);
         room.getMessages().add(newMessage);
 
         messagingTemplate.convertAndSend("/queue/api/chat/"+room.getId()+ "/newMessage", MessageDto.from(newMessage));
