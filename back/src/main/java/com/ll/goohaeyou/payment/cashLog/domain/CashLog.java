@@ -1,13 +1,10 @@
 package com.ll.goohaeyou.payment.cashLog.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.payment.cashLog.domain.type.EventType;
 import com.ll.goohaeyou.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
