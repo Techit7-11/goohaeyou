@@ -21,7 +21,7 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
-    public JoinForm join(JoinForm form) {
+    public void join(JoinForm form) {
         memberRepository.findByUsername(form.getUsername())
                 .ifPresent(member -> {
                     throw new MemberException.DuplicateUsernameException();
@@ -58,8 +58,6 @@ public class MemberService {
                     )
             );
         }
-
-        return form;
     }
 
     public void login(LoginForm form) {
