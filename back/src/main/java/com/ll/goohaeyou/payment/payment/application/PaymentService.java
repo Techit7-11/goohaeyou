@@ -46,7 +46,7 @@ public class PaymentService {
     }
 
     private Payment createPaymentEntity(PaymentReqDto paymentReqDto, String username) {
-        Payment payment = paymentReqDto.toEntity();
+        Payment payment = Payment.from(paymentReqDto);
         payment.updatePayer(memberService.getMember(username));
 
         return payment;
