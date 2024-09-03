@@ -10,9 +10,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Getter
 @Table(name = "application")
 public class JobApplication extends BaseTimeEntity {
@@ -35,8 +33,7 @@ public class JobApplication extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @Builder.Default
-    private WageStatus wageStatus = WageStatus.UNDEFINED;
+    private WageStatus wageStatus;
 
     private int earn;
 
@@ -45,6 +42,31 @@ public class JobApplication extends BaseTimeEntity {
     private Boolean jobCompleted;
 
     private LocalDate jobEndDate;
+
+    private JobApplication(
+            Member member,
+            JobPostDetail jobPostDetail,
+            String body,
+            WageStatus wageStatus
+    ) {
+        this.member = member;
+        this.jobPostDetail = jobPostDetail;
+        this.body = body;
+        this.wageStatus = wageStatus;
+    }
+
+    public static JobApplication create(
+            Member member,
+            JobPostDetail jobPostDetail,
+            String body
+    ) {
+        return new JobApplication(
+                member,
+                jobPostDetail,
+                body,
+                WageStatus.UNDEFINED
+        );
+    }
 
     public void updateBody(String body) {
         if (body != null && !body.isBlank()) {

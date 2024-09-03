@@ -48,13 +48,7 @@ public class JobApplicationService {
     }
 
     private JobApplication createNewApplication(Member member, JobPostDetail postDetail, JobApplicationForm.Register form) {
-        return JobApplication.builder()
-                .member(member)
-                .jobPostDetail(postDetail)
-                .body(form.getBody())
-                .approve(null)
-                .wageStatus(WageStatus.UNDEFINED)
-                .build();
+        return JobApplication.create(member, postDetail, form.getBody());
     }
 
     public JobApplicationDto findById(Long id) {
