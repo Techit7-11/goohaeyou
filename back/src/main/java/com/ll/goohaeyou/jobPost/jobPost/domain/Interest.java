@@ -26,8 +26,7 @@ public class Interest {
     private Member member;
 
     private Interest(
-            JobPostDetail
-                    jobPostDetail,
+            JobPostDetail jobPostDetail,
             Member member
     ) {
         this.jobPostDetail = jobPostDetail;
@@ -35,8 +34,7 @@ public class Interest {
     }
 
     public static Interest create(
-            JobPostDetail
-                    jobPostDetail,
+            JobPostDetail jobPostDetail,
             Member member) {
         return new Interest(
                 jobPostDetail,

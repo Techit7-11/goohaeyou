@@ -28,15 +28,18 @@ public class Essential {
 
     private Essential(int minAge, Gender gender, JobPostDetail jobPostDetail) {
         this.minAge = minAge;
-        this.gender = gender;
+        this.gender = (gender != null) ? gender : Gender.UNDEFINED;
         this.jobPostDetail = jobPostDetail;
     }
 
     public static Essential create(Integer minAge, Gender gender, JobPostDetail jobPostDetail) {
         int resolvedMinAge = (minAge != null) ? minAge : 0;
-        Gender resolveGender = (gender != null) ? gender : Gender.UNDEFINED;
 
-        return new Essential(resolvedMinAge, resolveGender, jobPostDetail);
+        return new Essential(
+                resolvedMinAge,
+                gender,
+                jobPostDetail
+        );
     }
 
     public void update(int minAge, Gender gender) {

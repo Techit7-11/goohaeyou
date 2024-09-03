@@ -46,13 +46,12 @@ public class JobApplication extends BaseTimeEntity {
     private JobApplication(
             Member member,
             JobPostDetail jobPostDetail,
-            String body,
-            WageStatus wageStatus
+            String body
     ) {
         this.member = member;
         this.jobPostDetail = jobPostDetail;
         this.body = body;
-        this.wageStatus = wageStatus;
+        this.wageStatus = WageStatus.UNDEFINED;
     }
 
     public static JobApplication create(
@@ -63,8 +62,7 @@ public class JobApplication extends BaseTimeEntity {
         return new JobApplication(
                 member,
                 jobPostDetail,
-                body,
-                WageStatus.UNDEFINED
+                body
         );
     }
 

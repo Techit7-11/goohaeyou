@@ -39,14 +39,12 @@ public class Room {
 
     private Room(
             String username1,
-            String username2,
-            LocalDateTime user1Enter,
-            LocalDateTime user2Enter
+            String username2
     ) {
         this.username1 = username1;
         this.username2 = username2;
-        this.user1Enter = user1Enter;
-        this.user2Enter = user2Enter;
+        this.user1Enter = LocalDateTime.now();
+        this.user2Enter = LocalDateTime.now();
     }
 
     public static Room create(
@@ -54,9 +52,8 @@ public class Room {
             String username2) {
         return new Room(
                 username1,
-                username2,
-                LocalDateTime.now(),
-                LocalDateTime.now());
+                username2
+        );
     }
 
     public void exit(String username) {

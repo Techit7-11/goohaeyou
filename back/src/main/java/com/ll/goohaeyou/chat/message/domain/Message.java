@@ -29,24 +29,23 @@ public class Message {
     private Message(
             Room room,
             String sender,
-            String content,
-            LocalDateTime createdAt
+            String content
     ) {
         this.room = room;
         this.sender = sender;
         this.content = content;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
     }
 
     public static Message create(
             Room room,
             String sender,
-            String content) {
+            String content
+    ) {
         return new Message(
                 room,
                 sender,
-                content,
-                LocalDateTime.now()
+                content
         );
     }
 
