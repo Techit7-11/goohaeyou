@@ -94,26 +94,16 @@ public class JobPostService {
     }
 
     private JobPost createAndSaveJobPost(String username, JobPostForm.Register form, int regionCode) {
-        JobPost newPost = JobPost.builder()
-                .member(memberService.getMember(username))
-                .title(form.getTitle())
-                .location(form.getLocation())
-                .deadline(form.getDeadLine())
-                .jobStartDate(form.getJobStartDate())
-                .regionCode(regionCode)
-                .build();
+        JobPost newPost = JobPost.create(memberService.getMember(username), form.getTitle(), form.getLocation(),
+                form.getDeadLine(), form.getJobStartDate(), regionCode);
 
         return jobPostRepository.save(newPost);
     }
 
     private JobPostDetail createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
-        JobPostDetail postDetail = JobPostDetail.builder()
-                .jobPost(newPost)
-                .author(username)
-                .body(form.getBody())
-                .build();
+        JobPostDetail newPostDetail = JobPostDetail.create(newPost, username, form.getBody());
 
-        return jobPostdetailRepository.save(postDetail);
+        return jobPostdetailRepository.save(newPostDetail);
     }
 
     @Transactional

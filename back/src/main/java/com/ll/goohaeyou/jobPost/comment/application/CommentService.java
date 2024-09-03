@@ -35,7 +35,7 @@ public class CommentService {
     public CommentForm.Register writeComment(Long postId, String username, CommentForm.Register form) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
 
-        Comment newComment = Comment.createComment(postDetail, memberService.getMember(username), form.getContent());
+        Comment newComment = Comment.create(postDetail, memberService.getMember(username), form.getContent());
 
         postDetail.getComments().add(newComment);
         postDetail.getJobPost().increaseCommentsCount();

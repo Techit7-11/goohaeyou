@@ -1,18 +1,14 @@
 package com.ll.goohaeyou.jobPost.jobPost.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@Builder
 @Table(name = "job_post_image")
 public class JobPostImage {
     @Id
@@ -28,6 +24,16 @@ public class JobPostImage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_post_detail_id", nullable = false)
     private JobPostDetail jobPostDetail;
+
+    private JobPostImage(String jobPostImageUrl, boolean isMainImage, JobPostDetail jobPostDetail) {
+        this.jobPostImageUrl = jobPostImageUrl;
+        this.isMainImage = isMainImage;
+        this.jobPostDetail = jobPostDetail;
+    }
+
+    public static JobPostImage create(String jobPostImageUrl, boolean isMainImage, JobPostDetail jobPostDetail) {
+        return new JobPostImage(jobPostImageUrl, isMainImage, jobPostDetail);
+    }
 
     public void setMainImage() {
         this.isMainImage = true;

@@ -16,21 +16,14 @@ public class WageService {
 
     @Transactional
     public void createAndSaveWage(JobPostDetail postDetail, JobPostForm.Register form) {
-        Wage wage = Wage.builder()
-                .cost(form.getCost())
-                .workTime(form.getWorkTime())
-                .workDays(form.getWorkDays())
-                .payBasis(form.getPayBasis())
-                .wagePaymentMethod(form.getWagePaymentMethod())
-                .jobPostDetail(postDetail)
-                .build();
+        Wage newWage = Wage.create(form.getCost(), form.getWorkTime(), form.getWorkDays(), form.getPayBasis(),
+                form.getWagePaymentMethod(), postDetail);
 
-        wageRepository.save(wage);
+        wageRepository.save(newWage);
     }
 
     @Transactional
     public void updateWage(Wage wage, JobPostForm.Modify form) {
         wage.updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
-        wageRepository.save(wage);
     }
 }

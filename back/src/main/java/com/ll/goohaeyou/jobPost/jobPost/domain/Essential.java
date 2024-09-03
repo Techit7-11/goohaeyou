@@ -7,10 +7,8 @@ import lombok.*;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@Builder
 @Table(name = "essential")
 public class Essential {
     @Id
@@ -22,12 +20,24 @@ public class Essential {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @Builder.Default
     private Gender gender = Gender.UNDEFINED;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_post_detail_id", nullable = false)
     private JobPostDetail jobPostDetail;
+
+    private Essential(int minAge, Gender gender, JobPostDetail jobPostDetail) {
+        this.minAge = minAge;
+        this.gender = gender;
+        this.jobPostDetail = jobPostDetail;
+    }
+
+    public static Essential create(Integer minAge, Gender gender, JobPostDetail jobPostDetail) {
+        int resolvedMinAge = (minAge != null) ? minAge : 0;
+        Gender resolveGender = (gender != null) ? gender : Gender.UNDEFINED;
+
+        return new Essential(resolvedMinAge, resolveGender, jobPostDetail);
+    }
 
     public void update(int minAge, Gender gender) {
         this.minAge = minAge;

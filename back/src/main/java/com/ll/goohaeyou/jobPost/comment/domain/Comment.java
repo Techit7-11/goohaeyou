@@ -31,7 +31,7 @@ public class Comment extends BaseTimeEntity {
         this.content = content;
     }
 
-    public static Comment createComment(JobPostDetail jobPostDetail, Member member, String content) {
+    public static Comment create(JobPostDetail jobPostDetail, Member member, String content) {
         return new Comment(jobPostDetail, member, content);
     }
 
