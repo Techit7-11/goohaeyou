@@ -27,20 +27,37 @@ public class MemberService {
                     throw new MemberException.DuplicateUsernameException();
                 });
 
-        Role role = form.getUsername().equals("admin") ? Role.ADMIN : Role.USER;
+        Role role = "admin".equals(form.getUsername()) ? Role.ADMIN : Role.USER;
 
-        memberRepository.save(Member.builder()
-                .username(form.getUsername())
-                .password(bCryptPasswordEncoder.encode(form.getPassword()))
-                .name(form.getName())
-                .phoneNumber(form.getPhoneNumber())
-                .email(form.getEmail())
-                .gender(form.getGender())
-                .location(form.getLocation())
-                .birth(form.getBirth())
-                .role(role)
-                .regionCode(Util.Region.getRegionCodeFromAddress(form.getLocation()))
-                .build());
+        if (role == Role.ADMIN) {
+            memberRepository.save(
+                    Member.createAdmin(
+                            bCryptPasswordEncoder.encode(form.getPassword()),
+                            form.getName(),
+                            form.getPhoneNumber(),
+                            form.getEmail(),
+                            form.getGender(),
+                            form.getLocation(),
+                            form.getBirth(),
+                            Util.Region.getRegionCodeFromAddress(form.getLocation())
+                    )
+            );
+        }
+        if (role == Role.USER) {
+            memberRepository.save(
+                    Member.createUser(
+                            form.getUsername(),
+                            bCryptPasswordEncoder.encode(form.getPassword()),
+                            form.getName(),
+                            form.getPhoneNumber(),
+                            form.getEmail(),
+                            form.getGender(),
+                            form.getLocation(),
+                            form.getBirth(),
+                            Util.Region.getRegionCodeFromAddress(form.getLocation())
+                    )
+            );
+        }
 
         return form;
     }
