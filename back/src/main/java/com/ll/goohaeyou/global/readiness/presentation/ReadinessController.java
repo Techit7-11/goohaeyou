@@ -20,10 +20,10 @@ public class ReadinessController {
         boolean ready = readinessService.checkApplicationReadiness();
 
         if (ready) {
-            return ResponseEntity.ok("Application is ready");
+            return ResponseEntity.ok("JobApplication is ready");
         } else {
             // 준비 되지 않았다면, 503 상태 코드와 메시지 반환
-            return ResponseEntity.status(503).body("Application is not ready");
+            return ResponseEntity.status(503).body("JobApplication is not ready");
         }
     }
 }

@@ -23,7 +23,7 @@ public class InterestController {
     @Operation(summary = "구인공고 관심 등록")
     public ApiResponse<Empty> interest(@AuthenticationPrincipal MemberDetails memberDetails,
                                        @PathVariable(name = "id") Long id) {
-        interestService.interest(memberDetails.getUsername(), id);
+        interestService.addInterestToPost(memberDetails.getUsername(), id);
 
         return ApiResponse.noContent();
     }
@@ -31,8 +31,8 @@ public class InterestController {
     @DeleteMapping("/{id}/interest")
     @Operation(summary = "구인공고 관심 제거")
     public ApiResponse<Empty> disinterest(@AuthenticationPrincipal MemberDetails memberDetails,
-                                          @PathVariable(name = "id") Long id) {
-        interestService.disinterest(memberDetails.getUsername(), id);
+                                          @PathVariable(name = "id") Long postId) {
+        interestService.removeInterestFromPost(memberDetails.getUsername(), postId);
 
         return ApiResponse.noContent();
     }

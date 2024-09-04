@@ -2,8 +2,6 @@ package com.ll.goohaeyou.jobPost.jobPost.application;
 
 import com.ll.goohaeyou.jobPost.jobPost.domain.Interest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.global.event.notification.PostGetInterestedEvent;
@@ -19,14 +17,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class InterestService {
-    private final JobPostRepository jobPostRepository;
-    private final JobPostDetailRepository jobPostdetailRepository;
     private final MemberService memberService;
     private final ApplicationEventPublisher publisher;
     private final JobPostService jobPostService;
 
     @Transactional
-    public void interest(String username, Long postId) {
+    public void addInterestToPost(String username, Long postId) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 
@@ -34,10 +30,9 @@ public class InterestService {
             throw new AuthException.NotAuthorizedException();
         }
 
-        postDetail.getInterests().add(Interest.builder()
-                .jobPostDetail(postDetail)
-                .member(member)
-                .build());
+        postDetail.getInterests().add(
+                Interest.create(postDetail, member)
+        );
 
         postDetail.getJobPost().increaseInterestCount();
 
@@ -47,7 +42,7 @@ public class InterestService {
     }
 
     @Transactional
-    public void disinterest(String username, Long postId) {
+    public void removeInterestFromPost(String username, Long postId) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
         Member member = memberService.getMember(username);
 

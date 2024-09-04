@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobPost.employ.presentation;
 
-import com.ll.goohaeyou.application.dto.ApplicationDto;
+import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
 import com.ll.goohaeyou.jobPost.employ.application.EmployService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.standard.base.Empty;
@@ -21,8 +21,8 @@ public class EmployController {
 
     @GetMapping
     @Operation(summary = "공고 별 지원리스트")
-    public ApiResponse<List<ApplicationDto>> getList(Authentication authentication,
-                                                     @PathVariable (name = "postId") Long postId) {
+    public ApiResponse<List<JobApplicationDto>> getList(Authentication authentication,
+                                                        @PathVariable (name = "postId") Long postId) {
         return ApiResponse.ok(employService.getList(authentication.getName(), postId));
     }
 

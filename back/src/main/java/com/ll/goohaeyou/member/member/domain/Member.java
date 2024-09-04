@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.member.member.domain;
 
-import com.ll.goohaeyou.member.member.dto.SocialProfileForm;
+import com.ll.goohaeyou.member.member.application.dto.SocialProfileForm;
 import com.ll.goohaeyou.member.member.domain.type.Gender;
 import com.ll.goohaeyou.member.member.domain.type.Level;
 import com.ll.goohaeyou.member.member.domain.type.Role;
@@ -12,9 +12,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Getter
 @Table(name = "member")
 public class Member extends BaseTimeEntity {
@@ -26,37 +24,125 @@ public class Member extends BaseTimeEntity {
     private String username;
 
     private String password;
-
     private String name;
-
     private String phoneNumber;
 
     @Email
     private String email;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.GUEST;
+    private Role role;
 
     @Enumerated(EnumType.STRING)
-    private Gender gender = Gender.UNDEFINED;
+    private Gender gender;
 
     @Enumerated(EnumType.STRING)
-    private Level level = Level.LV1;
+    private Level level;
 
-    private int transactionCount = 0;
+    private int transactionCount;
     private String location;
-
-    private LocalDate birth;  // yyyy-MM-dd
-
-    private boolean authenticated = false;
-
+    private LocalDate birth;
+    private boolean authenticated;
     private long restCash;
-
-    private String FCMToken = null;
-
+    private String FCMToken;
     private String profileImageUrl;
-
     private int regionCode;
+
+    private Member(
+            String username,
+            String password,
+            String name,
+            String phoneNumber,
+            String email,
+            Gender gender,
+            String location,
+            LocalDate birth,
+            boolean authenticated,
+            Role role,
+            int regionCode
+    ) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.gender = (gender == null) ? Gender.UNDEFINED : gender;
+        this.location = location;
+        this.birth = birth;
+        this.authenticated = authenticated;
+        this.role = (role == null) ? Role.GUEST : role;
+        this.level = Level.LV1;    // Default level
+        this.regionCode = regionCode;
+    }
+
+    public static Member createAdmin(
+            String password,
+            String name,
+            String phoneNumber,
+            String email,
+            Gender gender,
+            String location,
+            LocalDate birth,
+            int regionCode
+    ) {
+        return new Member(
+                "admin",
+                password,
+                name,
+                phoneNumber,
+                email,
+                gender,
+                location,
+                birth,
+                false,
+                Role.ADMIN,
+                regionCode
+        );
+    }
+
+    public static Member createSocialGoogle(
+            String username
+    ) {
+        return new Member(
+                username,
+                null,
+                null,
+                null,
+                null,
+                Gender.UNDEFINED,
+                null,
+                null,
+                true,
+                Role.USER,
+                0
+        );
+    }
+
+    public static Member createUser(
+            String username,
+            String password,
+            String name,
+            String phoneNumber,
+            String email,
+            Gender gender,
+            String location,
+            LocalDate birth,
+            int regionCode
+    ) {
+        return new Member(
+                username,
+                password,
+                name,
+                phoneNumber,
+                email,
+                gender,
+                location,
+                birth,
+                false,
+                Role.USER,
+                regionCode
+        );
+    }
 
     public void update(String password, Gender gender, String location, LocalDate birth) {
         if (location != null && !location.isBlank()) {

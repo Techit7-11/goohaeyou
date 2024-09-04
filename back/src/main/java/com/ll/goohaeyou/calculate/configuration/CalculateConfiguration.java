@@ -1,9 +1,9 @@
 package com.ll.goohaeyou.calculate.configuration;
 
-import com.ll.goohaeyou.application.domain.Application;
-import com.ll.goohaeyou.calculate.itemProcessor.ApplicationProcessor;
-import com.ll.goohaeyou.calculate.itemReader.ApplicationReader;
-import com.ll.goohaeyou.calculate.itemWriter.ApplicationWriter;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.calculate.itemProcessor.JobApplicationProcessor;
+import com.ll.goohaeyou.calculate.itemReader.JobApplicationReader;
+import com.ll.goohaeyou.calculate.itemWriter.JobApplicationWriter;
 import com.ll.goohaeyou.calculate.JobListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -22,9 +22,9 @@ public class CalculateConfiguration {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager ptm;
     private final JobListener jobListener;
-    private final ApplicationReader applicationReader;
-    private final ApplicationProcessor applicationProcessor;
-    private final ApplicationWriter applicationWriter;
+    private final JobApplicationReader jobApplicationReader;
+    private final JobApplicationProcessor jobApplicationProcessor;
+    private final JobApplicationWriter jobApplicationWriter;
 
     @Bean(name ="calculateJob" )
     public Job calculateJob() {
@@ -39,10 +39,10 @@ public class CalculateConfiguration {
     @Bean
     public Step calculateStep1() {
         return new StepBuilder("calculateStep1", jobRepository)
-                .<Application, Application>chunk(10,ptm)
-                .reader(applicationReader.completedApplicationReader())
-                .processor(applicationProcessor)
-                .writer(applicationWriter)
+                .<JobApplication, JobApplication>chunk(10,ptm)
+                .reader(jobApplicationReader.completedApplicationReader())
+                .processor(jobApplicationProcessor)
+                .writer(jobApplicationWriter)
                 .build();
     }
 

@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.jobPost.employ.application;
 
-import com.ll.goohaeyou.application.domain.Application;
-import com.ll.goohaeyou.application.domain.type.WageStatus;
-import com.ll.goohaeyou.application.application.ApplicationService;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
+import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
@@ -12,29 +12,29 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ll.goohaeyou.application.domain.type.WageStatus.APPLICATION_APPROVED;
+import static com.ll.goohaeyou.jobApplication.domain.type.WageStatus.APPLICATION_APPROVED;
 import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
 public class WorkCompletionService {
-    private final ApplicationService applicationService;
+    private final JobApplicationService jobApplicationService;
     private final JobPostService jobPostService;
 
     @Transactional
     public void completeJobManually(String username, Long applicationId) {
-        Application application = getApplicationWithAuthorizationCheck(username, applicationId);
+        JobApplication jobApplication = getApplicationWithAuthorizationCheck(username, applicationId);
 
-        updateApplicationByComplete(application);
+        updateApplicationByComplete(jobApplication);
     }
 
-    private Application getApplicationWithAuthorizationCheck(String username, Long applicationId) {
-        Application application = applicationService.findByIdAndValidate(applicationId);
-        JobPost jobPost = jobPostService.findByIdAndValidate(application.getJobPostDetail().getJobPost().getId());
+    private JobApplication getApplicationWithAuthorizationCheck(String username, Long applicationId) {
+        JobApplication jobApplication = jobApplicationService.findByIdAndValidate(applicationId);
+        JobPost jobPost = jobPostService.findByIdAndValidate(jobApplication.getJobPostDetail().getJobPost().getId());
 
         checkAuthorization(username, jobPost);
 
-        return application;
+        return jobApplication;
     }
 
     private void checkAuthorization(String username, JobPost jobPost) {
@@ -43,14 +43,14 @@ public class WorkCompletionService {
         }
     }
 
-    private void updateApplicationByComplete(Application application) {
-        application.changeToCompleted();
+    private void updateApplicationByComplete(JobApplication jobApplication) {
+        jobApplication.changeToCompleted();
 
-        switch (application.getWageStatus()) {
-            case PAYMENT_COMPLETED -> application.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
+        switch (jobApplication.getWageStatus()) {
+            case PAYMENT_COMPLETED -> jobApplication.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
             case APPLICATION_APPROVED -> {
-                application.updateWageStatus(WageStatus.WAGE_PAID);
-                application.setReceive(true);
+                jobApplication.updateWageStatus(WageStatus.WAGE_PAID);
+                jobApplication.markAsReceived(true);
             }
             default -> throw new EmployException.CompletionNotPossibleException();
         }
@@ -59,17 +59,17 @@ public class WorkCompletionService {
     // 개인 지급 알바 미완료 처리
     @Transactional
     public void cancelByIndividualPayment(String username, Long applicationId) {
-        Application application = getApplicationWithAuthorizationCheck(username, applicationId);
+        JobApplication jobApplication = getApplicationWithAuthorizationCheck(username, applicationId);
 
-        if (!application.getWageStatus().equals(APPLICATION_APPROVED)) {
+        if (!jobApplication.getWageStatus().equals(APPLICATION_APPROVED)) {
             throw new GoohaeyouException(BAD_REQUEST);
         }
 
-        updateApplicationByCancel(application);
+        updateApplicationByCancel(jobApplication);
     }
 
-    private void updateApplicationByCancel(Application application) {
-        application.changeToNotCompleted();
-        application.updateWageStatus(WageStatus.WORK_INCOMPLETE_NO_PAYMENT);
+    private void updateApplicationByCancel(JobApplication jobApplication) {
+        jobApplication.changeToNotCompleted();
+        jobApplication.updateWageStatus(WageStatus.WORK_INCOMPLETE_NO_PAYMENT);
     }
 }

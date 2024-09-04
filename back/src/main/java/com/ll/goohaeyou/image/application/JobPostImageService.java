@@ -47,13 +47,9 @@ public class JobPostImageService {
         for (MultipartFile imageFile : jobPostImageFiles) {
             String imageUrl = s3ImageService.upload(imageFile);
 
-            JobPostImage jobPostImage = JobPostImage.builder()
-                    .jobPostImageUrl(imageUrl)
-                    .jobPostDetail(jobPostDetail)
-                    .isMainImage(isMainNotSet)
-                    .build();
+            JobPostImage newJobPostImage = JobPostImage.create(imageUrl, isMainNotSet, jobPostDetail);
 
-            jobPostImages.add(jobPostImage);
+            jobPostImages.add(newJobPostImage);
             isMainNotSet = false;
         }
 
@@ -108,7 +104,7 @@ public class JobPostImageService {
         JobPostImage newMainImage = jobPostImageRepository.findById(newImageId)
                 .orElseThrow(ImageException.ImageNotFoundException::new);
 
-        currentMainImage.unsetMain();
-        newMainImage.setMain();
+        currentMainImage.unsetMainImage();
+        newMainImage.setMainImage();
     }
 }

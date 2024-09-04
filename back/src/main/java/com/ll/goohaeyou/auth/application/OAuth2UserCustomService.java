@@ -25,7 +25,6 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
     }
 
     // 유저가 있으면 업데이트, 없으면 유저 생성
-    // TODO username(=id)를 업데이트 하고 있지만, 추후 업데이트할 내용 변경 필요
     private Member saveOrUpdate(OAuth2User oAuth2User) {
         Map<String, Object> attributes = oAuth2User.getAttributes();
         String email = (String) attributes.get("email");
@@ -33,9 +32,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                 .map(entity -> {
                     return entity.oauthUpdate(email);
                 })
-                .orElseGet(() -> Member.builder()
-                        .username(email)
-                        .build());
+                .orElseGet(() -> Member.createSocialGoogle(email));
         return memberRepository.save(member);
     }
 

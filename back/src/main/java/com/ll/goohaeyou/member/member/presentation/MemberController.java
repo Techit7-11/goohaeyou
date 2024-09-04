@@ -1,9 +1,10 @@
 package com.ll.goohaeyou.member.member.presentation;
 
-import com.ll.goohaeyou.member.member.dto.JoinForm;
-import com.ll.goohaeyou.member.member.dto.LoginForm;
-import com.ll.goohaeyou.member.member.dto.MemberDto;
-import com.ll.goohaeyou.member.member.dto.SocialProfileForm;
+import com.ll.goohaeyou.global.standard.base.Empty;
+import com.ll.goohaeyou.member.member.application.dto.JoinForm;
+import com.ll.goohaeyou.member.member.application.dto.LoginForm;
+import com.ll.goohaeyou.member.member.application.dto.MemberDto;
+import com.ll.goohaeyou.member.member.application.dto.SocialProfileForm;
 import com.ll.goohaeyou.auth.application.AuthenticationService;
 import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.notification.application.NotificationService;
@@ -35,9 +36,9 @@ public class MemberController {
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
-    public ApiResponse<JoinForm> join(@RequestBody @Valid JoinForm form) {
-        JoinForm joinForm = memberService.join(form);
-        return ApiResponse.ok(joinForm);
+    public ApiResponse<Empty> join(@RequestBody @Valid JoinForm form) {
+        memberService.join(form);
+        return ApiResponse.created();
     }
 
     @PostMapping ("/login")

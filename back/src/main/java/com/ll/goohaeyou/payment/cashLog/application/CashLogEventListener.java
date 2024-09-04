@@ -12,6 +12,6 @@ public class CashLogEventListener {
 
     @EventListener
     public void creatCashLogEvent(CashLogEvent event) {
-        cashLogService.createCashLogOnSettled(event.getApplication());
+        cashLogService.createCashLogOnSettled(event.getJobApplication());
     }
 }

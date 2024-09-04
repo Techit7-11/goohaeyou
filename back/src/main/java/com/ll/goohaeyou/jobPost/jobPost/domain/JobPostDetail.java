@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobPost.jobPost.domain;
 
-import com.ll.goohaeyou.application.domain.Application;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import com.ll.goohaeyou.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -14,9 +14,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
-@Builder
 @Getter
 @Table(name = "job_post_detail",uniqueConstraints = {@UniqueConstraint(columnNames = {"jobPost_id","author"})})
 public class JobPostDetail extends BaseTimeEntity {
@@ -41,28 +39,46 @@ public class JobPostDetail extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     @ToString.Exclude
-    @Builder.Default
     @OrderBy("id DESC")
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "jobPostDetail", cascade = ALL, orphanRemoval = true)
     @ToString.Exclude
-    @Builder.Default
-    private List<Application> applications = new ArrayList<>();
+    private List<JobApplication> jobApplications = new ArrayList<>();
 
     @OneToMany(mappedBy = "jobPostDetail",cascade = ALL, orphanRemoval = true)
     @ToString.Exclude
-    @Builder.Default
     private List<Interest> interests = new ArrayList<>();
 
     @OneToMany(mappedBy = "jobPostDetail",cascade = ALL, orphanRemoval = true)
     @ToString.Exclude
-    @Builder.Default
     private List<JobPostImage> jobPostImages = new ArrayList<>();
 
     public void updatePostDetail(String body) {
         if (body != null && !body.isBlank()) {
             this.body = body;
         }
+    }
+
+    private JobPostDetail(
+            JobPost jobPost,
+            String author,
+            String body
+    ) {
+        this.jobPost = jobPost;
+        this.author = author;
+        this.body = body;
+    }
+
+    public static JobPostDetail create(
+            JobPost jobPost,
+            String author,
+            String body
+    ) {
+        return new JobPostDetail(
+                jobPost,
+                author,
+                body
+        );
     }
 }

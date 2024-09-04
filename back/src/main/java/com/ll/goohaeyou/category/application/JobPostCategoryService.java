@@ -22,12 +22,9 @@ public class JobPostCategoryService {
     }
 
     public void createAndSaveJobPostCategory(JobPost jobPost, Category category) {
-        JobPostCategory jobPostCategory = JobPostCategory.builder()
-                .jobPost(jobPost)
-                .category(category)
-                .build();
+        JobPostCategory newJobPostCategory = JobPostCategory.create(category, jobPost);
 
-        jobPostCategoryRepository.save(jobPostCategory);
+        jobPostCategoryRepository.save(newJobPostCategory);
     }
 
     public void updateJobPostCategories(JobPost jobPost, Category newTaskCategory, Category newRegionCategory) {

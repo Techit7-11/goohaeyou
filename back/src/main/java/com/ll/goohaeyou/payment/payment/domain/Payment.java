@@ -1,20 +1,19 @@
 package com.ll.goohaeyou.payment.payment.domain;
 
 import com.ll.goohaeyou.member.member.domain.Member;
-import com.ll.goohaeyou.payment.payment.dto.request.PaymentResDto;
+import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentReqDto;
+import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentResDto;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
-@Builder
 @Getter
 public class Payment {
     @Id
@@ -30,14 +29,37 @@ public class Payment {
     private String payStatus;
     private String orderId;
     private String orderName;
-
     private boolean paid;
     private boolean canceled;
     private String cancelReason;
-    private Long applicationId;
+    private Long jobApplicationId;
 
     @Version
-    private Long version;   // JPA가 관리하는 버전 필드
+    private Long version;
+
+    private Payment(
+            Long totalAmount,
+            String payStatus,
+            String orderId,
+            String orderName,
+            Long jobApplicationId
+    ) {
+        this.totalAmount = totalAmount;
+        this.payStatus = payStatus;
+        this.orderId = orderId;
+        this.orderName = orderName;
+        this.jobApplicationId = jobApplicationId;
+    }
+
+    public static Payment from(PaymentReqDto dto) {
+        return new Payment(
+                dto.getAmount(),
+                dto.getPayStatus().getDescription(),
+                UUID.randomUUID().toString(),
+                dto.getOrderName(),
+                dto.getJobApplicationId()
+        );
+    }
 
     public void updatePayer(Member member) {
         this.member = member;
@@ -77,3 +99,4 @@ public class Payment {
                 .build();
     }
 }
+

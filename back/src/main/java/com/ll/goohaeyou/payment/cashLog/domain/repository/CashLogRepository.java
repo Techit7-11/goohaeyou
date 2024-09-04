@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface CashLogRepository extends JpaRepository<CashLog, Long> {
-    Optional<CashLog> findByApplicationId(Long id);
+    Optional<CashLog> findByJobApplicationId(Long id);
 }

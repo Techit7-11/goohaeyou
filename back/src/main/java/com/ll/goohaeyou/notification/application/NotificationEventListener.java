@@ -47,7 +47,7 @@ public class NotificationEventListener {
     }
 
     @EventListener
-    public void ApplicationCreatedAndChangedEventListen(ApplicationCreateAndChangedEvent event) {
+    public void ApplicationCreatedAndChangedEventListen(JobApplicationCreateAndChangedEvent event) {
         // 지원서 작성 시
         log.debug("지원서 작성 및 수정 알림");
         notificationService.applicationCreatedAndChangedNotification(event);
@@ -69,6 +69,6 @@ public class NotificationEventListener {
     @EventListener
     public void calculateEventListen(CalculateNotificationEvent event) {
         log.debug("정산 완료시 지원자에게 알림");
-        notificationService.calculateNotificationEventListen(event.getApplication());
+        notificationService.calculateNotificationEventListen(event.getJobApplication());
     }
 }

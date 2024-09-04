@@ -1,6 +1,6 @@
 package com.ll.utils.builder;
 
-import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
 import com.ll.goohaeyou.jobPost.jobPost.domain.type.PayBasis;
 import com.ll.goohaeyou.jobPost.jobPost.domain.type.WagePaymentMethod;
 import com.ll.goohaeyou.member.member.domain.type.Gender;

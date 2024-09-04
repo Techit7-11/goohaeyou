@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.jobPost.comment.presentation;
 
-import com.ll.goohaeyou.jobPost.comment.dto.CommentDto;
-import com.ll.goohaeyou.jobPost.comment.dto.CommentForm;
+import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
+import com.ll.goohaeyou.jobPost.comment.application.dto.CommentForm;
 import com.ll.goohaeyou.jobPost.comment.application.CommentService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;

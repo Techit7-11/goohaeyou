@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.category.application;
 
 import com.ll.goohaeyou.category.domain.Category;
-import com.ll.goohaeyou.category.dto.CategoryForm;
+import com.ll.goohaeyou.category.application.dto.CategoryForm;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.category.exception.CategoryException;
@@ -29,18 +29,12 @@ public class CategoryAdminService {
             throw new CategoryException.InvalidCategoryFormatException();
         }
 
-        Category newCategory = Category.builder()
-                .name(form.getName())
-                .level(form.getLevel())
-                .enabled(form.isEnabled())
-                .parent(parent)
-                .type(form.getType())
-                .build();
+        Category newCategory = Category.create(form.getName(), form.getLevel(), form.isEnabled(), form.getType(), parent);
 
         categoryRepository.save(newCategory);
     }
 
-    private Category getParent(String name) {
+    public Category getParent(String name) {
         return categoryRepository.findByName(name)
                 .orElse(null);
     }

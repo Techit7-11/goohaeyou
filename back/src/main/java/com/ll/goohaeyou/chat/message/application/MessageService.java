@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.chat.message.application;
 
-import com.ll.goohaeyou.chat.message.dto.MessageDto;
-import com.ll.goohaeyou.chat.message.dto.MessageForm;
+import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
+import com.ll.goohaeyou.chat.message.application.dto.MessageForm;
 import com.ll.goohaeyou.chat.message.domain.Message;
 import com.ll.goohaeyou.chat.message.domain.repository.MessageRepository;
 import com.ll.goohaeyou.chat.room.domain.Room;
@@ -29,16 +29,11 @@ public class MessageService {
             throw new AuthException.NotAuthorizedException();
         }
 
-        Message message = Message.builder()
-                .room(room)
-                .sender(username)
-                .content(form.getContent())
-                .createdAt(LocalDateTime.now())
-                .build();
+        Message newMessage = Message.create(room, username, form.getContent());
 
-        room.getMessages().add(message);
+        room.getMessages().add(newMessage);
 
-        return message;
+        return newMessage;
     }
 
     public List<MessageDto> findByPostId(String username, Long roomId) {

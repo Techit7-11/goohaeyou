@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.jobPost.comment.application;
 
-import com.ll.goohaeyou.jobPost.comment.dto.CommentDto;
-import com.ll.goohaeyou.jobPost.comment.dto.CommentForm;
+import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
+import com.ll.goohaeyou.jobPost.comment.application.dto.CommentForm;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import com.ll.goohaeyou.jobPost.comment.domain.repository.CommentRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
@@ -35,17 +35,13 @@ public class CommentService {
     public CommentForm.Register writeComment(Long postId, String username, CommentForm.Register form) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
 
-        Comment comment = Comment.builder()
-                .jobPostDetail(postDetail)
-                .member(memberService.getMember(username))
-                .content(form.getContent())
-                .build();
+        Comment newComment = Comment.create(postDetail, memberService.getMember(username), form.getContent());
 
-        postDetail.getComments().add(comment);
+        postDetail.getComments().add(newComment);
         postDetail.getJobPost().increaseCommentsCount();
 
         if(!postDetail.getAuthor().equals(username)) {
-            publisher.publishEvent(new CommentCreatedEvent(this,postDetail,comment));
+            publisher.publishEvent(new CommentCreatedEvent(this,postDetail, newComment));
         }
 
         return form;

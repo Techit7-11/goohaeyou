@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.chat.room.presentation;
 
-import com.ll.goohaeyou.chat.room.dto.RoomDto;
-import com.ll.goohaeyou.chat.room.dto.RoomListDto;
+import com.ll.goohaeyou.chat.room.application.dto.RoomDto;
+import com.ll.goohaeyou.chat.room.application.dto.RoomListDto;
 import com.ll.goohaeyou.chat.room.application.RoomService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;

@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
-import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
 import com.ll.goohaeyou.jobPost.jobPost.domain.Essential;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.EssentialRepository;
@@ -16,18 +16,14 @@ public class EssentialService {
 
     @Transactional
     public void createAndSaveEssential(JobPostDetail postDetail, JobPostForm.Register form) {
-        Essential essential = Essential.builder()
-                .minAge(form.getMinAge())
-                .gender(form.getGender())
-                .jobPostDetail(postDetail)
-                .build();
+        Essential newEssential = Essential.create(form.getMinAge(),
+                form.getGender(), postDetail);
 
-        essentialRepository.save(essential);
+        essentialRepository.save(newEssential);
     }
 
     @Transactional
     public void updateEssential(Essential essential, JobPostForm.Modify form) {
         essential.update(form.getMinAge(), form.getGender());
-        essentialRepository.save(essential);
     }
 }

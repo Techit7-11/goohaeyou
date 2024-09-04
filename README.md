@@ -87,16 +87,16 @@
 
 ## ⚙️ Infrastructure
 
-<img src="https://github.com/user-attachments/assets/c1850aa3-fb86-4f21-bfdc-b0d7c6783794" width=800px alt="인프라아키텍처">
+<img src="https://github.com/user-attachments/assets/4b8379a0-4231-48c2-b198-dc4afd2319a6" width=800px alt="인프라아키텍처">
 
 <br/><br/>
 
 ## 🚀 CI/CD Pipeline
 
-<img src="https://github.com/user-attachments/assets/e56aa604-bc0f-4a0c-a372-3dc7cd68ee4f" width=800px alt="cicd아키텍처">
+<img src="https://github.com/user-attachments/assets/7f18d85a-e733-403f-a79b-a911c2a0a7f5" width=800px alt="cicd아키텍처">
 
 <br/><br/>
 
 ## 📝 ERD
 
-![erd_0808](https://github.com/user-attachments/assets/11b4fa24-2ca9-4b02-80bc-04ce7bd69114)
+![erd_0904](https://github.com/user-attachments/assets/458dbb20-0ef0-465f-9da9-064c307bfdf2)

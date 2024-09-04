@@ -1,14 +1,14 @@
 package com.ll.goohaeyou.payment.payment.presentation;
 
-import com.ll.goohaeyou.payment.payment.dto.PaymentDto;
-import com.ll.goohaeyou.payment.payment.dto.cancel.PaymentCancelResDto;
-import com.ll.goohaeyou.payment.payment.dto.fail.PaymentFailDto;
-import com.ll.goohaeyou.payment.payment.dto.request.PaymentReqDto;
-import com.ll.goohaeyou.payment.payment.dto.request.PaymentResDto;
-import com.ll.goohaeyou.payment.payment.dto.success.PaymentSuccessDto;
-import com.ll.goohaeyou.payment.payment.service.PaymentCancelService;
-import com.ll.goohaeyou.payment.payment.service.PaymentInfoService;
-import com.ll.goohaeyou.payment.payment.service.PaymentService;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentDto;
+import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResDto;
+import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailDto;
+import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentReqDto;
+import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentResDto;
+import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessDto;
+import com.ll.goohaeyou.payment.payment.application.PaymentCancelService;
+import com.ll.goohaeyou.payment.payment.application.PaymentInfoService;
+import com.ll.goohaeyou.payment.payment.application.PaymentService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.category.presentation;
 
 import com.ll.goohaeyou.category.application.CategoryService;
-import com.ll.goohaeyou.category.dto.CategoryDto;
+import com.ll.goohaeyou.category.application.dto.CategoryDto;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

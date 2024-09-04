@@ -1,16 +1,16 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
-import com.ll.goohaeyou.application.domain.Application;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.category.domain.Category;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
 import com.ll.goohaeyou.category.application.CategoryService;
 import com.ll.goohaeyou.category.application.JobPostCategoryService;
-import com.ll.goohaeyou.global.standard.base.util.Ut;
+import com.ll.goohaeyou.global.standard.base.util.Util;
 import com.ll.goohaeyou.image.application.S3ImageService;
-import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostDetailDto;
-import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostDto;
-import com.ll.goohaeyou.jobPost.jobPost.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;
@@ -67,7 +67,7 @@ public class JobPostService {
 
     @Transactional
     public void writePost(String username, JobPostForm.Register form) {
-        int regionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
+        int regionCode = Util.Region.getRegionCodeFromAddress(form.getLocation());
         Category taskCategory = categoryService.getCategoryById(form.getCategoryId());
         Category regionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(regionCode));
 
@@ -94,26 +94,16 @@ public class JobPostService {
     }
 
     private JobPost createAndSaveJobPost(String username, JobPostForm.Register form, int regionCode) {
-        JobPost newPost = JobPost.builder()
-                .member(memberService.getMember(username))
-                .title(form.getTitle())
-                .location(form.getLocation())
-                .deadline(form.getDeadLine())
-                .jobStartDate(form.getJobStartDate())
-                .regionCode(regionCode)
-                .build();
+        JobPost newPost = JobPost.create(memberService.getMember(username), form.getTitle(), form.getLocation(),
+                form.getDeadLine(), form.getJobStartDate(), regionCode);
 
         return jobPostRepository.save(newPost);
     }
 
     private JobPostDetail createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
-        JobPostDetail postDetail = JobPostDetail.builder()
-                .jobPost(newPost)
-                .author(username)
-                .body(form.getBody())
-                .build();
+        JobPostDetail newPostDetail = JobPostDetail.create(newPost, username, form.getBody());
 
-        return jobPostdetailRepository.save(postDetail);
+        return jobPostdetailRepository.save(newPostDetail);
     }
 
     @Transactional
@@ -123,7 +113,7 @@ public class JobPostService {
 
         validateModificationPermission(username, jobPost);
 
-        int newRegionCode = Ut.Region.getRegionCodeFromAddress(form.getLocation());
+        int newRegionCode = Util.Region.getRegionCodeFromAddress(form.getLocation());
 
         Category newTaskCategory = categoryService.getCategoryById(form.getCategoryId());
         Category newRegionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(newRegionCode));
@@ -147,17 +137,17 @@ public class JobPostService {
     }
 
     private void updateApplications(JobPostDetail postDetail, JobPostForm.Modify form) {
-        List<Application> applicationsToRemove = new ArrayList<>();
-        for (Application application : postDetail.getApplications()) {
-            if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - application.getMember().getBirth().getYear()) {
-                applicationsToRemove.add(application);
-                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), application, POST_MODIFICATION, DELETE));
+        List<JobApplication> applicationsToRemove = new ArrayList<>();
+        for (JobApplication jobApplication : postDetail.getJobApplications()) {
+            if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - jobApplication.getMember().getBirth().getYear()) {
+                applicationsToRemove.add(jobApplication);
+                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), jobApplication, POST_MODIFICATION, DELETE));
             } else {
-                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), application, POST_MODIFICATION, NOTICE));
+                publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), jobApplication, POST_MODIFICATION, NOTICE));
             }
         }
 
-        postDetail.getApplications().removeAll(applicationsToRemove);
+        postDetail.getJobApplications().removeAll(applicationsToRemove);
     }
 
     @Transactional

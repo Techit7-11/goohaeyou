@@ -13,9 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "job_post", indexes = {
         @Index(name = "idx_created_at", columnList = "created_at")
 })
-@AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
-@Builder
 @Getter
 public class JobPost extends BaseTimeEntity {
     @Id
@@ -26,36 +24,61 @@ public class JobPost extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Setter(PROTECTED)
-    private long commentsCount = 0;
-
-    @Setter(PROTECTED)
-    private long applicationCount = 0;
-
-    @Setter(PROTECTED)
-    private long interestsCount = 0;
-
-    @Setter(PROTECTED)
-    private long incrementViewCount = 0;
+    private long commentsCount;
+    private long applicationCount;
+    private long interestsCount;
+    private long incrementViewCount;
 
     private String title;
 
     private String location;
 
-    @Column(nullable = false)
-    private boolean closed = false;
+    private boolean closed;
 
     private LocalDate deadline;
 
     private LocalDate jobStartDate;
 
-    @Column(nullable = false)
     private boolean employed;
 
     @OneToOne(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private JobPostDetail jobPostDetail;
 
     private int regionCode;
+
+    private JobPost(
+            Member member,
+            String title,
+            String location,
+            LocalDate deadline,
+            LocalDate jobStartDate,
+            int regionCode
+    ) {
+        this.member = member;
+        this.title = title;
+        this.location = location;
+        this.deadline = deadline;
+        this.jobStartDate = jobStartDate;
+        this.regionCode = regionCode;
+    }
+
+    public static JobPost create(
+            Member member,
+            String title,
+            String location,
+            LocalDate deadline,
+            LocalDate jobStartDate,
+            int regionCode
+    ) {
+        return new JobPost(
+                member,
+                title,
+                location,
+                deadline,
+                jobStartDate,
+                regionCode
+        );
+    }
 
     public void update(String title, LocalDate deadline, LocalDate jobStartDate, String location, int regionCode) {
         if (title != null && !title.isBlank()) {
@@ -80,27 +103,33 @@ public class JobPost extends BaseTimeEntity {
     }
 
     public void increaseCommentsCount() {
-        commentsCount++;
+        this.commentsCount++;
     }
 
     public void decreaseCommentsCount() {
-        commentsCount--;
+        if (commentsCount > 0) {
+            this.commentsCount--;
+        }
     }
 
     public void increaseApplicationsCount() {
-        applicationCount++;
+        this.applicationCount++;
     }
 
     public void decreaseApplicationsCount() {
-        applicationCount--;
+        if (this.applicationCount > 0) {
+            this.applicationCount--;
+        }
     }
 
     public void increaseInterestCount() {
-        interestsCount++;
+        this.interestsCount++;
     }
 
     public void decreaseInterestCount() {
-        interestsCount--;
+        if (interestsCount > 0) {
+            this.interestsCount--;
+        }
     }
 
     public void increaseViewCount() {

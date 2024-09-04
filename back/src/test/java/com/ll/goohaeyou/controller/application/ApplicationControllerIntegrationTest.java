@@ -1,6 +1,6 @@
 //package com.ll.goohaeyou.controller.application;
 //
-//import com.ll.goohaeyou.domain.application.application.dto.ApplicationForm;
+//import com.ll.goohaeyou.domain.application.application.dto.JobApplicationForm;
 //import com.ll.goohaeyou.domain.jobPost.jobPost.dto.JobPostDto;
 //import com.ll.goohaeyou.domain.jobPost.jobPost.service.JobPostService;
 //import com.ll.goohaeyou.domain.member.member.entity.Member;
@@ -32,7 +32,7 @@
 //@AutoConfigureMockMvc
 //@Transactional
 //@ActiveProfiles("test")
-//public class ApplicationControllerIntegrationTest {
+//public class JobApplicationControllerIntegrationTest {
 //
 //    @Autowired
 //    private MockMvc mockMvc;
@@ -60,14 +60,14 @@
 //
 //        memberService.join(new JoinFormBuilder().setUsername("applicant").build());
 //
-//        ApplicationForm.Register form = writeApplicationForm();
+//        JobApplicationForm.Register form = writeApplicationForm();
 //
 //        Member member = memberService.getMember("applicant");
 //
 //        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 //
 //        // When
-//        ResultActions resultActions = mockMvc.perform(post("/api/applications/{id}", jobPostDtos.get(0).getId())
+//        ResultActions resultActions = mockMvc.perform(post("/api/jobApplications/{id}", jobPostDtos.get(0).getId())
 //                        .cookie(new Cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken))
 //                        .contentType(MediaType.APPLICATION_JSON)
 //                        .content(objectMapper.writeValueAsString(form)))
@@ -85,14 +85,14 @@
 //        // Given
 //        memberService.join(new JoinFormBuilder().setUsername("applicant").build());
 //
-//        ApplicationForm.Register form = writeApplicationForm();
+//        JobApplicationForm.Register form = writeApplicationForm();
 //
 //        Member member = memberService.getMember("applicant");
 //
 //        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 //
 //        // When
-//        ResultActions resultActions = mockMvc.perform(post("/api/applications/{id}", 10)
+//        ResultActions resultActions = mockMvc.perform(post("/api/jobApplications/{id}", 10)
 //                        .cookie(new Cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken))
 //                        .contentType(MediaType.APPLICATION_JSON)
 //                        .content(objectMapper.writeValueAsString(form)))
@@ -105,8 +105,8 @@
 //                .andExpect(jsonPath("$.data").isEmpty());
 //    }
 //
-//    private ApplicationForm.Register writeApplicationForm() {
-//        return ApplicationForm.Register.builder()
+//    private JobApplicationForm.Register writeApplicationForm() {
+//        return JobApplicationForm.Register.builder()
 //                .body("지원서 내용.")
 //                .build();
 //    }
