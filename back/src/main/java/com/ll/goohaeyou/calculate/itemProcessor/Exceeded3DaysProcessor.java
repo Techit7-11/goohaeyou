@@ -16,7 +16,7 @@ public class Exceeded3DaysProcessor implements ItemProcessor<JobApplication, Job
             jobApplication.updateWageStatus(SETTLEMENT_REQUESTED);
         } else if (jobApplication.getWageStatus() ==  APPLICATION_APPROVED ){
             jobApplication.changeToCompleted();
-            jobApplication.setReceive(true);
+            jobApplication.markAsReceived(true);
             jobApplication.updateWageStatus(WAGE_PAID);
         }
 

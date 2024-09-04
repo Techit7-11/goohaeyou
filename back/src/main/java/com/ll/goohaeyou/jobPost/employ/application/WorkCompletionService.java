@@ -50,7 +50,7 @@ public class WorkCompletionService {
             case PAYMENT_COMPLETED -> jobApplication.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
             case APPLICATION_APPROVED -> {
                 jobApplication.updateWageStatus(WageStatus.WAGE_PAID);
-                jobApplication.setReceive(true);
+                jobApplication.markAsReceived(true);
             }
             default -> throw new EmployException.CompletionNotPossibleException();
         }

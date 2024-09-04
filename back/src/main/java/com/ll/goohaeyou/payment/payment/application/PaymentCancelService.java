@@ -70,7 +70,7 @@ public class PaymentCancelService {
 
         JobApplication jobApplication = jobApplicationService.findByIdAndValidate(payment.getJobApplicationId());
         jobApplication.updateWageStatus(PAYMENT_CANCELLED);
-        jobApplication.setEarn(0);
+        jobApplication.updateEarn(0);
         jobApplication.changeToNotCompleted();
     }
 }

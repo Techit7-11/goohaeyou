@@ -126,6 +126,6 @@ public class JobApplicationService {
     public void updateJobApplicationOnPaymentSuccess(Long jobApplicationId, Long amount) {
         JobApplication jobApplication = findByIdAndValidate(jobApplicationId);
         jobApplication.updateWageStatus(WageStatus.PAYMENT_COMPLETED);
-        jobApplication.setEarn(Math.toIntExact(amount));
+        jobApplication.updateEarn(Math.toIntExact(amount));
     }
 }

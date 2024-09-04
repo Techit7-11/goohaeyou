@@ -38,8 +38,8 @@ public class JobApplicationProcessor implements ItemProcessor<JobApplication, Jo
         if (wage.getCost() == jobApplication.getEarn()) {
             member.addRestCash(cost);
             publisher.publishEvent(new CashLogEvent(this, jobApplication));
-            jobApplication.setEarn(0);
-            jobApplication.setReceive(true);
+            jobApplication.updateEarn(0);
+            jobApplication.markAsReceived(true);
             memberRepository.save(member);
             publisher.publishEvent(new CalculateNotificationEvent(this, jobApplication));
         } else throw new PaymentException.PaymentAmountMismatchException();

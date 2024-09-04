@@ -86,7 +86,6 @@ public class JobApplication extends BaseTimeEntity {
         }
     }
 
-
     public void changeToCompleted() {
         this.jobCompleted = true;
     }
@@ -95,15 +94,15 @@ public class JobApplication extends BaseTimeEntity {
         this.jobCompleted = false;
     }
 
-    public void setEarn(int earn) {
+    public void updateEarn(int earn) {
         this.earn = earn;
     }
 
-    public void setReceive(boolean receive) {
+    public void markAsReceived(boolean receive) {
         this.receive = receive;
     }
 
-    public void setJobEndDate(LocalDate jobEndDate) {
+    public void updateJobEndDate(LocalDate jobEndDate) {
         this.jobEndDate = jobEndDate;
     }
 }
