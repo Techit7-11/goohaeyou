@@ -3,8 +3,8 @@ package com.ll.goohaeyou.jobPost.employ.application;
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
-import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
 import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.jobPost.employ.exception.EmployException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
@@ -19,7 +19,7 @@ import static com.ll.goohaeyou.jobApplication.domain.type.WageStatus.APPLICATION
 @Service
 @RequiredArgsConstructor
 public class WorkCompletionService {
-    private final JobApplicationService jobApplicationService;
+    private final JobApplicationRepository jobApplicationRepository;
     private final JobPostRepository jobPostRepository;
 
     @Transactional
@@ -30,7 +30,8 @@ public class WorkCompletionService {
     }
 
     private JobApplication getApplicationWithAuthorizationCheck(String username, Long applicationId) {
-        JobApplication jobApplication = jobApplicationService.findByIdAndValidate(applicationId);
+        JobApplication jobApplication = jobApplicationRepository.findById(applicationId)
+                .orElseThrow(EntityNotFoundException.JobApplicationNotExistsException::new);
         JobPost jobPost = jobPostRepository.findById(jobApplication.getJobPostDetail().getJobPost().getId())
                         .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 

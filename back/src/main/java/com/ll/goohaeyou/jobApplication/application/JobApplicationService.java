@@ -7,7 +7,6 @@ import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
 import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationForm;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
-import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.jobApplication.exception.JobApplicationException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
@@ -61,7 +60,7 @@ public class JobApplicationService {
 
     public JobApplication findByIdAndValidate(Long id) {
         return jobApplicationRepository.findById(id)
-                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
+                .orElseThrow(EntityNotFoundException.JobApplicationNotExistsException::new);
     }
 
     @Transactional
@@ -123,12 +122,5 @@ public class JobApplicationService {
                 throw new JobApplicationException.DuplicateSubmissionExceptionJob();
             }
         }
-    }
-
-    @Transactional
-    public void updateJobApplicationOnPaymentSuccess(Long jobApplicationId, Long amount) {
-        JobApplication jobApplication = findByIdAndValidate(jobApplicationId);
-        jobApplication.updateWageStatus(WageStatus.PAYMENT_COMPLETED);
-        jobApplication.updateEarn(Math.toIntExact(amount));
     }
 }

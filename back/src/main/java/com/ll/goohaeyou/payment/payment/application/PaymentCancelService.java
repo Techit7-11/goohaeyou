@@ -1,29 +1,30 @@
 package com.ll.goohaeyou.payment.payment.application;
 
+import com.ll.goohaeyou.auth.exception.AuthException;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
-import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
+import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
 import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResDto;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
-import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.ll.goohaeyou.global.exception.ErrorCode.BAD_REQUEST;
 import static com.ll.goohaeyou.jobApplication.domain.type.WageStatus.PAYMENT_CANCELLED;
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
 public class PaymentCancelService {
     private final PaymentRepository paymentRepository;
     private final TossPaymentUtil tossPaymentUtil;
-    private final JobApplicationService jobApplicationService;
+    private final JobApplicationRepository jobApplicationRepository;
     private final CashLogService cashLogService;
 
     @Transactional
@@ -68,7 +69,8 @@ public class PaymentCancelService {
         payment.cancelPayment(cancelReason);
         payment.markAsUnpaid();
 
-        JobApplication jobApplication = jobApplicationService.findByIdAndValidate(payment.getJobApplicationId());
+        JobApplication jobApplication = jobApplicationRepository.findById(payment.getJobApplicationId())
+                .orElseThrow(EntityNotFoundException.JobApplicationNotExistsException::new);
         jobApplication.updateWageStatus(PAYMENT_CANCELLED);
         jobApplication.updateEarn(0);
         jobApplication.changeToNotCompleted();

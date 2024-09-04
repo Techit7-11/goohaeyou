@@ -11,6 +11,7 @@ public enum ErrorCode {
     CLOSED_POST(HttpStatus.BAD_REQUEST, "마감된 공고입니다."),
     DUPLICATE_SUBMISSION(HttpStatus.CONFLICT, "중복 지원은 불가능합니다."),
     NOT_ELIGIBLE_FOR_OWN_JOB(HttpStatus.FORBIDDEN, "본인의 공고에는 지원이 불가능합니다."),
+    JOB_APPLICATION_NOT_EXISTS(HttpStatus.NOT_FOUND, "지원서가 존재하지 않습니다."),
 
     // auth
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "패스워드를 잘못 입력하셨습니다."),

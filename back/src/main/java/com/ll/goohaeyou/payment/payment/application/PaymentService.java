@@ -4,7 +4,9 @@ import com.ll.goohaeyou.global.config.TossPaymentsConfig;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import com.ll.goohaeyou.global.standard.retryOnOptimisticLock.RetryOnOptimisticLock;
-import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
+import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.exception.MemberException;
@@ -31,9 +33,9 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final TossPaymentsConfig tossPaymentsConfig;
     private final MemberRepository memberRepository;
-    private final JobApplicationService jobApplicationService;
     private final TossPaymentUtil tossPaymentUtil;
     private final CashLogService cashLogService;
+    private final JobApplicationRepository jobApplicationRepository;
 
     @Transactional
     @RetryOnOptimisticLock(attempts = 2, backoff = 500L)
@@ -69,7 +71,11 @@ public class PaymentService {
 
         updatePayment(payment, successDto);
 
-        jobApplicationService.updateJobApplicationOnPaymentSuccess(payment.getJobApplicationId(), amount);
+        JobApplication jobApplication = jobApplicationRepository.findById(payment.getJobApplicationId())
+                        .orElseThrow(EntityNotFoundException.JobApplicationNotExistsException::new);
+
+        jobApplication.updateWageStatus(WageStatus.PAYMENT_COMPLETED);
+        jobApplication.updateEarn(Math.toIntExact(amount));
 
         cashLogService.createCashLogOnPaid(successDto, payment);
 
