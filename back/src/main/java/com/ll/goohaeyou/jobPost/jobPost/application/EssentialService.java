@@ -28,9 +28,4 @@ public class EssentialService {
 
         essentialRepository.save(newEssential);
     }
-
-    @Transactional
-    public void updateEssential(Essential essential, JobPostForm.Modify form) {
-        essential.update(form.getMinAge(), form.getGender());
-    }
 }

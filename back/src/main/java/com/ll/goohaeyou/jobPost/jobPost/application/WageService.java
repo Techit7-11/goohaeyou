@@ -28,9 +28,4 @@ public class WageService {
 
         wageRepository.save(newWage);
     }
-
-    @Transactional
-    public void updateWage(Wage wage, JobPostForm.Modify form) {
-        wage.updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
-    }
 }

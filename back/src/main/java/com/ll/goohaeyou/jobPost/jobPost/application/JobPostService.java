@@ -18,12 +18,8 @@ import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostSpecifications;
+import com.ll.goohaeyou.jobPost.jobPost.domain.*;
+import com.ll.goohaeyou.jobPost.jobPost.domain.repository.*;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;
@@ -59,8 +55,8 @@ public class JobPostService {
     private final S3ImageService s3ImageService;
     private final CategoryRepository categoryRepository;
     private final JobPostCategoryRepository jobPostCategoryRepository;
-    private final EssentialService essentialService;
-    private final WageService wageService;
+    private final WageRepository wageRepository;
+    private final EssentialRepository essentialRepository;
 
     @Transactional
     public JobPostDto writePost(String username, JobPostForm.Register form) {
@@ -109,8 +105,8 @@ public class JobPostService {
 
         int newRegionCode = Util.Region.getRegionCodeFromAddress(form.getLocation());
 
-        JobPostCategory preTaskJobPostCategory = jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, CategoryType.TASK);
-        JobPostCategory preRegionJobPostCategory = jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, CategoryType.REGION);
+        JobPostCategory existingTaskJobPostCategory = jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, CategoryType.TASK);
+        JobPostCategory existingRegionJobPostCategory = jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, CategoryType.REGION);
 
         Category newTaskCategory = categoryRepository.findById(form.getCategoryId())
                 .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
@@ -119,8 +115,8 @@ public class JobPostService {
 
         jobPost.update(form.getTitle(), form.getDeadLine(), form.getJobStartDate(), form.getLocation(), newRegionCode);
 
-        preTaskJobPostCategory.updateCategory(newTaskCategory);
-        preRegionJobPostCategory.updateCategory(newRegionCategory);
+        existingTaskJobPostCategory.updateCategory(newTaskCategory);
+        existingRegionJobPostCategory.updateCategory(newRegionCategory);
 
         updateJobPostDetails(postDetail, form);
         updateApplications(postDetail, form);
@@ -133,9 +129,12 @@ public class JobPostService {
     }
 
     private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form) {
+        Wage existingWage = wageRepository.findByJobPostDetail(jobPostDetail);
+        Essential existingEssential = essentialRepository.findByJobPostDetail(jobPostDetail);
+
         jobPostDetail.updatePostDetail(form.getBody());
-        essentialService.updateEssential(jobPostDetail.getEssential(), form);
-        wageService.updateWage(jobPostDetail.getWage(), form);
+        existingWage.updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
+        existingEssential.update(form.getMinAge(), form.getGender());
     }
 
     private void updateApplications(JobPostDetail postDetail, JobPostForm.Modify form) {
