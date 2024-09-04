@@ -1,12 +1,11 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.category.application.CategoryService;
-import com.ll.goohaeyou.category.application.JobPostCategoryService;
 import com.ll.goohaeyou.category.domain.Category;
+import com.ll.goohaeyou.category.domain.JobPostCategory;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
-import com.ll.goohaeyou.category.exception.CategoryException;
+import com.ll.goohaeyou.category.domain.type.CategoryType;
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.PostDeadlineEvent;
 import com.ll.goohaeyou.global.event.notification.PostDeletedEvent;
@@ -60,27 +59,17 @@ public class JobPostService {
     private final S3ImageService s3ImageService;
     private final CategoryRepository categoryRepository;
     private final JobPostCategoryRepository jobPostCategoryRepository;
-    private final JobPostCategoryService jobPostCategoryService;
-    private final CategoryService categoryService;
     private final EssentialService essentialService;
     private final WageService wageService;
 
     @Transactional
-    public void writePost(String username, JobPostForm.Register form) {
+    public JobPostDto writePost(String username, JobPostForm.Register form) {
         int regionCode = Util.Region.getRegionCodeFromAddress(form.getLocation());
-        Category taskCategory = categoryService.getCategoryById(form.getCategoryId());
-        Category regionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(regionCode));
 
         JobPost newPost = createAndSaveJobPost(username, form, regionCode);
+        createAndSaveJobPostDetail(newPost, username, form);
 
-        jobPostCategoryService.createAndSaveJobPostCategory(newPost, taskCategory);
-        jobPostCategoryService.createAndSaveJobPostCategory(newPost, regionCategory);
-
-        JobPostDetail postDetail = createAndSaveJobPostDetail(newPost, username, form);
-
-        essentialService.createAndSaveEssential(postDetail, form);
-
-        wageService.createAndSaveWage(postDetail, form);
+        return JobPostDto.from(newPost);
     }
 
     public JobPostDetailDto findById(Long id) {
@@ -104,10 +93,10 @@ public class JobPostService {
         return jobPostRepository.save(newPost);
     }
 
-    private JobPostDetail createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
+    private void createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
         JobPostDetail newPostDetail = JobPostDetail.create(newPost, username, form.getBody());
 
-        return jobPostdetailRepository.save(newPostDetail);
+        jobPostdetailRepository.save(newPostDetail);
     }
 
     @Transactional
@@ -120,12 +109,20 @@ public class JobPostService {
 
         int newRegionCode = Util.Region.getRegionCodeFromAddress(form.getLocation());
 
-        Category newTaskCategory = categoryService.getCategoryById(form.getCategoryId());
-        Category newRegionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(newRegionCode));
+        JobPostCategory preTaskJobPostCategory = jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, CategoryType.TASK);
+        JobPostCategory preRegionJobPostCategory = jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, CategoryType.REGION);
+
+        Category newTaskCategory = categoryRepository.findById(form.getCategoryId())
+                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
+        Category newRegionCategory = categoryRepository.findByName(RegionType.getNameByCode(newRegionCode))
+                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
         jobPost.update(form.getTitle(), form.getDeadLine(), form.getJobStartDate(), form.getLocation(), newRegionCode);
-        jobPostCategoryService.updateJobPostCategories(jobPost, newTaskCategory, newRegionCategory);
-        updateJobPostDetails(postDetail, form, newRegionCode);
+
+        preTaskJobPostCategory.updateCategory(newTaskCategory);
+        preRegionJobPostCategory.updateCategory(newRegionCategory);
+
+        updateJobPostDetails(postDetail, form);
         updateApplications(postDetail, form);
     }
 
@@ -135,7 +132,7 @@ public class JobPostService {
         }
     }
 
-    private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form, int newRegionCode) {
+    private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form) {
         jobPostDetail.updatePostDetail(form.getBody());
         essentialService.updateEssential(jobPostDetail.getEssential(), form);
         wageService.updateWage(jobPostDetail.getWage(), form);
@@ -299,7 +296,7 @@ public class JobPostService {
     @Cacheable(value = "jobPostsByCategory", key = "#categoryName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
     public Page<JobPostDto> getPostsByCategory(String categoryName, Pageable pageable) {
         Category category = categoryRepository.findByName(categoryName)
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
         Page<JobPost> jobPosts = jobPostCategoryRepository.findJobPostsByCategoryId(category.getId(), pageable);
 

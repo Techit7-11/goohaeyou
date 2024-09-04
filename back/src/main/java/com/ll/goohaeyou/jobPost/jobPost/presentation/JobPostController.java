@@ -1,5 +1,8 @@
 package com.ll.goohaeyou.jobPost.jobPost.presentation;
 
+import com.ll.goohaeyou.category.application.JobPostCategoryService;
+import com.ll.goohaeyou.jobPost.jobPost.application.EssentialService;
+import com.ll.goohaeyou.jobPost.jobPost.application.WageService;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
@@ -36,12 +39,19 @@ import java.util.List;
 @Tag(name = "JobPost", description = "구인공고 API")
 public class JobPostController {
     private final JobPostService jobPostService;
+    private final JobPostCategoryService jobPostCategoryService;
+    private final WageService wageService;
+    private final EssentialService essentialService;
 
     @PostMapping
     @Operation(summary = "구인공고 작성")
     public ApiResponse<Empty> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
                                                        @Valid @RequestBody JobPostForm.Register form) {
-        jobPostService.writePost(memberDetails.getUsername(), form);
+        JobPostDto jobPostDto = jobPostService.writePost(memberDetails.getUsername(), form);
+        jobPostCategoryService.create(jobPostDto, form.getCategoryId());
+
+        wageService.create(jobPostDto, form);
+        essentialService.create(jobPostDto, form);
 
         return ApiResponse.created();
     }

@@ -4,6 +4,7 @@ import com.ll.goohaeyou.category.domain.Category;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.category.application.dto.CategoryDto;
 import com.ll.goohaeyou.category.exception.CategoryException;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,8 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public List<CategoryDto> getSubCategories(String categoryName) {
-        Category currentCategory = getCategoryByName(categoryName);
+        Category currentCategory = categoryRepository.findByName(categoryName)
+                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
         List<Category> categories = currentCategory.getSubCategories();
 
@@ -26,20 +28,9 @@ public class CategoryService {
         }
     }
 
-    public Category getCategoryByName(String categoryName) {
-
-        return categoryRepository.findByName(categoryName)
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
-    }
-
-    public Category getCategoryById(Long categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
-    }
-
     public boolean isLeafCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
         return category.isLeaf();
     }
