@@ -5,8 +5,8 @@ import com.ll.goohaeyou.global.event.notification.*;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
-import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.notification.application.dto.NotificationDto;
@@ -32,7 +32,7 @@ import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.*;
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final RoomService roomService;
-    private final JobPostService jobPostService;
+    private final JobPostRepository jobPostRepository;
     private final FCMService fcmService;
     private final MemberRepository memberRepository;
 
@@ -109,9 +109,10 @@ public class NotificationService {
 
     @Transactional
     public void calculateNotificationEventListen(JobApplication jobApplication) {
-        Member member = jobApplication.getMember();
-        JobPost jobPost = jobPostService.findByIdAndValidate(jobApplication.getJobPostDetail().getId());
+        JobPost jobPost = jobPostRepository.findById(jobApplication.getJobPostDetail().getId())
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         String url = "/jobApplications/detail/" + jobApplication.getId();
+
         makeNotification(jobApplication.getMember(), jobPost.getMember(), jobPost.getTitle(),
                 CALCULATE_PAYMENT, NOTICE, url);
     }

@@ -25,11 +25,9 @@ import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostSpecifications;
-import com.ll.goohaeyou.jobPost.jobPost.exception.JobPostException;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;
-import com.ll.goohaeyou.member.member.exception.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
@@ -86,7 +84,8 @@ public class JobPostService {
     }
 
     public JobPostDetailDto findById(Long id) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+        JobPostDetail postDetail = jobPostdetailRepository.findById(id)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
         return JobPostDetailDto.from(postDetail.getJobPost(), postDetail, postDetail.getEssential(), postDetail.getWage());
     }
@@ -113,7 +112,8 @@ public class JobPostService {
 
     @Transactional
     public void modifyPost(String username, Long id, JobPostForm.Modify form) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+        JobPostDetail postDetail = jobPostdetailRepository.findById(id)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         JobPost jobPost = postDetail.getJobPost();
 
         validateModificationPermission(username, jobPost);
@@ -159,7 +159,8 @@ public class JobPostService {
     public void deleteJobPost(String username, Long postId) {
         JobPost post = findByIdAndValidate(postId);
         List<JobPostImage> jobPostImages = post.getJobPostDetail().getJobPostImages();
-        Member member = findUserByUserNameValidate(username);
+        Member member = memberRepository.findByUsername(username)
+                        .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         publisher.publishEvent(new PostDeletedEvent(this, post, member, DELETE));
 
@@ -175,26 +176,13 @@ public class JobPostService {
         }
     }
 
-    private Member findUserByUserNameValidate(String username) {
-        return memberRepository.findByUsername(username)
-                .orElseThrow(MemberException.MemberNotFoundException::new);
-    }
-
-
     public boolean canEditPost(String username, String author) {
         return username.equals(author);
     }
 
     public JobPost findByIdAndValidate(Long id) {
         return jobPostRepository.findById(id)
-                .orElseThrow(JobPostException.PostNotExistsException::new);
-    }
-
-    public JobPostDetail findByJobPostAndNameAndValidate(Long postId) {
-        JobPost post = findByIdAndValidate(postId);
-
-        return jobPostdetailRepository.findByJobPostAndAuthor(post, post.getMember().getUsername())
-                .orElseThrow(JobPostException.PostNotExistsException::new);
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
     }
 
     public List<JobPostDto> findByUsername(String username) {
@@ -226,7 +214,7 @@ public class JobPostService {
     @Transactional
     public void increaseViewCount(Long jobPostId) {
         JobPost jobPost = jobPostRepository.findById(jobPostId)
-                .orElseThrow(JobPostException.PostNotExistsException::new);
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
         jobPost.increaseViewCount();
     }

@@ -1,17 +1,19 @@
 package com.ll.goohaeyou.jobPost.employ.application;
 
-import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
-import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.jobPost.jobPost.domain.type.WagePaymentMethod;
-import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
+import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;
 import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
-import com.ll.goohaeyou.auth.exception.AuthException;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.jobPost.employ.exception.EmployException;
+import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
+import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
+import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
+import com.ll.goohaeyou.jobPost.jobPost.domain.type.WagePaymentMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -29,11 +31,13 @@ import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.NOTICE;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EmployService {
-    private final JobPostService jobPostService;
+    private final JobPostRepository jobPostRepository;
+    private final JobPostDetailRepository jobPostDetailRepository;
     private final ApplicationEventPublisher publisher;
 
     public List<JobApplicationDto> getList(String username, Long postId) {
-        JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
+        JobPostDetail postDetail = jobPostDetailRepository.findById(postId)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         checkPermissions(username,postDetail.getAuthor());
 
         return JobApplicationDto.convertToDtoList(postDetail.getJobApplications());
@@ -41,7 +45,8 @@ public class EmployService {
 
     @Transactional
     public void approve(String username, Long postId, List<Long> applicationIds) {
-        JobPost jobPost = jobPostService.findByIdAndValidate(postId);
+        JobPost jobPost = jobPostRepository.findById(postId)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         JobPostDetail postDetail = jobPost.getJobPostDetail();
         Long postWriterId = jobPost.getMember().getId();
 

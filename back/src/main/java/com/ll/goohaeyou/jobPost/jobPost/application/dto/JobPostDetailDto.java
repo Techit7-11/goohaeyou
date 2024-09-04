@@ -22,7 +22,6 @@ public class JobPostDetailDto extends AbstractJobPostDto{
     private int minAge;
     private Gender gender;
     private String modifiedAt;
-    private List<String> interestedUsernames;
     private int workTime;
     private int workDays;
     private int cost;
@@ -31,10 +30,6 @@ public class JobPostDetailDto extends AbstractJobPostDto{
 
     public static JobPostDetailDto from(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential, Wage wage) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
-        List<String> interestedUsernames = jobPostDetail.getInterests().stream()
-                .map(Interest::getMember)
-                .map(Member::getUsername)
-                .toList();
         LocalDateTime mostRecentModifiedDate = jobPost.getModifiedAt().isAfter(jobPostDetail.getModifiedAt()) ? jobPost.getModifiedAt() : jobPostDetail.getModifiedAt();
 
         return JobPostDetailDto.builder()
@@ -53,7 +48,6 @@ public class JobPostDetailDto extends AbstractJobPostDto{
                 .jobStartDate(jobPost.getJobStartDate())
                 .isClosed(jobPost.isClosed())
                 .employed(jobPost.isEmployed())
-                .interestedUsernames(interestedUsernames)
                 .cost(wage.getCost())
                 .payBasis(wage.getPayBasis())
                 .workTime(wage.getWorkTime())

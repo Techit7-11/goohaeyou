@@ -22,7 +22,7 @@ public class JobApplicationController {
     @PostMapping("/api/job-posts/{postId}/applications")
     @Operation(summary = "지원서 작성")
     public ApiResponse<Empty> writeJobApplication(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                  @PathVariable Long jobPostId,
+                                                  @PathVariable(name = "postId") Long jobPostId,
                                                   @Valid @RequestBody JobApplicationForm.Register form) {
         jobApplicationService.writeApplication(memberDetails.getUsername(), jobPostId, form);
 

@@ -1,25 +1,26 @@
 package com.ll.goohaeyou.jobPost.employ.application;
 
+import com.ll.goohaeyou.auth.exception.AuthException;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.global.exception.GoohaeyouException;
+import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
-import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
-import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.jobPost.employ.exception.EmployException;
+import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.ll.goohaeyou.global.exception.ErrorCode.BAD_REQUEST;
 import static com.ll.goohaeyou.jobApplication.domain.type.WageStatus.APPLICATION_APPROVED;
-import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
 public class WorkCompletionService {
     private final JobApplicationService jobApplicationService;
-    private final JobPostService jobPostService;
+    private final JobPostRepository jobPostRepository;
 
     @Transactional
     public void completeJobManually(String username, Long applicationId) {
@@ -30,7 +31,8 @@ public class WorkCompletionService {
 
     private JobApplication getApplicationWithAuthorizationCheck(String username, Long applicationId) {
         JobApplication jobApplication = jobApplicationService.findByIdAndValidate(applicationId);
-        JobPost jobPost = jobPostService.findByIdAndValidate(jobApplication.getJobPostDetail().getJobPost().getId());
+        JobPost jobPost = jobPostRepository.findById(jobApplication.getJobPostDetail().getJobPost().getId())
+                        .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
         checkAuthorization(username, jobPost);
 

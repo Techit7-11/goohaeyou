@@ -1,12 +1,13 @@
 package com.ll.goohaeyou.image.application;
 
+import com.ll.goohaeyou.auth.exception.AuthException;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.image.exception.ImageException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostImageRepository;
-import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
-import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.image.exception.ImageException;
+import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +20,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class JobPostImageService {
-    private final JobPostService jobPostService;
+    private final JobPostRepository JobPostRepository;
     private final S3ImageService s3ImageService;
     private final JobPostImageRepository jobPostImageRepository;
     private final JobPostDetailRepository jobPostDetailRepository;
+    private final JobPostRepository jobPostRepository;
 
     @Transactional
     public void uploadJobPostImages(String username, long postDetailId, MultipartFile[] jobPostImageFiles) {
-        JobPostDetail jobPostDetail = jobPostService.findByIdAndValidate(postDetailId).getJobPostDetail();
+        JobPostDetail jobPostDetail = JobPostRepository.findById(postDetailId)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new)
+                .getJobPostDetail();
 
         if (!jobPostDetail.getAuthor().equals(username)) {
             throw new AuthException.NotAuthorizedException();
@@ -71,7 +75,9 @@ public class JobPostImageService {
 
     @Transactional
     public void deleteJobPostImages(String username, long postDetailId) {
-        JobPostDetail jobPostDetail = jobPostService.findByIdAndValidate(postDetailId).getJobPostDetail();
+        JobPostDetail jobPostDetail = jobPostRepository.findById(postDetailId)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new)
+                .getJobPostDetail();
         List<JobPostImage> jobPostImages = jobPostDetail.getJobPostImages();
 
         if (!jobPostDetail.getAuthor().equals(username)) {
@@ -92,7 +98,9 @@ public class JobPostImageService {
 
     @Transactional
     public void changeMainImage(String username, Long postId, Long currentImageId, Long newImageId) {
-        String author = jobPostService.findByJobPostAndNameAndValidate(postId).getAuthor();
+        String author = jobPostDetailRepository.findById(postId)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new)
+                .getAuthor();
 
         if (!author.equals(username)) {
             throw new AuthException.NotAuthorizedException();

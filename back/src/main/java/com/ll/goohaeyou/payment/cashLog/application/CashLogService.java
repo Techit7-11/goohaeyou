@@ -1,12 +1,12 @@
 package com.ll.goohaeyou.payment.cashLog.application;
 
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.payment.cashLog.domain.CashLog;
 import com.ll.goohaeyou.payment.cashLog.domain.repository.CashLogRepository;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessDto;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
-import com.ll.goohaeyou.jobPost.jobPost.exception.JobPostException;
 import com.ll.goohaeyou.payment.payment.domain.type.PayTypeFee;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class CashLogService {
 
     public CashLog findByApplicationIdAndValidate(Long id) {
         return cashLogRepository.findByJobApplicationId(id)
-                .orElseThrow(JobPostException.PostNotExistsException::new);
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
     }
 
     private void addCashLog(CashLog cashLog) {

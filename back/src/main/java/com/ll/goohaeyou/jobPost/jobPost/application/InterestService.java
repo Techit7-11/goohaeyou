@@ -3,6 +3,7 @@ package com.ll.goohaeyou.jobPost.jobPost.application;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.Interest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
+import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.global.event.notification.PostGetInterestedEvent;
 import com.ll.goohaeyou.auth.exception.AuthException;
@@ -19,12 +20,13 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class InterestService {
     private final MemberRepository memberRepository;
+    private final JobPostDetailRepository jobPostDetailRepository;
     private final ApplicationEventPublisher publisher;
-    private final JobPostService jobPostService;
 
     @Transactional
     public void addInterestToPost(String username, Long postId) {
-        JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
+        JobPostDetail postDetail = jobPostDetailRepository.findById(postId)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
@@ -45,7 +47,8 @@ public class InterestService {
 
     @Transactional
     public void removeInterestFromPost(String username, Long postId) {
-        JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
+        JobPostDetail postDetail = jobPostDetailRepository.findById(postId)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
@@ -63,8 +66,18 @@ public class InterestService {
     }
 
     public boolean isInterested(String username, Long id) {
-        List<String> interestedUsernames = jobPostService.findById(id).getInterestedUsernames();
+        JobPostDetail postDetail = jobPostDetailRepository.findById(id)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
+        List<String> interestedUsernames = getInterestedUsernames(postDetail);
+
         return interestedUsernames.stream()
                 .anyMatch(username::equals);
+    }
+
+    public List<String> getInterestedUsernames(JobPostDetail jobPostDetail) {
+        return jobPostDetail.getInterests().stream()
+                .map(Interest::getMember)
+                .map(Member::getUsername)
+                .toList();
     }
 }

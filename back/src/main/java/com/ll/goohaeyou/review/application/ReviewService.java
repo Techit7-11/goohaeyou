@@ -1,16 +1,16 @@
 package com.ll.goohaeyou.review.application;
 
+import com.ll.goohaeyou.auth.exception.AuthException;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
-import com.ll.goohaeyou.review.domain.mapper.ReviewMapper;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
+import com.ll.goohaeyou.member.member.exception.MemberException;
 import com.ll.goohaeyou.review.application.dto.ApplicantReviewDto;
 import com.ll.goohaeyou.review.domain.Review;
+import com.ll.goohaeyou.review.domain.mapper.ReviewMapper;
 import com.ll.goohaeyou.review.domain.repository.ReviewRepository;
-import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.jobPost.jobPost.exception.JobPostException;
-import com.ll.goohaeyou.member.member.exception.MemberException;
 import com.ll.goohaeyou.review.exception.ReviewException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -33,7 +33,7 @@ public class ReviewService {
     @Transactional
     public ApplicantReviewDto saveReview(ApplicantReviewDto applicantReviewDto) {
         JobPost jobPostId = jobPostRepository.findById(applicantReviewDto.getJobPostingId())
-                .orElseThrow(JobPostException.PostNotExistsException::new);
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
         Member applicantId = memberRepository.findByUsername(getCurrentUsername())
                 .orElseThrow(MemberException.MemberNotFoundException::new);
