@@ -2,6 +2,7 @@ package com.ll.goohaeyou.global.exception;
 
 import com.ll.goohaeyou.category.exception.CategoryException;
 import com.ll.goohaeyou.chat.exception.ChatException;
+import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 
 import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
@@ -43,6 +44,13 @@ public class EntityNotFoundException extends GoohaeyouException {
 
         public NotFoundCategoryException() {
             super(NOT_FOUND_CATEGORY);
+        }
+    }
+
+    public static class PaymentNotFoundException extends EntityNotFoundException {
+
+        public PaymentNotFoundException() {
+            super(PAYMENT_NOT_FOUND);
         }
     }
 }

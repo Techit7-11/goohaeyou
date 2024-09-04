@@ -10,7 +10,6 @@ import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.exception.MemberException;
-import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailDto;
 import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentReqDto;
 import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentResDto;
@@ -34,7 +33,6 @@ public class PaymentService {
     private final TossPaymentsConfig tossPaymentsConfig;
     private final MemberRepository memberRepository;
     private final TossPaymentUtil tossPaymentUtil;
-    private final CashLogService cashLogService;
     private final JobApplicationRepository jobApplicationRepository;
 
     @Transactional
@@ -76,8 +74,6 @@ public class PaymentService {
 
         jobApplication.updateWageStatus(WageStatus.PAYMENT_COMPLETED);
         jobApplication.updateEarn(Math.toIntExact(amount));
-
-        cashLogService.createCashLogOnPaid(successDto, payment);
 
         return successDto;
     }
@@ -145,6 +141,6 @@ public class PaymentService {
 
     private Payment findPaymentByOrderId(String orderId) {
         return paymentRepository.findByOrderId(orderId)
-                .orElseThrow(PaymentException.PaymentNotFoundException::new);
+                .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
     }
 }

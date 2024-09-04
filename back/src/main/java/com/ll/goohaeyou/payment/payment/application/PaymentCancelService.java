@@ -6,7 +6,6 @@ import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
-import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResDto;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
@@ -25,12 +24,11 @@ public class PaymentCancelService {
     private final PaymentRepository paymentRepository;
     private final TossPaymentUtil tossPaymentUtil;
     private final JobApplicationRepository jobApplicationRepository;
-    private final CashLogService cashLogService;
 
     @Transactional
     public PaymentCancelResDto tossPaymentCancel(String username, String paymentKey, String cancelReason) {
         Payment payment = paymentRepository.findByPaymentKeyAndMemberUsername(paymentKey, username)
-                .orElseThrow(PaymentException.PaymentNotFoundException::new);
+                .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
 
         checkPaymentCancelable(username, payment);
 
@@ -45,8 +43,6 @@ public class PaymentCancelService {
         PaymentCancelResDto paymentCancelResDto = tossPaymentUtil.sendPaymentCancelRequest(
                 paymentKey, params, PaymentCancelResDto.class
         );
-
-        cashLogService.createCashLogOnCancel(payment);
 
         return paymentCancelResDto;
     }
