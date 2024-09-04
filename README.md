@@ -99,4 +99,4 @@
 
 ## 📝 ERD
 
-![erd_0808](https://github.com/user-attachments/assets/11b4fa24-2ca9-4b02-80bc-04ce7bd69114)
+![erd_0904](https://github.com/user-attachments/assets/458dbb20-0ef0-465f-9da9-064c307bfdf2)
