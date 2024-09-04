@@ -2,7 +2,7 @@ package com.ll.goohaeyou.review.application;
 
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
-import com.ll.goohaeyou.review.application.mapper.ReviewMapper;
+import com.ll.goohaeyou.review.domain.mapper.ReviewMapper;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.review.application.dto.ApplicantReviewDto;

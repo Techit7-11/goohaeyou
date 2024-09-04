@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.review.application.mapper;
+package com.ll.goohaeyou.review.domain.mapper;
 
 import com.ll.goohaeyou.review.application.dto.ApplicantReviewDto;
 import com.ll.goohaeyou.review.domain.Review;
