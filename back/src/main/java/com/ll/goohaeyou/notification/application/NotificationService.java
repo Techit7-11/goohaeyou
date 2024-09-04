@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.notification.application;
 
-import com.ll.goohaeyou.chat.room.application.RoomService;
+import com.ll.goohaeyou.chat.room.domain.repository.RoomRepository;
 import com.ll.goohaeyou.global.event.notification.*;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
@@ -31,10 +31,10 @@ import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.*;
 @Slf4j
 public class NotificationService {
     private final NotificationRepository notificationRepository;
-    private final RoomService roomService;
     private final JobPostRepository jobPostRepository;
     private final FCMService fcmService;
     private final MemberRepository memberRepository;
+    private final RoomRepository roomRepository;
 
     @Transactional
     public void notifyApplicantsAboutPost(ChangeOfPostEvent event) {
@@ -126,7 +126,10 @@ public class NotificationService {
         Member member2 = memberRepository.findById(event.getMemberId2())
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         String title = event.getPostTitle();
-        Long roomId = roomService.findByUsername1AndUsername2(member1.getUsername(), member2.getUsername()).getId();
+        Long roomId = roomRepository.findByUsername1AndUsername2(member1.getUsername(), member2.getUsername())
+                .orElseGet(() -> roomRepository.findByUsername1AndUsername2(member2.getUsername(), member1.getUsername())
+                        .orElseThrow(EntityNotFoundException.ChatroomNotExistsException::new))
+                .getId();
 
         String url = "/chat/" + roomId;
         makeNotification(member1, member2, title, CHATROOM_CREATED, NOTICE, url);

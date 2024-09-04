@@ -12,13 +12,6 @@ public class ChatException extends GoohaeyouException {
         super(e);
     }
 
-    public static class ChatroomNotExistsException extends ChatException {
-
-        public ChatroomNotExistsException() {
-            super(CHATROOM_NOT_EXISTS);
-        }
-    }
-
     public static class MessageNotExistsException extends ChatException {
 
         public MessageNotExistsException() {

@@ -70,7 +70,7 @@ public class RoomService {
 
     public Room findByIdAndValidate(Long roomId) {
         return roomRepository.findById(roomId)
-                .orElseThrow(ChatException.ChatroomNotExistsException::new);
+                .orElseThrow(EntityNotFoundException.ChatroomNotExistsException::new);
     }
 
     public List<RoomListDto> getRoomList(String username) {
@@ -92,7 +92,7 @@ public class RoomService {
     public Room findByUsername1AndUsername2(String username1, String username2) {
         return roomRepository.findByUsername1AndUsername2(username1, username2)
                 .orElseGet(() -> roomRepository.findByUsername1AndUsername2(username2, username1)
-                        .orElseThrow(ChatException.ChatroomNotExistsException::new));
+                        .orElseThrow(EntityNotFoundException.ChatroomNotExistsException::new));
     }
 
     public boolean checkTheChatroom(String username1, String username2) {

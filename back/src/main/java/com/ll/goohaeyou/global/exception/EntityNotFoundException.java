@@ -1,5 +1,7 @@
 package com.ll.goohaeyou.global.exception;
 
+import com.ll.goohaeyou.chat.exception.ChatException;
+
 import static com.ll.goohaeyou.global.exception.ErrorCode.*;
 
 public class EntityNotFoundException extends GoohaeyouException {
@@ -26,6 +28,13 @@ public class EntityNotFoundException extends GoohaeyouException {
 
         public JobApplicationNotExistsException() {
             super(JOB_APPLICATION_NOT_EXISTS);
+        }
+    }
+
+    public static class ChatroomNotExistsException extends EntityNotFoundException {
+
+        public ChatroomNotExistsException() {
+            super(CHATROOM_NOT_EXISTS);
         }
     }
 }
