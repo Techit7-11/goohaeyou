@@ -1,26 +1,25 @@
 package com.ll.goohaeyou.notification.application;
 
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.chat.room.application.RoomService;
+import com.ll.goohaeyou.global.event.notification.*;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
+import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
-import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.notification.application.dto.NotificationDto;
 import com.ll.goohaeyou.notification.domain.Notification;
 import com.ll.goohaeyou.notification.domain.repository.NotificationRepository;
 import com.ll.goohaeyou.notification.domain.type.CauseTypeCode;
 import com.ll.goohaeyou.notification.domain.type.ResultTypeCode;
-import com.ll.goohaeyou.global.event.notification.*;
 import com.ll.goohaeyou.notification.exception.NotificationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.ll.goohaeyou.notification.domain.type.CauseTypeCode.*;
@@ -32,7 +31,6 @@ import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.*;
 @Slf4j
 public class NotificationService {
     private final NotificationRepository notificationRepository;
-    private final MemberService memberService;
     private final RoomService roomService;
     private final JobPostService jobPostService;
     private final FCMService fcmService;
@@ -122,8 +120,10 @@ public class NotificationService {
     public void notifyAboutChatRoom(CreateChatRoomEvent event) {
         log.info("알림 생성 중");
 
-        Member member1 = memberService.findById(event.getMemberId1());
-        Member member2 = memberService.findById(event.getMemberId2());
+        Member member1 = memberRepository.findById(event.getMemberId1())
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+        Member member2 = memberRepository.findById(event.getMemberId2())
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         String title = event.getPostTitle();
         Long roomId = roomService.findByUsername1AndUsername2(member1.getUsername(), member2.getUsername()).getId();
 
@@ -153,7 +153,8 @@ public class NotificationService {
     }
 
     public List<NotificationDto> getList(String username) {
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         List<Notification> notificationList = notificationRepository.findByToMemberOrderByCreateAtDesc(member);
 
         return NotificationDto.convertToDtoList(notificationList);
@@ -161,7 +162,8 @@ public class NotificationService {
 
     @Transactional
     public void deleteReadAllNotification(String username) {
-        Member toMember = memberService.getMember(username);
+        Member toMember = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         List<Notification> readNotification = notificationRepository.findByToMemberAndSeenIsTrue(toMember);
 
         notificationRepository.deleteAll(readNotification);
@@ -169,14 +171,16 @@ public class NotificationService {
 
     @Transactional
     public void deleteAllNotification(String username) {
-        Member toMember = memberService.getMember(username);
+        Member toMember = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         List<Notification> removeNotification = notificationRepository.findByToMember(toMember);
         notificationRepository.deleteAll(removeNotification);
     }
 
     @Transactional
     public void readNotification(String username, Long notificationId) {
-        memberService.getMember(username);
+        memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         Notification notification = findByIdAndValidate(notificationId);
         notification.update();
     }
@@ -187,7 +191,8 @@ public class NotificationService {
     }
 
     public Boolean unreadNotification(String username) {
-        Member toMember = memberService.getMember(username);
+        Member toMember = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         return notificationRepository.existsByToMemberAndSeenIsFalse(toMember);
     }
@@ -199,7 +204,8 @@ public class NotificationService {
 
         String extractedToken = token.substring(startIndex, endIndex);
 
-        Member member = memberService.findById(userId);
+        Member member = memberRepository.findById(userId)
+                        .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         member.registerFCMToken(extractedToken);
 
         memberRepository.save(member);
@@ -207,7 +213,8 @@ public class NotificationService {
 
     @Transactional
     public void deleteToken(Long userId) {
-        Member member = memberService.findById(userId);
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         member.removeFCMToken();
 
         memberRepository.save(member);

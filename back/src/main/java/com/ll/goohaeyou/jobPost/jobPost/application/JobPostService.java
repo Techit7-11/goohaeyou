@@ -1,32 +1,35 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.auth.exception.AuthException;
+import com.ll.goohaeyou.category.application.CategoryService;
+import com.ll.goohaeyou.category.application.JobPostCategoryService;
 import com.ll.goohaeyou.category.domain.Category;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
-import com.ll.goohaeyou.category.application.CategoryService;
-import com.ll.goohaeyou.category.application.JobPostCategoryService;
+import com.ll.goohaeyou.category.exception.CategoryException;
+import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
+import com.ll.goohaeyou.global.event.notification.PostDeadlineEvent;
+import com.ll.goohaeyou.global.event.notification.PostDeletedEvent;
+import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.global.standard.base.RegionType;
 import com.ll.goohaeyou.global.standard.base.util.Util;
 import com.ll.goohaeyou.image.application.S3ImageService;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
-import com.ll.goohaeyou.member.member.domain.Member;
-import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
-import com.ll.goohaeyou.member.member.domain.type.Role;
-import com.ll.goohaeyou.member.member.application.MemberService;
-import com.ll.goohaeyou.global.event.notification.*;
-import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.category.exception.CategoryException;
-import com.ll.goohaeyou.jobPost.jobPost.exception.JobPostException;
-import com.ll.goohaeyou.member.member.exception.MemberException;
-import com.ll.goohaeyou.global.standard.base.RegionType;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostSpecifications;
+import com.ll.goohaeyou.jobPost.jobPost.exception.JobPostException;
+import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
+import com.ll.goohaeyou.member.member.domain.type.Role;
+import com.ll.goohaeyou.member.member.exception.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
@@ -54,7 +57,6 @@ import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.NOTICE;
 public class JobPostService {
     private final JobPostRepository jobPostRepository;
     private final JobPostDetailRepository jobPostdetailRepository;
-    private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
     private final S3ImageService s3ImageService;
@@ -94,7 +96,10 @@ public class JobPostService {
     }
 
     private JobPost createAndSaveJobPost(String username, JobPostForm.Register form, int regionCode) {
-        JobPost newPost = JobPost.create(memberService.getMember(username), form.getTitle(), form.getLocation(),
+        JobPost newPost = JobPost.create(
+                memberRepository.findByUsername(username)
+                        .orElseThrow(EntityNotFoundException.MemberNotFoundException::new),
+                form.getTitle(), form.getLocation(),
                 form.getDeadLine(), form.getJobStartDate(), regionCode);
 
         return jobPostRepository.save(newPost);
@@ -194,7 +199,8 @@ public class JobPostService {
 
     public List<JobPostDto> findByUsername(String username) {
 
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         return JobPostDto.convertToDtoList(jobPostRepository.findByMemberId(member.getId()));
     }

@@ -1,18 +1,19 @@
 package com.ll.goohaeyou.jobApplication.application;
 
+import com.ll.goohaeyou.auth.exception.AuthException;
+import com.ll.goohaeyou.global.event.notification.JobApplicationCreateAndChangedEvent;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
 import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationForm;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
 import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
-import com.ll.goohaeyou.member.member.domain.Member;
-import com.ll.goohaeyou.member.member.application.MemberService;
-import com.ll.goohaeyou.global.event.notification.JobApplicationCreateAndChangedEvent;
 import com.ll.goohaeyou.jobApplication.exception.JobApplicationException;
-import com.ll.goohaeyou.auth.exception.AuthException;
+import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
+import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.exception.JobPostException;
+import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ import static com.ll.goohaeyou.notification.domain.type.CauseTypeCode.APPLICATIO
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class JobApplicationService {
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final JobPostService jobPostService;
     private final JobApplicationRepository jobApplicationRepository;
     private final ApplicationEventPublisher publisher;
@@ -35,7 +36,8 @@ public class JobApplicationService {
     @Transactional
     public void writeApplication(String username, Long id, JobApplicationForm.Register form) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(id);
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         canWrite(postDetail, member);
 
         JobApplication newJobApplication = createNewApplication(member, postDetail, form);
@@ -101,7 +103,8 @@ public class JobApplicationService {
 
     public List<JobApplicationDto> findByUsername(String username) {
 
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         return JobApplicationDto.convertToDtoList(jobApplicationRepository.findByMemberId(member.getId()));
     }

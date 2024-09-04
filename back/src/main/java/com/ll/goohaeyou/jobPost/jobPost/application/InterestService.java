@@ -1,11 +1,12 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.Interest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.member.member.domain.Member;
-import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.global.event.notification.PostGetInterestedEvent;
 import com.ll.goohaeyou.auth.exception.AuthException;
+import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,15 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class InterestService {
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
     private final JobPostService jobPostService;
 
     @Transactional
     public void addInterestToPost(String username, Long postId) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         if (hasInterest(postDetail, member)) {
             throw new AuthException.NotAuthorizedException();
@@ -44,7 +46,8 @@ public class InterestService {
     @Transactional
     public void removeInterestFromPost(String username, Long postId) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         if (!hasInterest(postDetail, member)) {
             throw new AuthException.NotAuthorizedException();

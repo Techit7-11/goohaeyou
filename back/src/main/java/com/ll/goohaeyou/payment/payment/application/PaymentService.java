@@ -1,7 +1,13 @@
 package com.ll.goohaeyou.payment.payment.application;
 
+import com.ll.goohaeyou.global.config.TossPaymentsConfig;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
+import com.ll.goohaeyou.global.standard.retryOnOptimisticLock.RetryOnOptimisticLock;
 import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
-import com.ll.goohaeyou.member.member.application.MemberService;
+import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
+import com.ll.goohaeyou.member.member.exception.MemberException;
 import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailDto;
 import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentReqDto;
@@ -10,11 +16,7 @@ import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessDt
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
-import com.ll.goohaeyou.global.config.TossPaymentsConfig;
-import com.ll.goohaeyou.member.member.exception.MemberException;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
-import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
-import com.ll.goohaeyou.global.standard.retryOnOptimisticLock.RetryOnOptimisticLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -28,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final TossPaymentsConfig tossPaymentsConfig;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final JobApplicationService jobApplicationService;
     private final TossPaymentUtil tossPaymentUtil;
     private final CashLogService cashLogService;
@@ -46,8 +48,11 @@ public class PaymentService {
     }
 
     private Payment createPaymentEntity(PaymentReqDto paymentReqDto, String username) {
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+
         Payment payment = Payment.from(paymentReqDto);
-        payment.updatePayer(memberService.getMember(username));
+        payment.updatePayer(member);
 
         return payment;
     }

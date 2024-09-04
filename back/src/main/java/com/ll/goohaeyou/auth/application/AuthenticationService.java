@@ -2,10 +2,11 @@ package com.ll.goohaeyou.auth.application;
 
 import com.ll.goohaeyou.auth.domain.RefreshToken;
 import com.ll.goohaeyou.auth.domain.RefreshTokenRepository;
-import com.ll.goohaeyou.member.member.application.MemberService;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
 import com.ll.goohaeyou.member.member.application.dto.MemberDto;
 import com.ll.goohaeyou.member.member.domain.Member;
-import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
+import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,11 @@ public class AuthenticationService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     public MemberDto authenticateAndSetTokens(String username, HttpServletRequest request, HttpServletResponse response) {
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         // 리프레쉬 토큰
         String refreshToken = jwtTokenProvider.generateToken(member, REFRESH_TOKEN_DURATION);

@@ -1,5 +1,6 @@
 package com.ll.goohaeyou.jobPost.comment.application;
 
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
 import com.ll.goohaeyou.jobPost.comment.application.dto.CommentForm;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
@@ -9,7 +10,6 @@ import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;
-import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.global.event.notification.CommentCreatedEvent;
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.jobPost.comment.exception.CommentException;
@@ -26,7 +26,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class CommentService {
     private final JobPostService jobPostService;
-    private final MemberService memberService;
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
@@ -34,8 +33,10 @@ public class CommentService {
     @Transactional
     public CommentForm.Register writeComment(Long postId, String username, CommentForm.Register form) {
         JobPostDetail postDetail = jobPostService.findByJobPostAndNameAndValidate(postId);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
-        Comment newComment = Comment.create(postDetail, memberService.getMember(username), form.getContent());
+        Comment newComment = Comment.create(postDetail, member, form.getContent());
 
         postDetail.getComments().add(newComment);
         postDetail.getJobPost().increaseCommentsCount();
@@ -105,7 +106,8 @@ public class CommentService {
 
     public List<CommentDto> findByUsername(String username) {
 
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         return CommentDto.convertToDtoList(commentRepository.findByMemberId(member.getId()));
     }

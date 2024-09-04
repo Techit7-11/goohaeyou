@@ -205,7 +205,7 @@ public class Member extends BaseTimeEntity {
         this.FCMToken = null;
     }
 
-    public void setImageUrl(String profileImageUrl) {
+    public void updateImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
 }

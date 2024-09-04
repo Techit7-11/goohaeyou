@@ -1,9 +1,10 @@
 package com.ll.goohaeyou.member.emailAuth.application;
 
-import com.ll.goohaeyou.member.member.domain.Member;
-import com.ll.goohaeyou.member.member.application.MemberService;
-import com.ll.goohaeyou.member.emailAuth.exception.EmailAuthException;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.base.util.RedisUtil;
+import com.ll.goohaeyou.member.emailAuth.exception.EmailAuthException;
+import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class EmailAuthService {
     private static final String EMAIL_TEMPLATE = "emailTemplate";
     private static final long EXPIRATION_IN_SECONDS = 1800;   // 30 minutes
 
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final TemplateEngine templateEngine;
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
@@ -42,7 +43,8 @@ public class EmailAuthService {
     }
 
     private void verifyAlreadyAuthenticated(String username) {
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         if (member.isAuthenticated()) {
             throw new EmailAuthException.EmailAlreadyAuthenticatedException();
@@ -88,7 +90,8 @@ public class EmailAuthService {
 
         redisUtil.deleteData(username);
 
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         member.authenticate();
     }
 
