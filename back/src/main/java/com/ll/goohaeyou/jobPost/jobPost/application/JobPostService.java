@@ -13,7 +13,7 @@ import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
 import com.ll.goohaeyou.global.standard.base.util.Util;
-import com.ll.goohaeyou.image.application.S3ImageService;
+import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
@@ -52,7 +52,7 @@ public class JobPostService {
     private final JobPostDetailRepository jobPostdetailRepository;
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
-    private final S3ImageService s3ImageService;
+    private final ImageStorage imageStorage;
     private final CategoryRepository categoryRepository;
     private final JobPostCategoryRepository jobPostCategoryRepository;
     private final WageRepository wageRepository;
@@ -162,7 +162,7 @@ public class JobPostService {
 
         if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
             if (!jobPostImages.isEmpty()) {
-                s3ImageService.deletePostImagesFromS3(jobPostImages);
+                imageStorage.deletePostImagesFromS3(jobPostImages);
             }
 
             jobPostCategoryRepository.deleteAllByJobPost(post);

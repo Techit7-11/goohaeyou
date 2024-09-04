@@ -11,6 +11,7 @@ import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.notification.application.dto.NotificationDto;
 import com.ll.goohaeyou.notification.domain.Notification;
+import com.ll.goohaeyou.notification.domain.NotificationSender;
 import com.ll.goohaeyou.notification.domain.repository.NotificationRepository;
 import com.ll.goohaeyou.notification.domain.type.CauseTypeCode;
 import com.ll.goohaeyou.notification.domain.type.ResultTypeCode;
@@ -32,7 +33,7 @@ import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.*;
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final JobPostRepository jobPostRepository;
-    private final FCMService fcmService;
+    private final NotificationSender notificationSender;
     private final MemberRepository memberRepository;
     private final RoomRepository roomRepository;
 
@@ -138,7 +139,7 @@ public class NotificationService {
         log.info("알림 생성 완료");
     }
 
-    private void makeNotification(Member toMember, Member fromMember, String jobPostTitle,
+    private NotificationDto makeNotification(Member toMember, Member fromMember, String jobPostTitle,
                                   CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {
         Notification newNotification = Notification.create(
                 toMember,
@@ -152,8 +153,10 @@ public class NotificationService {
         notificationRepository.save(newNotification);
 
         if (toMember.getFCMToken() != null) {
-            fcmService.send(toMember.getFCMToken(), jobPostTitle, causeTypeCode);
+            notificationSender.send(toMember.getFCMToken(), jobPostTitle, causeTypeCode);
         }
+
+        return NotificationDto.from(newNotification);
     }
 
     public List<NotificationDto> getList(String username) {

@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.image.application;
+package com.ll.goohaeyou.jobPost.jobPost.infra;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
@@ -7,9 +7,10 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
-import com.ll.goohaeyou.image.exception.ImageException;
 import com.ll.goohaeyou.global.standard.base.util.MimeTypeUtil;
+import com.ll.goohaeyou.image.exception.ImageException;
+import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
+import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class S3ImageService {
+public class S3ImageService implements ImageStorage {
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucketName}")
@@ -39,6 +40,7 @@ public class S3ImageService {
 
     // 이미지 업로드 (S3에 저장된 이미지 객체의 public url 반환)
     @Transactional
+    @Override
     public String upload(MultipartFile image) {
         if (image == null || image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
             throw new ImageException.FileIsEmptyException();
@@ -106,6 +108,7 @@ public class S3ImageService {
 
     // AWS S3에서 이미지 삭제
     @Transactional
+    @Override
     public void deleteImageFromS3(String imageAddress) {
         String fileName = getFileNameFromImageAddress(imageAddress);   // 이미지 주소에서 파일명 추출
         try {
@@ -116,6 +119,7 @@ public class S3ImageService {
     }
 
     @Transactional
+    @Override
     public void deletePostImagesFromS3(List<JobPostImage> jobPostImages) {
         if (jobPostImages.isEmpty()) {
             throw new ImageException.PostImagesNotFoundException();

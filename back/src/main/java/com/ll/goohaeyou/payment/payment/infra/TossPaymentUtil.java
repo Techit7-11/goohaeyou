@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.global.standard.base.util;
+package com.ll.goohaeyou.payment.payment.infra;
 
 import com.ll.goohaeyou.global.config.TossPaymentsConfig;
 import lombok.RequiredArgsConstructor;

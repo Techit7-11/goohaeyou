@@ -2,7 +2,6 @@ package com.ll.goohaeyou.payment.payment.application;
 
 import com.ll.goohaeyou.global.config.TossPaymentsConfig;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.global.standard.base.util.TossPaymentUtil;
 import com.ll.goohaeyou.global.standard.retryOnOptimisticLock.RetryOnOptimisticLock;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
@@ -18,6 +17,7 @@ import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
+import com.ll.goohaeyou.payment.payment.infra.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;

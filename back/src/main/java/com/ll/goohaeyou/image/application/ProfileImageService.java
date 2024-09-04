@@ -2,6 +2,7 @@ package com.ll.goohaeyou.image.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.image.exception.ImageException;
+import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
@@ -14,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProfileImageService {
-    private final S3ImageService s3ImageService;
+    private final ImageStorage imageStorage;
     private final JobPostRepository jobPostRepository;
     private final MemberRepository memberRepository;
 
@@ -31,7 +32,7 @@ public class ProfileImageService {
             deleteProfileImage(username);   // S3에서 이미지 제거, DB에서 이미지 url 제거
         }
 
-        String imageUrl = s3ImageService.upload(profileImageFile);
+        String imageUrl = imageStorage.upload(profileImageFile);
         member.updateImageUrl(imageUrl);
     }
 
@@ -58,7 +59,7 @@ public class ProfileImageService {
             throw new ImageException.ProfileImageNotFoundException();
         }
 
-        s3ImageService.deleteImageFromS3(member.getProfileImageUrl());
+        imageStorage.deleteImageFromS3(member.getProfileImageUrl());
         member.updateImageUrl(null);
     }
 }

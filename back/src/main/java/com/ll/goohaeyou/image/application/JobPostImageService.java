@@ -3,6 +3,7 @@ package com.ll.goohaeyou.image.application;
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.image.exception.ImageException;
+import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
@@ -21,7 +22,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class JobPostImageService {
     private final JobPostRepository JobPostRepository;
-    private final S3ImageService s3ImageService;
+    private final ImageStorage imageStorage;
     private final JobPostImageRepository jobPostImageRepository;
     private final JobPostDetailRepository jobPostDetailRepository;
     private final JobPostRepository jobPostRepository;
@@ -49,7 +50,7 @@ public class JobPostImageService {
         boolean isMainNotSet = true;
 
         for (MultipartFile imageFile : jobPostImageFiles) {
-            String imageUrl = s3ImageService.upload(imageFile);
+            String imageUrl = imageStorage.upload(imageFile);
 
             JobPostImage newJobPostImage = JobPostImage.create(imageUrl, isMainNotSet, jobPostDetail);
 
@@ -89,7 +90,7 @@ public class JobPostImageService {
         }
 
         for (JobPostImage jobPostImage : jobPostImages) {
-            s3ImageService.deleteImageFromS3(jobPostImage.getJobPostImageUrl());
+            imageStorage.deleteImageFromS3(jobPostImage.getJobPostImageUrl());
         }
 
         jobPostImageRepository.deleteAll(jobPostImages);
