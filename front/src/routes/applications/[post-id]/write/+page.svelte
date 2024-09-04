@@ -34,7 +34,7 @@
 
 		const postId = parseInt($page.params.id);
 
-		const response = await rq.apiEndPoints().POST(`/api/applications/${postId}`, {
+		const response = await rq.apiEndPoints().POST(`/api/job-posts/${postId}/applications`, {
 			body: {
 				body: form.applicationBody.value.trim()
 			}
