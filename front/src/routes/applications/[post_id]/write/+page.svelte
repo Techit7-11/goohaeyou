@@ -18,13 +18,9 @@
 			);
 		}
 
-		const { data } = await rq.apiEndPoints().GET('/api/job-posts/{id}', {
-			params: {
-				path: {
-					id: parseInt($page.params.id)
-				}
-			}
-		});
+		const { data } = await rq
+			.apiEndPoints()
+			.GET(`/api/job-posts/${parseInt($page.params.post_id)}`);
 
 		return data!.data!;
 	}
@@ -32,7 +28,7 @@
 	async function writeApplications(this: HTMLFormElement) {
 		const form: HTMLFormElement = this;
 
-		const postId = parseInt($page.params.id);
+		const postId = parseInt($page.params.post_id);
 
 		const response = await rq.apiEndPoints().POST(`/api/job-posts/${postId}/applications`, {
 			body: {
