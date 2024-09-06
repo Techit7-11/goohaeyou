@@ -1,10 +1,13 @@
 package com.ll.goohaeyou.jobPost.comment.presentation;
 
+import com.ll.goohaeyou.global.standard.base.Empty;
 import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
-import com.ll.goohaeyou.jobPost.comment.application.dto.CommentForm;
 import com.ll.goohaeyou.jobPost.comment.application.CommentService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
+import com.ll.goohaeyou.jobPost.comment.application.dto.CreateCommentRequest;
+import com.ll.goohaeyou.jobPost.comment.application.dto.CreateCommentResponse;
+import com.ll.goohaeyou.jobPost.comment.application.dto.ModifyCommentRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -31,28 +34,28 @@ public class CommentController {
 
     @PostMapping("/comment")
     @Operation(summary = "댓글 작성")
-    public ApiResponse<CommentForm.Register> write (@AuthenticationPrincipal MemberDetails memberDetails,
-                                                    @PathVariable("postId") Long postId,
-                                                    @Valid @RequestBody CommentForm.Register form){
-        CommentForm.Register jobPostForm = commentService.writeComment(postId,memberDetails.getUsername(),form);
+    public ApiResponse<CreateCommentResponse> write (@AuthenticationPrincipal MemberDetails memberDetails,
+                                                     @PathVariable("postId") Long postId,
+                                                     @Valid @RequestBody CreateCommentRequest request){
+        CreateCommentResponse response = commentService.writeComment(postId,memberDetails.getUsername(), request);
 
-        return ApiResponse.ok(jobPostForm);
+        return ApiResponse.ok(response);
     }
 
     @PutMapping("/comment/{commentId}")
     @Operation(summary = "댓글 수정")
-    public ResponseEntity<Void> modify (@AuthenticationPrincipal MemberDetails memberDetails,
-                                        @PathVariable("postId") Long postId,
-                                        @PathVariable("commentId") Long commentId,
-                                        @Valid @RequestBody CommentForm.Register form) {
-        commentService.modifyComment(memberDetails.getUsername(), postId, commentId, form);
+    public ResponseEntity<Empty> modify (@AuthenticationPrincipal MemberDetails memberDetails,
+                                         @PathVariable("postId") Long postId,
+                                         @PathVariable("commentId") Long commentId,
+                                         @Valid @RequestBody ModifyCommentRequest request) {
+        commentService.modifyComment(memberDetails.getUsername(), postId, commentId, request);
 
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/comment/{commentId}")
     @Operation(summary = "댓글 삭제")
-    public ResponseEntity<Void> delete (@AuthenticationPrincipal MemberDetails memberDetails,
+    public ResponseEntity<Empty> delete (@AuthenticationPrincipal MemberDetails memberDetails,
                                         @PathVariable("postId") Long postId,
                                         @PathVariable("commentId") Long commentId) {
         commentService.deleteComment(memberDetails.getUsername(), postId, commentId);
