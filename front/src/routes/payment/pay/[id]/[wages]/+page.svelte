@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 
 	let tossPayments: TossPayments;
-	let applicationId: string = '';
+	let jobApplicationId: string = '';
 	let totalAmount: number = 0;
 	let orderName: string = '';
 
@@ -17,13 +17,13 @@
 
 		// URL 파싱하여 값 가져오기
 		const urlParams = window.location.pathname.split('/');
-		applicationId = urlParams[urlParams.length - 2] || '';
+		jobApplicationId = urlParams[urlParams.length - 2] || '';
 		totalAmount = parseInt(urlParams[urlParams.length - 1] || '0', 10);
 
-		orderName = `지원서_${applicationId}_급여_결제`;
+		orderName = `지원서_${jobApplicationId}_급여_결제`;
 
 		console.log(
-			`Application ID: ${applicationId}, Total Amount: ${totalAmount}, Order Name: ${orderName}`
+			`Application ID: ${jobApplicationId}, Total Amount: ${totalAmount}, Order Name: ${orderName}`
 		);
 	});
 
@@ -39,7 +39,7 @@
 		const body = {
 			payStatus: 'REQUEST',
 			amount: totalAmount,
-			applicationId,
+			jobApplicationId,
 			orderName
 		};
 

@@ -95,7 +95,7 @@ public class NotificationService {
     public void applicationCreatedAndChangedNotification(JobApplicationCreateAndChangedEvent event) {
         JobPost jobPost = event.getJobPostDetail().getJobPost();
         JobApplication jobApplication = event.getJobApplication();
-        String url = "/jobApplications/detail/" + jobApplication.getId();
+        String url = "/applications/detail/" + jobApplication.getId();
         makeNotification(jobPost.getMember(), jobApplication.getMember(), jobPost.getTitle(),
                 event.getCauseTypeCode(), NOTICE, url);
     }
@@ -112,7 +112,7 @@ public class NotificationService {
     public void calculateNotificationEventListen(JobApplication jobApplication) {
         JobPost jobPost = jobPostRepository.findById(jobApplication.getJobPostDetail().getId())
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
-        String url = "/jobApplications/detail/" + jobApplication.getId();
+        String url = "/applications/detail/" + jobApplication.getId();
 
         makeNotification(jobApplication.getMember(), jobPost.getMember(), jobPost.getTitle(),
                 CALCULATE_PAYMENT, NOTICE, url);
