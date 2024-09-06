@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.payment.payment.domain;
 
 import com.ll.goohaeyou.member.member.domain.Member;
-import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentReqDto;
-import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentResDto;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -51,13 +51,13 @@ public class Payment {
         this.jobApplicationId = jobApplicationId;
     }
 
-    public static Payment from(PaymentReqDto dto) {
+    public static Payment create(PaymentRequest request) {
         return new Payment(
-                dto.getAmount(),
-                dto.getPayStatus().getDescription(),
+                request.amount(),
+                request.payStatus().getDescription(),
                 UUID.randomUUID().toString(),
-                dto.getOrderName(),
-                dto.getJobApplicationId()
+                request.orderName(),
+                request.jobApplicationId()
         );
     }
 
@@ -86,10 +86,10 @@ public class Payment {
         this.cancelReason = cancelReason;
     }
 
-    public PaymentResDto toPaymentRespDto() {
+    public PaymentResponse toPaymentRespDto() {
         PayStatus payStatusEnum = PayStatus.findPayTypeByDescription(payStatus);
 
-        return PaymentResDto.builder()
+        return PaymentResponse.builder()
                 .payStatus(payStatusEnum)
                 .amount(totalAmount)
                 .orderId(orderId)

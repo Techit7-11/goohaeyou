@@ -9,9 +9,9 @@ import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.exception.MemberException;
-import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailDto;
-import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentReqDto;
-import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentResDto;
+import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessDto;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
@@ -37,29 +37,29 @@ public class PaymentService {
 
     @Transactional
     @RetryOnOptimisticLock(attempts = 2, backoff = 500L)
-    public PaymentResDto requestTossPayment(PaymentReqDto paymentReqDto, String username) {
-        Payment payment = createPaymentEntity(paymentReqDto, username);
+    public PaymentResponse requestTossPayment(PaymentRequest request, String username) {
+        Payment payment = createPaymentEntity(request, username);
 
         Payment savedPayment = paymentRepository.save(payment);
-        PaymentResDto paymentResDto = savedPayment.toPaymentRespDto();
-        setRedirectUrls(paymentResDto);
+        PaymentResponse response = savedPayment.toPaymentRespDto();
+        setRedirectUrls(response);
 
-        return paymentResDto;
+        return response;
     }
 
-    private Payment createPaymentEntity(PaymentReqDto paymentReqDto, String username) {
+    private Payment createPaymentEntity(PaymentRequest request, String username) {
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
-        Payment payment = Payment.from(paymentReqDto);
+        Payment payment = Payment.create(request);
         payment.updatePayer(member);
 
         return payment;
     }
 
-    private void setRedirectUrls(PaymentResDto paymentResDto) {
-        paymentResDto.setSuccessUrl(tossPaymentsConfig.getSuccessUrl());
-        paymentResDto.setFailUrl(tossPaymentsConfig.getFailUrl());
+    private void setRedirectUrls(PaymentResponse response) {
+        response.setSuccessUrl(tossPaymentsConfig.getSuccessUrl());
+        response.setFailUrl(tossPaymentsConfig.getFailUrl());
     }
 
     @Transactional
@@ -121,17 +121,13 @@ public class PaymentService {
     }
 
     @Transactional
-    public PaymentFailDto tossPaymentFail(String code, String message, String orderId) {
+    public PaymentFailResponse tossPaymentFail(String code, String message, String orderId) {
         handlePaymentFailure(orderId, message);
 
         Payment payment = findPaymentByOrderId(orderId);
         paymentRepository.delete(payment);
 
-        return PaymentFailDto.builder()
-                .errorCode(code)
-                .errorMessage(message)
-                .orderId(orderId)
-                .build();
+        return new PaymentFailResponse(code, message, orderId);
     }
 
     private void handlePaymentFailure(String orderId, String message) {

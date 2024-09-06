@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.payment.payment.application.dto.request;
+package com.ll.goohaeyou.payment.payment.application.dto;
 
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class PaymentResDto {
+public class PaymentResponse {
     @NotNull
     private PayStatus payStatus;
     @NotNull
