@@ -2,7 +2,7 @@ package com.ll.goohaeyou.jobPost.jobPost.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.Essential;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.EssentialRepository;
@@ -19,12 +19,12 @@ public class EssentialService {
     private final JobPostDetailRepository jobPostDetailRepository;
 
     @Transactional
-    public void create(JobPostDto jobPostDto, JobPostForm.Register form) {
+    public void create(JobPostDto jobPostDto, WriteJobPostRequest request) {
         JobPostDetail jobPostDetail = jobPostDetailRepository.findById(jobPostDto.getId())
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
-        Essential newEssential = Essential.create(form.getMinAge(),
-                form.getGender(), jobPostDetail);
+        Essential newEssential = Essential.create(request.minAge(),
+                request.gender(), jobPostDetail);
 
         essentialRepository.save(newEssential);
     }

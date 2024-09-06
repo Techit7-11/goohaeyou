@@ -2,7 +2,7 @@ package com.ll.goohaeyou.jobPost.jobPost.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.Wage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
@@ -19,12 +19,12 @@ public class WageService {
     private final JobPostDetailRepository jobPostDetailRepository;
 
     @Transactional
-    public void create(JobPostDto jobPostDto, JobPostForm.Register form) {
+    public void create(JobPostDto jobPostDto, WriteJobPostRequest request) {
         JobPostDetail jobPostDetail = jobPostDetailRepository.findById(jobPostDto.getId())
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
-        Wage newWage = Wage.create(form.getCost(), form.getWorkTime(), form.getWorkDays(), form.getPayBasis(),
-                form.getWagePaymentMethod(), jobPostDetail);
+        Wage newWage = Wage.create(request.cost(), request.workTime(), request.workDays(), request.payBasis(),
+                request.wagePaymentMethod(), jobPostDetail);
 
         wageRepository.save(newWage);
     }

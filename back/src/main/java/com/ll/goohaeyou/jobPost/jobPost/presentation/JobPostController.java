@@ -5,7 +5,8 @@ import com.ll.goohaeyou.jobPost.jobPost.application.EssentialService;
 import com.ll.goohaeyou.jobPost.jobPost.application.WageService;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.ModifyJobPostRequest;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
@@ -46,12 +47,12 @@ public class JobPostController {
     @PostMapping
     @Operation(summary = "구인공고 작성")
     public ApiResponse<Empty> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                       @Valid @RequestBody JobPostForm.Register form) {
-        JobPostDto jobPostDto = jobPostService.writePost(memberDetails.getUsername(), form);
-        jobPostCategoryService.create(jobPostDto, form.getCategoryId());
+                                                       @Valid @RequestBody WriteJobPostRequest request) {
+        JobPostDto jobPostDto = jobPostService.writePost(memberDetails.getUsername(), request);
+        jobPostCategoryService.create(jobPostDto, request.categoryId());
 
-        wageService.create(jobPostDto, form);
-        essentialService.create(jobPostDto, form);
+        wageService.create(jobPostDto, request);
+        essentialService.create(jobPostDto, request);
 
         return ApiResponse.created();
     }
@@ -59,9 +60,9 @@ public class JobPostController {
     @Operation(summary = "구인공고 수정")
     public ApiResponse<Empty> modifyPost(@AuthenticationPrincipal MemberDetails memberDetails,
                                                       @PathVariable(name = "id") Long id,
-                                                      @Valid @RequestBody JobPostForm.Modify form) {
+                                                      @Valid @RequestBody ModifyJobPostRequest request) {
 
-        jobPostService.modifyPost(memberDetails.getUsername(), id, form);
+        jobPostService.modifyPost(memberDetails.getUsername(), id, request);
 
         return ApiResponse.noContent();
     }

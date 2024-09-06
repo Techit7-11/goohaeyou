@@ -17,7 +17,8 @@ import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.ModifyJobPostRequest;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.*;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.*;
 import com.ll.goohaeyou.member.member.domain.Member;
@@ -59,11 +60,11 @@ public class JobPostService {
     private final EssentialRepository essentialRepository;
 
     @Transactional
-    public JobPostDto writePost(String username, JobPostForm.Register form) {
-        int regionCode = Util.Region.getRegionCodeFromAddress(form.getLocation());
+    public JobPostDto writePost(String username, WriteJobPostRequest request) {
+        int regionCode = Util.Region.getRegionCodeFromAddress(request.location());
 
-        JobPost newPost = createAndSaveJobPost(username, form, regionCode);
-        createAndSaveJobPostDetail(newPost, username, form);
+        JobPost newPost = createAndSaveJobPost(username, request, regionCode);
+        createAndSaveJobPostDetail(newPost, username, request);
 
         return JobPostDto.from(newPost);
     }
@@ -79,47 +80,47 @@ public class JobPostService {
         return JobPostDto.convertToDtoList(jobPostRepository.findAll());
     }
 
-    private JobPost createAndSaveJobPost(String username, JobPostForm.Register form, int regionCode) {
+    private JobPost createAndSaveJobPost(String username, WriteJobPostRequest request, int regionCode) {
         JobPost newPost = JobPost.create(
                 memberRepository.findByUsername(username)
                         .orElseThrow(EntityNotFoundException.MemberNotFoundException::new),
-                form.getTitle(), form.getLocation(),
-                form.getDeadLine(), form.getJobStartDate(), regionCode);
+                request.title(), request.location(),
+                request.deadLine(), request.jobStartDate(), regionCode);
 
         return jobPostRepository.save(newPost);
     }
 
-    private void createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
-        JobPostDetail newPostDetail = JobPostDetail.create(newPost, username, form.getBody());
+    private void createAndSaveJobPostDetail(JobPost newPost, String username, WriteJobPostRequest request) {
+        JobPostDetail newPostDetail = JobPostDetail.create(newPost, username, request.body());
 
         jobPostdetailRepository.save(newPostDetail);
     }
 
     @Transactional
-    public void modifyPost(String username, Long id, JobPostForm.Modify form) {
+    public void modifyPost(String username, Long id, ModifyJobPostRequest request) {
         JobPostDetail postDetail = jobPostdetailRepository.findById(id)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         JobPost jobPost = postDetail.getJobPost();
 
         validateModificationPermission(username, jobPost);
 
-        int newRegionCode = Util.Region.getRegionCodeFromAddress(form.getLocation());
+        int newRegionCode = Util.Region.getRegionCodeFromAddress(request.location());
 
         JobPostCategory existingTaskJobPostCategory = jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, CategoryType.TASK);
         JobPostCategory existingRegionJobPostCategory = jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, CategoryType.REGION);
 
-        Category newTaskCategory = categoryRepository.findById(form.getCategoryId())
+        Category newTaskCategory = categoryRepository.findById(request.categoryId())
                 .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
         Category newRegionCategory = categoryRepository.findByName(RegionType.getNameByCode(newRegionCode))
                 .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
-        jobPost.update(form.getTitle(), form.getDeadLine(), form.getJobStartDate(), form.getLocation(), newRegionCode);
+        jobPost.update(request.title(), request.deadLine(), request.jobStartDate(), request.location(), newRegionCode);
 
         existingTaskJobPostCategory.updateCategory(newTaskCategory);
         existingRegionJobPostCategory.updateCategory(newRegionCategory);
 
-        updateJobPostDetails(postDetail, form);
-        updateApplications(postDetail, form);
+        updateJobPostDetails(postDetail, request);
+        updateApplications(postDetail, request);
     }
 
     private void validateModificationPermission(String username, JobPost jobPost) {
@@ -128,19 +129,19 @@ public class JobPostService {
         }
     }
 
-    private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form) {
+    private void updateJobPostDetails(JobPostDetail jobPostDetail, ModifyJobPostRequest request) {
         Wage existingWage = wageRepository.findByJobPostDetail(jobPostDetail);
         Essential existingEssential = essentialRepository.findByJobPostDetail(jobPostDetail);
 
-        jobPostDetail.updatePostDetail(form.getBody());
-        existingWage.updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
-        existingEssential.update(form.getMinAge(), form.getGender());
+        jobPostDetail.updatePostDetail(request.body());
+        existingWage.updateWageInfo(request.cost(), request.payBasis(), request.workTime(), request.workDays());
+        existingEssential.update(request.minAge(), request.gender());
     }
 
-    private void updateApplications(JobPostDetail postDetail, JobPostForm.Modify form) {
+    private void updateApplications(JobPostDetail postDetail, ModifyJobPostRequest request) {
         List<JobApplication> applicationsToRemove = new ArrayList<>();
         for (JobApplication jobApplication : postDetail.getJobApplications()) {
-            if (form.getMinAge() > LocalDateTime.now().plusYears(1).getYear() - jobApplication.getMember().getBirth().getYear()) {
+            if (request.minAge() > LocalDateTime.now().plusYears(1).getYear() - jobApplication.getMember().getBirth().getYear()) {
                 applicationsToRemove.add(jobApplication);
                 publisher.publishEvent(new ChangeOfPostEvent(this, postDetail.getJobPost(), jobApplication, POST_MODIFICATION, DELETE));
             } else {
