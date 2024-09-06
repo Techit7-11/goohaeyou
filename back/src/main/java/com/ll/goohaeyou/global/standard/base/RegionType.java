@@ -1,6 +1,7 @@
 package com.ll.goohaeyou.global.standard.base;
 
 import com.ll.goohaeyou.category.exception.CategoryException;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -34,7 +35,7 @@ public enum RegionType {
                 return region.getCode();
             }
         }
-        throw new CategoryException.NotFoundCategoryException();
+        throw new EntityNotFoundException.NotFoundCategoryException();
     }
 
     public static String getNameByCode(int code) {
@@ -43,6 +44,6 @@ public enum RegionType {
                 return region.getName();
             }
         }
-        throw new CategoryException.NotFoundCategoryException();
+        throw new EntityNotFoundException.NotFoundCategoryException();
     }
 }

@@ -1,5 +1,6 @@
 package com.ll.goohaeyou.payment.payment.presentation;
 
+import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentDto;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResDto;
 import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailDto;
@@ -26,6 +27,7 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final PaymentCancelService paymentCancelService;
     private final PaymentInfoService paymentInfoService;
+    private final CashLogService cashLogService;
 
     @PostMapping()
     @Operation(summary = "결제 요청")
@@ -42,8 +44,10 @@ public class PaymentController {
     public ApiResponse<PaymentSuccessDto> tossPaymentSuccess(@RequestParam String paymentKey,
                                                              @RequestParam String orderId,
                                                              @RequestParam Long amount) {
+        PaymentSuccessDto dto = paymentService.tossPaymentSuccess(paymentKey, orderId, amount);
+        cashLogService.createCashLogOnPaid(dto);
 
-        return ApiResponse.ok(paymentService.tossPaymentSuccess(paymentKey, orderId, amount));
+        return ApiResponse.ok(dto);
     }
 
     @GetMapping("/fail")
@@ -62,6 +66,7 @@ public class PaymentController {
                                                               @RequestParam String cancelReason) {
 
         PaymentCancelResDto resDto = paymentCancelService.tossPaymentCancel(memberDetails.getUsername(), paymentKey, cancelReason);
+        cashLogService.createCashLogOnCancel(paymentKey);
 
         return ApiResponse.ok(resDto);
     }

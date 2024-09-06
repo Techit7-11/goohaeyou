@@ -1,21 +1,27 @@
-package com.ll.goohaeyou.notification.application;
+package com.ll.goohaeyou.notification.infra;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;
 import com.google.firebase.messaging.WebpushNotification;
+import com.ll.goohaeyou.notification.domain.NotificationSender;
 import com.ll.goohaeyou.notification.domain.type.CauseTypeCode;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
 
 @Service
-public class FCMService {
+public class FCMService implements NotificationSender {
+
+    private static final String NOTIFICATION_TITLE = "GooHaeYou";
+    private static final String TTL_HEADER = "300";
+
+    @Override
     public void send(String token, String postTitle, CauseTypeCode causeTypeCode) {
         Message message = Message.builder()
                 .setToken(token)
-                .setWebpushConfig(WebpushConfig.builder().putHeader("ttl", "300")
-                        .setNotification(new WebpushNotification("GooHaeYou",
+                .setWebpushConfig(WebpushConfig.builder().putHeader("ttl", TTL_HEADER)
+                        .setNotification(new WebpushNotification(NOTIFICATION_TITLE,
                                 "\""+postTitle+"\""+getContent(causeTypeCode)))
                         .build())
                 .build();

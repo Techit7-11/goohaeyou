@@ -2,7 +2,7 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { onMount } from 'svelte';
 
-	let applicationId: string = '';
+	let jobApplicationId: string = '';
 	let paymentDto: PaymentDto | null = null;
 
 	interface PaymentDto {
@@ -11,16 +11,16 @@
 		orderName: string;
 		paid: boolean;
 		canceled: boolean;
-		applicationId: number;
+		jobApplicationId: number;
 		payStatus: string;
 	}
 
 	onMount(async () => {
-		// 현재 URL에서 applicationId 파싱
+		// 현재 URL에서 jobApplicationId 파싱
 		const urlParams = window.location.pathname.split('/');
-		applicationId = urlParams[urlParams.length - 1];
+		jobApplicationId = urlParams[urlParams.length - 1];
 
-		const response = await rq.apiEndPoints().GET(`/api/payments/${applicationId}`);
+		const response = await rq.apiEndPoints().GET(`/api/payments/${jobApplicationId}`);
 
 		if (response.data?.resultType === 'SUCCESS') {
 			paymentDto = response.data?.data;
@@ -28,10 +28,14 @@
 			rq.msgAndRedirect(
 				response.data?.data.message,
 				undefined,
-				'/applications/detail/' + applicationId
+				'/applications/detail/' + jobApplicationId
 			);
 		} else {
-			rq.msgAndRedirect('오류가 발생했습니다.', undefined, '/applications/detail/' + applicationId);
+			rq.msgAndRedirect(
+				'오류가 발생했습니다.',
+				undefined,
+				'/applications/detail/' + jobApplicationId
+			);
 		}
 	});
 
@@ -47,7 +51,7 @@
 
 		if (response.data?.resultType === 'SUCCESS') {
 			rq.msgInfo('결제가 취소되었습니다.');
-			rq.goTo('/applications/detail/' + applicationId);
+			rq.goTo('/applications/detail/' + jobApplicationId);
 		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
 			rq.msgError(response.data?.message);
 		} else {

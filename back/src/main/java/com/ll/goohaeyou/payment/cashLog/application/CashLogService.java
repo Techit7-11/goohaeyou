@@ -1,12 +1,13 @@
 package com.ll.goohaeyou.payment.cashLog.application;
 
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.payment.cashLog.domain.CashLog;
 import com.ll.goohaeyou.payment.cashLog.domain.repository.CashLogRepository;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessDto;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
+import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
-import com.ll.goohaeyou.jobPost.jobPost.exception.JobPostException;
 import com.ll.goohaeyou.payment.payment.domain.type.PayTypeFee;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,11 @@ import java.util.Arrays;
 @Transactional(readOnly = true)
 public class CashLogService {
     private final CashLogRepository cashLogRepository;
+    private final PaymentRepository paymentRepository;
 
     public CashLog findByApplicationIdAndValidate(Long id) {
         return cashLogRepository.findByJobApplicationId(id)
-                .orElseThrow(JobPostException.PostNotExistsException::new);
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
     }
 
     private void addCashLog(CashLog cashLog) {
@@ -47,8 +49,10 @@ public class CashLogService {
     }
 
     @Transactional
-    public void createCashLogOnPaid(PaymentSuccessDto successDto, Payment payment) {
+    public void createCashLogOnPaid(PaymentSuccessDto successDto) {
         PayStatus payStatus = PayStatus.findByMethod(successDto.getMethod());
+        Payment payment = paymentRepository.findByPaymentKey(successDto.getPaymentKey())
+                .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
 
         CashLog newCashLog = CashLog.createOnPaymentSuccess(
                 successDto.getTotalAmount(),
@@ -63,7 +67,10 @@ public class CashLogService {
     }
 
     @Transactional
-    public void createCashLogOnCancel(Payment payment) {
+    public void createCashLogOnCancel(String paymentKey) {
+        Payment payment = paymentRepository.findByPaymentKey(paymentKey)
+                .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
+
         CashLog newCashLog = CashLog.createOnCancel(
                 payment.getTotalAmount(),
                 payment.getMember(),

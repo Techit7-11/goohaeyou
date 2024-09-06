@@ -1,5 +1,6 @@
 package com.ll.goohaeyou.jobPost.jobPost.domain;
 
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;

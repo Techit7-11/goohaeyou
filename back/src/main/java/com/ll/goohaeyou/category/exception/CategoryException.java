@@ -18,11 +18,4 @@ public class CategoryException extends GoohaeyouException {
             super(INVALID_CATEGORY_FORMAT);
         }
     }
-
-    public static class NotFoundCategoryException extends CategoryException {
-
-        public NotFoundCategoryException() {
-            super(NOT_FOUND_CATEGORY);
-        }
-    }
 }

@@ -47,4 +47,5 @@ public class JobPostCategory {
     public void updateCategory(Category category) {
         this.category = category;
     }
+
 }

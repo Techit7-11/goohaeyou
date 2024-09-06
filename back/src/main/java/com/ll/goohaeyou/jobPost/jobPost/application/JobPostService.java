@@ -1,32 +1,28 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.category.domain.Category;
+import com.ll.goohaeyou.category.domain.JobPostCategory;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
-import com.ll.goohaeyou.category.application.CategoryService;
-import com.ll.goohaeyou.category.application.JobPostCategoryService;
+import com.ll.goohaeyou.category.domain.type.CategoryType;
+import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
+import com.ll.goohaeyou.global.event.notification.PostDeadlineEvent;
+import com.ll.goohaeyou.global.event.notification.PostDeletedEvent;
+import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.global.standard.base.RegionType;
 import com.ll.goohaeyou.global.standard.base.util.Util;
-import com.ll.goohaeyou.image.application.S3ImageService;
+import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
+import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostForm;
+import com.ll.goohaeyou.jobPost.jobPost.domain.*;
+import com.ll.goohaeyou.jobPost.jobPost.domain.repository.*;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;
-import com.ll.goohaeyou.member.member.application.MemberService;
-import com.ll.goohaeyou.global.event.notification.*;
-import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.category.exception.CategoryException;
-import com.ll.goohaeyou.jobPost.jobPost.exception.JobPostException;
-import com.ll.goohaeyou.member.member.exception.MemberException;
-import com.ll.goohaeyou.global.standard.base.RegionType;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
@@ -54,37 +50,27 @@ import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.NOTICE;
 public class JobPostService {
     private final JobPostRepository jobPostRepository;
     private final JobPostDetailRepository jobPostdetailRepository;
-    private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
-    private final S3ImageService s3ImageService;
+    private final ImageStorage imageStorage;
     private final CategoryRepository categoryRepository;
     private final JobPostCategoryRepository jobPostCategoryRepository;
-    private final JobPostCategoryService jobPostCategoryService;
-    private final CategoryService categoryService;
-    private final EssentialService essentialService;
-    private final WageService wageService;
+    private final WageRepository wageRepository;
+    private final EssentialRepository essentialRepository;
 
     @Transactional
-    public void writePost(String username, JobPostForm.Register form) {
+    public JobPostDto writePost(String username, JobPostForm.Register form) {
         int regionCode = Util.Region.getRegionCodeFromAddress(form.getLocation());
-        Category taskCategory = categoryService.getCategoryById(form.getCategoryId());
-        Category regionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(regionCode));
 
         JobPost newPost = createAndSaveJobPost(username, form, regionCode);
+        createAndSaveJobPostDetail(newPost, username, form);
 
-        jobPostCategoryService.createAndSaveJobPostCategory(newPost, taskCategory);
-        jobPostCategoryService.createAndSaveJobPostCategory(newPost, regionCategory);
-
-        JobPostDetail postDetail = createAndSaveJobPostDetail(newPost, username, form);
-
-        essentialService.createAndSaveEssential(postDetail, form);
-
-        wageService.createAndSaveWage(postDetail, form);
+        return JobPostDto.from(newPost);
     }
 
     public JobPostDetailDto findById(Long id) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+        JobPostDetail postDetail = jobPostdetailRepository.findById(id)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
         return JobPostDetailDto.from(postDetail.getJobPost(), postDetail, postDetail.getEssential(), postDetail.getWage());
     }
@@ -94,33 +80,45 @@ public class JobPostService {
     }
 
     private JobPost createAndSaveJobPost(String username, JobPostForm.Register form, int regionCode) {
-        JobPost newPost = JobPost.create(memberService.getMember(username), form.getTitle(), form.getLocation(),
+        JobPost newPost = JobPost.create(
+                memberRepository.findByUsername(username)
+                        .orElseThrow(EntityNotFoundException.MemberNotFoundException::new),
+                form.getTitle(), form.getLocation(),
                 form.getDeadLine(), form.getJobStartDate(), regionCode);
 
         return jobPostRepository.save(newPost);
     }
 
-    private JobPostDetail createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
+    private void createAndSaveJobPostDetail(JobPost newPost, String username, JobPostForm.Register form) {
         JobPostDetail newPostDetail = JobPostDetail.create(newPost, username, form.getBody());
 
-        return jobPostdetailRepository.save(newPostDetail);
+        jobPostdetailRepository.save(newPostDetail);
     }
 
     @Transactional
     public void modifyPost(String username, Long id, JobPostForm.Modify form) {
-        JobPostDetail postDetail = findByJobPostAndNameAndValidate(id);
+        JobPostDetail postDetail = jobPostdetailRepository.findById(id)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         JobPost jobPost = postDetail.getJobPost();
 
         validateModificationPermission(username, jobPost);
 
         int newRegionCode = Util.Region.getRegionCodeFromAddress(form.getLocation());
 
-        Category newTaskCategory = categoryService.getCategoryById(form.getCategoryId());
-        Category newRegionCategory = categoryService.getCategoryByName(RegionType.getNameByCode(newRegionCode));
+        JobPostCategory existingTaskJobPostCategory = jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, CategoryType.TASK);
+        JobPostCategory existingRegionJobPostCategory = jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, CategoryType.REGION);
+
+        Category newTaskCategory = categoryRepository.findById(form.getCategoryId())
+                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
+        Category newRegionCategory = categoryRepository.findByName(RegionType.getNameByCode(newRegionCode))
+                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
         jobPost.update(form.getTitle(), form.getDeadLine(), form.getJobStartDate(), form.getLocation(), newRegionCode);
-        jobPostCategoryService.updateJobPostCategories(jobPost, newTaskCategory, newRegionCategory);
-        updateJobPostDetails(postDetail, form, newRegionCode);
+
+        existingTaskJobPostCategory.updateCategory(newTaskCategory);
+        existingRegionJobPostCategory.updateCategory(newRegionCategory);
+
+        updateJobPostDetails(postDetail, form);
         updateApplications(postDetail, form);
     }
 
@@ -130,10 +128,13 @@ public class JobPostService {
         }
     }
 
-    private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form, int newRegionCode) {
+    private void updateJobPostDetails(JobPostDetail jobPostDetail, JobPostForm.Modify form) {
+        Wage existingWage = wageRepository.findByJobPostDetail(jobPostDetail);
+        Essential existingEssential = essentialRepository.findByJobPostDetail(jobPostDetail);
+
         jobPostDetail.updatePostDetail(form.getBody());
-        essentialService.updateEssential(jobPostDetail.getEssential(), form);
-        wageService.updateWage(jobPostDetail.getWage(), form);
+        existingWage.updateWageInfo(form.getCost(), form.getPayBasis(), form.getWorkTime(), form.getWorkDays());
+        existingEssential.update(form.getMinAge(), form.getGender());
     }
 
     private void updateApplications(JobPostDetail postDetail, JobPostForm.Modify form) {
@@ -154,13 +155,14 @@ public class JobPostService {
     public void deleteJobPost(String username, Long postId) {
         JobPost post = findByIdAndValidate(postId);
         List<JobPostImage> jobPostImages = post.getJobPostDetail().getJobPostImages();
-        Member member = findUserByUserNameValidate(username);
+        Member member = memberRepository.findByUsername(username)
+                        .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         publisher.publishEvent(new PostDeletedEvent(this, post, member, DELETE));
 
         if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
             if (!jobPostImages.isEmpty()) {
-                s3ImageService.deletePostImagesFromS3(jobPostImages);
+                imageStorage.deletePostImagesFromS3(jobPostImages);
             }
 
             jobPostCategoryRepository.deleteAllByJobPost(post);
@@ -170,31 +172,19 @@ public class JobPostService {
         }
     }
 
-    private Member findUserByUserNameValidate(String username) {
-        return memberRepository.findByUsername(username)
-                .orElseThrow(MemberException.MemberNotFoundException::new);
-    }
-
-
     public boolean canEditPost(String username, String author) {
         return username.equals(author);
     }
 
     public JobPost findByIdAndValidate(Long id) {
         return jobPostRepository.findById(id)
-                .orElseThrow(JobPostException.PostNotExistsException::new);
-    }
-
-    public JobPostDetail findByJobPostAndNameAndValidate(Long postId) {
-        JobPost post = findByIdAndValidate(postId);
-
-        return jobPostdetailRepository.findByJobPostAndAuthor(post, post.getMember().getUsername())
-                .orElseThrow(JobPostException.PostNotExistsException::new);
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
     }
 
     public List<JobPostDto> findByUsername(String username) {
 
-        Member member = memberService.getMember(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         return JobPostDto.convertToDtoList(jobPostRepository.findByMemberId(member.getId()));
     }
@@ -220,7 +210,7 @@ public class JobPostService {
     @Transactional
     public void increaseViewCount(Long jobPostId) {
         JobPost jobPost = jobPostRepository.findById(jobPostId)
-                .orElseThrow(JobPostException.PostNotExistsException::new);
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
         jobPost.increaseViewCount();
     }
@@ -305,7 +295,7 @@ public class JobPostService {
     @Cacheable(value = "jobPostsByCategory", key = "#categoryName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
     public Page<JobPostDto> getPostsByCategory(String categoryName, Pageable pageable) {
         Category category = categoryRepository.findByName(categoryName)
-                .orElseThrow(CategoryException.NotFoundCategoryException::new);
+                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
         Page<JobPost> jobPosts = jobPostCategoryRepository.findJobPostsByCategoryId(category.getId(), pageable);
 

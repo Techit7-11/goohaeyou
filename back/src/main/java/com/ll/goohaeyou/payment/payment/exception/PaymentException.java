@@ -11,13 +11,6 @@ public class PaymentException extends GoohaeyouException {
         super(e);
     }
 
-    public static class PaymentNotFoundException extends PaymentException {
-
-        public PaymentNotFoundException() {
-            super(PAYMENT_NOT_FOUND);
-        }
-    }
-
     public static class PaymentAmountMismatchException extends PaymentException {
 
         public PaymentAmountMismatchException() {

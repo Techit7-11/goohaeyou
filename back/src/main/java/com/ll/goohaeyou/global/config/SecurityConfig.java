@@ -8,6 +8,7 @@ import com.ll.goohaeyou.auth.application.JwtTokenProvider;
 import com.ll.goohaeyou.auth.infrastructure.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.ll.goohaeyou.auth.application.OAuth2SuccessHandler;
 import com.ll.goohaeyou.auth.application.OAuth2UserCustomService;
+import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +30,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService customUserDetailsService;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final OAuth2UserCustomService oAuth2UserCustomService;
 
@@ -91,7 +92,7 @@ public class SecurityConfig {
         return new OAuth2SuccessHandler(jwtTokenProvider,
                 refreshTokenRepository,
                 oAuth2AuthorizationRequestBasedOnCookieRepository(),
-                memberService
+                memberRepository
         );
     }
 

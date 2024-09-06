@@ -3,7 +3,7 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { page } from '$app/stores';
 
-	let applicationId = parseInt($page.params.id);
+	let jobApplicationId = parseInt($page.params.id);
 	let newReviewData = {
 		score: 5,
 		body: ''
@@ -28,10 +28,16 @@
 		try {
 			const response = await rq
 				.apiEndPoints()
-				.POST(`/api/member/review/${applicationId}`, { body: newReviewData });
+				.POST(`/api/member/review/${jobApplicationId}`, { body: newReviewData });
 
 			if (response.data?.resultType === 'SUCCESS') {
-				rq.msgAndRedirect({ msg: '리뷰 작성 완료' }, undefined, '/');
+				rq.msgAndRedirect(
+					{ msg: '리뷰 작성 완료' },
+					undefined,
+					`/applications/detail/${jobApplicationId}`
+				);
+			} else if (response.data?.resultType === 'VALIDATION_EXCEPTION') {
+				rq.msgError(response.data?.message);
 			} else {
 				rq.msgError(response.data?.message || '리뷰 작성 중 오류가 발생했습니다.');
 			}

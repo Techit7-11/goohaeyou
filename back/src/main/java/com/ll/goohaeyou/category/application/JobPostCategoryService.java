@@ -1,10 +1,15 @@
 package com.ll.goohaeyou.category.application;
 
 import com.ll.goohaeyou.category.domain.Category;
+import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
-import com.ll.goohaeyou.category.domain.type.CategoryType;
 import com.ll.goohaeyou.category.domain.JobPostCategory;
+import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.global.standard.base.RegionType;
+import com.ll.goohaeyou.global.standard.base.util.Util;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,22 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class JobPostCategoryService {
     private final JobPostCategoryRepository jobPostCategoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final JobPostRepository jobPostRepository;
 
-    public JobPostCategory findByJobPostAndCategoryType(JobPost jobPost, CategoryType categoryType) {
-        return jobPostCategoryRepository.findByJobPostAndCategory_Type(jobPost, categoryType);
-    }
+    public void create(JobPostDto jobPostDto, Long categoryId) {
+        int regionCode = Util.Region.getRegionCodeFromAddress(jobPostDto.getLocation());
+        JobPost jobPost = jobPostRepository.findById(jobPostDto.getId())
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
-    public void createAndSaveJobPostCategory(JobPost jobPost, Category category) {
-        JobPostCategory newJobPostCategory = JobPostCategory.create(category, jobPost);
+        Category taskCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
+        Category regionCategory = categoryRepository.findByName(RegionType.getNameByCode(regionCode))
+                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
-        jobPostCategoryRepository.save(newJobPostCategory);
-    }
+        JobPostCategory newJobPostCategory1 = JobPostCategory.create(regionCategory, jobPost);
+        JobPostCategory newJobPostCategory2 = JobPostCategory.create(taskCategory, jobPost);
 
-    public void updateJobPostCategories(JobPost jobPost, Category newTaskCategory, Category newRegionCategory) {
-        JobPostCategory taskJobPostCategory = findByJobPostAndCategoryType(jobPost, CategoryType.TASK);
-        JobPostCategory regionJobPostCategory = findByJobPostAndCategoryType(jobPost, CategoryType.REGION);
-
-        taskJobPostCategory.updateCategory(newTaskCategory);
-        regionJobPostCategory.updateCategory(newRegionCategory);
+        jobPostCategoryRepository.save(newJobPostCategory1);
+        jobPostCategoryRepository.save(newJobPostCategory2);
     }
 }

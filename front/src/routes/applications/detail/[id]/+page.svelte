@@ -211,7 +211,7 @@
 
 			{#if application.jobPostAuthorUsername == rq.member.username && application.approve == true}
 				<div class="flex justify-center">
-					{#if application.wageStatus != '급여 결제 전'}
+					{#if application.wageStatus == '급여 결제 전'}
 						<button
 							class="btn btn-btn btn-sm mx-12 mt-6"
 							on:click={() => goToPaymentPage(application.wages)}>급여 결제하기</button
@@ -227,7 +227,7 @@
 					{/if}
 				</div>
 			{/if}
-			{#if application.wageStatus == '급여 결제 완료'}
+			{#if application.wageStatus == '급여 정산 신청' || application.wageStatus == '급여 지급 완료'}
 				<div class="text-center mt-4">
 					<button class="btn btn-sm" on:click={goToReviewPage}>리뷰 작성하기</button>
 				</div>

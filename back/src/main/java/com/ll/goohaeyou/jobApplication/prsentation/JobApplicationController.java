@@ -14,43 +14,42 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/applications")
 @RequiredArgsConstructor
 @Tag(name = "JobApplication", description = "지원서 API")
 public class JobApplicationController {
     private final JobApplicationService jobApplicationService;
 
-    @PostMapping("/{id}")
+    @PostMapping("/api/job-posts/{postId}/applications")
     @Operation(summary = "지원서 작성")
     public ApiResponse<Empty> writeJobApplication(@AuthenticationPrincipal MemberDetails memberDetails,
-                                               @PathVariable(name = "id") Long id,
-                                               @Valid @RequestBody JobApplicationForm.Register form) {
-        jobApplicationService.writeApplication(memberDetails.getUsername(), id, form);
+                                                  @PathVariable(name = "postId") Long jobPostId,
+                                                  @Valid @RequestBody JobApplicationForm.Register form) {
+        jobApplicationService.writeApplication(memberDetails.getUsername(), jobPostId, form);
 
         return ApiResponse.created();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/applications/{id}")
     @Operation(summary = "지원서 상세 내용")
     public ApiResponse<JobApplicationDto> detailJobApplication(@PathVariable(name = "id") Long id) {
 
         return ApiResponse.ok(jobApplicationService.findById(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/applications/{id}")
     @Operation(summary = "지원서 수정")
     public ApiResponse<Empty> modifyJobApplication(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                @PathVariable(name = "id") Long id,
-                                                @Valid @RequestBody JobApplicationForm.Modify form) {
+                                                   @PathVariable(name = "id") Long id,
+                                                   @Valid @RequestBody JobApplicationForm.Modify form) {
         jobApplicationService.modifyJobApplication(memberDetails.getUsername(), id, form);
 
         return ApiResponse.noContent();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/applications/{id}")
     @Operation(summary = "지원서 삭제")
     public ApiResponse<Empty> deleteJobApplication(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                @PathVariable(name = "id") Long id) {
+                                                   @PathVariable(name = "id") Long id) {
         jobApplicationService.deleteJobApplication(memberDetails.getUsername(), id);
 
         return ApiResponse.noContent();
