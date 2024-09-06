@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.member.member.presentation;
 
 import com.ll.goohaeyou.global.standard.base.Empty;
-import com.ll.goohaeyou.member.member.application.dto.JoinForm;
-import com.ll.goohaeyou.member.member.application.dto.LoginForm;
+import com.ll.goohaeyou.member.member.application.dto.JoinRequest;
+import com.ll.goohaeyou.member.member.application.dto.LoginRequest;
 import com.ll.goohaeyou.member.member.application.dto.MemberDto;
 import com.ll.goohaeyou.member.member.application.dto.SocialProfileForm;
 import com.ll.goohaeyou.auth.application.AuthenticationService;
@@ -36,17 +36,17 @@ public class MemberController {
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
-    public ApiResponse<Empty> join(@RequestBody @Valid JoinForm form) {
-        memberService.join(form);
+    public ApiResponse<Empty> join(@RequestBody @Valid JoinRequest request) {
+        memberService.join(request);
         return ApiResponse.created();
     }
 
     @PostMapping ("/login")
     @Operation(summary = "로그인, accessToken, refreshToken 쿠키 생성됨")
-    public ApiResponse<MemberDto> login(@RequestBody @Valid LoginForm form,
+    public ApiResponse<MemberDto> login(@RequestBody @Valid LoginRequest loginRequest,
                                         HttpServletRequest request, HttpServletResponse response) {
-        memberService.login(form);
-        MemberDto memberDto = authenticationService.authenticateAndSetTokens(form.getUsername(), request, response);
+        memberService.login(loginRequest);
+        MemberDto memberDto = authenticationService.authenticateAndSetTokens(loginRequest.username(), request, response);
         return ApiResponse.ok(memberDto);
     }
 
