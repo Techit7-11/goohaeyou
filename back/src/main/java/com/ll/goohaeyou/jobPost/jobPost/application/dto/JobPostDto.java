@@ -2,19 +2,43 @@ package com.ll.goohaeyou.jobPost.jobPost.application.dto;
 
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
-@SuperBuilder
 @Getter
-public class JobPostDto extends AbstractJobPostDto{
+@Builder
+public class JobPostDto {
+    @NotNull
+    private Long id;
+    @NotNull
+    private String author;
+    @NotNull
+    private String title;
+    @NotNull
+    private String location;
+    @NotNull
+    private long commentsCount;
+    @NotNull
+    private long incrementViewCount;
+    @NotNull
+    private long interestsCount;
+    @NotNull
+    private String createdAt;
+
+    private boolean employed;
+    private boolean isClosed;
+    private LocalDate deadLine;
+    private LocalDate jobStartDate;
+
     private String mainImageUrl = null;
 
     public static JobPostDto from(JobPost jobPost) {

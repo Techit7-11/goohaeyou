@@ -3,19 +3,40 @@ package com.ll.goohaeyou.jobPost.jobPost.application.dto;
 import com.ll.goohaeyou.jobPost.jobPost.domain.*;
 import com.ll.goohaeyou.jobPost.jobPost.domain.type.PayBasis;
 import com.ll.goohaeyou.jobPost.jobPost.domain.type.WagePaymentMethod;
-import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.type.Gender;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
-@SuperBuilder
 @Getter
-public class JobPostDetailDto extends AbstractJobPostDto{
+@Builder
+public class JobPostDetailDto {
+    @NotNull
+    private Long id;
+    @NotNull
+    private String author;
+    @NotNull
+    private String title;
+    @NotNull
+    private String location;
+    @NotNull
+    private long commentsCount;
+    @NotNull
+    private long incrementViewCount;
+    @NotNull
+    private long interestsCount;
+    @NotNull
+    private String createdAt;
+
+    private boolean employed;
+    private boolean isClosed;
+    private LocalDate deadLine;
+    private LocalDate jobStartDate;
+
     @NotNull
     private String body;
     private long applicationCount;
