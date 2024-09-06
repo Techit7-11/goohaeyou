@@ -2,7 +2,7 @@ package com.ll.goohaeyou.chat.message.application;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
-import com.ll.goohaeyou.chat.message.application.dto.MessageForm;
+import com.ll.goohaeyou.chat.message.application.dto.WriteMessageRequest;
 import com.ll.goohaeyou.chat.message.domain.Message;
 import com.ll.goohaeyou.chat.message.domain.repository.MessageRepository;
 import com.ll.goohaeyou.chat.room.domain.Room;
@@ -23,7 +23,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
 
     @Transactional
-    public Message write(String username, Long roomId, MessageForm.Register form) {
+    public Message write(String username, Long roomId, WriteMessageRequest request) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(EntityNotFoundException.ChatroomNotExistsException::new);
 
@@ -31,7 +31,7 @@ public class MessageService {
             throw new AuthException.NotAuthorizedException();
         }
 
-        Message newMessage = Message.create(room, username, form.getContent());
+        Message newMessage = Message.create(room, username, request.content());
 
         room.getMessages().add(newMessage);
 
