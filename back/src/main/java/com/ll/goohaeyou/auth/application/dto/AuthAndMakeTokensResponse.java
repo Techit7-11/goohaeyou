@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.auth.application.dto;
 
-import com.ll.goohaeyou.member.member.application.dto.MemberDto;
+import com.ll.goohaeyou.member.member.application.dto.MemberResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.NonNull;
 @Getter
 public class AuthAndMakeTokensResponse {
     @NonNull
-    MemberDto memberDto;
+    MemberResponse memberResponse;
     @NotNull
     String accessToken;
     @NotNull

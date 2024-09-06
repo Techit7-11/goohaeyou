@@ -6,12 +6,12 @@ import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
 import com.ll.goohaeyou.jobPost.comment.application.CommentService;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
-import com.ll.goohaeyou.member.member.application.dto.MemberDto;
-import com.ll.goohaeyou.member.member.application.dto.MemberForm;
+import com.ll.goohaeyou.member.member.application.dto.MemberResponse;
 import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.global.standard.base.Empty;
+import com.ll.goohaeyou.member.member.application.dto.ModifyMemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,15 +33,15 @@ public class MypageController {
 
     @GetMapping
     @Operation(summary = "내 정보 조회")
-    public ApiResponse<MemberDto> detailMember(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public ApiResponse<MemberResponse> detailMember(@AuthenticationPrincipal MemberDetails memberDetails) {
         return ApiResponse.ok(memberService.findByUsername(memberDetails.getUsername()));
     }
 
     @PutMapping
     @Operation(summary = "내 정보 수정")
     public ApiResponse<Empty> modifyMember(@AuthenticationPrincipal MemberDetails memberDetails,
-                                           @Valid @RequestBody MemberForm.Modify form) {
-        memberService.modifyMember(memberDetails.getUsername(), form);
+                                           @Valid @RequestBody ModifyMemberRequest request) {
+        memberService.modifyMember(memberDetails.getUsername(), request);
 
         return ApiResponse.noContent();
     }

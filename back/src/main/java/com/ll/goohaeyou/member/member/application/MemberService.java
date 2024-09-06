@@ -73,21 +73,21 @@ public class MemberService {
                 .orElseThrow(MemberException.MemberNotFoundException::new);
     }
 
-    public MemberDto findByUsername(String username) {
+    public MemberResponse findByUsername(String username) {
         Member member = getMember(username);
 
-        return MemberDto.from(member);
+        return MemberResponse.from(member);
     }
 
     @Transactional
-    public void modifyMember(String username, MemberForm.Modify form) {
+    public void modifyMember(String username, ModifyMemberRequest request) {
         Member member = getMember(username);
 
-        String password = (form.getPassword() != null && !form.getPassword().isBlank())
-                ? bCryptPasswordEncoder.encode(form.getPassword())
+        String password = (request.password() != null && !request.password().isBlank())
+                ? bCryptPasswordEncoder.encode(request.password())
                 : null;
 
-        member.update(password, form.getGender(), form.getLocation(), form.getBirth());
+        member.update(password, request.gender(), request.location(), request.birth());
     }
 
     public Member findById(Long userId) {
@@ -96,7 +96,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form) {
+    public MemberResponse updateSocialMemberProfile(String username, SocialProfileForm form) {
         Member member = getMember(username);
 
         if (member.getEmail() == null) {
@@ -106,6 +106,6 @@ public class MemberService {
         member.oauthDetailUpdate(form);
         member.updateRole(Role.USER);
 
-        return MemberDto.from(member);
+        return MemberResponse.from(member);
     }
 }

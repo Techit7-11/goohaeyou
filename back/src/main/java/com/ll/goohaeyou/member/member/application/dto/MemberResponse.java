@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Builder
 @Getter
-public class MemberDto {
+public class MemberResponse {
     @NotNull
     private Long id;
     @NotBlank
@@ -29,8 +29,8 @@ public class MemberDto {
     private boolean authenticated;
     private String profileImageUrl;
 
-    public static MemberDto from(Member member) {
-        return MemberDto.builder()
+    public static MemberResponse from(Member member) {
+        return MemberResponse.builder()
                 .id(member.getId())
                 .username(member.getUsername())
                 .gender(member.getGender())
