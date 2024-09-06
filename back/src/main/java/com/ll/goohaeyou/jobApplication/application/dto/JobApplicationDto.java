@@ -39,7 +39,7 @@ public class JobApplicationDto {
     private String wageStatus;
     @NotBlank
     private String wagePaymentMethod;
-    @NotNull int wages = 0;
+    @NotNull int wages;
 
     private LocalDateTime createdAt;
     private Boolean approve;

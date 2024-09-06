@@ -4,7 +4,8 @@ import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.event.notification.JobApplicationCreateAndChangedEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
-import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationForm;
+import com.ll.goohaeyou.jobApplication.application.dto.ModifyJobApplicationRequest;
+import com.ll.goohaeyou.jobApplication.application.dto.WriteJobApplicationRequest;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
 import com.ll.goohaeyou.jobApplication.exception.JobApplicationException;
@@ -32,14 +33,14 @@ public class JobApplicationService {
     private final JobPostDetailRepository jobPostDetailRepository;
 
     @Transactional
-    public void writeApplication(String username, Long jobPostId, JobApplicationForm.Register form) {
+    public void writeApplication(String username, Long jobPostId, WriteJobApplicationRequest request) {
         JobPostDetail postDetail = jobPostDetailRepository.findById(jobPostId)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         canWrite(postDetail, member);
 
-        JobApplication newJobApplication = createNewApplication(member, postDetail, form);
+        JobApplication newJobApplication = createNewApplication(member, postDetail, request);
 
         postDetail.getJobApplications().add(newJobApplication);
         postDetail.getJobPost().increaseApplicationsCount();
@@ -48,8 +49,8 @@ public class JobApplicationService {
         publisher.publishEvent(new JobApplicationCreateAndChangedEvent(this, postDetail, newJobApplication, APPLICATION_CREATED));
     }
 
-    private JobApplication createNewApplication(Member member, JobPostDetail postDetail, JobApplicationForm.Register form) {
-        return JobApplication.create(member, postDetail, form.getBody());
+    private JobApplication createNewApplication(Member member, JobPostDetail postDetail, WriteJobApplicationRequest request) {
+        return JobApplication.create(member, postDetail, request.body());
     }
 
     public JobApplicationDto findById(Long id) {
@@ -64,14 +65,14 @@ public class JobApplicationService {
     }
 
     @Transactional
-    public void modifyJobApplication(String username, Long id, JobApplicationForm.Modify form) {
+    public void modifyJobApplication(String username, Long id, ModifyJobApplicationRequest request) {
         JobApplication jobApplication = findByIdAndValidate(id);
 
         if (!isJobApplicationAuthor(username, jobApplication.getMember().getUsername())) {
             throw new AuthException.NotAuthorizedException();
         }
 
-        jobApplication.updateBody(form.getBody());
+        jobApplication.updateBody(request.body());
         publisher.publishEvent(new JobApplicationCreateAndChangedEvent(this, jobApplication, APPLICATION_MODIFICATION));
     }
 

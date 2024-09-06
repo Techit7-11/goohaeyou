@@ -1,11 +1,12 @@
 package com.ll.goohaeyou.jobApplication.prsentation;
 
 import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
-import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationForm;
 import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.global.standard.base.Empty;
+import com.ll.goohaeyou.jobApplication.application.dto.ModifyJobApplicationRequest;
+import com.ll.goohaeyou.jobApplication.application.dto.WriteJobApplicationRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -23,8 +24,8 @@ public class JobApplicationController {
     @Operation(summary = "지원서 작성")
     public ApiResponse<Empty> writeJobApplication(@AuthenticationPrincipal MemberDetails memberDetails,
                                                   @PathVariable(name = "postId") Long jobPostId,
-                                                  @Valid @RequestBody JobApplicationForm.Register form) {
-        jobApplicationService.writeApplication(memberDetails.getUsername(), jobPostId, form);
+                                                  @Valid @RequestBody WriteJobApplicationRequest request) {
+        jobApplicationService.writeApplication(memberDetails.getUsername(), jobPostId, request);
 
         return ApiResponse.created();
     }
@@ -40,8 +41,8 @@ public class JobApplicationController {
     @Operation(summary = "지원서 수정")
     public ApiResponse<Empty> modifyJobApplication(@AuthenticationPrincipal MemberDetails memberDetails,
                                                    @PathVariable(name = "id") Long id,
-                                                   @Valid @RequestBody JobApplicationForm.Modify form) {
-        jobApplicationService.modifyJobApplication(memberDetails.getUsername(), id, form);
+                                                   @Valid @RequestBody ModifyJobApplicationRequest request) {
+        jobApplicationService.modifyJobApplication(memberDetails.getUsername(), id, request);
 
         return ApiResponse.noContent();
     }
