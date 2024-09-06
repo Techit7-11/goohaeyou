@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.member.member.domain;
 
-import com.ll.goohaeyou.member.member.application.dto.SocialProfileForm;
+import com.ll.goohaeyou.member.member.application.dto.UpdateSocialProfileRequest;
 import com.ll.goohaeyou.member.member.domain.type.Gender;
 import com.ll.goohaeyou.member.member.domain.type.Level;
 import com.ll.goohaeyou.member.member.domain.type.Role;
@@ -168,12 +168,12 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
-    public void oauthDetailUpdate(SocialProfileForm form) {
-        this.name = form.getName();
-        this.phoneNumber = form.getPhoneNumber();
-        this.gender = form.getGender();
-        this.location = form.getLocation();
-        this.birth = form.getBirth();
+    public void oauthDetailUpdate(UpdateSocialProfileRequest request) {
+        this.name = request.name();
+        this.phoneNumber = request.phoneNumber();
+        this.gender = request.gender();
+        this.location = request.location();
+        this.birth = request.birth();
     }
 
     public void updateRestCash(long cash) {

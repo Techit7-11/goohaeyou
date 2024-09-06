@@ -4,9 +4,9 @@ import com.ll.goohaeyou.global.standard.base.Empty;
 import com.ll.goohaeyou.member.member.application.dto.JoinRequest;
 import com.ll.goohaeyou.member.member.application.dto.LoginRequest;
 import com.ll.goohaeyou.member.member.application.dto.MemberResponse;
-import com.ll.goohaeyou.member.member.application.dto.SocialProfileForm;
 import com.ll.goohaeyou.auth.application.AuthenticationService;
 import com.ll.goohaeyou.member.member.application.MemberService;
+import com.ll.goohaeyou.member.member.application.dto.UpdateSocialProfileRequest;
 import com.ll.goohaeyou.notification.application.NotificationService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
@@ -67,8 +67,8 @@ public class MemberController {
     @PutMapping("/social")
     @Operation(summary = "최초 소셜로그인 - 필수 회원정보 입력")
     public ApiResponse<MemberResponse> updateSocialMember(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                          @Valid @RequestBody SocialProfileForm form) {
-        MemberResponse updatedMember = memberService.updateSocialMemberProfile(memberDetails.getUsername(), form);
+                                                          @Valid @RequestBody UpdateSocialProfileRequest request) {
+        MemberResponse updatedMember = memberService.updateSocialMemberProfile(memberDetails.getUsername(), request);
 
         return ApiResponse.ok(updatedMember);
     }

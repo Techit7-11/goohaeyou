@@ -96,14 +96,14 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponse updateSocialMemberProfile(String username, SocialProfileForm form) {
+    public MemberResponse updateSocialMemberProfile(String username, UpdateSocialProfileRequest request) {
         Member member = getMember(username);
 
         if (member.getEmail() == null) {
             member.authenticate();
         }
 
-        member.oauthDetailUpdate(form);
+        member.oauthDetailUpdate(request);
         member.updateRole(Role.USER);
 
         return MemberResponse.from(member);
