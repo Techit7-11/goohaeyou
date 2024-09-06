@@ -9,7 +9,7 @@ import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
-import com.ll.goohaeyou.notification.application.dto.NotificationDto;
+import com.ll.goohaeyou.notification.application.dto.NotificationResponse;
 import com.ll.goohaeyou.notification.domain.Notification;
 import com.ll.goohaeyou.notification.domain.NotificationSender;
 import com.ll.goohaeyou.notification.domain.repository.NotificationRepository;
@@ -139,8 +139,8 @@ public class NotificationService {
         log.info("알림 생성 완료");
     }
 
-    private NotificationDto makeNotification(Member toMember, Member fromMember, String jobPostTitle,
-                                  CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {
+    private void makeNotification(Member toMember, Member fromMember, String jobPostTitle,
+                                                  CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {
         Notification newNotification = Notification.create(
                 toMember,
                 fromMember,
@@ -155,16 +155,14 @@ public class NotificationService {
         if (toMember.getFCMToken() != null) {
             notificationSender.send(toMember.getFCMToken(), jobPostTitle, causeTypeCode);
         }
-
-        return NotificationDto.from(newNotification);
     }
 
-    public List<NotificationDto> getList(String username) {
+    public List<NotificationResponse> getList(String username) {
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         List<Notification> notificationList = notificationRepository.findByToMemberOrderByCreateAtDesc(member);
 
-        return NotificationDto.convertToDtoList(notificationList);
+        return NotificationResponse.convertToDtoList(notificationList);
     }
 
     @Transactional
