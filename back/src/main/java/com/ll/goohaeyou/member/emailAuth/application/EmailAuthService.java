@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.member.emailAuth.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.global.standard.base.util.RedisUtil;
+import com.ll.goohaeyou.member.emailAuth.infra.RedisUtil;
 import com.ll.goohaeyou.member.emailAuth.exception.EmailAuthException;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;

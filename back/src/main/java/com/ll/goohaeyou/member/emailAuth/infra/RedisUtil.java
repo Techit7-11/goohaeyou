@@ -1,5 +1,6 @@
-package com.ll.goohaeyou.global.standard.base.util;
+package com.ll.goohaeyou.member.emailAuth.infra;
 
+import com.ll.goohaeyou.member.emailAuth.domain.AuthCodeStorage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -9,7 +10,7 @@ import java.time.Duration;
 
 @Component
 @RequiredArgsConstructor
-public class RedisUtil {
+public class RedisUtil implements AuthCodeStorage {
     private final StringRedisTemplate stringRedisTemplate;
 
     public String getData(String key) {
