@@ -5,7 +5,7 @@ import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;
 import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
+import com.ll.goohaeyou.jobApplication.application.dto.JobPostApplicationResponse;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.jobPost.employ.exception.EmployException;
@@ -35,12 +35,12 @@ public class EmployService {
     private final JobPostDetailRepository jobPostDetailRepository;
     private final ApplicationEventPublisher publisher;
 
-    public List<JobApplicationDto> getList(String username, Long postId) {
+    public List<JobPostApplicationResponse> getList(String username, Long postId) {
         JobPostDetail postDetail = jobPostDetailRepository.findById(postId)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         checkPermissions(username,postDetail.getAuthor());
 
-        return JobApplicationDto.convertToDtoList(postDetail.getJobApplications());
+        return JobPostApplicationResponse.convertToList(postDetail.getJobApplications());
     }
 
     @Transactional

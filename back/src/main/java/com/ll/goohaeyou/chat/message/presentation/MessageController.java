@@ -3,7 +3,7 @@ package com.ll.goohaeyou.chat.message.presentation;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.chat.message.application.MessageService;
 import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
-import com.ll.goohaeyou.chat.message.application.dto.WriteMessageRequest;
+import com.ll.goohaeyou.chat.message.application.dto.request.WriteMessageRequest;
 import com.ll.goohaeyou.chat.message.domain.Message;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.standard.base.Empty;

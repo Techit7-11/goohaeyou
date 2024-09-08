@@ -1,10 +1,10 @@
 package com.ll.goohaeyou.jobApplication.prsentation;
 
-import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
-import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
-import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
+import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.standard.base.Empty;
+import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
+import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDetailResponse;
 import com.ll.goohaeyou.jobApplication.application.dto.ModifyJobApplicationRequest;
 import com.ll.goohaeyou.jobApplication.application.dto.WriteJobApplicationRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,9 +32,9 @@ public class JobApplicationController {
 
     @GetMapping("/api/applications/{id}")
     @Operation(summary = "지원서 상세 내용")
-    public ApiResponse<JobApplicationDto> detailJobApplication(@PathVariable(name = "id") Long id) {
+    public ApiResponse<JobApplicationDetailResponse> detailJobApplication(@PathVariable(name = "id") Long id) {
 
-        return ApiResponse.ok(jobApplicationService.findById(id));
+        return ApiResponse.ok(jobApplicationService.getDetailById(id));
     }
 
     @PutMapping("/api/applications/{id}")

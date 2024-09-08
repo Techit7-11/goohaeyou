@@ -2,7 +2,7 @@ package com.ll.goohaeyou.chat.message.application;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
-import com.ll.goohaeyou.chat.message.application.dto.WriteMessageRequest;
+import com.ll.goohaeyou.chat.message.application.dto.request.WriteMessageRequest;
 import com.ll.goohaeyou.chat.message.domain.Message;
 import com.ll.goohaeyou.chat.message.domain.repository.MessageRepository;
 import com.ll.goohaeyou.chat.room.domain.Room;

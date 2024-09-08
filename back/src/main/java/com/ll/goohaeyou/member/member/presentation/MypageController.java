@@ -56,7 +56,7 @@ public class MypageController {
 
     @GetMapping("/myapplications")
     @Operation(summary = "내 지원서 조회")
-    public ApiResponse<List<JobApplicationDto>> detailMyApplications(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public ApiResponse<List<MyJobApplicationResponse>> detailMyApplications(@AuthenticationPrincipal MemberDetails memberDetails) {
         return ApiResponse.ok(jobApplicationService.findByUsername(memberDetails.getUsername()));
     }
 

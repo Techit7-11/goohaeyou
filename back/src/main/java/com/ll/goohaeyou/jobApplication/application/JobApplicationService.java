@@ -3,8 +3,9 @@ package com.ll.goohaeyou.jobApplication.application;
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.event.notification.JobApplicationCreateAndChangedEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
+import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDetailResponse;
 import com.ll.goohaeyou.jobApplication.application.dto.ModifyJobApplicationRequest;
+import com.ll.goohaeyou.jobApplication.application.dto.MyJobApplicationResponse;
 import com.ll.goohaeyou.jobApplication.application.dto.WriteJobApplicationRequest;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
@@ -53,10 +54,10 @@ public class JobApplicationService {
         return JobApplication.create(member, postDetail, request.body());
     }
 
-    public JobApplicationDto findById(Long id) {
+    public JobApplicationDetailResponse getDetailById(Long id) {
         JobApplication jobApplication = findByIdAndValidate(id);
 
-        return JobApplicationDto.from(jobApplication);
+        return JobApplicationDetailResponse.from(jobApplication);
     }
 
     public JobApplication findByIdAndValidate(Long id) {
@@ -101,12 +102,12 @@ public class JobApplicationService {
         return true;
     }
 
-    public List<JobApplicationDto> findByUsername(String username) {
+    public List<MyJobApplicationResponse> findByUsername(String username) {
 
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
-        return JobApplicationDto.convertToDtoList(jobApplicationRepository.findByMemberId(member.getId()));
+        return MyJobApplicationResponse.convertToList(jobApplicationRepository.findByMemberId(member.getId()));
     }
 
     private void canWrite(JobPostDetail postDetail, Member member) {

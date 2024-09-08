@@ -1,9 +1,9 @@
 package com.ll.goohaeyou.jobPost.employ.presentation;
 
-import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
-import com.ll.goohaeyou.jobPost.employ.application.EmployService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.standard.base.Empty;
+import com.ll.goohaeyou.jobApplication.application.dto.JobPostApplicationResponse;
+import com.ll.goohaeyou.jobPost.employ.application.EmployService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class EmployController {
 
     @GetMapping
     @Operation(summary = "공고 별 지원리스트")
-    public ApiResponse<List<JobApplicationDto>> getList(Authentication authentication,
-                                                        @PathVariable (name = "postId") Long postId) {
+    public ApiResponse<List<JobPostApplicationResponse>> getJobApplicationsByPost(Authentication authentication,
+                                                                                  @PathVariable (name = "postId") Long postId) {
         return ApiResponse.ok(employService.getList(authentication.getName(), postId));
     }
 
