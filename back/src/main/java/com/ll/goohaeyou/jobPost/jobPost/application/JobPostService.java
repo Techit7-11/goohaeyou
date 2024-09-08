@@ -306,13 +306,18 @@ public class JobPostService {
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
 
-    @Cacheable(value = "jobPostsByCategory", key = "#categoryName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
-    public Page<JobPostBasicResponse> getPostsByCategory(String categoryName, Pageable pageable) {
+    @Cacheable(value = "jobPostsByCategory", key = "#categoryName + '_' + #page", condition = "#page <= 5")
+    public Page<JobPostBasicResponse> getPostsByCategory(String categoryName, int page) {
         Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
+        Pageable pageable = createPageableForCategory(page);
         Page<JobPost> jobPosts = jobPostCategoryRepository.findJobPostsByCategoryId(category.getId(), pageable);
 
         return JobPostBasicResponse.convertToPage(jobPosts);
+    }
+
+    private Pageable createPageableForCategory(int page) {
+        return PageRequest.of(page - 1, 10); // Convert page number to zero-based index
     }
 }
