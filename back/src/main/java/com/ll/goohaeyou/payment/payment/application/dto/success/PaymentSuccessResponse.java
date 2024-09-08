@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class PaymentSuccessDto {
+public class PaymentSuccessResponse {
     private String paymentKey;
     private String orderId;
     private Long jobApplicationId;
@@ -15,6 +15,6 @@ public class PaymentSuccessDto {
     private String method;   // 카드(신한카드), 간편결제(네이버페이) 등
     private int totalAmount;    // 총 결제금액
     private String approvedAt;    // 결제승인 날짜,시간
-    private SuccessCardDto card;
-    private SuccessEasyPayDto easyPay;
+    private SuccessCardResponse card;
+    private SuccessEasyPayResponse easyPay;
 }

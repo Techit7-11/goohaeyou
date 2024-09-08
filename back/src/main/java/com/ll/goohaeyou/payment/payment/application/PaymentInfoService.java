@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.payment.payment.application;
 
-import com.ll.goohaeyou.payment.payment.application.dto.PaymentDto;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentInfoResponse;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.auth.exception.AuthException;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentInfoService {
     private final PaymentRepository paymentRepository;
 
-    public PaymentDto getValidPayment(String username, Long applicationId) {
+    public PaymentInfoResponse getValidPaymentInfo(String username, Long applicationId) {
         return paymentRepository.findByJobApplicationIdAndPaid(applicationId, true)
                 .map(payment -> {
                     validatePayer(payment, username);
@@ -24,7 +24,7 @@ public class PaymentInfoService {
                         throw new PaymentException.AlreadyCanceledException();
                     }
 
-                    return buildPaymentDto(payment);
+                    return PaymentInfoResponse.from(payment);
                 })
                 .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
     }
@@ -33,17 +33,5 @@ public class PaymentInfoService {
         if (!payment.getMember().getUsername().equals(username)) {
             throw new AuthException.NotAuthorizedException();
         }
-    }
-
-    private PaymentDto buildPaymentDto(Payment payment) {
-        return PaymentDto.builder()
-                .paymentKey(payment.getPaymentKey())
-                .canceled(payment.isCanceled())
-                .paid(payment.isPaid())
-                .totalAmount(payment.getTotalAmount())
-                .jobApplicationId(payment.getJobApplicationId())
-                .orderName(payment.getOrderName())
-                .payStatus(payment.getPayStatus())
-                .build();
     }
 }

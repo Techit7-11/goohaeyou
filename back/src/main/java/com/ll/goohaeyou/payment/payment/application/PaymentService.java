@@ -12,7 +12,7 @@ import com.ll.goohaeyou.member.member.exception.MemberException;
 import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
-import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessDto;
+import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
@@ -63,9 +63,9 @@ public class PaymentService {
     }
 
     @Transactional
-    public PaymentSuccessDto tossPaymentSuccess(String paymentKey, String orderId, Long amount) {
+    public PaymentSuccessResponse tossPaymentSuccess(String paymentKey, String orderId, Long amount) {
         Payment payment = verifyPayment(orderId, amount);
-        PaymentSuccessDto successDto = requestPaymentAccept(paymentKey, orderId, amount);
+        PaymentSuccessResponse successDto = requestPaymentAccept(paymentKey, orderId, amount);
 
         updatePayment(payment, successDto);
 
@@ -90,15 +90,15 @@ public class PaymentService {
     }
 
     @Transactional
-    public PaymentSuccessDto requestPaymentAccept(String paymentKey, String orderId, Long amount) {
+    public PaymentSuccessResponse requestPaymentAccept(String paymentKey, String orderId, Long amount) {
         JSONObject params = createPaymentRequestParams(orderId, amount);
 
-        PaymentSuccessDto paymentSuccessDto = tossPaymentUtil.sendPaymentRequest(
-                paymentKey, params, PaymentSuccessDto.class);
+        PaymentSuccessResponse paymentSuccessResponse = tossPaymentUtil.sendPaymentRequest(
+                paymentKey, params, PaymentSuccessResponse.class);
 
-        paymentSuccessDto.setJobApplicationId(findPaymentByOrderId(orderId).getJobApplicationId());
+        paymentSuccessResponse.setJobApplicationId(findPaymentByOrderId(orderId).getJobApplicationId());
 
-        return paymentSuccessDto;
+        return paymentSuccessResponse;
     }
 
     private JSONObject createPaymentRequestParams(String orderId, Long amount) {
@@ -109,7 +109,7 @@ public class PaymentService {
         return params;
     }
 
-    private void updatePayment(Payment payment, PaymentSuccessDto successDto) {
+    private void updatePayment(Payment payment, PaymentSuccessResponse successDto) {
         payment.updatePaymentKey(successDto.getPaymentKey());
         payment.markAsPaid();
         updatePayStatusByPayment(payment, successDto.getMethod());

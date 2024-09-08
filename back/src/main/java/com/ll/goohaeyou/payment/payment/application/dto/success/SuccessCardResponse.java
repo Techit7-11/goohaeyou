@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class SuccessCardDto {
+public class SuccessCardResponse {
     private String company;
     private String number; // 카드번호
     private String installmentPlanMonths; // 할부 개월

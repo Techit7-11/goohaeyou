@@ -4,7 +4,7 @@ import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.payment.cashLog.domain.CashLog;
 import com.ll.goohaeyou.payment.cashLog.domain.repository.CashLogRepository;
-import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessDto;
+import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
@@ -49,7 +49,7 @@ public class CashLogService {
     }
 
     @Transactional
-    public void createCashLogOnPaid(PaymentSuccessDto successDto) {
+    public void createCashLogOnPaid(PaymentSuccessResponse successDto) {
         PayStatus payStatus = PayStatus.findByMethod(successDto.getMethod());
         Payment payment = paymentRepository.findByPaymentKey(successDto.getPaymentKey())
                 .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);

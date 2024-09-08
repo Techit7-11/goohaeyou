@@ -1,12 +1,12 @@
 package com.ll.goohaeyou.payment.payment.presentation;
 
 import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
-import com.ll.goohaeyou.payment.payment.application.dto.PaymentDto;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentInfoResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.CancelPaymentResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
-import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessDto;
+import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.application.PaymentCancelService;
 import com.ll.goohaeyou.payment.payment.application.PaymentInfoService;
 import com.ll.goohaeyou.payment.payment.application.PaymentService;
@@ -41,10 +41,10 @@ public class PaymentController {
 
     @GetMapping("/success")
     @Operation(summary = "결제 성공")
-    public ApiResponse<PaymentSuccessDto> tossPaymentSuccess(@RequestParam String paymentKey,
+    public ApiResponse<PaymentSuccessResponse> tossPaymentSuccess(@RequestParam String paymentKey,
                                                                   @RequestParam String orderId,
                                                                   @RequestParam Long amount) {
-        PaymentSuccessDto successDto = paymentService.tossPaymentSuccess(paymentKey, orderId, amount);
+        PaymentSuccessResponse successDto = paymentService.tossPaymentSuccess(paymentKey, orderId, amount);
         cashLogService.createCashLogOnPaid(successDto);
 
         return ApiResponse.ok(successDto);
@@ -73,9 +73,9 @@ public class PaymentController {
 
     @GetMapping("/{applicationId}")
     @Operation(summary = "결제정보 가져오기")
-    public ApiResponse<PaymentDto> getPaymentKey(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                 @PathVariable Long applicationId) {
+    public ApiResponse<PaymentInfoResponse> getPaymentInfo(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                           @PathVariable Long applicationId) {
 
-        return ApiResponse.ok(paymentInfoService.getValidPayment(memberDetails.getUsername(), applicationId));
+        return ApiResponse.ok(paymentInfoService.getValidPaymentInfo(memberDetails.getUsername(), applicationId));
     }
 }

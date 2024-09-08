@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class SuccessEasyPayDto {
+public class SuccessEasyPayResponse {
     private String provider;
     private int amount;
     private int discountAmount;
