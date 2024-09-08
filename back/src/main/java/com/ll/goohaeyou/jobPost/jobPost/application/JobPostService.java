@@ -11,7 +11,6 @@ import com.ll.goohaeyou.global.config.AppConfig;
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.PostDeadlineEvent;
 import com.ll.goohaeyou.global.event.notification.PostDeletedEvent;
-import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
 import com.ll.goohaeyou.global.standard.base.util.Util;
@@ -29,7 +28,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -267,22 +265,6 @@ public class JobPostService {
 
     public List<JobPost> findExpiredJobPosts(LocalDate currentDate) { //    ver.  LocalDate
         return jobPostRepository.findByClosedFalseAndDeadlineBefore(currentDate);
-    }
-
-    @EventListener
-    @Transactional
-    public void jobPostClosedEventListen(PostDeadlineEvent event) {
-        JobPost jobPost = event.getJobPost();
-        jobPost.close();
-        jobPostRepository.save(jobPost);
-    }
-
-    @EventListener
-    @Transactional
-    public void jobPostEmployedEventListen(PostEmployedEvent event) {
-        JobPost jobPost = event.getJobPost();
-        jobPost.employed();
-        jobPostRepository.save(jobPost);
     }
 
     @Transactional
