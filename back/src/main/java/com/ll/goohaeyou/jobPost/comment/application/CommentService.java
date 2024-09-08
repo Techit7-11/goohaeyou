@@ -3,10 +3,7 @@ package com.ll.goohaeyou.jobPost.comment.application;
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.event.notification.CommentCreatedEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
-import com.ll.goohaeyou.jobPost.comment.application.dto.CreateCommentRequest;
-import com.ll.goohaeyou.jobPost.comment.application.dto.CreateCommentResponse;
-import com.ll.goohaeyou.jobPost.comment.application.dto.ModifyCommentRequest;
+import com.ll.goohaeyou.jobPost.comment.application.dto.*;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import com.ll.goohaeyou.jobPost.comment.domain.repository.CommentRepository;
 import com.ll.goohaeyou.jobPost.comment.exception.CommentException;
@@ -83,11 +80,11 @@ public class CommentService {
         postDetail.getComments().remove(comment);
     }
 
-    public List<CommentDto> findByPostId(Long postId) {
+    public List<CommentResponse> findByPostId(Long postId) {
         jobPostRepository.findById(postId)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
-        return CommentDto.convertToDtoList(commentRepository.findAllByJobPostDetailId(postId));
+        return CommentResponse.convertToList(commentRepository.findAllByJobPostDetailId(postId));
     }
 
     public Comment findByIdAndValidate(Long id) {
@@ -112,11 +109,11 @@ public class CommentService {
         return member.getRole() == Role.ADMIN || comment.getMember().equals(member);
     }
 
-    public List<CommentDto> findByUsername(String username) {
+    public List<MyCommentResponse> findByUsername(String username) {
 
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
-        return CommentDto.convertToDtoList(commentRepository.findByMemberId(member.getId()));
+        return MyCommentResponse.convertToList(commentRepository.findByMemberId(member.getId()));
     }
 }

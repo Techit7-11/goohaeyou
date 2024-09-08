@@ -1,10 +1,10 @@
 package com.ll.goohaeyou.jobPost.comment.presentation;
 
 import com.ll.goohaeyou.global.standard.base.Empty;
-import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
 import com.ll.goohaeyou.jobPost.comment.application.CommentService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
+import com.ll.goohaeyou.jobPost.comment.application.dto.CommentResponse;
 import com.ll.goohaeyou.jobPost.comment.application.dto.CreateCommentRequest;
 import com.ll.goohaeyou.jobPost.comment.application.dto.CreateCommentResponse;
 import com.ll.goohaeyou.jobPost.comment.application.dto.ModifyCommentRequest;
@@ -27,7 +27,7 @@ public class CommentController {
 
     @GetMapping
     @Operation(summary = "해당 공고에 달린 댓글 목록")
-    public ApiResponse<List<CommentDto>> findByPostId(@PathVariable("postId") Long postId) {
+    public ApiResponse<List<CommentResponse>> findByPostId(@PathVariable("postId") Long postId) {
 
         return ApiResponse.ok(commentService.findByPostId(postId));
     }

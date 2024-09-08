@@ -1,17 +1,17 @@
 package com.ll.goohaeyou.member.member.presentation;
 
-import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
-import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
-import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
-import com.ll.goohaeyou.jobPost.comment.application.CommentService;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.InterestedJobPostResponse;
-import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.MyPostResponse;
-import com.ll.goohaeyou.member.member.application.dto.MemberResponse;
-import com.ll.goohaeyou.member.member.application.MemberService;
-import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
+import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.standard.base.Empty;
+import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
+import com.ll.goohaeyou.jobApplication.application.dto.MyJobApplicationResponse;
+import com.ll.goohaeyou.jobPost.comment.application.CommentService;
+import com.ll.goohaeyou.jobPost.comment.application.dto.MyCommentResponse;
+import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.InterestedJobPostResponse;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.MyPostResponse;
+import com.ll.goohaeyou.member.member.application.MemberService;
+import com.ll.goohaeyou.member.member.application.dto.MemberResponse;
 import com.ll.goohaeyou.member.member.application.dto.ModifyMemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -62,7 +62,7 @@ public class MypageController {
 
     @GetMapping("/mycomments")
     @Operation(summary = "내 댓글 조회")
-    public ApiResponse<List<CommentDto>> detailMyComments(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public ApiResponse<List<MyCommentResponse>> detailMyComments(@AuthenticationPrincipal MemberDetails memberDetails) {
         return ApiResponse.ok(commentService.findByUsername(memberDetails.getUsername()));
     }
 
