@@ -3,10 +3,7 @@ package com.ll.goohaeyou.jobPost.jobPost.presentation;
 import com.ll.goohaeyou.category.application.JobPostCategoryService;
 import com.ll.goohaeyou.jobPost.jobPost.application.EssentialService;
 import com.ll.goohaeyou.jobPost.jobPost.application.WageService;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.ModifyJobPostRequest;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.*;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
@@ -47,36 +44,30 @@ public class JobPostController {
     @PostMapping
     @Operation(summary = "구인공고 작성")
     public ApiResponse<Empty> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                       @Valid @RequestBody WriteJobPostRequest request) {
-        JobPostDto jobPostDto = jobPostService.writePost(memberDetails.getUsername(), request);
-        jobPostCategoryService.create(jobPostDto, request.categoryId());
+                                        @Valid @RequestBody WriteJobPostRequest request) {
+        Long jobPostId = jobPostService.writePost(memberDetails.getUsername(), request);
 
-        wageService.create(jobPostDto, request);
-        essentialService.create(jobPostDto, request);
+        jobPostCategoryService.create(jobPostId, request.location(), request.categoryId());
+        wageService.create(jobPostId, request);
+        essentialService.create(jobPostId, request.minAge(), request.gender());
 
         return ApiResponse.created();
     }
     @PutMapping("/{id}")
     @Operation(summary = "구인공고 수정")
     public ApiResponse<Empty> modifyPost(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                      @PathVariable(name = "id") Long id,
-                                                      @Valid @RequestBody ModifyJobPostRequest request) {
+                                         @PathVariable(name = "id") Long id,
+                                         @Valid @RequestBody ModifyJobPostRequest request) {
 
         jobPostService.modifyPost(memberDetails.getUsername(), id, request);
 
         return ApiResponse.noContent();
     }
 
-    @GetMapping
-    @Operation(summary = "구인공고 글 목록 가져오기")
-    public ApiResponse<List<JobPostDto>> findAllPost() {
-        return ApiResponse.ok(jobPostService.findAll());
-    }
-
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
-    public ApiResponse<JobPostDetailDto> showDetailPost(@PathVariable(name = "id") Long id,
-                                                        HttpServletRequest request, HttpServletResponse response) {
+    public ApiResponse<JobPostDetailResponse> showDetailPost(@PathVariable(name = "id") Long id,
+                                                             HttpServletRequest request, HttpServletResponse response) {
         final String VIEWED_JOB_POSTS_COOKIE = "viewedJobPosts";
         boolean isJobPostAlreadyVisited = checkJobPostVisited(request, id, VIEWED_JOB_POSTS_COOKIE);
 
@@ -122,7 +113,7 @@ public class JobPostController {
     @DeleteMapping("/{id}")
     @Operation(summary = "구인공고 삭제")
     public ResponseEntity<Empty> deleteJobPost(@AuthenticationPrincipal MemberDetails memberDetails,
-                                              @PathVariable(name = "id") Long id) {
+                                               @PathVariable(name = "id") Long id) {
         jobPostService.deleteJobPost(memberDetails.getUsername(), id);
 
         return ResponseEntity.noContent().build();
@@ -130,7 +121,7 @@ public class JobPostController {
 
     @GetMapping("/search")
     @Operation(summary = "게시물 검색")
-    public ApiResponse<List<JobPostDto>> searchJobPostsByTitleAndBody(
+    public ApiResponse<List<JobPostBasicResponse>> searchJobPostsByTitleAndBody(
             @RequestParam(required = false, name = "titleOrBody") String titleOrBody,
             @RequestParam(required = false, name = "title") String title,
             @RequestParam(required = false, name = "body") String body) {
@@ -141,7 +132,7 @@ public class JobPostController {
 
     @GetMapping("/search-sort")
     @Operation(summary = "구인공고 검색")
-    public ApiResponse<GetPostsResponseBody> postSearchAndSort(
+    public ApiResponse<Page<JobPostBasicResponse>> postSearchAndSort(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(defaultValue = "") String kw,
             @RequestParam(value = "kwType", defaultValue = "") List<String> kwTypes,
@@ -156,23 +147,12 @@ public class JobPostController {
 
         Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
 
-        Page<JobPost> itemPage = jobPostService.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable);
-
-        Page<JobPostDto> _itemPage = JobPostDto.convertToDtoPage(itemPage);
-
-        return ApiResponse.ok(
-                new GetPostsResponseBody(
-                        new PageDto<>(_itemPage)
-                )
-        );
-    }
-
-    public record GetPostsResponseBody(@NonNull PageDto<JobPostDto> itemPage) {
+        return ApiResponse.ok(jobPostService.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable));
     }
 
     @GetMapping("/sort")
     @Operation(summary = "구인공고 글 목록 정렬")
-    public ApiResponse<GetPostsResponseBody> findAllPostSort(
+    public ApiResponse<Page<JobPostBasicResponse>> findAllPostSort(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(name = "sortBy", defaultValue = "createdAt") List<String> sortBys,
             @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders
@@ -187,14 +167,7 @@ public class JobPostController {
 
         Pageable pageable = PageRequest.of(page - 1, AppConfig.getBasePageSize(), Sort.by(sorts));
 
-        Page<JobPost> itemPage = jobPostService.findBySort(pageable);
-        Page<JobPostDto> _itemPage = JobPostDto.convertToDtoPage(itemPage);
-
-        return ApiResponse.ok(
-                new GetPostsResponseBody(
-                        new PageDto<>(_itemPage)
-                )
-        );
+        return ApiResponse.ok(jobPostService.findBySort(pageable));
     }
 
     @PutMapping("/{id}/closing")
@@ -208,12 +181,10 @@ public class JobPostController {
 
     @GetMapping("/by-category")
     @Operation(summary = "카테고리의 글 목록 불러오기")
-    public ApiResponse<Page<JobPostDto>> getPostsByCategory(@RequestParam("category-name") String categoryName,
+    public ApiResponse<Page<JobPostBasicResponse>> getPostsByCategory(@RequestParam("category-name") String categoryName,
                                                             @RequestParam(value = "page", defaultValue = "1") int page) {
         Pageable pageable = PageRequest.of(page - 1, 10);
 
-        Page<JobPostDto> jobPostDtoPage = jobPostService.getPostsByCategory(categoryName, pageable);
-
-        return ApiResponse.ok(jobPostDtoPage);
+        return ApiResponse.ok(jobPostService.getPostsByCategory(categoryName, pageable));
     }
 }

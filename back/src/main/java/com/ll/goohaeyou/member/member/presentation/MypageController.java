@@ -4,8 +4,9 @@ import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDto;
 import com.ll.goohaeyou.jobApplication.application.JobApplicationService;
 import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
 import com.ll.goohaeyou.jobPost.comment.application.CommentService;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.InterestedJobPostResponse;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.MyPostResponse;
 import com.ll.goohaeyou.member.member.application.dto.MemberResponse;
 import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
@@ -48,8 +49,8 @@ public class MypageController {
 
     @GetMapping("/myposts")
     @Operation(summary = "내 공고 조회")
-    public ApiResponse<List<JobPostDto>> detailMyPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return ApiResponse.ok(jobPostService.findByUsername(memberDetails.getUsername()));
+    public ApiResponse<List<MyPostResponse>> detailMyPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return ApiResponse.ok(jobPostService.getMyJobPosts(memberDetails.getUsername()));
     }
 
 
@@ -67,7 +68,7 @@ public class MypageController {
 
     @GetMapping("/myinterest")
     @Operation(summary = "내 관심 공고 조회")
-    public ApiResponse<List<JobPostDto>> detailMyInterestingPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public ApiResponse<List<InterestedJobPostResponse>> detailMyInterestingPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
         return ApiResponse.ok(jobPostService.findByInterestAndUsername(memberDetails.getId()));
     }
 }
