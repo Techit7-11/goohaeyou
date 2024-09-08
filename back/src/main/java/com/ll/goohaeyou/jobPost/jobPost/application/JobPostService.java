@@ -1,11 +1,13 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
+import com.ll.goohaeyou.auth.domain.UserActivityService;
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.category.domain.Category;
 import com.ll.goohaeyou.category.domain.JobPostCategory;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
 import com.ll.goohaeyou.category.domain.type.CategoryType;
+import com.ll.goohaeyou.global.config.AppConfig;
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.PostDeadlineEvent;
 import com.ll.goohaeyou.global.event.notification.PostDeletedEvent;
@@ -13,6 +15,7 @@ import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
 import com.ll.goohaeyou.global.standard.base.util.Util;
+import com.ll.goohaeyou.global.standard.dto.PageDto;
 import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.*;
@@ -21,12 +24,16 @@ import com.ll.goohaeyou.jobPost.jobPost.domain.repository.*;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -36,7 +43,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.ll.goohaeyou.notification.domain.type.CauseTypeCode.POST_MODIFICATION;
 import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.DELETE;
@@ -55,6 +61,7 @@ public class JobPostService {
     private final JobPostCategoryRepository jobPostCategoryRepository;
     private final WageRepository wageRepository;
     private final EssentialRepository essentialRepository;
+    private final UserActivityService userActivityService;
 
     @Transactional
     public Long writePost(String username, WriteJobPostRequest request) {
@@ -66,7 +73,8 @@ public class JobPostService {
         return newPost.getId();
     }
 
-    public JobPostDetailResponse findById(Long id) {
+    public JobPostDetailResponse getJobPostDetail(Long id, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+        userActivityService.handleJobPostView(id, httpRequest, httpResponse);
         JobPostDetail postDetail = jobPostdetailRepository.findById(id)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
@@ -184,15 +192,37 @@ public class JobPostService {
     }
 
     public Page<JobPostBasicResponse> findByKw(List<String> kwTypes, String kw, String closed, String gender,
-                                               int[] min_Age, List<String> location, Pageable pageable) {
+                                               int[] min_Age, List<String> location, int page) {
+
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
+
         return JobPostBasicResponse.convertToPage(
                 jobPostRepository.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable)
         );
     }
 
     @Cacheable(value = "jobPostsBySort", key = "#sortName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
-    public Page<JobPostBasicResponse> findBySort(Pageable pageable) {
-        return JobPostBasicResponse.convertToPage(jobPostRepository.findBySort(pageable));
+    public JobPostSortPageResponse findBySort(Pageable pageable) {
+
+        return new JobPostSortPageResponse(
+                new PageDto<>(
+                        JobPostBasicResponse.convertToPage(jobPostRepository.findBySort(pageable))
+                )
+        );
+    }
+
+    public Pageable createPageableForSorting(int page, List<String> sortBys, List<String> sortOrders) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        for (int i = 0; i < sortBys.size(); i++) {
+            String sortBy = sortBys.get(i);
+            String sortOrder = i < sortOrders.size() ? sortOrders.get(i) : "desc"; // 기본값은 desc
+            sorts.add(new Sort.Order(Sort.Direction.fromString(sortOrder), sortBy));
+        }
+
+        return PageRequest.of(page - 1, AppConfig.getBasePageSize(), Sort.by(sorts));
     }
 
     public List<InterestedJobPostResponse> findByInterestAndUsername(Long memberId) {
@@ -200,14 +230,6 @@ public class JobPostService {
                 jobPostdetailRepository.findByInterestsMemberId(memberId)
         );
 
-    }
-
-    @Transactional
-    public void increaseViewCount(Long jobPostId) {
-        JobPost jobPost = jobPostRepository.findById(jobPostId)
-                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
-
-        jobPost.increaseViewCount();
     }
 
     @Cacheable(value = "jobPostsBySearch", key = "#titleAndBody + '_' + #titleOnly + '_' + #bodyOnly")

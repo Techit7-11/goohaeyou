@@ -1,19 +1,15 @@
 package com.ll.goohaeyou.jobPost.jobPost.presentation;
 
+import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.category.application.JobPostCategoryService;
-import com.ll.goohaeyou.global.standard.dto.PageDto;
+import com.ll.goohaeyou.global.apiResponse.ApiResponse;
+import com.ll.goohaeyou.global.standard.base.Empty;
 import com.ll.goohaeyou.jobPost.jobPost.application.EssentialService;
+import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.jobPost.jobPost.application.WageService;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.*;
-import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
-import com.ll.goohaeyou.global.apiResponse.ApiResponse;
-import com.ll.goohaeyou.global.config.AppConfig;
-import com.ll.goohaeyou.auth.domain.MemberDetails;
-import com.ll.goohaeyou.global.standard.base.Empty;
-import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -21,12 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -64,48 +58,10 @@ public class JobPostController {
 
     @GetMapping("/{id}")
     @Operation(summary = "구인공고 단건 조회")
-    public ApiResponse<JobPostDetailResponse> showDetailPost(@PathVariable(name = "id") Long id,
-                                                             HttpServletRequest request, HttpServletResponse response) {
-        final String VIEWED_JOB_POSTS_COOKIE = "viewedJobPosts";
-        boolean isJobPostAlreadyVisited = checkJobPostVisited(request, id, VIEWED_JOB_POSTS_COOKIE);
+    public ApiResponse<JobPostDetailResponse> showDetailPost(@PathVariable(name = "id") Long postId,
+                                                             HttpServletRequest httpRequest, HttpServletResponse HttpResponse) {
 
-        // 쿠키 없으면 조회수 증가하고 쿠키 생성
-        if (!isJobPostAlreadyVisited) {
-            jobPostService.increaseViewCount(id);
-            addOrUpdateViewedJobPostsCookie(request, response, id, VIEWED_JOB_POSTS_COOKIE);
-        }
-
-        return ApiResponse.ok(jobPostService.findById(id));
-    }
-
-    // 방문 여부 확인 (쿠키를 활용)
-    private boolean checkJobPostVisited(HttpServletRequest request, Long jobId, String cookieName) {
-        Cookie viewCookie = CookieUtil.findCookie(request, cookieName);
-        return viewCookie != null && viewCookie.getValue().contains("_" + jobId);
-    }
-
-    // 쿠키 추가
-    private void addOrUpdateViewedJobPostsCookie(HttpServletRequest request, HttpServletResponse response,
-                                                 Long jobId, String cookieName) {
-        // 쿠키에서 방문한 게시물 ID 목록 가져옴
-        Cookie viewCookie = CookieUtil.findCookie(request, cookieName);
-        String newCookieValue;
-
-        // 가져온 목록에 현재 게시물 ID 추가
-        if (viewCookie != null) {
-            String existingValue = viewCookie.getValue();
-            if (!existingValue.contains("_" + jobId)) {
-                newCookieValue = existingValue + "_" + jobId;
-            } else {
-                // 이미 방문한 게시물이면 쿠키 값을 변경 X
-                return;
-            }
-        } else {
-            newCookieValue = "_" + jobId;
-        }
-
-        // 새로운 쿠키 값 설정 or 기존 쿠키 업데이트
-        CookieUtil.addCookie(response, cookieName, newCookieValue, 24 * 60 * 60); // 24시간
+        return ApiResponse.ok(jobPostService.getJobPostDetail(postId, httpRequest, HttpResponse));
     }
 
     @DeleteMapping("/{id}")
@@ -140,12 +96,19 @@ public class JobPostController {
             @RequestParam(defaultValue = "") List<String> location
             ) {
 
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
+        return ApiResponse.ok(jobPostService.findByKw(kwTypes, kw, closed, gender, min_Age, location, page));
+    }
 
-        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
+    @GetMapping("/sort")
+    @Operation(summary = "구인공고 글 목록 정렬")
+    public ApiResponse<JobPostSortPageResponse> findAllPostSort(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(name = "sortBy", defaultValue = "createdAt") List<String> sortBys,
+            @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders
+    ) {
+        Pageable pageable = jobPostService.createPageableForSorting(page, sortBys, sortOrders);
 
-        return ApiResponse.ok(jobPostService.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable));
+        return ApiResponse.ok(jobPostService.findBySort(pageable));
     }
 
     @PutMapping("/{id}/closing")

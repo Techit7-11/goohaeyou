@@ -10,7 +10,7 @@ import com.ll.goohaeyou.member.member.application.dto.UpdateSocialProfileRequest
 import com.ll.goohaeyou.notification.application.NotificationService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
-import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
+import com.ll.goohaeyou.global.infra.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;

@@ -3,7 +3,7 @@ package com.ll.goohaeyou.auth.application;
 import com.ll.goohaeyou.auth.domain.RefreshToken;
 import com.ll.goohaeyou.auth.domain.RefreshTokenRepository;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
+import com.ll.goohaeyou.global.infra.util.CookieUtil;
 import com.ll.goohaeyou.member.member.application.dto.MemberResponse;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;

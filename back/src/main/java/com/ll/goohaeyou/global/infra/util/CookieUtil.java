@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.global.standard.base.util;
+package com.ll.goohaeyou.global.infra.util;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
