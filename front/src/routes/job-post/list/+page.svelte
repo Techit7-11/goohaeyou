@@ -4,7 +4,7 @@
 
 	import type { components } from '$lib/types/api/v1/schema';
 	import Pagination from '$lib/components/Pagination.svelte';
-	let posts: components['schemas']['JobPostDto'][] = $state([]);
+	let posts: components['schemas']['JobPostBasicResponse'][] = $state([]);
 
 	function JobPostWritePage() {
 		rq.goTo('/job-post/write');

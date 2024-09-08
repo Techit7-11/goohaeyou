@@ -1,17 +1,16 @@
 package com.ll.goohaeyou.jobPost.jobPost.presentation;
 
 import com.ll.goohaeyou.category.application.JobPostCategoryService;
+import com.ll.goohaeyou.global.standard.dto.PageDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.EssentialService;
 import com.ll.goohaeyou.jobPost.jobPost.application.WageService;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.*;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.config.AppConfig;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.global.standard.base.Empty;
 import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
-import com.ll.goohaeyou.global.standard.dto.PageDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
@@ -24,7 +23,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -148,26 +146,6 @@ public class JobPostController {
         Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
 
         return ApiResponse.ok(jobPostService.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable));
-    }
-
-    @GetMapping("/sort")
-    @Operation(summary = "구인공고 글 목록 정렬")
-    public ApiResponse<Page<JobPostBasicResponse>> findAllPostSort(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(name = "sortBy", defaultValue = "createdAt") List<String> sortBys,
-            @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders
-    ) {
-        List<Sort.Order> sorts = new ArrayList<>();
-
-        for (int i = 0; i < sortBys.size(); i++) {
-            String sortBy = sortBys.get(i);
-            String sortOrder = i < sortOrders.size() ? sortOrders.get(i) : "desc"; // 기본값은 desc
-            sorts.add(new Sort.Order(Sort.Direction.fromString(sortOrder), sortBy));
-        }
-
-        Pageable pageable = PageRequest.of(page - 1, AppConfig.getBasePageSize(), Sort.by(sorts));
-
-        return ApiResponse.ok(jobPostService.findBySort(pageable));
     }
 
     @PutMapping("/{id}/closing")

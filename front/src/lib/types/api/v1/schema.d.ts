@@ -3,1964 +3,3320 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/api/post-comment/{postId}/comment/{commentId}": {
-    /** 댓글 수정 */
-    put: operations["modify"];
-    /** 댓글 삭제 */
-    delete: operations["delete"];
-  };
-  "/api/notification/{id}": {
-    /** 알림 읽음 처리 */
-    put: operations["read"];
-  };
-  "/api/members/image": {
-    /** 프로필 이미지 변경 */
-    put: operations["updateMemberImage"];
-    /** 프로필 이미지 삭제 */
-    delete: operations["deleteMemberImage"];
-  };
-  "/api/member": {
-    /** 내 정보 조회 */
-    get: operations["detailMember"];
-    /** 내 정보 수정 */
-    put: operations["modifyMember"];
-  };
-  "/api/member/social": {
-    /** 최초 소셜로그인 - 필수 회원정보 입력 */
-    put: operations["updateSocialMember"];
-  };
-  "/api/job-posts/{id}": {
-    /** 구인공고 단건 조회 */
-    get: operations["showDetailPost"];
-    /** 구인공고 수정 */
-    put: operations["modifyPost"];
-    /** 구인공고 삭제 */
-    delete: operations["deleteJobPost"];
-  };
-  "/api/job-posts/{id}/closing": {
-    /** 조기 마감 */
-    put: operations["postEarlyClosing"];
-  };
-  "/api/chat/{roomId}": {
-    /** 채팅방 입장 */
-    get: operations["showRoom"];
-    /** 채팅방 퇴장 */
-    put: operations["exitsRoom"];
-  };
-  "/api/applications/{id}": {
-    /** 지원서 상세 내용 */
-    get: operations["detailApplication"];
-    /** 지원서 수정 */
-    put: operations["modifyApplication"];
-    /** 지원서 작성 */
-    post: operations["writeApplication"];
-    /** 지원서 삭제 */
-    delete: operations["deleteApplication"];
-  };
-  "/batch": {
-    post: operations["runBatch"];
-  };
-  "/api/post-comment/{postId}/comment": {
-    /** 댓글 작성 */
-    post: operations["write"];
-  };
-  "/api/payments": {
-    /** 결제 요청 */
-    post: operations["requestTossPayments"];
-  };
-  "/api/payments/cancel": {
-    /** 결제 취소 */
-    post: operations["tossPaymentCancel"];
-  };
-  "/api/notification/register": {
-    post: operations["register"];
-  };
-  "/api/member/review/{jobPostingId}": {
-    /** 지원자 리뷰 작성 */
-    post: operations["createReview"];
-  };
-  "/api/member/logout": {
-    /** 로그아웃 처리 및 쿠키 삭제 */
-    post: operations["logout"];
-  };
-  "/api/member/login": {
-    /** 로그인, accessToken, refreshToken 쿠키 생성됨 */
-    post: operations["login"];
-  };
-  "/api/member/join": {
-    /** 회원가입 */
-    post: operations["join"];
-  };
-  "/api/job-posts": {
-    /** 구인공고 글 목록 가져오기 */
-    get: operations["findAllPost"];
-    /** 구인공고 작성 */
-    post: operations["writePost"];
-  };
-  "/api/job-posts/{id}/interest": {
-    /** 구인공고 관심 등록 */
-    post: operations["interest"];
-    /** 구인공고 관심 제거 */
-    delete: operations["disinterest"];
-  };
-  "/api/job-post/images": {
-    /** 공고에 이미지 등록 */
-    post: operations["registerPostImages"];
-  };
-  "/api/chat/{roomId}/message": {
-    /** 채팅 메세지 로드 */
-    get: operations["writeChat_1"];
-    /** 채팅 생성 */
-    post: operations["writeChat"];
-  };
-  "/api/auth/email": {
-    /** 인증 메일 전송 */
-    post: operations["sendAuthEmail"];
-  };
-  "/admin/category/add": {
-    post: operations["addCategory"];
-  };
-  "/api/members/verify/{code}": {
-    /** 인증코드 확인 */
-    patch: operations["verifyCode"];
-  };
-  "/api/jobs/individual/no-work/{applicationId}": {
-    /** 개인 지급 알바 미완료 처리 */
-    patch: operations["cancelIndividualNoWork"];
-  };
-  "/api/jobs/complete/{applicationId}/manually": {
-    /** 구인자가 수동으로 알바완료 처리 */
-    patch: operations["completeJobManually"];
-  };
-  "/api/job-post/{postId}/main-image": {
-    /** 공고의 대표 이미지 변경 */
-    patch: operations["changeMainImage"];
-  };
-  "/api/employ/{postId}/{applicationIds}": {
-    /** 지원서 승인 */
-    patch: operations["approve"];
-  };
-  "/ready": {
-    /** 배포한 애플리케이션의 준비 상태를 확인 */
-    get: operations["isReady"];
-  };
-  "/member/socialLogin/{providerTypeCode}": {
-    /** 소셜 로그인 */
-    get: operations["socialLogin"];
-  };
-  "/api/post-comment/{postId}": {
-    /** 해당 공고에 달린 댓글 목록 */
-    get: operations["findByPostId"];
-  };
-  "/api/payments/{applicationId}": {
-    /** 결제정보 가져오기 */
-    get: operations["getPaymentKey"];
-  };
-  "/api/payments/success": {
-    /** 결제 성공 */
-    get: operations["tossPaymentSuccess"];
-  };
-  "/api/payments/fail": {
-    /** 결제 실패 */
-    get: operations["tossPaymentFail"];
-  };
-  "/api/notification": {
-    /** 유저 별 알림리스트 */
-    get: operations["getList"];
-  };
-  "/api/notification/new": {
-    /** 읽지 않은 알림 유무 확인 */
-    get: operations["unreadNotification"];
-  };
-  "/api/members/image/{username}": {
-    /** 아이디로 프로필 이미지 URL 불러오기 */
-    get: operations["getMemberImageByUsername"];
-  };
-  "/api/member/review": {
-    /** 나의 전체 리뷰 조회 */
-    get: operations["getAllReviews"];
-  };
-  "/api/member/review/{id}": {
-    /** 리뷰 단건 조회 */
-    get: operations["getReviewById"];
-    /** 리뷰 삭제 */
-    delete: operations["deleteReview"];
-  };
-  "/api/member/myposts": {
-    /** 내 공고 조회 */
-    get: operations["detailMyPosts"];
-  };
-  "/api/member/myinterest": {
-    /** 내 관심 공고 조회 */
-    get: operations["detailMyInterestingPosts"];
-  };
-  "/api/member/mycomments": {
-    /** 내 댓글 조회 */
-    get: operations["detailMyComments"];
-  };
-  "/api/member/myapplications": {
-    /** 내 지원서 조회 */
-    get: operations["detailMyApplications"];
-  };
-  "/api/job-posts/{postId}/members/image": {
-    /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
-    get: operations["getMemberImageByPostId"];
-  };
-  "/api/job-posts/{postId}/images": {
-    /** 공고에 등록된 이미지 불러오기 */
-    get: operations["getPostImages"];
-  };
-  "/api/job-posts/{id}/members/interest": {
-    /** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
-    get: operations["isInterested"];
-  };
-  "/api/job-posts/sort": {
-    /** 구인공고 글 목록 정렬 */
-    get: operations["findAllPostSort"];
-  };
-  "/api/job-posts/search": {
-    /** 게시물 검색 */
-    get: operations["searchJobPostsByTitleAndBody"];
-  };
-  "/api/job-posts/search-sort": {
-    /** 구인공고 검색 */
-    get: operations["postSearchAndSort"];
-  };
-  "/api/job-posts/by-category": {
-    /** 카테고리의 글 목록 불러오기 */
-    get: operations["getPostsByCategory"];
-  };
-  "/api/employ/{postId}": {
-    /** 공고 별 지원리스트 */
-    get: operations["getList_1"];
-  };
-  "/api/chat": {
-    /** 채팅방 목록 */
-    get: operations["showRoomList"];
-  };
-  "/api/categories/top-level": {
-    /** 최상단 카테고리 목록 불러오기 */
-    get: operations["getTopCategories"];
-  };
-  "/api/categories/sub-categories": {
-    /** 하위 카테고리 목록 불러오기 */
-    get: operations["getSubCategories"];
-  };
-  "/api/categories/is-leaf": {
-    /** 가장 최하단의 카테고리인지 확인 */
-    get: operations["isLeafCategory"];
-  };
-  "/": {
-    get: operations["showMain"];
-  };
-  "/api/notification/read": {
-    /** 읽은 알림 전부 삭제 */
-    delete: operations["deleteReadAll"];
-  };
-  "/api/notification/all": {
-    /** 알림 전부 삭제 */
-    delete: operations["deleteAll"];
-  };
-  "/api/job-post/{postId}/images": {
-    /** 공고에 등록된 이미지 삭제 */
-    delete: operations["deletePostImages"];
-  };
+    "/api/post-comment/{postId}/comment/{commentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** 댓글 수정 */
+        put: operations["modify"];
+        post?: never;
+        /** 댓글 삭제 */
+        delete: operations["delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notification/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** 알림 읽음 처리 */
+        put: operations["read"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/members/image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** 프로필 이미지 변경 */
+        put: operations["updateMemberImage"];
+        post?: never;
+        /** 프로필 이미지 삭제 */
+        delete: operations["deleteMemberImage"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 내 정보 조회 */
+        get: operations["detailMember"];
+        /** 내 정보 수정 */
+        put: operations["modifyMember"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/social": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** 최초 소셜로그인 - 필수 회원정보 입력 */
+        put: operations["updateSocialMember"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 구인공고 단건 조회 */
+        get: operations["showDetailPost"];
+        /** 구인공고 수정 */
+        put: operations["modifyPost"];
+        post?: never;
+        /** 구인공고 삭제 */
+        delete: operations["deleteJobPost"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/{id}/closing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** 조기 마감 */
+        put: operations["postEarlyClosing"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/chat/{roomId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 채팅방 입장 */
+        get: operations["showRoom"];
+        /** 채팅방 퇴장 */
+        put: operations["exitsRoom"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/applications/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 지원서 상세 내용 */
+        get: operations["detailJobApplication"];
+        /** 지원서 수정 */
+        put: operations["modifyJobApplication"];
+        post?: never;
+        /** 지원서 삭제 */
+        delete: operations["deleteJobApplication"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["runBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/post-comment/{postId}/comment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 댓글 작성 */
+        post: operations["write"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 결제 요청 */
+        post: operations["requestTossPayments"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 결제 취소 */
+        post: operations["tossPaymentCancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notification/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["register"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/review/{jobPostingId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 지원자 리뷰 작성 */
+        post: operations["createReview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 로그아웃 처리 및 쿠키 삭제 */
+        post: operations["logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 로그인, accessToken, refreshToken 쿠키 생성됨 */
+        post: operations["login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/join": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 회원가입 */
+        post: operations["join"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 구인공고 작성 */
+        post: operations["writePost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/{postId}/applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 지원서 작성 */
+        post: operations["writeJobApplication"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/{id}/interest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 구인공고 관심 등록 */
+        post: operations["interest"];
+        /** 구인공고 관심 제거 */
+        delete: operations["disinterest"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-post/images": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 공고에 이미지 등록 */
+        post: operations["registerPostImages"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/chat/{roomId}/message": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 채팅 메세지 로드 */
+        get: operations["writeChat_1"];
+        put?: never;
+        /** 채팅 생성 */
+        post: operations["writeChat"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 인증 메일 전송 */
+        post: operations["sendAuthEmail"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/category/add": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 카테고리 추가 */
+        post: operations["addCategory"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/members/verify/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** 인증코드 확인 */
+        patch: operations["verifyCode"];
+        trace?: never;
+    };
+    "/api/jobs/individual/no-work/{applicationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** 개인 지급 알바 미완료 처리 */
+        patch: operations["cancelIndividualNoWork"];
+        trace?: never;
+    };
+    "/api/jobs/complete/{applicationId}/manually": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** 구인자가 수동으로 알바완료 처리 */
+        patch: operations["completeJobManually"];
+        trace?: never;
+    };
+    "/api/job-post/{postId}/main-image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** 공고의 대표 이미지 변경 */
+        patch: operations["changeMainImage"];
+        trace?: never;
+    };
+    "/api/employ/{postId}/{applicationIds}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** 지원서 승인 */
+        patch: operations["approve"];
+        trace?: never;
+    };
+    "/ready": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 배포한 애플리케이션의 준비 상태를 확인 */
+        get: operations["isReady"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/member/socialLogin/{providerTypeCode}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 소셜 로그인 */
+        get: operations["socialLogin"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/post-comment/{postId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 해당 공고에 달린 댓글 목록 */
+        get: operations["findByPostId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/{applicationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 결제정보 가져오기 */
+        get: operations["getPaymentKey"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/success": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 결제 성공 */
+        get: operations["tossPaymentSuccess"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/fail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 결제 실패 */
+        get: operations["tossPaymentFail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 유저 별 알림리스트 */
+        get: operations["getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notification/new": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 읽지 않은 알림 유무 확인 */
+        get: operations["unreadNotification"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/members/image/{username}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 아이디로 프로필 이미지 URL 불러오기 */
+        get: operations["getMemberImageByUsername"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 나의 전체 리뷰 조회 */
+        get: operations["getAllReviews"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/review/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 리뷰 단건 조회 */
+        get: operations["getReviewById"];
+        put?: never;
+        post?: never;
+        /** 리뷰 삭제 */
+        delete: operations["deleteReview"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/myposts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 내 공고 조회 */
+        get: operations["detailMyPosts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/myinterest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 내 관심 공고 조회 */
+        get: operations["detailMyInterestingPosts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/mycomments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 내 댓글 조회 */
+        get: operations["detailMyComments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/member/myapplications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 내 지원서 조회 */
+        get: operations["detailMyApplications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/{postId}/members/image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
+        get: operations["getMemberImageByPostId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/{postId}/images": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 공고에 등록된 이미지 불러오기 */
+        get: operations["getPostImages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/{id}/members/interest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
+        get: operations["isInterested"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/sort": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 구인공고 글 목록 정렬 */
+        get: operations["findAllPostSort"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 게시물 검색 */
+        get: operations["searchJobPostsByTitleAndBody"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/search-sort": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 구인공고 검색 */
+        get: operations["postSearchAndSort"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-posts/by-category": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 카테고리의 글 목록 불러오기 */
+        get: operations["getPostsByCategory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/employ/{postId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 공고 별 지원리스트 */
+        get: operations["getList_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/chat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 채팅방 목록 */
+        get: operations["showRoomList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/categories/top-level": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 최상단 카테고리 목록 불러오기 */
+        get: operations["getTopCategories"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/categories/sub-categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 하위 카테고리 목록 불러오기 */
+        get: operations["getSubCategories"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/categories/is-leaf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 가장 최하단의 카테고리인지 확인 */
+        get: operations["isLeafCategory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["showMain"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notification/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** 읽은 알림 전부 삭제 */
+        delete: operations["deleteReadAll"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notification/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** 알림 전부 삭제 */
+        delete: operations["deleteAll"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-post/{postId}/images": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** 공고에 등록된 이미지 삭제 */
+        delete: operations["deletePostImages"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-
 export type webhooks = Record<string, never>;
-
 export interface components {
-  schemas: {
-    Register: {
-      content: string;
+    schemas: {
+        ModifyCommentRequest: {
+            content: string;
+        };
+        Empty: Record<string, never>;
+        ApiResponseEmpty: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["Empty"];
+        };
+        ModifyMemberRequest: {
+            /** @enum {string} */
+            gender?: "MALE" | "FEMALE" | "UNDEFINED";
+            location?: string;
+            /** Format: date */
+            birth?: string;
+            password?: string;
+        };
+        UpdateSocialProfileRequest: {
+            name: string;
+            phoneNumber: string;
+            /** @enum {string} */
+            gender?: "MALE" | "FEMALE" | "UNDEFINED";
+            location: string;
+            /** Format: date */
+            birth: string;
+        };
+        ApiResponseMemberResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["MemberResponse"];
+        };
+        MemberResponse: {
+            /** Format: int64 */
+            id: number;
+            username: string;
+            /** @enum {string} */
+            gender?: "MALE" | "FEMALE" | "UNDEFINED";
+            location: string;
+            /** Format: date */
+            birth?: string;
+            name: string;
+            phoneNumber: string;
+            email: string;
+            authenticated?: boolean;
+            profileImageUrl?: string;
+        };
+        ModifyJobPostRequest: {
+            /** Format: int64 */
+            categoryId: number;
+            title: string;
+            body: string;
+            location: string;
+            /** Format: int32 */
+            minAge?: number;
+            /** @enum {string} */
+            gender?: "MALE" | "FEMALE" | "UNDEFINED";
+            /** Format: date */
+            deadLine: string;
+            /** Format: date */
+            jobStartDate: string;
+            /** Format: int32 */
+            workDays?: number;
+            /** Format: int32 */
+            workTime?: number;
+            /** @enum {string} */
+            payBasis?: "UNDEFINED" | "TOTAL_HOURS" | "TOTAL_DAYS";
+            /** Format: int32 */
+            cost: number;
+        };
+        ModifyJobApplicationRequest: {
+            body: string;
+        };
+        CreateCommentRequest: {
+            content: string;
+        };
+        ApiResponseCreateCommentResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["CreateCommentResponse"];
+        };
+        CreateCommentResponse: {
+            content?: string;
+        };
+        PaymentRequest: {
+            /** @enum {string} */
+            payStatus: "REQUEST" | "CARD" | "EASY_PAY";
+            /** Format: int64 */
+            amount: number;
+            orderName?: string;
+            /** Format: int64 */
+            jobApplicationId?: number;
+        };
+        ApiResponsePaymentResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["PaymentResponse"];
+        };
+        PaymentResponse: {
+            /** @enum {string} */
+            payStatus: "REQUEST" | "CARD" | "EASY_PAY";
+            /** Format: int64 */
+            amount: number;
+            orderId: string;
+            orderName: string;
+            payer: string;
+            successUrl?: string;
+            failUrl?: string;
+            failReason?: string;
+            canceled?: boolean;
+            cancelReason?: string;
+        };
+        ApiResponseCancelPaymentResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["CancelPaymentResponse"];
+        };
+        CancelPaymentResponse: {
+            /** Format: int32 */
+            cancelAmount?: number;
+            transactionKey?: string;
+            canceledAt?: string;
+        };
+        ApplicantReviewDto: {
+            /** Format: int64 */
+            id?: number;
+            body?: string;
+            /** Format: double */
+            score?: number;
+            /** Format: int64 */
+            jobPostingId?: number;
+            /** Format: int64 */
+            applicantId?: number;
+        };
+        ApiResponseApplicantReviewDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["ApplicantReviewDto"];
+        };
+        LoginRequest: {
+            username: string;
+            password: string;
+        };
+        JoinRequest: {
+            username: string;
+            password: string;
+            name: string;
+            phoneNumber: string;
+            email: string;
+            /** @enum {string} */
+            gender?: "MALE" | "FEMALE" | "UNDEFINED";
+            location: string;
+            /** Format: date */
+            birth: string;
+        };
+        WriteJobPostRequest: {
+            /** Format: int64 */
+            categoryId: number;
+            title: string;
+            body: string;
+            location: string;
+            /** Format: int32 */
+            minAge?: number;
+            /** @enum {string} */
+            gender?: "MALE" | "FEMALE" | "UNDEFINED";
+            /** Format: date */
+            deadLine: string;
+            /** Format: date */
+            jobStartDate: string;
+            /** Format: int32 */
+            workTime?: number;
+            /** Format: int32 */
+            workDays?: number;
+            /** @enum {string} */
+            payBasis: "UNDEFINED" | "TOTAL_HOURS" | "TOTAL_DAYS";
+            /** Format: int32 */
+            cost: number;
+            /** @enum {string} */
+            wagePaymentMethod: "UNDEFINED" | "INDIVIDUAL_PAYMENT" | "SERVICE_PAYMENT";
+        };
+        WriteJobApplicationRequest: {
+            body: string;
+        };
+        WriteMessageRequest: {
+            content: string;
+        };
+        Add: {
+            parentName?: string;
+            name: string;
+            /** Format: int32 */
+            level: number;
+            /** @enum {string} */
+            type?: "TASK" | "REGION";
+            enabled?: boolean;
+        };
+        ApiResponseListCommentDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["CommentDto"][];
+        };
+        CommentDto: {
+            /** Format: int64 */
+            id: number;
+            /** Format: int64 */
+            jobPostId: number;
+            author: string;
+            content: string;
+            authorProfileImageUrl?: string;
+            /** Format: date-time */
+            createAt: string;
+            /** Format: date-time */
+            modifyAt: string;
+        };
+        ApiResponsePaymentDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["PaymentDto"];
+        };
+        PaymentDto: {
+            paymentKey?: string;
+            /** Format: int64 */
+            totalAmount?: number;
+            orderName?: string;
+            paid?: boolean;
+            canceled?: boolean;
+            /** Format: int64 */
+            jobApplicationId?: number;
+            payStatus?: string;
+        };
+        ApiResponsePaymentSuccessDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["PaymentSuccessDto"];
+        };
+        PaymentSuccessDto: {
+            paymentKey?: string;
+            orderId?: string;
+            /** Format: int64 */
+            jobApplicationId?: number;
+            orderName?: string;
+            method?: string;
+            /** Format: int32 */
+            totalAmount?: number;
+            approvedAt?: string;
+            card?: components["schemas"]["SuccessCardDto"];
+            easyPay?: components["schemas"]["SuccessEasyPayDto"];
+        };
+        SuccessCardDto: {
+            company?: string;
+            number?: string;
+            installmentPlanMonths?: string;
+            isInterestFree?: string;
+            approveNo?: string;
+            useCardPoint?: string;
+            cardType?: string;
+            acquireStatus?: string;
+        };
+        SuccessEasyPayDto: {
+            provider?: string;
+            /** Format: int32 */
+            amount?: number;
+            /** Format: int32 */
+            discountAmount?: number;
+        };
+        ApiResponsePaymentFailResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["PaymentFailResponse"];
+        };
+        PaymentFailResponse: {
+            errorCode?: string;
+            errorMessage?: string;
+            orderId?: string;
+        };
+        ApiResponseListNotificationResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["NotificationResponse"][];
+        };
+        NotificationResponse: {
+            /** Format: int64 */
+            id?: number;
+            createAt?: string;
+            toMember?: string;
+            fromMember?: string;
+            relPostTitle?: string;
+            /** @enum {string} */
+            causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVED" | "CHATROOM_CREATED" | "CALCULATE_PAYMENT";
+            /** @enum {string} */
+            resultTypeCode?: "NOTICE" | "DELETE" | "APPROVE";
+            seen?: boolean;
+            url?: string;
+        };
+        ApiResponseBoolean: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: boolean;
+        };
+        ApiResponseString: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: string;
+        };
+        ApiResponseListApplicantReviewDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["ApplicantReviewDto"][];
+        };
+        ApiResponseListMyPostResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["MyPostResponse"][];
+        };
+        MyPostResponse: {
+            /** Format: int64 */
+            id?: number;
+            title?: string;
+        };
+        ApiResponseListInterestedJobPostResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["InterestedJobPostResponse"][];
+        };
+        InterestedJobPostResponse: {
+            /** Format: int64 */
+            id?: number;
+            title?: string;
+        };
+        ApiResponseListJobApplicationDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["JobApplicationDto"][];
+        };
+        JobApplicationDto: {
+            /** Format: int64 */
+            id: number;
+            jobPostAuthorUsername: string;
+            /** Format: int64 */
+            jobPostId: number;
+            jobPostName: string;
+            author: string;
+            body: string;
+            name: string;
+            /** Format: date */
+            birth: string;
+            phone: string;
+            location: string;
+            wageStatus: string;
+            wagePaymentMethod: string;
+            /** Format: int32 */
+            wages: number;
+            /** Format: date-time */
+            createdAt?: string;
+            approve?: boolean;
+        };
+        ApiResponseListString: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: string[];
+        };
+        ApiResponseJobPostDetailResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["JobPostDetailResponse"];
+        };
+        JobPostDetailResponse: {
+            /** Format: int64 */
+            id: number;
+            author: string;
+            title: string;
+            location: string;
+            /** Format: int64 */
+            commentsCount: number;
+            /** Format: int64 */
+            incrementViewCount: number;
+            /** Format: int64 */
+            interestsCount: number;
+            createdAt: string;
+            employed?: boolean;
+            /** Format: date */
+            deadLine?: string;
+            /** Format: date */
+            jobStartDate?: string;
+            body: string;
+            /** Format: int64 */
+            applicationCount?: number;
+            /** Format: int32 */
+            minAge?: number;
+            /** @enum {string} */
+            gender?: "MALE" | "FEMALE" | "UNDEFINED";
+            /** Format: int32 */
+            workTime?: number;
+            /** Format: int32 */
+            workDays?: number;
+            /** Format: int32 */
+            cost?: number;
+            /** @enum {string} */
+            payBasis?: "UNDEFINED" | "TOTAL_HOURS" | "TOTAL_DAYS";
+            /** @enum {string} */
+            wagePaymentMethod?: "UNDEFINED" | "INDIVIDUAL_PAYMENT" | "SERVICE_PAYMENT";
+            closed?: boolean;
+        };
+        ApiResponsePageJobPostBasicResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["PageJobPostBasicResponse"];
+        };
+        JobPostBasicResponse: {
+            /** Format: int64 */
+            id?: number;
+            author?: string;
+            location?: string;
+            mainImageUrl?: string;
+            title?: string;
+            /** Format: int64 */
+            incrementViewCount?: number;
+            /** Format: int64 */
+            commentsCount?: number;
+            /** Format: int64 */
+            interestsCount?: number;
+            closed?: boolean;
+            /** Format: date */
+            deadLine?: string;
+        };
+        PageJobPostBasicResponse: {
+            /** Format: int64 */
+            totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            first?: boolean;
+            last?: boolean;
+            /** Format: int32 */
+            size?: number;
+            content?: components["schemas"]["JobPostBasicResponse"][];
+            /** Format: int32 */
+            number?: number;
+            sort?: components["schemas"]["SortObject"];
+            /** Format: int32 */
+            numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
+            empty?: boolean;
+        };
+        PageableObject: {
+            /** Format: int64 */
+            offset?: number;
+            sort?: components["schemas"]["SortObject"];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            pageSize?: number;
+            paged?: boolean;
+            unpaged?: boolean;
+        };
+        SortObject: {
+            empty?: boolean;
+            sorted?: boolean;
+            unsorted?: boolean;
+        };
+        ApiResponseListJobPostBasicResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["JobPostBasicResponse"][];
+        };
+        ApiResponseListRoomListDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["RoomListDto"][];
+        };
+        RoomListDto: {
+            /** Format: int64 */
+            roomId?: number;
+            username1?: string;
+            username2?: string;
+            lastChat?: string;
+            lastChatDate?: string;
+        };
+        ApiResponseRoomDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["RoomDto"];
+        };
+        Message: {
+            /** Format: int64 */
+            id?: number;
+            room?: components["schemas"]["Room"];
+            sender?: string;
+            content?: string;
+            /** Format: date-time */
+            createdAt?: string;
+        };
+        Room: {
+            /** Format: int64 */
+            id?: number;
+            username1?: string;
+            username2?: string;
+            /** Format: date-time */
+            user1Enter?: string;
+            /** Format: date-time */
+            user2Enter?: string;
+            user1HasExit?: boolean;
+            user2HasExit?: boolean;
+        };
+        RoomDto: {
+            username1?: string;
+            username2?: string;
+            messages?: components["schemas"]["Message"][];
+        };
+        ApiResponseListMessageDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["MessageDto"][];
+        };
+        MessageDto: {
+            /** Format: int64 */
+            id?: number;
+            sender: string;
+            text: string;
+            createdAt?: string;
+        };
+        ApiResponseListCategoryDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["CategoryDto"][];
+        };
+        CategoryDto: {
+            /** Format: int64 */
+            id?: number;
+            name?: string;
+            /** Format: int32 */
+            level?: number;
+            /** Format: int64 */
+            parentId?: number;
+        };
+        ApiResponseJobApplicationDto: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["JobApplicationDto"];
+        };
     };
-    ApiResponseEmpty: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["Empty"];
-    };
-    Empty: Record<string, never>;
-    Modify: {
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location?: string;
-      /** Format: date */
-      birth?: string;
-      password?: string;
-    };
-    SocialProfileForm: {
-      name: string;
-      phoneNumber: string;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location: string;
-      /** Format: date */
-      birth: string;
-    };
-    ApiResponseMemberDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["MemberDto"];
-    };
-    MemberDto: {
-      /** Format: int64 */
-      id: number;
-      username: string;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location: string;
-      /** Format: date */
-      birth?: string;
-      name: string;
-      phoneNumber: string;
-      email: string;
-      authenticated?: boolean;
-      profileImageUrl?: string;
-    };
-    ApiResponseModify: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["Modify"];
-    };
-    ApiResponseRegister: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["Register"];
-    };
-    PaymentReqDto: {
-      /** @enum {string} */
-      payStatus: "REQUEST" | "CARD" | "EASY_PAY";
-      /** Format: int64 */
-      amount: number;
-      orderId?: string;
-      orderName?: string;
-      /** Format: int64 */
-      applicationId?: number;
-    };
-    ApiResponsePaymentResDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["PaymentResDto"];
-    };
-    PaymentResDto: {
-      /** @enum {string} */
-      payStatus: "REQUEST" | "CARD" | "EASY_PAY";
-      /** Format: int64 */
-      amount: number;
-      orderId: string;
-      orderName: string;
-      payer: string;
-      successUrl?: string;
-      failUrl?: string;
-      failReason?: string;
-      canceled?: boolean;
-      cancelReason?: string;
-    };
-    ApiResponsePaymentCancelResDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["PaymentCancelResDto"];
-    };
-    PaymentCancelResDto: {
-      /** Format: int32 */
-      cancelAmount?: number;
-      transactionKey?: string;
-      canceledAt?: string;
-    };
-    ApplicantReviewDto: {
-      /** Format: int64 */
-      id?: number;
-      body?: string;
-      /** Format: double */
-      score?: number;
-      /** Format: int64 */
-      jobPostingId?: number;
-      /** Format: int64 */
-      applicantId?: number;
-    };
-    ApiResponseApplicantReviewDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["ApplicantReviewDto"];
-    };
-    LoginForm: {
-      username: string;
-      password: string;
-    };
-    JoinForm: {
-      username: string;
-      password: string;
-      name: string;
-      phoneNumber: string;
-      email: string;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      location: string;
-      /** Format: date */
-      birth: string;
-    };
-    ApiResponseJoinForm: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["JoinForm"];
-    };
-    Add: {
-      parentName?: string;
-      name: string;
-      /** Format: int32 */
-      code: number;
-      /** Format: int32 */
-      level: number;
-      enabled?: boolean;
-    };
-    ApiResponseListCommentDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["CommentDto"][];
-    };
-    CommentDto: {
-      /** Format: int64 */
-      id: number;
-      /** Format: int64 */
-      jobPostId: number;
-      author: string;
-      content: string;
-      authorProfileImageUrl?: string;
-      /** Format: date-time */
-      createAt: string;
-      /** Format: date-time */
-      modifyAt: string;
-    };
-    ApiResponsePaymentDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["PaymentDto"];
-    };
-    PaymentDto: {
-      paymentKey?: string;
-      /** Format: int64 */
-      totalAmount?: number;
-      orderName?: string;
-      paid?: boolean;
-      canceled?: boolean;
-      /** Format: int64 */
-      applicationId?: number;
-      payStatus?: string;
-    };
-    ApiResponsePaymentSuccessDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["PaymentSuccessDto"];
-    };
-    PaymentSuccessDto: {
-      paymentKey?: string;
-      orderId?: string;
-      /** Format: int64 */
-      applicationId?: number;
-      orderName?: string;
-      method?: string;
-      /** Format: int32 */
-      totalAmount?: number;
-      approvedAt?: string;
-      card?: components["schemas"]["SuccessCardDto"];
-      easyPay?: components["schemas"]["SuccessEasyPayDto"];
-    };
-    SuccessCardDto: {
-      company?: string;
-      number?: string;
-      installmentPlanMonths?: string;
-      isInterestFree?: string;
-      approveNo?: string;
-      useCardPoint?: string;
-      cardType?: string;
-      acquireStatus?: string;
-    };
-    SuccessEasyPayDto: {
-      provider?: string;
-      /** Format: int32 */
-      amount?: number;
-      /** Format: int32 */
-      discountAmount?: number;
-    };
-    ApiResponsePaymentFailDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["PaymentFailDto"];
-    };
-    PaymentFailDto: {
-      errorCode?: string;
-      errorMessage?: string;
-      orderId?: string;
-    };
-    ApiResponseListNotificationDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["NotificationDto"][];
-    };
-    NotificationDto: {
-      /** Format: int64 */
-      id?: number;
-      createAt?: string;
-      toMember?: string;
-      fromMember?: string;
-      relPostTitle?: string;
-      /** @enum {string} */
-      causeTypeCode?: "POST_MODIFICATION" | "POST_DELETED" | "POST_INTERESTED" | "POST_DEADLINE" | "COMMENT_CREATED" | "APPLICATION_CREATED" | "APPLICATION_MODIFICATION" | "APPLICATION_APPROVED" | "APPLICATION_UNAPPROVE" | "CHATROOM_CREATED" | "CALCULATE_PAYMENT";
-      /** @enum {string} */
-      resultTypeCode?: "NOTICE" | "DELETE" | "APPROVE";
-      seen?: boolean;
-      url?: string;
-    };
-    ApiResponseBoolean: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: boolean;
-    };
-    ApiResponseString: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: string;
-    };
-    ApiResponseListApplicantReviewDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["ApplicantReviewDto"][];
-    };
-    ApiResponseListJobPostDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["JobPostDto"][];
-    };
-    JobPostDto: {
-      /** Format: int64 */
-      id: number;
-      author: string;
-      title: string;
-      location: string;
-      /** Format: int64 */
-      commentsCount: number;
-      /** Format: int64 */
-      incrementViewCount: number;
-      /** Format: int64 */
-      interestsCount: number;
-      createdAt: string;
-      employed?: boolean;
-      /** Format: date */
-      deadLine?: string;
-      /** Format: date */
-      jobStartDate?: string;
-      mainImageUrl?: string;
-      closed?: boolean;
-    };
-    ApiResponseListApplicationDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["ApplicationDto"][];
-    };
-    ApplicationDto: {
-      /** Format: int64 */
-      id: number;
-      jobPostAuthorUsername: string;
-      /** Format: int64 */
-      jobPostId: number;
-      jobPostName: string;
-      author: string;
-      body: string;
-      name: string;
-      /** Format: date */
-      birth: string;
-      phone: string;
-      location: string;
-      wageStatus: string;
-      wagePaymentMethod: string;
-      /** Format: int32 */
-      wages: number;
-      /** Format: date-time */
-      createdAt?: string;
-      approve?: boolean;
-    };
-    ApiResponseListString: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: string[];
-    };
-    ApiResponseJobPostDetailDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["JobPostDetailDto"];
-    };
-    JobPostDetailDto: {
-      /** Format: int64 */
-      id: number;
-      author: string;
-      title: string;
-      location: string;
-      /** Format: int64 */
-      commentsCount: number;
-      /** Format: int64 */
-      incrementViewCount: number;
-      /** Format: int64 */
-      interestsCount: number;
-      createdAt: string;
-      employed?: boolean;
-      /** Format: date */
-      deadLine?: string;
-      /** Format: date */
-      jobStartDate?: string;
-      body: string;
-      /** Format: int64 */
-      applicationCount?: number;
-      /** Format: int32 */
-      minAge?: number;
-      /** @enum {string} */
-      gender?: "MALE" | "FEMALE" | "UNDEFINED";
-      modifiedAt?: string;
-      interestedUsernames?: string[];
-      /** Format: int32 */
-      workTime?: number;
-      /** Format: int32 */
-      workDays?: number;
-      /** Format: int32 */
-      cost?: number;
-      /** @enum {string} */
-      payBasis?: "UNDEFINED" | "TOTAL_HOURS" | "TOTAL_DAYS";
-      /** @enum {string} */
-      wagePaymentMethod?: "UNDEFINED" | "INDIVIDUAL_PAYMENT" | "SERVICE_PAYMENT";
-      closed?: boolean;
-    };
-    ApiResponseGetPostsResponseBody: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["GetPostsResponseBody"];
-    };
-    GetPostsResponseBody: {
-      itemPage: components["schemas"]["PageDtoJobPostDto"];
-    };
-    PageDtoJobPostDto: {
-      /** Format: int64 */
-      totalElementsCount: number;
-      /** Format: int64 */
-      pageElementsCount: number;
-      /** Format: int64 */
-      totalPagesCount: number;
-      /** Format: int32 */
-      number: number;
-      content: components["schemas"]["JobPostDto"][];
-    };
-    ApiResponseListRoomListDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["RoomListDto"][];
-    };
-    RoomListDto: {
-      /** Format: int64 */
-      roomId?: number;
-      username1?: string;
-      username2?: string;
-      lastChat?: string;
-      lastChatDate?: string;
-    };
-    ApiResponseRoomDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["RoomDto"];
-    };
-    Message: {
-      /** Format: int64 */
-      id?: number;
-      room?: components["schemas"]["Room"];
-      sender?: string;
-      content?: string;
-      /** Format: date-time */
-      createdAt?: string;
-    };
-    Room: {
-      /** Format: int64 */
-      id?: number;
-      username1?: string;
-      username2?: string;
-      /** Format: date-time */
-      user1Enter?: string;
-      /** Format: date-time */
-      user2Enter?: string;
-      user1HasExit?: boolean;
-      user2HasExit?: boolean;
-    };
-    RoomDto: {
-      username1?: string;
-      username2?: string;
-      messages?: components["schemas"]["Message"][];
-    };
-    ApiResponseListMessageDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["MessageDto"][];
-    };
-    MessageDto: {
-      /** Format: int64 */
-      id?: number;
-      sender: string;
-      text: string;
-      createdAt?: string;
-    };
-    ApiResponseListCategoryDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["CategoryDto"][];
-    };
-    CategoryDto: {
-      /** Format: int64 */
-      id?: number;
-      name?: string;
-      /** Format: int32 */
-      code?: number;
-      /** Format: int32 */
-      level?: number;
-      /** Format: int64 */
-      parentId?: number;
-    };
-    ApiResponseApplicationDto: {
-      /** Format: int32 */
-      statusCode?: number;
-      message: string;
-      /** @enum {string} */
-      resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-      errorCode?: string;
-      data: components["schemas"]["ApplicationDto"];
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-
 export type $defs = Record<string, never>;
-
-export type external = Record<string, never>;
-
 export interface operations {
-
-  /** 댓글 수정 */
-  modify: {
-    parameters: {
-      path: {
-        postId: number;
-        commentId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Register"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-    };
-  };
-  /** 댓글 삭제 */
-  delete: {
-    parameters: {
-      path: {
-        postId: number;
-        commentId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-    };
-  };
-  /** 알림 읽음 처리 */
-  read: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-    };
-  };
-  /** 프로필 이미지 변경 */
-  updateMemberImage: {
-    requestBody?: {
-      content: {
-        "application/json": {
-          /** Format: binary */
-          profileImageFile?: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 프로필 이미지 삭제 */
-  deleteMemberImage: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 내 정보 조회 */
-  detailMember: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseMemberDto"];
-        };
-      };
-    };
-  };
-  /** 내 정보 수정 */
-  modifyMember: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Modify"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 최초 소셜로그인 - 필수 회원정보 입력 */
-  updateSocialMember: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SocialProfileForm"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseMemberDto"];
-        };
-      };
-    };
-  };
-  /** 구인공고 단건 조회 */
-  showDetailPost: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseJobPostDetailDto"];
-        };
-      };
-    };
-  };
-  /** 구인공고 수정 */
-  modifyPost: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Modify"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseModify"];
-        };
-      };
-    };
-  };
-  /** 구인공고 삭제 */
-  deleteJobPost: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-    };
-  };
-  /** 조기 마감 */
-  postEarlyClosing: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 채팅방 입장 */
-  showRoom: {
-    parameters: {
-      path: {
-        roomId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseRoomDto"];
-        };
-      };
-    };
-  };
-  /** 채팅방 퇴장 */
-  exitsRoom: {
-    parameters: {
-      path: {
-        roomId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 지원서 상세 내용 */
-  detailApplication: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseApplicationDto"];
-        };
-      };
-    };
-  };
-  /** 지원서 수정 */
-  modifyApplication: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Modify"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 지원서 작성 */
-  writeApplication: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Register"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 지원서 삭제 */
-  deleteApplication: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  runBatch: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-  };
-  /** 댓글 작성 */
-  write: {
-    parameters: {
-      path: {
-        postId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Register"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseRegister"];
-        };
-      };
-    };
-  };
-  /** 결제 요청 */
-  requestTossPayments: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PaymentReqDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponsePaymentResDto"];
-        };
-      };
-    };
-  };
-  /** 결제 취소 */
-  tossPaymentCancel: {
-    parameters: {
-      query: {
-        paymentKey: string;
-        cancelReason: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponsePaymentCancelResDto"];
-        };
-      };
-    };
-  };
-  register: {
-    requestBody: {
-      content: {
-        "application/json": string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-    };
-  };
-  /** 지원자 리뷰 작성 */
-  createReview: {
-    parameters: {
-      path: {
-        jobPostingId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ApplicantReviewDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseApplicantReviewDto"];
-        };
-      };
-    };
-  };
-  /** 로그아웃 처리 및 쿠키 삭제 */
-  logout: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": Record<string, never>;
-        };
-      };
-    };
-  };
-  /** 로그인, accessToken, refreshToken 쿠키 생성됨 */
-  login: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["LoginForm"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseMemberDto"];
-        };
-      };
-    };
-  };
-  /** 회원가입 */
-  join: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["JoinForm"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseJoinForm"];
-        };
-      };
-    };
-  };
-  /** 구인공고 글 목록 가져오기 */
-  findAllPost: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
-        };
-      };
-    };
-  };
-  /** 구인공고 작성 */
-  writePost: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Register"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseRegister"];
-        };
-      };
-    };
-  };
-  /** 구인공고 관심 등록 */
-  interest: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 구인공고 관심 제거 */
-  disinterest: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 공고에 이미지 등록 */
-  registerPostImages: {
-    parameters: {
-      query: {
-        postDetailId: number;
-        jobPostImageFile?: string[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 채팅 메세지 로드 */
-  writeChat_1: {
-    parameters: {
-      path: {
-        roomId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListMessageDto"];
-        };
-      };
-    };
-  };
-  /** 채팅 생성 */
-  writeChat: {
-    parameters: {
-      path: {
-        roomId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Register"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 인증 메일 전송 */
-  sendAuthEmail: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  addCategory: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Add"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 인증코드 확인 */
-  verifyCode: {
-    parameters: {
-      path: {
-        code: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 개인 지급 알바 미완료 처리 */
-  cancelIndividualNoWork: {
-    parameters: {
-      path: {
-        applicationId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 구인자가 수동으로 알바완료 처리 */
-  completeJobManually: {
-    parameters: {
-      path: {
-        applicationId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 공고의 대표 이미지 변경 */
-  changeMainImage: {
-    parameters: {
-      query: {
-        currentImageId: number;
-        newImageId: number;
-      };
-      path: {
-        postId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 지원서 승인 */
-  approve: {
-    parameters: {
-      path: {
-        postId: number;
-        applicationIds: number[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
-  /** 배포한 애플리케이션의 준비 상태를 확인 */
-  isReady: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-  };
-  /** 소셜 로그인 */
-  socialLogin: {
-    parameters: {
-      query: {
-        redirectUrl: string;
-      };
-      path: {
-        providerTypeCode: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-  };
-  /** 해당 공고에 달린 댓글 목록 */
-  findByPostId: {
-    parameters: {
-      path: {
-        postId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListCommentDto"];
-        };
-      };
-    };
-  };
-  /** 결제정보 가져오기 */
-  getPaymentKey: {
-    parameters: {
-      path: {
-        applicationId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponsePaymentDto"];
-        };
-      };
-    };
-  };
-  /** 결제 성공 */
-  tossPaymentSuccess: {
-    parameters: {
-      query: {
-        paymentKey: string;
-        orderId: string;
-        amount: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponsePaymentSuccessDto"];
-        };
-      };
-    };
-  };
-  /** 결제 실패 */
-  tossPaymentFail: {
-    parameters: {
-      query: {
-        code: string;
-        message: string;
-        orderId: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponsePaymentFailDto"];
-        };
-      };
-    };
-  };
-  /** 유저 별 알림리스트 */
-  getList: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListNotificationDto"];
-        };
-      };
-    };
-  };
-  /** 읽지 않은 알림 유무 확인 */
-  unreadNotification: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseBoolean"];
-        };
-      };
-    };
-  };
-  /** 아이디로 프로필 이미지 URL 불러오기 */
-  getMemberImageByUsername: {
-    parameters: {
-      path: {
-        username: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseString"];
-        };
-      };
-    };
-  };
-  /** 나의 전체 리뷰 조회 */
-  getAllReviews: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListApplicantReviewDto"];
-        };
-      };
-    };
-  };
-  /** 리뷰 단건 조회 */
-  getReviewById: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseApplicantReviewDto"];
-        };
-      };
-    };
-  };
-  /** 리뷰 삭제 */
-  deleteReview: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseString"];
-        };
-      };
-    };
-  };
-  /** 내 공고 조회 */
-  detailMyPosts: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
-        };
-      };
-    };
-  };
-  /** 내 관심 공고 조회 */
-  detailMyInterestingPosts: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
-        };
-      };
-    };
-  };
-  /** 내 댓글 조회 */
-  detailMyComments: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListCommentDto"];
-        };
-      };
-    };
-  };
-  /** 내 지원서 조회 */
-  detailMyApplications: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListApplicationDto"];
-        };
-      };
-    };
-  };
-  /** 공고번호로 작성자의 프로필 이미지 URL 불러오기 */
-  getMemberImageByPostId: {
-    parameters: {
-      path: {
-        postId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseString"];
-        };
-      };
-    };
-  };
-  /** 공고에 등록된 이미지 불러오기 */
-  getPostImages: {
-    parameters: {
-      path: {
-        postId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListString"];
-        };
-      };
-    };
-  };
-  /** 로그인한 유저의 해당 구인공고 관심 등록 여부 */
-  isInterested: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseBoolean"];
-        };
-      };
-    };
-  };
-  /** 구인공고 글 목록 정렬 */
-  findAllPostSort: {
-    parameters: {
-      query?: {
-        page?: number;
-        sortBy?: string[];
-        sortOrder?: string[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseGetPostsResponseBody"];
-        };
-      };
-    };
-  };
-  /** 게시물 검색 */
-  searchJobPostsByTitleAndBody: {
-    parameters: {
-      query?: {
-        titleOrBody?: string;
-        title?: string;
-        body?: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
-        };
-      };
-    };
-  };
-  /** 구인공고 검색 */
-  postSearchAndSort: {
-    parameters: {
-      query?: {
-        page?: number;
-        kw?: string;
-        kwType?: string[];
-        closed?: string;
-        gender?: string;
-        min_Age?: number[];
-        location?: string[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseGetPostsResponseBody"];
-        };
-      };
-    };
-  };
-  /** 카테고리의 글 목록 불러오기 */
-  getPostsByCategory: {
-    parameters: {
-      query: {
-        category_name: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListJobPostDto"];
-        };
-      };
-    };
-  };
-  /** 공고 별 지원리스트 */
-  getList_1: {
-    parameters: {
-      path: {
-        postId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListApplicationDto"];
-        };
-      };
-    };
-  };
-  /** 채팅방 목록 */
-  showRoomList: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListRoomListDto"];
-        };
-      };
-    };
-  };
-  /** 최상단 카테고리 목록 불러오기 */
-  getTopCategories: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListCategoryDto"];
-        };
-      };
-    };
-  };
-  /** 하위 카테고리 목록 불러오기 */
-  getSubCategories: {
-    parameters: {
-      query: {
-        category_name: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseListCategoryDto"];
-        };
-      };
-    };
-  };
-  /** 가장 최하단의 카테고리인지 확인 */
-  isLeafCategory: {
-    parameters: {
-      query: {
-        category_id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseBoolean"];
-        };
-      };
-    };
-  };
-  showMain: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-  };
-  /** 읽은 알림 전부 삭제 */
-  deleteReadAll: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-    };
-  };
-  /** 알림 전부 삭제 */
-  deleteAll: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-    };
-  };
-  /** 공고에 등록된 이미지 삭제 */
-  deletePostImages: {
-    parameters: {
-      path: {
-        postId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ApiResponseEmpty"];
-        };
-      };
-    };
-  };
+    modify: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: number;
+                commentId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModifyCommentRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Empty"];
+                };
+            };
+        };
+    };
+    delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: number;
+                commentId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Empty"];
+                };
+            };
+        };
+    };
+    read: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    updateMemberImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    /** Format: binary */
+                    profileImageFile?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    deleteMemberImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    detailMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseMemberResponse"];
+                };
+            };
+        };
+    };
+    modifyMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModifyMemberRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    updateSocialMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSocialProfileRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseMemberResponse"];
+                };
+            };
+        };
+    };
+    showDetailPost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseJobPostDetailResponse"];
+                };
+            };
+        };
+    };
+    modifyPost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModifyJobPostRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    deleteJobPost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Empty"];
+                };
+            };
+        };
+    };
+    postEarlyClosing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    showRoom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                roomId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseRoomDto"];
+                };
+            };
+        };
+    };
+    exitsRoom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                roomId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    detailJobApplication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseJobApplicationDto"];
+                };
+            };
+        };
+    };
+    modifyJobApplication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModifyJobApplicationRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    deleteJobApplication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    runBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
+            };
+        };
+    };
+    write: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCommentRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseCreateCommentResponse"];
+                };
+            };
+        };
+    };
+    requestTossPayments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePaymentResponse"];
+                };
+            };
+        };
+    };
+    tossPaymentCancel: {
+        parameters: {
+            query: {
+                paymentKey: string;
+                cancelReason: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseCancelPaymentResponse"];
+                };
+            };
+        };
+    };
+    register: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    createReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                jobPostingId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplicantReviewDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseApplicantReviewDto"];
+                };
+            };
+        };
+    };
+    logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": {
+                        [key: string]: string;
+                    };
+                };
+            };
+        };
+    };
+    login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseMemberResponse"];
+                };
+            };
+        };
+    };
+    join: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JoinRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    writePost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WriteJobPostRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    writeJobApplication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WriteJobApplicationRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    interest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    disinterest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    registerPostImages: {
+        parameters: {
+            query: {
+                postDetailId: number;
+                jobPostImageFile?: string[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    writeChat_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                roomId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListMessageDto"];
+                };
+            };
+        };
+    };
+    writeChat: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                roomId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WriteMessageRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    sendAuthEmail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    addCategory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Add"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    verifyCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    cancelIndividualNoWork: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                applicationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    completeJobManually: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                applicationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    changeMainImage: {
+        parameters: {
+            query: {
+                currentImageId: number;
+                newImageId: number;
+            };
+            header?: never;
+            path: {
+                postId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    approve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: number;
+                applicationIds: number[];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
+    isReady: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
+            };
+        };
+    };
+    socialLogin: {
+        parameters: {
+            query: {
+                redirectUrl: string;
+            };
+            header?: never;
+            path: {
+                providerTypeCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
+            };
+        };
+    };
+    findByPostId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListCommentDto"];
+                };
+            };
+        };
+    };
+    getPaymentKey: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                applicationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePaymentDto"];
+                };
+            };
+        };
+    };
+    tossPaymentSuccess: {
+        parameters: {
+            query: {
+                paymentKey: string;
+                orderId: string;
+                amount: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePaymentSuccessDto"];
+                };
+            };
+        };
+    };
+    tossPaymentFail: {
+        parameters: {
+            query: {
+                code: string;
+                message: string;
+                orderId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePaymentFailResponse"];
+                };
+            };
+        };
+    };
+    getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListNotificationResponse"];
+                };
+            };
+        };
+    };
+    unreadNotification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseBoolean"];
+                };
+            };
+        };
+    };
+    getMemberImageByUsername: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                username: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseString"];
+                };
+            };
+        };
+    };
+    getAllReviews: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListApplicantReviewDto"];
+                };
+            };
+        };
+    };
+    getReviewById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseApplicantReviewDto"];
+                };
+            };
+        };
+    };
+    deleteReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseString"];
+                };
+            };
+        };
+    };
+    detailMyPosts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListMyPostResponse"];
+                };
+            };
+        };
+    };
+    detailMyInterestingPosts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListInterestedJobPostResponse"];
+                };
+            };
+        };
+    };
+    detailMyComments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListCommentDto"];
+                };
+            };
+        };
+    };
+    detailMyApplications: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListJobApplicationDto"];
+                };
+            };
+        };
+    };
+    getMemberImageByPostId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseString"];
+                };
+            };
+        };
+    };
+    getPostImages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListString"];
+                };
+            };
+        };
+    };
+    isInterested: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseBoolean"];
+                };
+            };
+        };
+    };
+    findAllPostSort: {
+        parameters: {
+            query?: {
+                page?: number;
+                sortBy?: string[];
+                sortOrder?: string[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePageJobPostBasicResponse"];
+                };
+            };
+        };
+    };
+    searchJobPostsByTitleAndBody: {
+        parameters: {
+            query?: {
+                titleOrBody?: string;
+                title?: string;
+                body?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListJobPostBasicResponse"];
+                };
+            };
+        };
+    };
+    postSearchAndSort: {
+        parameters: {
+            query?: {
+                page?: number;
+                kw?: string;
+                kwType?: string[];
+                closed?: string;
+                gender?: string;
+                min_Age?: number[];
+                location?: string[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePageJobPostBasicResponse"];
+                };
+            };
+        };
+    };
+    getPostsByCategory: {
+        parameters: {
+            query: {
+                "category-name": string;
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePageJobPostBasicResponse"];
+                };
+            };
+        };
+    };
+    getList_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListJobApplicationDto"];
+                };
+            };
+        };
+    };
+    showRoomList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListRoomListDto"];
+                };
+            };
+        };
+    };
+    getTopCategories: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListCategoryDto"];
+                };
+            };
+        };
+    };
+    getSubCategories: {
+        parameters: {
+            query: {
+                category_name: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListCategoryDto"];
+                };
+            };
+        };
+    };
+    isLeafCategory: {
+        parameters: {
+            query: {
+                category_id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseBoolean"];
+                };
+            };
+        };
+    };
+    showMain: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
+            };
+        };
+    };
+    deleteReadAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    deleteAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    deletePostImages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
+                };
+            };
+        };
+    };
 }
