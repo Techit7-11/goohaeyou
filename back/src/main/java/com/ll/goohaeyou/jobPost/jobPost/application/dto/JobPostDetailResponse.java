@@ -9,12 +9,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter
 @Builder
-public class JobPostDetailDto {
+public class JobPostDetailResponse {
     @NotNull
     private Long id;
     @NotNull
@@ -42,18 +41,16 @@ public class JobPostDetailDto {
     private long applicationCount;
     private int minAge;
     private Gender gender;
-    private String modifiedAt;
     private int workTime;
     private int workDays;
     private int cost;
     private PayBasis payBasis;
     private WagePaymentMethod wagePaymentMethod;
 
-    public static JobPostDetailDto from(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential, Wage wage) {
+    public static JobPostDetailResponse from(JobPost jobPost, JobPostDetail jobPostDetail, Essential essential, Wage wage) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
-        LocalDateTime mostRecentModifiedDate = jobPost.getModifiedAt().isAfter(jobPostDetail.getModifiedAt()) ? jobPost.getModifiedAt() : jobPostDetail.getModifiedAt();
 
-        return JobPostDetailDto.builder()
+        return JobPostDetailResponse.builder()
                 .id(jobPost.getId())
                 .author(jobPostDetail.getAuthor())
                 .title(jobPost.getTitle())
@@ -75,7 +72,6 @@ public class JobPostDetailDto {
                 .workDays(wage.getWorkDays())
                 .wagePaymentMethod(wage.getWagePaymentMethod())
                 .createdAt(jobPost.getCreatedAt().format(formatter))
-                .modifiedAt(mostRecentModifiedDate.format(formatter))
                 .build();
     }
 }

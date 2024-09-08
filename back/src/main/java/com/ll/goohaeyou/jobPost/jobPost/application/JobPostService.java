@@ -15,10 +15,7 @@ import com.ll.goohaeyou.global.standard.base.RegionType;
 import com.ll.goohaeyou.global.standard.base.util.Util;
 import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDetailDto;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.ModifyJobPostRequest;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
+import com.ll.goohaeyou.jobPost.jobPost.application.dto.*;
 import com.ll.goohaeyou.jobPost.jobPost.domain.*;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.*;
 import com.ll.goohaeyou.member.member.domain.Member;
@@ -60,24 +57,20 @@ public class JobPostService {
     private final EssentialRepository essentialRepository;
 
     @Transactional
-    public JobPostDto writePost(String username, WriteJobPostRequest request) {
+    public Long writePost(String username, WriteJobPostRequest request) {
         int regionCode = Util.Region.getRegionCodeFromAddress(request.location());
 
         JobPost newPost = createAndSaveJobPost(username, request, regionCode);
         createAndSaveJobPostDetail(newPost, username, request);
 
-        return JobPostDto.from(newPost);
+        return newPost.getId();
     }
 
-    public JobPostDetailDto findById(Long id) {
+    public JobPostDetailResponse findById(Long id) {
         JobPostDetail postDetail = jobPostdetailRepository.findById(id)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
-        return JobPostDetailDto.from(postDetail.getJobPost(), postDetail, postDetail.getEssential(), postDetail.getWage());
-    }
-
-    public List<JobPostDto> findAll() {
-        return JobPostDto.convertToDtoList(jobPostRepository.findAll());
+        return JobPostDetailResponse.from(postDetail.getJobPost(), postDetail, postDetail.getEssential(), postDetail.getWage());
     }
 
     private JobPost createAndSaveJobPost(String username, WriteJobPostRequest request, int regionCode) {
@@ -182,30 +175,31 @@ public class JobPostService {
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
     }
 
-    public List<JobPostDto> findByUsername(String username) {
+    public List<MyPostResponse> getMyJobPosts(String username) {
 
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
-        return JobPostDto.convertToDtoList(jobPostRepository.findByMemberId(member.getId()));
+        return MyPostResponse.convertToList(jobPostRepository.findByMemberId(member.getId()));
     }
 
-    public Page<JobPost> findByKw(List<String> kwTypes, String kw, String closed, String gender, int[] min_Age,
-                                  List<String> location, Pageable pageable) {
-        return jobPostRepository.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable);
+    public Page<JobPostBasicResponse> findByKw(List<String> kwTypes, String kw, String closed, String gender,
+                                               int[] min_Age, List<String> location, Pageable pageable) {
+        return JobPostBasicResponse.convertToPage(
+                jobPostRepository.findByKw(kwTypes, kw, closed, gender, min_Age, location, pageable)
+        );
     }
 
     @Cacheable(value = "jobPostsBySort", key = "#sortName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
-    public Page<JobPost> findBySort(Pageable pageable) {
-        return jobPostRepository.findBySort(pageable);
+    public Page<JobPostBasicResponse> findBySort(Pageable pageable) {
+        return JobPostBasicResponse.convertToPage(jobPostRepository.findBySort(pageable));
     }
 
-    public List<JobPostDto> findByInterestAndUsername(Long memberId) {
-        return jobPostdetailRepository.findByInterestsMemberId(memberId)
-                .stream()
-                .map(JobPostDetail::getJobPost)
-                .map(JobPostDto::from)
-                .collect(Collectors.toList());
+    public List<InterestedJobPostResponse> findByInterestAndUsername(Long memberId) {
+        return InterestedJobPostResponse.convertToList(
+                jobPostdetailRepository.findByInterestsMemberId(memberId)
+        );
+
     }
 
     @Transactional
@@ -217,17 +211,14 @@ public class JobPostService {
     }
 
     @Cacheable(value = "jobPostsBySearch", key = "#titleAndBody + '_' + #titleOnly + '_' + #bodyOnly")
-    public List<JobPostDto> searchJobPostsByTitleAndBody(String titleAndBody, String titleOnly, String bodyOnly) {
+    public List<JobPostBasicResponse> searchJobPostsByTitleAndBody(String titleAndBody, String titleOnly, String bodyOnly) {
         Specification<JobPost> spec = Specification.where(null);
 
         spec = applyTitleAndBodySearch(spec, titleAndBody);
         spec = applyTitleOnlySearch(spec, titleOnly);
         spec = applyBodyOnlySearch(spec, bodyOnly);
 
-        return jobPostRepository.findAll(spec)
-                .stream()
-                .map(JobPostDto::from)
-                .collect(Collectors.toList());
+        return JobPostBasicResponse.convertToList(jobPostRepository.findAll(spec));
     }
 
     private Specification<JobPost> applyTitleAndBodySearch(Specification<JobPost> spec, String titleAndBody) {
@@ -294,12 +285,12 @@ public class JobPostService {
     }
 
     @Cacheable(value = "jobPostsByCategory", key = "#categoryName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
-    public Page<JobPostDto> getPostsByCategory(String categoryName, Pageable pageable) {
+    public Page<JobPostBasicResponse> getPostsByCategory(String categoryName, Pageable pageable) {
         Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
         Page<JobPost> jobPosts = jobPostCategoryRepository.findJobPostsByCategoryId(category.getId(), pageable);
 
-        return JobPostDto.convertToDtoPage(jobPosts);
+        return JobPostBasicResponse.convertToPage(jobPosts);
     }
 }

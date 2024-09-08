@@ -1,7 +1,6 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.Wage;
@@ -19,8 +18,8 @@ public class WageService {
     private final JobPostDetailRepository jobPostDetailRepository;
 
     @Transactional
-    public void create(JobPostDto jobPostDto, WriteJobPostRequest request) {
-        JobPostDetail jobPostDetail = jobPostDetailRepository.findById(jobPostDto.getId())
+    public void create(Long jobPostId, WriteJobPostRequest request) {
+        JobPostDetail jobPostDetail = jobPostDetailRepository.findById(jobPostId)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
         Wage newWage = Wage.create(request.cost(), request.workTime(), request.workDays(), request.payBasis(),
