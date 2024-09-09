@@ -583,11 +583,11 @@
 					<!-- 댓글 입력 폼 -->
 					<div class="flex justify-between items-center mb-4">
 						<textarea
-							class="textarea textarea-bordered border-green4 w-full"
+							class="textarea textarea-bordered border-gray-300 focus:border-green4 focus:ring focus:ring-green3 focus:ring-opacity-50 w-full"
 							placeholder="댓글을 입력하세요."
 							bind:value={newComment}
 						></textarea>
-						<button class="btn btn-ghost mx-3 bg-white text-green-500" on:click={addComment}
+						<button class="btn btn-ghost mx-3 bg-white text-gray-900" on:click={addComment}
 							>댓글 달기</button
 						>
 					</div>
