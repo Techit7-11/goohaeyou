@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.category.presentation;
 
 import com.ll.goohaeyou.category.application.CategoryAdminService;
-import com.ll.goohaeyou.category.application.dto.CategoryForm;
+import com.ll.goohaeyou.category.application.dto.CreateCategoryRequest;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.global.standard.base.Empty;
@@ -25,8 +25,8 @@ public class CategoryAdminController {
     @PostMapping("add")
     @Operation(summary = "카테고리 추가")
     public ApiResponse<Empty> addCategory(@AuthenticationPrincipal MemberDetails memberDetail,
-                                          @Valid @RequestBody CategoryForm.Add form) {
-        categoryAdminService.addCategory(memberDetail.getUsername(), form);
+                                          @Valid @RequestBody CreateCategoryRequest request) {
+        categoryAdminService.addCategory(memberDetail.getUsername(), request);
 
         return ApiResponse.created();
     }

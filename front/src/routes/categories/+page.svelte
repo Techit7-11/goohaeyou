@@ -5,8 +5,8 @@
 	import type { components } from '$lib/types/api/v1/schema';
 	import Pagination from '$lib/components/CategoryPagination.svelte';
 
-	let categories: components['schemas']['CategoryDto'][] = [];
-	let subCategories: components['schemas']['CategoryDto'][] = [];
+	let topCategories: components['schemas']['TopLevelCategoryResponse'][] = [];
+	let subCategories: components['schemas']['SubCategoryResponse'][] = [];
 	let posts: any = null;
 	let selectedCategoryName = '';
 	let isLeafCategory = false;
@@ -18,8 +18,8 @@
 			const response = await rq.apiEndPoints().GET('/api/categories/top-level');
 
 			if (response.data?.resultType === 'SUCCESS') {
-				categories = response.data.data ?? [];
-				if (categories.length === 0) {
+				topCategories = response.data.data ?? [];
+				if (topCategories.length === 0) {
 					console.error('카테고리가 없습니다.');
 				}
 			} else {
@@ -83,9 +83,9 @@
 	async function initialize() {
 		try {
 			await loadCategories();
-			if (categories.length > 0) {
-				selectedCategoryName = categories[0].name;
-				await handleCategoryClick(categories[0]);
+			if (topCategories.length > 0) {
+				selectedCategoryName = topCategories[0].name;
+				await handleCategoryClick(topCategories[0]);
 			}
 		} catch (e) {
 			console.error('Error during load:', e);
@@ -104,8 +104,8 @@
 <div class="flex items-center justify-center min-h-screen">
 	<div class="flex flex-col items-center p-4 space-y-4">
 		<div class="menu bg-base-200 w-full rounded-box p-4 shadow-lg">
-			{#if categories.length > 0}
-				{#each categories as category}
+			{#if topCategories.length > 0}
+				{#each topCategories as category}
 					<details class="mb-2">
 						<summary
 							on:click={() => handleCategoryClick(category)}

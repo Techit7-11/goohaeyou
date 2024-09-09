@@ -581,7 +581,7 @@ export interface paths {
             cookie?: never;
         };
         /** 결제정보 가져오기 */
-        get: operations["getPaymentKey"];
+        get: operations["getPaymentInfo"];
         put?: never;
         post?: never;
         delete?: never;
@@ -905,7 +905,7 @@ export interface paths {
             cookie?: never;
         };
         /** 공고 별 지원리스트 */
-        get: operations["getList_1"];
+        get: operations["getJobApplicationsByPost"];
         put?: never;
         post?: never;
         delete?: never;
@@ -974,22 +974,6 @@ export interface paths {
         };
         /** 가장 최하단의 카테고리인지 확인 */
         get: operations["isLeafCategory"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["showMain"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1262,47 +1246,47 @@ export interface components {
         WriteMessageRequest: {
             content: string;
         };
-        Add: {
+        CreateCategoryRequest: {
             parentName?: string;
-            name: string;
+            name?: string;
             /** Format: int32 */
-            level: number;
+            level?: number;
             /** @enum {string} */
             type?: "TASK" | "REGION";
             enabled?: boolean;
         };
-        ApiResponseListCommentDto: {
+        ApiResponseListCommentResponse: {
             /** Format: int32 */
             statusCode?: number;
             message: string;
             /** @enum {string} */
             resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
             errorCode?: string;
-            data: components["schemas"]["CommentDto"][];
+            data: components["schemas"]["CommentResponse"][];
         };
-        CommentDto: {
+        CommentResponse: {
             /** Format: int64 */
-            id: number;
+            id?: number;
             /** Format: int64 */
-            jobPostId: number;
-            author: string;
-            content: string;
+            jobPostId?: number;
+            author?: string;
+            content?: string;
             authorProfileImageUrl?: string;
             /** Format: date-time */
-            createAt: string;
+            createAt?: string;
             /** Format: date-time */
-            modifyAt: string;
+            modifyAt?: string;
         };
-        ApiResponsePaymentDto: {
+        ApiResponsePaymentInfoResponse: {
             /** Format: int32 */
             statusCode?: number;
             message: string;
             /** @enum {string} */
             resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
             errorCode?: string;
-            data: components["schemas"]["PaymentDto"];
+            data: components["schemas"]["PaymentInfoResponse"];
         };
-        PaymentDto: {
+        PaymentInfoResponse: {
             paymentKey?: string;
             /** Format: int64 */
             totalAmount?: number;
@@ -1313,16 +1297,16 @@ export interface components {
             jobApplicationId?: number;
             payStatus?: string;
         };
-        ApiResponsePaymentSuccessDto: {
+        ApiResponsePaymentSuccessResponse: {
             /** Format: int32 */
             statusCode?: number;
             message: string;
             /** @enum {string} */
             resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
             errorCode?: string;
-            data: components["schemas"]["PaymentSuccessDto"];
+            data: components["schemas"]["PaymentSuccessResponse"];
         };
-        PaymentSuccessDto: {
+        PaymentSuccessResponse: {
             paymentKey?: string;
             orderId?: string;
             /** Format: int64 */
@@ -1332,10 +1316,10 @@ export interface components {
             /** Format: int32 */
             totalAmount?: number;
             approvedAt?: string;
-            card?: components["schemas"]["SuccessCardDto"];
-            easyPay?: components["schemas"]["SuccessEasyPayDto"];
+            card?: components["schemas"]["SuccessCardResponse"];
+            easyPay?: components["schemas"]["SuccessEasyPayResponse"];
         };
-        SuccessCardDto: {
+        SuccessCardResponse: {
             company?: string;
             number?: string;
             installmentPlanMonths?: string;
@@ -1345,7 +1329,7 @@ export interface components {
             cardType?: string;
             acquireStatus?: string;
         };
-        SuccessEasyPayDto: {
+        SuccessEasyPayResponse: {
             provider?: string;
             /** Format: int32 */
             amount?: number;
@@ -1444,36 +1428,34 @@ export interface components {
             id?: number;
             title?: string;
         };
-        ApiResponseListJobApplicationDto: {
+        ApiResponseListMyCommentResponse: {
             /** Format: int32 */
             statusCode?: number;
             message: string;
             /** @enum {string} */
             resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
             errorCode?: string;
-            data: components["schemas"]["JobApplicationDto"][];
+            data: components["schemas"]["MyCommentResponse"][];
         };
-        JobApplicationDto: {
+        MyCommentResponse: {
             /** Format: int64 */
-            id: number;
-            jobPostAuthorUsername: string;
-            /** Format: int64 */
-            jobPostId: number;
-            jobPostName: string;
-            author: string;
-            body: string;
-            name: string;
-            /** Format: date */
-            birth: string;
-            phone: string;
-            location: string;
-            wageStatus: string;
-            wagePaymentMethod: string;
+            id?: number;
+            content?: string;
+        };
+        ApiResponseListMyJobApplicationResponse: {
             /** Format: int32 */
-            wages: number;
-            /** Format: date-time */
-            createdAt?: string;
-            approve?: boolean;
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["MyJobApplicationResponse"][];
+        };
+        MyJobApplicationResponse: {
+            /** Format: int64 */
+            id?: number;
+            jobPostName?: string;
+            body?: string;
         };
         ApiResponseListString: {
             /** Format: int32 */
@@ -1494,50 +1476,46 @@ export interface components {
             data: components["schemas"]["JobPostDetailResponse"];
         };
         JobPostDetailResponse: {
+            author?: string;
+            createdAt?: string;
+            closed?: boolean;
             /** Format: int64 */
-            id: number;
-            author: string;
-            title: string;
-            location: string;
+            id?: number;
+            title?: string;
             /** Format: int64 */
-            commentsCount: number;
+            incrementViewCount?: number;
             /** Format: int64 */
-            incrementViewCount: number;
-            /** Format: int64 */
-            interestsCount: number;
-            createdAt: string;
-            employed?: boolean;
-            /** Format: date */
-            deadLine?: string;
-            /** Format: date */
-            jobStartDate?: string;
-            body: string;
-            /** Format: int64 */
-            applicationCount?: number;
-            /** Format: int32 */
-            minAge?: number;
-            /** @enum {string} */
-            gender?: "MALE" | "FEMALE" | "UNDEFINED";
-            /** Format: int32 */
-            workTime?: number;
-            /** Format: int32 */
-            workDays?: number;
+            interestsCount?: number;
             /** Format: int32 */
             cost?: number;
             /** @enum {string} */
             payBasis?: "UNDEFINED" | "TOTAL_HOURS" | "TOTAL_DAYS";
+            /** Format: int32 */
+            workTime?: number;
+            /** Format: int32 */
+            workDays?: number;
             /** @enum {string} */
             wagePaymentMethod?: "UNDEFINED" | "INDIVIDUAL_PAYMENT" | "SERVICE_PAYMENT";
-            closed?: boolean;
+            /** Format: date */
+            jobStartDate?: string;
+            employed?: boolean;
+            /** Format: date */
+            deadLine?: string;
+            /** Format: int32 */
+            minAge?: number;
+            /** @enum {string} */
+            gender?: "MALE" | "FEMALE" | "UNDEFINED";
+            location?: string;
+            body?: string;
         };
-        ApiResponsePageJobPostBasicResponse: {
+        ApiResponseJobPostSortPageResponse: {
             /** Format: int32 */
             statusCode?: number;
             message: string;
             /** @enum {string} */
             resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
             errorCode?: string;
-            data: components["schemas"]["PageJobPostBasicResponse"];
+            data: components["schemas"]["JobPostSortPageResponse"];
         };
         JobPostBasicResponse: {
             /** Format: int64 */
@@ -1556,11 +1534,43 @@ export interface components {
             /** Format: date */
             deadLine?: string;
         };
-        PageJobPostBasicResponse: {
+        JobPostSortPageResponse: {
+            itemPage: components["schemas"]["PageDtoJobPostBasicResponse"];
+        };
+        PageDtoJobPostBasicResponse: {
             /** Format: int64 */
-            totalElements?: number;
+            totalElementsCount: number;
+            /** Format: int64 */
+            pageElementsCount: number;
+            /** Format: int64 */
+            totalPagesCount: number;
+            /** Format: int32 */
+            number: number;
+            content: components["schemas"]["JobPostBasicResponse"][];
+        };
+        ApiResponseListJobPostBasicResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["JobPostBasicResponse"][];
+        };
+        ApiResponsePageJobPostBasicResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["PageJobPostBasicResponse"];
+        };
+        PageJobPostBasicResponse: {
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -1569,9 +1579,9 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
@@ -1590,14 +1600,29 @@ export interface components {
             sorted?: boolean;
             unsorted?: boolean;
         };
-        ApiResponseListJobPostBasicResponse: {
+        ApiResponseListJobPostApplicationResponse: {
             /** Format: int32 */
             statusCode?: number;
             message: string;
             /** @enum {string} */
             resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
             errorCode?: string;
-            data: components["schemas"]["JobPostBasicResponse"][];
+            data: components["schemas"]["JobPostApplicationResponse"][];
+        };
+        JobPostApplicationResponse: {
+            /** Format: int64 */
+            id?: number;
+            jobPostAuthorUsername?: string;
+            /** Format: int64 */
+            jobPostId?: number;
+            jobPostName?: string;
+            author?: string;
+            body?: string;
+            wagePaymentMethod?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            wageStatus?: string;
+            approve?: boolean;
         };
         ApiResponseListRoomListDto: {
             /** Format: int32 */
@@ -1667,32 +1692,56 @@ export interface components {
             text: string;
             createdAt?: string;
         };
-        ApiResponseListCategoryDto: {
+        ApiResponseListTopLevelCategoryResponse: {
             /** Format: int32 */
             statusCode?: number;
             message: string;
             /** @enum {string} */
             resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
             errorCode?: string;
-            data: components["schemas"]["CategoryDto"][];
+            data: components["schemas"]["TopLevelCategoryResponse"][];
         };
-        CategoryDto: {
+        TopLevelCategoryResponse: {
+            name?: string;
+        };
+        ApiResponseListSubCategoryResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["SubCategoryResponse"][];
+        };
+        SubCategoryResponse: {
+            name?: string;
+        };
+        ApiResponseJobApplicationDetailResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["JobApplicationDetailResponse"];
+        };
+        JobApplicationDetailResponse: {
+            author?: string;
+            name?: string;
+            /** Format: date */
+            birth?: string;
+            phone?: string;
+            location?: string;
             /** Format: int64 */
             id?: number;
-            name?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            approve?: boolean;
+            body?: string;
+            wageStatus?: string;
+            jobPostAuthorUsername?: string;
             /** Format: int32 */
-            level?: number;
-            /** Format: int64 */
-            parentId?: number;
-        };
-        ApiResponseJobApplicationDto: {
-            /** Format: int32 */
-            statusCode?: number;
-            message: string;
-            /** @enum {string} */
-            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-            errorCode?: string;
-            data: components["schemas"]["JobApplicationDto"];
+            wages?: number;
         };
     };
     responses: never;
@@ -2041,7 +2090,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseJobApplicationDto"];
+                    "*/*": components["schemas"]["ApiResponseJobApplicationDetailResponse"];
                 };
             };
         };
@@ -2499,7 +2548,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["Add"];
+                "application/json": components["schemas"]["CreateCategoryRequest"];
             };
         };
         responses: {
@@ -2689,12 +2738,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseListCommentDto"];
+                    "*/*": components["schemas"]["ApiResponseListCommentResponse"];
                 };
             };
         };
     };
-    getPaymentKey: {
+    getPaymentInfo: {
         parameters: {
             query?: never;
             header?: never;
@@ -2711,7 +2760,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponsePaymentDto"];
+                    "*/*": components["schemas"]["ApiResponsePaymentInfoResponse"];
                 };
             };
         };
@@ -2735,7 +2784,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponsePaymentSuccessDto"];
+                    "*/*": components["schemas"]["ApiResponsePaymentSuccessResponse"];
                 };
             };
         };
@@ -2945,7 +2994,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseListCommentDto"];
+                    "*/*": components["schemas"]["ApiResponseListMyCommentResponse"];
                 };
             };
         };
@@ -2965,7 +3014,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseListJobApplicationDto"];
+                    "*/*": components["schemas"]["ApiResponseListMyJobApplicationResponse"];
                 };
             };
         };
@@ -3055,7 +3104,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponsePageJobPostBasicResponse"];
+                    "*/*": components["schemas"]["ApiResponseJobPostSortPageResponse"];
                 };
             };
         };
@@ -3135,7 +3184,7 @@ export interface operations {
             };
         };
     };
-    getList_1: {
+    getJobApplicationsByPost: {
         parameters: {
             query?: never;
             header?: never;
@@ -3152,7 +3201,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseListJobApplicationDto"];
+                    "*/*": components["schemas"]["ApiResponseListJobPostApplicationResponse"];
                 };
             };
         };
@@ -3192,7 +3241,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseListCategoryDto"];
+                    "*/*": components["schemas"]["ApiResponseListTopLevelCategoryResponse"];
                 };
             };
         };
@@ -3214,7 +3263,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseListCategoryDto"];
+                    "*/*": components["schemas"]["ApiResponseListSubCategoryResponse"];
                 };
             };
         };
@@ -3237,26 +3286,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponseBoolean"];
-                };
-            };
-        };
-    };
-    showMain: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
                 };
             };
         };

@@ -1,7 +1,8 @@
 package com.ll.goohaeyou.category.presentation;
 
 import com.ll.goohaeyou.category.application.CategoryService;
-import com.ll.goohaeyou.category.application.dto.CategoryDto;
+import com.ll.goohaeyou.category.application.dto.SubCategoryResponse;
+import com.ll.goohaeyou.category.application.dto.TopLevelCategoryResponse;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,13 +23,13 @@ public class CategoryController {
 
     @GetMapping("/top-level")
     @Operation(summary = "최상단 카테고리 목록 불러오기")
-    public ApiResponse<List<CategoryDto>> getTopCategories() {
+    public ApiResponse<List<TopLevelCategoryResponse>> getTopCategories() {
         return ApiResponse.ok(categoryService.getTopCategories());
     }
 
     @GetMapping("/sub-categories")
     @Operation(summary = "하위 카테고리 목록 불러오기")
-    public ApiResponse<List<CategoryDto>> getSubCategories(@RequestParam("category_name") String categoryName) {
+    public ApiResponse<List<SubCategoryResponse>> getSubCategories(@RequestParam("category_name") String categoryName) {
         return ApiResponse.ok(categoryService.getSubCategories(categoryName));
     }
 
