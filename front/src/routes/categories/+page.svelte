@@ -8,6 +8,7 @@
 	let topCategories: components['schemas']['TopLevelCategoryResponse'][] = [];
 	let subCategories: components['schemas']['SubCategoryResponse'][] = [];
 	let posts: any = null;
+	let selectedCategoryId = '';
 	let selectedCategoryName = '';
 	let isLeafCategory = false;
 	let currentPage = 1;
@@ -30,10 +31,9 @@
 		}
 	}
 
-	async function loadSubCategories(categoryName: string) {
+	async function loadSubCategories(categoryId: number) {
 		try {
-			const params = new URLSearchParams({ category_name: categoryName });
-			const response = await rq.apiEndPoints().GET(`/api/categories/sub-categories?${params}`);
+			const response = await rq.apiEndPoints().GET(`/api/categories/${categoryId}/sub-categories`);
 
 			if (response.data?.resultType === 'SUCCESS') {
 				subCategories = response.data?.data ?? [];
@@ -68,8 +68,9 @@
 	}
 
 	async function handleCategoryClick(category) {
+		selectedCategoryId = category.id;
 		selectedCategoryName = category.name;
-		await loadSubCategories(category.name);
+		await loadSubCategories(category.id);
 		if (isLeafCategory) {
 			await loadPosts(category.name);
 		}
@@ -84,7 +85,7 @@
 		try {
 			await loadCategories();
 			if (topCategories.length > 0) {
-				selectedCategoryName = topCategories[0].name;
+				selectedCategoryId = topCategories[0].id;
 				await handleCategoryClick(topCategories[0]);
 			}
 		} catch (e) {
@@ -113,7 +114,7 @@
 						>
 							{category.name}
 						</summary>
-						{#if subCategories.length > 0 && selectedCategoryName === category.name}
+						{#if subCategories.length > 0 && selectedCategoryId === category.id}
 							<ul class="list-disc list-inside pl-4 space-y-2 mt-2">
 								{#each subCategories as subCategory}
 									<li>

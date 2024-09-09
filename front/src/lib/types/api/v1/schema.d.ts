@@ -931,24 +931,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/categories/top-level": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 최상단 카테고리 목록 불러오기 */
-        get: operations["getTopCategories"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/categories/sub-categories": {
+    "/api/categories/{categoryId}/sub-categories": {
         parameters: {
             query?: never;
             header?: never;
@@ -965,15 +948,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/categories/is-leaf": {
+    "/api/categories/top-level": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** 가장 최하단의 카테고리인지 확인 */
-        get: operations["isLeafCategory"];
+        /** 최상단 카테고리 목록 불러오기 */
+        get: operations["getTopCategories"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1567,10 +1550,10 @@ export interface components {
             data: components["schemas"]["PageJobPostBasicResponse"];
         };
         PageJobPostBasicResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -1579,26 +1562,26 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
+            paged?: boolean;
+            unpaged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
-            paged?: boolean;
-            unpaged?: boolean;
         };
         SortObject: {
             empty?: boolean;
-            sorted?: boolean;
             unsorted?: boolean;
+            sorted?: boolean;
         };
         ApiResponseListJobPostApplicationResponse: {
             /** Format: int32 */
@@ -1692,18 +1675,6 @@ export interface components {
             text: string;
             createdAt?: string;
         };
-        ApiResponseListTopLevelCategoryResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message: string;
-            /** @enum {string} */
-            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-            errorCode?: string;
-            data: components["schemas"]["TopLevelCategoryResponse"][];
-        };
-        TopLevelCategoryResponse: {
-            name?: string;
-        };
         ApiResponseListSubCategoryResponse: {
             /** Format: int32 */
             statusCode?: number;
@@ -1714,6 +1685,22 @@ export interface components {
             data: components["schemas"]["SubCategoryResponse"][];
         };
         SubCategoryResponse: {
+            /** Format: int64 */
+            id?: number;
+            name?: string;
+        };
+        ApiResponseListTopLevelCategoryResponse: {
+            /** Format: int32 */
+            statusCode?: number;
+            message: string;
+            /** @enum {string} */
+            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
+            errorCode?: string;
+            data: components["schemas"]["TopLevelCategoryResponse"][];
+        };
+        TopLevelCategoryResponse: {
+            /** Format: int64 */
+            id?: number;
             name?: string;
         };
         ApiResponseJobApplicationDetailResponse: {
@@ -3226,6 +3213,28 @@ export interface operations {
             };
         };
     };
+    getSubCategories: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                categoryId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListSubCategoryResponse"];
+                };
+            };
+        };
+    };
     getTopCategories: {
         parameters: {
             query?: never;
@@ -3242,50 +3251,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponseListTopLevelCategoryResponse"];
-                };
-            };
-        };
-    };
-    getSubCategories: {
-        parameters: {
-            query: {
-                category_name: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ApiResponseListSubCategoryResponse"];
-                };
-            };
-        };
-    };
-    isLeafCategory: {
-        parameters: {
-            query: {
-                category_id: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ApiResponseBoolean"];
                 };
             };
         };

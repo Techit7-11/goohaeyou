@@ -5,10 +5,12 @@ import com.ll.goohaeyou.category.domain.Category;
 import java.util.List;
 
 public record SubCategoryResponse(
+        Long id,
         String name
 ) {
     public static SubCategoryResponse from(Category category) {
         return new SubCategoryResponse(
+                category.getId(),
                 category.getName()
         );
     }

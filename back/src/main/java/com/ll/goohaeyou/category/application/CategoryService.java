@@ -15,8 +15,8 @@ import java.util.List;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-    public List<SubCategoryResponse> getSubCategories(String categoryName) {
-        Category currentCategory = categoryRepository.findByName(categoryName)
+    public List<SubCategoryResponse> getSubCategories(Long categoryId) {
+        Category currentCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
         List<Category> categories = currentCategory.getSubCategories();
@@ -26,13 +26,6 @@ public class CategoryService {
         } else {
             return SubCategoryResponse.convertToList(categories);
         }
-    }
-
-    public boolean isLeafCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
-
-        return category.isLeaf();
     }
 
     public List<TopLevelCategoryResponse> getTopCategories() {
