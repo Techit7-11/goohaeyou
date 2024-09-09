@@ -12,7 +12,7 @@ public record CommentResponse(
         String content,
         String authorProfileImageUrl,
         LocalDateTime createAt,
-        LocalDateTime modpackage
+        LocalDateTime modifyAt
 ) {
 
     public static CommentResponse form(Comment comment) {

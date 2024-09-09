@@ -15,17 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserActivityService {
-    private JobPostRepository jobPostRepository;
+    private final JobPostRepository jobPostRepository;
 
     @Transactional
     public void handleJobPostView(Long jobPostId, HttpServletRequest request, HttpServletResponse response) {
         final String VIEWED_JOB_POSTS_COOKIE = "viewedJobPosts";
         boolean isJobPostAlreadyVisited = checkJobPostVisited(request, jobPostId, VIEWED_JOB_POSTS_COOKIE);
 
-        if (!isJobPostAlreadyVisited) {
-            JobPost jobPost = jobPostRepository.findById(jobPostId)
-                    .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
+        JobPost jobPost = jobPostRepository.findById(jobPostId)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
+        if (!isJobPostAlreadyVisited) {
             jobPost.increaseViewCount();
             addOrUpdateViewedJobPostsCookie(request, response, jobPostId, VIEWED_JOB_POSTS_COOKIE);
         }

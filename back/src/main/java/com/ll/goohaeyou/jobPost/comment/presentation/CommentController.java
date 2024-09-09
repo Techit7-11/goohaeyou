@@ -37,7 +37,7 @@ public class CommentController {
     public ApiResponse<CreateCommentResponse> write (@AuthenticationPrincipal MemberDetails memberDetails,
                                                      @PathVariable("postId") Long postId,
                                                      @Valid @RequestBody CreateCommentRequest request){
-        CreateCommentResponse response = commentService.writeComment(postId,memberDetails.getUsername(), request);
+        CreateCommentResponse response = commentService.writeComment(postId, memberDetails.getUsername(), request);
 
         return ApiResponse.ok(response);
     }

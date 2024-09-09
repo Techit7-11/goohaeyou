@@ -37,6 +37,10 @@
 			rq.apiEndPoints().GET(`/api/job-posts/${postId}/images`)
 		]);
 
+		if (jobPostResponse.data?.resultType === 'CUSTOM_EXCEPTION') {
+			rq.msgError(jobPostResponse.data?.message);
+		}
+
 		const jobPostData = jobPostResponse.data;
 		const imageUrls = imageUrlResponse.data?.data || [];
 
@@ -61,6 +65,8 @@
 	function editPost() {
 		rq.goTo(`/job-post/modify/${postId}`);
 	}
+
+	// 공고 삭제
 	async function deletePost() {
 		try {
 			const { data } = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}`);
@@ -76,6 +82,8 @@
 		const { data } = await rq.apiEndPoints().GET(`/api/job-posts/${postId}/members/interest`);
 		interested = data?.data;
 	}
+
+	// 관심 추가
 	async function registerInterest(postId: number) {
 		const response = await rq.apiEndPoints().POST(`/api/job-posts/${postId}/interest`);
 
@@ -87,6 +95,8 @@
 			console.error('관심 등록에 실패하였습니다.');
 		}
 	}
+
+	// 관심 취소
 	async function removeInterest(postId: number) {
 		const response = await rq.apiEndPoints().DELETE(`/api/job-posts/${postId}/interest`);
 
@@ -101,13 +111,20 @@
 	// 댓글
 	async function loadComments() {
 		try {
-			const { data } = await rq.apiEndPoints().GET(`/api/post-comment/${postId}`);
-			comments = data.data
-				.map((comment) => ({
-					...comment,
-					isEditing: false // 모든 댓글에 isEditing 속성 추가
-				}))
-				.reverse();
+			const response = await rq.apiEndPoints().GET(`/api/post-comment/${postId}`);
+
+			if (response.data?.resultType === 'SUCCESS') {
+				comments = response.data.data
+					.map((comment) => ({
+						...comment,
+						isEditing: false // 모든 댓글에 isEditing 속성 추가
+					}))
+					.reverse();
+			} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+				rq.msgError(jobPostResponse.data?.message);
+			} else {
+				console.error('다시 시도해주세요.');
+			}
 		} catch (error) {
 			console.error('댓글을 로드하는 중 오류가 발생했습니다.', error);
 		}
@@ -122,7 +139,11 @@
 			const response = await rq.apiEndPoints().POST(`/api/post-comment/${postId}/comment`, {
 				body: { content: newComment }
 			});
-			console.log(response);
+
+			if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
+				rq.msgError(response.data?.message);
+			}
+
 			newComment = ''; // 입력 필드 초기화
 			loadComments(); // 댓글 목록 새로고침
 		} catch (error) {
