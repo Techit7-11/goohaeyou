@@ -880,7 +880,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/job-posts/by-category": {
+    "/api/job-posts/categories/{categoryId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -3150,12 +3150,13 @@ export interface operations {
     };
     getPostsByCategory: {
         parameters: {
-            query: {
-                "category-name": string;
+            query?: {
                 page?: number;
             };
             header?: never;
-            path?: never;
+            path: {
+                categoryId: number;
+            };
             cookie?: never;
         };
         requestBody?: never;

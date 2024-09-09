@@ -119,11 +119,11 @@ public class JobPostController {
         return ApiResponse.noContent();
     }
 
-    @GetMapping("/by-category")
+    @GetMapping("/categories/{categoryId}")
     @Operation(summary = "카테고리의 글 목록 불러오기")
-    public ApiResponse<Page<JobPostBasicResponse>> getPostsByCategory(@RequestParam("category-name") String categoryName,
+    public ApiResponse<Page<JobPostBasicResponse>> getPostsByCategory(@PathVariable("categoryId") Long categoryId,
                                                             @RequestParam(value = "page", defaultValue = "1") int page) {
 
-        return ApiResponse.ok(jobPostService.getPostsByCategory(categoryName, page));
+        return ApiResponse.ok(jobPostService.getPostsByCategory(categoryId, page));
     }
 }

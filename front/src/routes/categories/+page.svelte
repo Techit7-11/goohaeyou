@@ -48,13 +48,10 @@
 		}
 	}
 
-	async function loadPosts(categoryName: string, page: number = 1) {
-		const params = new URLSearchParams({
-			'category-name': categoryName,
-			page: String(page)
-		});
-
-		const response = await rq.apiEndPoints().GET(`/api/job-posts/by-category?${params}`);
+	async function loadPosts(categoryId: number, page: number = 1) {
+		const response = await rq
+			.apiEndPoints()
+			.GET(`/api/job-posts/categories/${categoryId}?page=${page}`);
 
 		if (response.data?.resultType === 'SUCCESS') {
 			posts = response.data.data ?? [];
@@ -72,13 +69,13 @@
 		selectedCategoryName = category.name;
 		await loadSubCategories(category.id);
 		if (isLeafCategory) {
-			await loadPosts(category.name);
+			await loadPosts(category.id);
 		}
 	}
 
 	function handlePageChange(event) {
 		const newPage = event.detail;
-		loadPosts(selectedCategoryName, newPage);
+		loadPosts(selectedCategoryId, newPage);
 	}
 
 	async function initialize() {
