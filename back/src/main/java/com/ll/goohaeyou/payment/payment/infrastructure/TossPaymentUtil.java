@@ -1,6 +1,7 @@
 package com.ll.goohaeyou.payment.payment.infrastructure;
 
 import com.ll.goohaeyou.global.config.TossPaymentsConfig;
+import com.ll.goohaeyou.payment.payment.domain.PaymentProcessor;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -15,7 +16,7 @@ import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
-public class TossPaymentUtil {
+public class TossPaymentUtil implements PaymentProcessor {
     private final TossPaymentsConfig tossPaymentsConfig;
     private final RestTemplate restTemplate;
 
@@ -41,11 +42,13 @@ public class TossPaymentUtil {
     }
 
     // 결제 성공 요청 메서드
+    @Override
     public <T> T sendPaymentRequest(String paymentKey, JSONObject params, Class<T> responseType) {
         return sendRequest(paymentKey, params, responseType);
     }
 
     // 결제 취소 요청 메서드
+    @Override
     public <T> T sendPaymentCancelRequest(String paymentKey, JSONObject params, Class<T> responseType) {
         return sendRequest(paymentKey + "/cancel", params, responseType);
     }

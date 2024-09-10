@@ -3,11 +3,11 @@ package com.ll.goohaeyou.payment.payment.application;
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
-import com.ll.goohaeyou.payment.payment.application.dto.cancel.CancelPaymentResponse;
-import com.ll.goohaeyou.payment.payment.infrastructure.TossPaymentUtil;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
+import com.ll.goohaeyou.payment.payment.application.dto.cancel.CancelPaymentResponse;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
+import com.ll.goohaeyou.payment.payment.domain.PaymentProcessor;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import static com.ll.goohaeyou.jobApplication.domain.type.WageStatus.PAYMENT_CAN
 @RequiredArgsConstructor
 public class PaymentCancelService {
     private final PaymentRepository paymentRepository;
-    private final TossPaymentUtil tossPaymentUtil;
+    private final PaymentProcessor paymentProcessor;
     private final JobApplicationRepository jobApplicationRepository;
 
     @Transactional
@@ -40,7 +40,7 @@ public class PaymentCancelService {
         UpdatePaymentAndApplication(payment, cancelReason);
 
         // TossPayments 결제 취소 API를 호출하고, 응답 값을 DTO 객체로 매핑
-        CancelPaymentResponse response = tossPaymentUtil.sendPaymentCancelRequest(
+        CancelPaymentResponse response = paymentProcessor.sendPaymentCancelRequest(
                 paymentKey, params, CancelPaymentResponse.class
         );
 

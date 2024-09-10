@@ -9,15 +9,15 @@ import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.exception.MemberException;
-import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
+import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
+import com.ll.goohaeyou.payment.payment.domain.PaymentProcessor;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
-import com.ll.goohaeyou.payment.payment.infrastructure.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -32,7 +32,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final TossPaymentsConfig tossPaymentsConfig;
     private final MemberRepository memberRepository;
-    private final TossPaymentUtil tossPaymentUtil;
+    private final PaymentProcessor paymentProcessor;
     private final JobApplicationRepository jobApplicationRepository;
 
     @Transactional
@@ -93,7 +93,7 @@ public class PaymentService {
     public PaymentSuccessResponse requestPaymentAccept(String paymentKey, String orderId, Long amount) {
         JSONObject params = createPaymentRequestParams(orderId, amount);
 
-        PaymentSuccessResponse paymentSuccessResponse = tossPaymentUtil.sendPaymentRequest(
+        PaymentSuccessResponse paymentSuccessResponse = paymentProcessor.sendPaymentRequest(
                 paymentKey, params, PaymentSuccessResponse.class);
 
         paymentSuccessResponse.setJobApplicationId(findPaymentByOrderId(orderId).getJobApplicationId());
