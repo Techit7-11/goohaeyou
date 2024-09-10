@@ -1,10 +1,10 @@
 package com.ll.goohaeyou.jobPost.jobPost.domain;
 
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.JobPostDto;
-import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.global.jpa.BaseTimeEntity;
+import com.ll.goohaeyou.member.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 

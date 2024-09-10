@@ -22,7 +22,7 @@ public class Category {
 
     @Column(nullable = false)
     private int level;
-    private boolean enabled = true;
+    private boolean enabled;
 
     @Enumerated(EnumType.STRING)
     private CategoryType type;
@@ -43,7 +43,7 @@ public class Category {
     ) {
         this.name = name;
         this.level = level;
-        this.enabled = enabled;
+        this.enabled = true;
         this.type = type;
         this.parent = parent;
     }

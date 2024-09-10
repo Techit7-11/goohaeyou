@@ -1,11 +1,11 @@
 package com.ll.goohaeyou.chat.message.presentation;
 
-import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
-import com.ll.goohaeyou.chat.message.application.dto.MessageForm;
-import com.ll.goohaeyou.chat.message.domain.Message;
-import com.ll.goohaeyou.chat.message.application.MessageService;
-import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
+import com.ll.goohaeyou.chat.message.application.MessageService;
+import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
+import com.ll.goohaeyou.chat.message.application.dto.WriteMessageRequest;
+import com.ll.goohaeyou.chat.message.domain.Message;
+import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,8 +28,8 @@ public class MessageController {
     @Operation(summary = "채팅 생성")
     public ApiResponse<Empty> writeChat(@AuthenticationPrincipal MemberDetails memberDetails,
                                         @PathVariable(name = "roomId")Long roomId,
-                                        @RequestBody MessageForm.Register form) {
-        Message message = messageService.write(memberDetails.getUsername(), roomId, form);
+                                        @RequestBody WriteMessageRequest request) {
+        Message message = messageService.write(memberDetails.getUsername(), roomId, request);
 
         messagingTemplate.convertAndSend("/queue/api/chat/"+roomId+ "/newMessage", MessageDto.from(message));
 

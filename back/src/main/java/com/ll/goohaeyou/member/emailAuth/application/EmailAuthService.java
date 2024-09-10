@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.member.emailAuth.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.global.standard.base.util.RedisUtil;
+import com.ll.goohaeyou.member.emailAuth.domain.AuthCodeStorage;
 import com.ll.goohaeyou.member.emailAuth.exception.EmailAuthException;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
@@ -27,7 +27,7 @@ public class EmailAuthService {
     private final MemberRepository memberRepository;
     private final TemplateEngine templateEngine;
     private final JavaMailSender javaMailSender;
-    private final RedisUtil redisUtil;
+    private final AuthCodeStorage authCodeStorage;
 
     @Transactional
     public void sendEmail(String username, String email) {
@@ -55,11 +55,12 @@ public class EmailAuthService {
     public String manageMail(String username) {
         String randomKey = RandomStringUtils.randomAlphanumeric(5);
 
-        if (redisUtil.getData(username) != null) {
-            redisUtil.deleteData(username);
+        if (authCodeStorage.getData(username) != null) {
+            authCodeStorage.deleteData(username);
         }
 
-        redisUtil.setDataExpire(username, randomKey, EXPIRATION_IN_SECONDS);
+        authCodeStorage.setDataExpire(username, randomKey, EXPIRATION_IN_SECONDS);
+
 
         return randomKey;
     }
@@ -80,7 +81,7 @@ public class EmailAuthService {
 
     @Transactional
     public void confirmVerification(String username, String inputCode) {
-        String authCode = redisUtil.getData(username);
+        String authCode = authCodeStorage.getData(username);
 
         if (authCode == null) {
             throw new EmailAuthException.InitiateEmailRequestException();
@@ -88,7 +89,7 @@ public class EmailAuthService {
 
         verifyCode(inputCode, authCode);
 
-        redisUtil.deleteData(username);
+        authCodeStorage.deleteData(username);
 
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);

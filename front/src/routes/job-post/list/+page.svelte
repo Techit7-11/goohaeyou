@@ -4,7 +4,7 @@
 
 	import type { components } from '$lib/types/api/v1/schema';
 	import Pagination from '$lib/components/Pagination.svelte';
-	let posts: components['schemas']['JobPostDto'][] = $state([]);
+	let posts: components['schemas']['JobPostBasicResponse'][] = $state([]);
 
 	function JobPostWritePage() {
 		rq.goTo('/job-post/write');
@@ -65,7 +65,7 @@
 </script>
 
 <div class="sort mx-auto w-80 mt-5">
-	<select class="select select-bordered w-full max-w-xs" on:change={handleSortSelect}>
+	<select class="select select-ghost w-full max-w-xs" on:change={handleSortSelect}>
 		<option value="createdAt desc">최신 등록 순</option>
 		<option value="createdAt asc">오래된 순</option>
 		<option value="applicationCount desc">지원자 많은 순</option>

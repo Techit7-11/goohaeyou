@@ -1,16 +1,16 @@
 package com.ll.goohaeyou.member.member.presentation;
 
 import com.ll.goohaeyou.global.standard.base.Empty;
-import com.ll.goohaeyou.member.member.application.dto.JoinForm;
-import com.ll.goohaeyou.member.member.application.dto.LoginForm;
-import com.ll.goohaeyou.member.member.application.dto.MemberDto;
-import com.ll.goohaeyou.member.member.application.dto.SocialProfileForm;
+import com.ll.goohaeyou.member.member.application.dto.JoinRequest;
+import com.ll.goohaeyou.member.member.application.dto.LoginRequest;
+import com.ll.goohaeyou.member.member.application.dto.MemberResponse;
 import com.ll.goohaeyou.auth.application.AuthenticationService;
 import com.ll.goohaeyou.member.member.application.MemberService;
+import com.ll.goohaeyou.member.member.application.dto.UpdateSocialProfileRequest;
 import com.ll.goohaeyou.notification.application.NotificationService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.auth.domain.MemberDetails;
-import com.ll.goohaeyou.global.standard.base.util.CookieUtil;
+import com.ll.goohaeyou.global.infra.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,23 +36,23 @@ public class MemberController {
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
-    public ApiResponse<Empty> join(@RequestBody @Valid JoinForm form) {
-        memberService.join(form);
+    public ApiResponse<Empty> join(@RequestBody @Valid JoinRequest request) {
+        memberService.join(request);
         return ApiResponse.created();
     }
 
     @PostMapping ("/login")
     @Operation(summary = "로그인, accessToken, refreshToken 쿠키 생성됨")
-    public ApiResponse<MemberDto> login(@RequestBody @Valid LoginForm form,
-                                        HttpServletRequest request, HttpServletResponse response) {
-        memberService.login(form);
-        MemberDto memberDto = authenticationService.authenticateAndSetTokens(form.getUsername(), request, response);
-        return ApiResponse.ok(memberDto);
+    public ApiResponse<MemberResponse> login(@RequestBody @Valid LoginRequest loginRequest,
+                                             HttpServletRequest request, HttpServletResponse response) {
+        memberService.login(loginRequest);
+        MemberResponse memberResponse = authenticationService.authenticateAndSetTokens(loginRequest.username(), request, response);
+        return ApiResponse.ok(memberResponse);
     }
 
     @PostMapping ("/logout")
     @Operation(summary = "로그아웃 처리 및 쿠키 삭제")
-    public ResponseEntity<?> logout(@AuthenticationPrincipal MemberDetails memberDetails,
+    public ResponseEntity<Map<String, String>> logout(@AuthenticationPrincipal MemberDetails memberDetails,
                                     HttpServletRequest request, HttpServletResponse response) {
         Stream.of("refresh_token", "access_token", "JSESSIONID")
                 .forEach(cookieName -> CookieUtil.deleteCookie(request, response, cookieName));
@@ -66,9 +66,9 @@ public class MemberController {
 
     @PutMapping("/social")
     @Operation(summary = "최초 소셜로그인 - 필수 회원정보 입력")
-    public ApiResponse<MemberDto> updateSocialMember(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                     @Valid @RequestBody SocialProfileForm form) {
-        MemberDto updatedMember = memberService.updateSocialMemberProfile(memberDetails.getUsername(), form);
+    public ApiResponse<MemberResponse> updateSocialMember(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                          @Valid @RequestBody UpdateSocialProfileRequest request) {
+        MemberResponse updatedMember = memberService.updateSocialMemberProfile(memberDetails.getUsername(), request);
 
         return ApiResponse.ok(updatedMember);
     }

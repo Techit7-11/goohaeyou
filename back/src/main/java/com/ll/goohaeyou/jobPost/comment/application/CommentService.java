@@ -3,8 +3,7 @@ package com.ll.goohaeyou.jobPost.comment.application;
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.event.notification.CommentCreatedEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.jobPost.comment.application.dto.CommentDto;
-import com.ll.goohaeyou.jobPost.comment.application.dto.CommentForm;
+import com.ll.goohaeyou.jobPost.comment.application.dto.*;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import com.ll.goohaeyou.jobPost.comment.domain.repository.CommentRepository;
 import com.ll.goohaeyou.jobPost.comment.exception.CommentException;
@@ -33,13 +32,13 @@ public class CommentService {
     private final JobPostDetailRepository jobPostDetailRepository;
 
     @Transactional
-    public CommentForm.Register writeComment(Long postId, String username, CommentForm.Register form) {
+    public CreateCommentResponse writeComment(Long postId, String username, CreateCommentRequest request) {
         JobPostDetail postDetail = jobPostDetailRepository.findById(postId)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
-        Comment newComment = Comment.create(postDetail, member, form.getContent());
+        Comment newComment = Comment.create(postDetail, member, request.content());
 
         postDetail.getComments().add(newComment);
         postDetail.getJobPost().increaseCommentsCount();
@@ -48,11 +47,11 @@ public class CommentService {
             publisher.publishEvent(new CommentCreatedEvent(this,postDetail, newComment));
         }
 
-        return form;
+        return new CreateCommentResponse(newComment.getContent());
     }
 
     @Transactional
-    public void modifyComment(String username, Long postId, Long commentId, CommentForm.Register form) {
+    public void modifyComment(String username, Long postId, Long commentId, ModifyCommentRequest request) {
         JobPostDetail postDetail = jobPostDetailRepository.findById(postId)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         Comment comment = findByIdAndValidate(commentId);
@@ -61,7 +60,7 @@ public class CommentService {
             throw new AuthException.NotAuthorizedException();
         }
 
-        comment.update(form.getContent());
+        comment.update(request.content());
     }
 
     @Transactional
@@ -81,11 +80,11 @@ public class CommentService {
         postDetail.getComments().remove(comment);
     }
 
-    public List<CommentDto> findByPostId(Long postId) {
+    public List<CommentResponse> findByPostId(Long postId) {
         jobPostRepository.findById(postId)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
-        return CommentDto.convertToDtoList(commentRepository.findAllByJobPostDetailId(postId));
+        return CommentResponse.convertToList(commentRepository.findAllByJobPostDetailId(postId));
     }
 
     public Comment findByIdAndValidate(Long id) {
@@ -110,11 +109,11 @@ public class CommentService {
         return member.getRole() == Role.ADMIN || comment.getMember().equals(member);
     }
 
-    public List<CommentDto> findByUsername(String username) {
+    public List<MyCommentResponse> findByUsername(String username) {
 
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
-        return CommentDto.convertToDtoList(commentRepository.findByMemberId(member.getId()));
+        return MyCommentResponse.convertToList(commentRepository.findByMemberId(member.getId()));
     }
 }

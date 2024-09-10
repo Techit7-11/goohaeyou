@@ -21,49 +21,49 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
-    public void join(JoinForm form) {
-        memberRepository.findByUsername(form.getUsername())
+    public void join(JoinRequest request) {
+        memberRepository.findByUsername(request.username())
                 .ifPresent(member -> {
                     throw new MemberException.DuplicateUsernameException();
                 });
 
-        Role role = "admin".equals(form.getUsername()) ? Role.ADMIN : Role.USER;
+        Role role = "admin".equals(request.username()) ? Role.ADMIN : Role.USER;
 
         if (role == Role.ADMIN) {
             memberRepository.save(
                     Member.createAdmin(
-                            bCryptPasswordEncoder.encode(form.getPassword()),
-                            form.getName(),
-                            form.getPhoneNumber(),
-                            form.getEmail(),
-                            form.getGender(),
-                            form.getLocation(),
-                            form.getBirth(),
-                            Util.Region.getRegionCodeFromAddress(form.getLocation())
+                            bCryptPasswordEncoder.encode(request.password()),
+                            request.name(),
+                            request.phoneNumber(),
+                            request.email(),
+                            request.gender(),
+                            request.location(),
+                            request.birth(),
+                            Util.Region.getRegionCodeFromAddress(request.location())
                     )
             );
         }
         if (role == Role.USER) {
             memberRepository.save(
                     Member.createUser(
-                            form.getUsername(),
-                            bCryptPasswordEncoder.encode(form.getPassword()),
-                            form.getName(),
-                            form.getPhoneNumber(),
-                            form.getEmail(),
-                            form.getGender(),
-                            form.getLocation(),
-                            form.getBirth(),
-                            Util.Region.getRegionCodeFromAddress(form.getLocation())
+                            request.username(),
+                            bCryptPasswordEncoder.encode(request.password()),
+                            request.name(),
+                            request.phoneNumber(),
+                            request.email(),
+                            request.gender(),
+                            request.location(),
+                            request.birth(),
+                            Util.Region.getRegionCodeFromAddress(request.location())
                     )
             );
         }
     }
 
-    public void login(LoginForm form) {
-        Member member = getMember(form.getUsername());
+    public void login(LoginRequest request) {
+        Member member = getMember(request.username());
 
-        if (!bCryptPasswordEncoder.matches(form.getPassword(), member.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(request.password(), member.getPassword())) {
             throw new AuthException.InvalidPasswordException();
         }
     }
@@ -73,21 +73,21 @@ public class MemberService {
                 .orElseThrow(MemberException.MemberNotFoundException::new);
     }
 
-    public MemberDto findByUsername(String username) {
+    public MemberResponse findByUsername(String username) {
         Member member = getMember(username);
 
-        return MemberDto.from(member);
+        return MemberResponse.from(member);
     }
 
     @Transactional
-    public void modifyMember(String username, MemberForm.Modify form) {
+    public void modifyMember(String username, ModifyMemberRequest request) {
         Member member = getMember(username);
 
-        String password = (form.getPassword() != null && !form.getPassword().isBlank())
-                ? bCryptPasswordEncoder.encode(form.getPassword())
+        String password = (request.password() != null && !request.password().isBlank())
+                ? bCryptPasswordEncoder.encode(request.password())
                 : null;
 
-        member.update(password, form.getGender(), form.getLocation(), form.getBirth());
+        member.update(password, request.gender(), request.location(), request.birth());
     }
 
     public Member findById(Long userId) {
@@ -96,16 +96,16 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberDto updateSocialMemberProfile(String username, SocialProfileForm form) {
+    public MemberResponse updateSocialMemberProfile(String username, UpdateSocialProfileRequest request) {
         Member member = getMember(username);
 
         if (member.getEmail() == null) {
             member.authenticate();
         }
 
-        member.oauthDetailUpdate(form);
+        member.oauthDetailUpdate(request);
         member.updateRole(Role.USER);
 
-        return MemberDto.from(member);
+        return MemberResponse.from(member);
     }
 }

@@ -9,15 +9,15 @@ import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.exception.MemberException;
-import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailDto;
-import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentReqDto;
-import com.ll.goohaeyou.payment.payment.application.dto.request.PaymentResDto;
-import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessDto;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
+import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse;
+import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
+import com.ll.goohaeyou.payment.payment.domain.PaymentProcessor;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
-import com.ll.goohaeyou.payment.payment.infra.TossPaymentUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -32,40 +32,40 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final TossPaymentsConfig tossPaymentsConfig;
     private final MemberRepository memberRepository;
-    private final TossPaymentUtil tossPaymentUtil;
+    private final PaymentProcessor paymentProcessor;
     private final JobApplicationRepository jobApplicationRepository;
 
     @Transactional
     @RetryOnOptimisticLock(attempts = 2, backoff = 500L)
-    public PaymentResDto requestTossPayment(PaymentReqDto paymentReqDto, String username) {
-        Payment payment = createPaymentEntity(paymentReqDto, username);
+    public PaymentResponse requestTossPayment(PaymentRequest request, String username) {
+        Payment payment = createPaymentEntity(request, username);
 
         Payment savedPayment = paymentRepository.save(payment);
-        PaymentResDto paymentResDto = savedPayment.toPaymentRespDto();
-        setRedirectUrls(paymentResDto);
+        PaymentResponse response = savedPayment.toPaymentRespDto();
+        setRedirectUrls(response);
 
-        return paymentResDto;
+        return response;
     }
 
-    private Payment createPaymentEntity(PaymentReqDto paymentReqDto, String username) {
+    private Payment createPaymentEntity(PaymentRequest request, String username) {
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
-        Payment payment = Payment.from(paymentReqDto);
+        Payment payment = Payment.create(request);
         payment.updatePayer(member);
 
         return payment;
     }
 
-    private void setRedirectUrls(PaymentResDto paymentResDto) {
-        paymentResDto.setSuccessUrl(tossPaymentsConfig.getSuccessUrl());
-        paymentResDto.setFailUrl(tossPaymentsConfig.getFailUrl());
+    private void setRedirectUrls(PaymentResponse response) {
+        response.setSuccessUrl(tossPaymentsConfig.getSuccessUrl());
+        response.setFailUrl(tossPaymentsConfig.getFailUrl());
     }
 
     @Transactional
-    public PaymentSuccessDto tossPaymentSuccess(String paymentKey, String orderId, Long amount) {
+    public PaymentSuccessResponse tossPaymentSuccess(String paymentKey, String orderId, Long amount) {
         Payment payment = verifyPayment(orderId, amount);
-        PaymentSuccessDto successDto = requestPaymentAccept(paymentKey, orderId, amount);
+        PaymentSuccessResponse successDto = requestPaymentAccept(paymentKey, orderId, amount);
 
         updatePayment(payment, successDto);
 
@@ -90,15 +90,15 @@ public class PaymentService {
     }
 
     @Transactional
-    public PaymentSuccessDto requestPaymentAccept(String paymentKey, String orderId, Long amount) {
+    public PaymentSuccessResponse requestPaymentAccept(String paymentKey, String orderId, Long amount) {
         JSONObject params = createPaymentRequestParams(orderId, amount);
 
-        PaymentSuccessDto paymentSuccessDto = tossPaymentUtil.sendPaymentRequest(
-                paymentKey, params, PaymentSuccessDto.class);
+        PaymentSuccessResponse paymentSuccessResponse = paymentProcessor.sendPaymentRequest(
+                paymentKey, params, PaymentSuccessResponse.class);
 
-        paymentSuccessDto.setJobApplicationId(findPaymentByOrderId(orderId).getJobApplicationId());
+        paymentSuccessResponse.setJobApplicationId(findPaymentByOrderId(orderId).getJobApplicationId());
 
-        return paymentSuccessDto;
+        return paymentSuccessResponse;
     }
 
     private JSONObject createPaymentRequestParams(String orderId, Long amount) {
@@ -109,7 +109,7 @@ public class PaymentService {
         return params;
     }
 
-    private void updatePayment(Payment payment, PaymentSuccessDto successDto) {
+    private void updatePayment(Payment payment, PaymentSuccessResponse successDto) {
         payment.updatePaymentKey(successDto.getPaymentKey());
         payment.markAsPaid();
         updatePayStatusByPayment(payment, successDto.getMethod());
@@ -121,17 +121,13 @@ public class PaymentService {
     }
 
     @Transactional
-    public PaymentFailDto tossPaymentFail(String code, String message, String orderId) {
+    public PaymentFailResponse tossPaymentFail(String code, String message, String orderId) {
         handlePaymentFailure(orderId, message);
 
         Payment payment = findPaymentByOrderId(orderId);
         paymentRepository.delete(payment);
 
-        return PaymentFailDto.builder()
-                .errorCode(code)
-                .errorMessage(message)
-                .orderId(orderId)
-                .build();
+        return new PaymentFailResponse(code, message, orderId);
     }
 
     private void handlePaymentFailure(String orderId, String message) {
