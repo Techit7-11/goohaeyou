@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.jobPost.jobPost.infra;
+package com.ll.goohaeyou.jobPost.jobPost.infrastructure;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;

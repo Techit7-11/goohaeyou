@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.member.emailAuth.infra;
+package com.ll.goohaeyou.member.emailAuth.infrastructure;
 
 import com.ll.goohaeyou.member.emailAuth.domain.AuthCodeStorage;
 import lombok.RequiredArgsConstructor;

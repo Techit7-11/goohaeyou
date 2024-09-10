@@ -4,7 +4,7 @@ import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.CancelPaymentResponse;
-import com.ll.goohaeyou.payment.payment.infra.TossPaymentUtil;
+import com.ll.goohaeyou.payment.payment.infrastructure.TossPaymentUtil;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
 import com.ll.goohaeyou.payment.payment.domain.Payment;

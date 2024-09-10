@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.notification.infra;
+package com.ll.goohaeyou.notification.infrastructure;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
