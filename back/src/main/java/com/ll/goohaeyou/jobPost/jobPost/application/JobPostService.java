@@ -19,10 +19,10 @@ import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.*;
 import com.ll.goohaeyou.jobPost.jobPost.domain.*;
+import com.ll.goohaeyou.jobPost.jobPost.domain.policy.JobPostPolicy;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.*;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
-import com.ll.goohaeyou.member.member.domain.type.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +60,7 @@ public class JobPostService {
     private final WageRepository wageRepository;
     private final EssentialRepository essentialRepository;
     private final UserActivityService userActivityService;
+    private final JobPostPolicy jobPostPolicy;
 
     @Transactional
     public Long writePost(String username, WriteJobPostRequest request) {
@@ -101,7 +102,7 @@ public class JobPostService {
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         JobPost jobPost = postDetail.getJobPost();
 
-        validateModificationPermission(username, jobPost);
+        jobPostPolicy.validateCanModify(username, jobPost.getId());
 
         int newRegionCode = Util.Region.getRegionCodeFromAddress(request.location());
 
@@ -120,12 +121,6 @@ public class JobPostService {
 
         updateJobPostDetails(postDetail, request);
         updateApplications(postDetail, request);
-    }
-
-    private void validateModificationPermission(String username, JobPost jobPost) {
-        if (!canEditPost(username, jobPost.getMember().getUsername())) {
-            throw new AuthException.NotAuthorizedException();
-        }
     }
 
     private void updateJobPostDetails(JobPostDetail jobPostDetail, ModifyJobPostRequest request) {
@@ -160,20 +155,14 @@ public class JobPostService {
 
         publisher.publishEvent(new PostDeletedEvent(this, post, member, DELETE));
 
-        if (member.getRole() == Role.ADMIN || post.getMember().equals(member)) {
-            if (!jobPostImages.isEmpty()) {
-                imageStorage.deletePostImagesFromS3(jobPostImages);
-            }
+        jobPostPolicy.validateCanDelete(member.getUsername(), postId);
 
-            jobPostCategoryRepository.deleteAllByJobPost(post);
-            jobPostRepository.deleteById(postId);
-        } else {
-            throw new AuthException.NotAuthorizedException();
+        if (!jobPostImages.isEmpty()) {
+            imageStorage.deletePostImagesFromS3(jobPostImages);
         }
-    }
 
-    public boolean canEditPost(String username, String author) {
-        return username.equals(author);
+        jobPostCategoryRepository.deleteAllByJobPost(post);
+        jobPostRepository.deleteById(postId);
     }
 
     public JobPost findByIdAndValidate(Long id) {
@@ -280,7 +269,7 @@ public class JobPostService {
     public void closeJobPostEarly(String username, Long id) {
         JobPost jobPost = findByIdAndValidate(id);
 
-        if (!canEditPost(username, jobPost.getMember().getUsername())) {
+        if (!username.equals(jobPost.getMember().getUsername())) {
             throw new AuthException.NotAuthorizedException();
         }
 
