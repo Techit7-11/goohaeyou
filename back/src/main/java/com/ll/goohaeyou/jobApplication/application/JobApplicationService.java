@@ -1,6 +1,5 @@
 package com.ll.goohaeyou.jobApplication.application;
 
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.event.notification.JobApplicationCreateAndChangedEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDetailResponse;
@@ -9,7 +8,7 @@ import com.ll.goohaeyou.jobApplication.application.dto.MyJobApplicationResponse;
 import com.ll.goohaeyou.jobApplication.application.dto.WriteJobApplicationRequest;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
-import com.ll.goohaeyou.jobApplication.exception.JobApplicationException;
+import com.ll.goohaeyou.jobApplication.policy.JobApplicationPolicy;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.member.member.domain.Member;
@@ -32,6 +31,7 @@ public class JobApplicationService {
     private final JobApplicationRepository jobApplicationRepository;
     private final ApplicationEventPublisher publisher;
     private final JobPostDetailRepository jobPostDetailRepository;
+    private final JobApplicationPolicy jobApplicationPolicy;
 
     @Transactional
     public void writeApplication(String username, Long jobPostId, WriteJobApplicationRequest request) {
@@ -39,7 +39,8 @@ public class JobApplicationService {
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
-        canWrite(postDetail, member);
+
+        jobApplicationPolicy.validateCanWrite(postDetail, member);
 
         JobApplication newJobApplication = createNewApplication(member, postDetail, request);
 
@@ -69,37 +70,20 @@ public class JobApplicationService {
     public void modifyJobApplication(String username, Long id, ModifyJobApplicationRequest request) {
         JobApplication jobApplication = findByIdAndValidate(id);
 
-        if (!isJobApplicationAuthor(username, jobApplication.getMember().getUsername())) {
-            throw new AuthException.NotAuthorizedException();
-        }
+        jobApplicationPolicy.validateCanModify(username, jobApplication);
 
         jobApplication.updateBody(request.body());
         publisher.publishEvent(new JobApplicationCreateAndChangedEvent(this, jobApplication, APPLICATION_MODIFICATION));
-    }
-
-    public boolean isJobApplicationAuthor(String username, String author) {
-        return username.equals(author);
     }
 
     @Transactional
     public void deleteJobApplication(String username, Long id) {
         JobApplication jobApplication = findByIdAndValidate(id);
 
-        canDelete(username, jobApplication);
+        jobApplicationPolicy.validateCanDelete(username, jobApplication);
 
         jobApplication.getJobPostDetail().getJobPost().decreaseApplicationsCount();
         jobApplicationRepository.deleteById(id);
-    }
-
-    public boolean canDelete(String username, JobApplication jobApplication) {
-        if (jobApplication.getApprove()) {
-            throw new AuthException.NotAuthorizedException();
-        }
-
-        if (!isJobApplicationAuthor(username, jobApplication.getMember().getUsername()))
-            throw new AuthException.NotAuthorizedException();
-
-        return true;
     }
 
     public List<MyJobApplicationResponse> findByUsername(String username) {
@@ -108,21 +92,5 @@ public class JobApplicationService {
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
         return MyJobApplicationResponse.convertToList(jobApplicationRepository.findByMemberId(member.getId()));
-    }
-
-    private void canWrite(JobPostDetail postDetail, Member member) {
-        if (postDetail.getJobPost().isClosed()){ // 공고 지원 마감
-            throw new JobApplicationException.ClosedPostExceptionJob();
-        }
-
-        if (postDetail.getAuthor().equals(member.getUsername())) { // 자신의 공고에 지원 불가능
-            throw new JobApplicationException.NotEligibleForOwnJobExceptionJob();
-        }
-
-        for (JobApplication jobApplication : postDetail.getJobApplications()) { // 지원서 중복 불가능
-            if (jobApplication.getMember().equals(member)) {
-                throw new JobApplicationException.DuplicateSubmissionExceptionJob();
-            }
-        }
     }
 }
