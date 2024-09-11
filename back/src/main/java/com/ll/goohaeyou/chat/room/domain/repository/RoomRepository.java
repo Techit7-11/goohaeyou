@@ -11,9 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    @Query("SELECT r FROM Room r WHERE " +
-            "(r.username1 = :username AND r.user1HasExit = false) " +
-            "OR (r.username2 = :username AND r.user2HasExit = false)")
+    @Query(
+        "SELECT r FROM Room r " +
+        "WHERE (r.username1 = :username AND r.user1HasExit = false) " +
+        "OR (r.username2 = :username AND r.user2HasExit = false)"
+    )
     List<Room> findActiveRoomsByUsername(@Param("username") String username);
 
 
