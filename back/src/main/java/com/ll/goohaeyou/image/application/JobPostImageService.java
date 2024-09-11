@@ -2,6 +2,7 @@ package com.ll.goohaeyou.image.application;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.image.domain.policy.JobPostImagePolicy;
 import com.ll.goohaeyou.image.exception.ImageException;
 import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
@@ -26,6 +27,7 @@ public class JobPostImageService {
     private final JobPostImageRepository jobPostImageRepository;
     private final JobPostDetailRepository jobPostDetailRepository;
     private final JobPostRepository jobPostRepository;
+    private final JobPostImagePolicy jobPostImagePolicy;
 
     @Transactional
     public void uploadJobPostImages(String username, long postDetailId, MultipartFile[] jobPostImageFiles) {
@@ -33,13 +35,7 @@ public class JobPostImageService {
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new)
                 .getJobPostDetail();
 
-        if (!jobPostDetail.getAuthor().equals(username)) {
-            throw new AuthException.NotAuthorizedException();
-        }
-
-        if (jobPostImageFiles.length == 0) {
-            throw new ImageException.FileIsEmptyException();
-        }
+        jobPostImagePolicy.validateCanUploadImages(username, jobPostDetail, jobPostImageFiles);
 
         if (!jobPostDetail.getJobPostImages().isEmpty()) {
             deleteJobPostImages(username, postDetailId);
@@ -99,13 +95,10 @@ public class JobPostImageService {
 
     @Transactional
     public void changeMainImage(String username, Long postId, Long currentImageId, Long newImageId) {
-        String author = jobPostDetailRepository.findById(postId)
-                .orElseThrow(EntityNotFoundException.PostNotExistsException::new)
-                .getAuthor();
+        JobPostDetail jobPostDetail = jobPostDetailRepository.findById(postId)
+                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
-        if (!author.equals(username)) {
-            throw new AuthException.NotAuthorizedException();
-        }
+        jobPostImagePolicy.verifyAuthor(username, jobPostDetail);
 
         JobPostImage currentMainImage = jobPostImageRepository.findById(currentImageId)
                 .orElseThrow(ImageException.ImageNotFoundException::new);

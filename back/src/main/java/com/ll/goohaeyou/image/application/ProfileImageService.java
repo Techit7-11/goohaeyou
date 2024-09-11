@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.image.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.image.exception.ImageException;
+import com.ll.goohaeyou.image.domain.policy.ProfileImagePolicy;
 import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import com.ll.goohaeyou.member.member.domain.Member;
@@ -18,15 +18,14 @@ public class ProfileImageService {
     private final ImageStorage imageStorage;
     private final JobPostRepository jobPostRepository;
     private final MemberRepository memberRepository;
+    private final ProfileImagePolicy profileImagePolicy;
 
     @Transactional
     public void uploadProfileImage(String username, MultipartFile profileImageFile) {
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
-        if (profileImageFile == null ||  profileImageFile.isEmpty()) {
-            throw new ImageException.FileIsEmptyException();
-        }
+        profileImagePolicy.validateCanUploadImage(profileImageFile);
 
         if (member.getProfileImageUrl() != null) {
             deleteProfileImage(username);   // S3에서 이미지 제거, DB에서 이미지 url 제거
@@ -55,9 +54,7 @@ public class ProfileImageService {
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
 
-        if (member.getProfileImageUrl() == null) {
-            throw new ImageException.ProfileImageNotFoundException();
-        }
+        profileImagePolicy.validateProfileImageExists(member);
 
         imageStorage.deleteImageFromS3(member.getProfileImageUrl());
         member.updateImageUrl(null);
