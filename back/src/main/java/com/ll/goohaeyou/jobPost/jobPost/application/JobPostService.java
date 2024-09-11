@@ -102,7 +102,7 @@ public class JobPostService {
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         JobPost jobPost = postDetail.getJobPost();
 
-        jobPostPolicy.validateCanModify(username, jobPost.getId());
+        jobPostPolicy.validateCanModify(username, jobPost);
 
         int newRegionCode = Util.Region.getRegionCodeFromAddress(request.location());
 
@@ -155,7 +155,7 @@ public class JobPostService {
 
         publisher.publishEvent(new PostDeletedEvent(this, post, member, DELETE));
 
-        jobPostPolicy.validateCanDelete(member.getUsername(), postId);
+        jobPostPolicy.validateCanDelete(member.getUsername(), post);
 
         if (!jobPostImages.isEmpty()) {
             imageStorage.deletePostImagesFromS3(jobPostImages);
