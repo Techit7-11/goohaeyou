@@ -1,10 +1,10 @@
 package com.ll.goohaeyou.jobPost.comment.application;
 
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.event.notification.CommentCreatedEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobPost.comment.application.dto.*;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
+import com.ll.goohaeyou.jobPost.comment.domain.policy.CommentPolicy;
 import com.ll.goohaeyou.jobPost.comment.domain.repository.CommentRepository;
 import com.ll.goohaeyou.jobPost.comment.exception.CommentException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
@@ -12,7 +12,6 @@ import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepositor
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
-import com.ll.goohaeyou.member.member.domain.type.Role;
 import com.ll.goohaeyou.member.member.exception.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,6 +29,7 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
     private final JobPostDetailRepository jobPostDetailRepository;
+    private final CommentPolicy commentPolicy;
 
     @Transactional
     public CreateCommentResponse writeComment(Long postId, String username, CreateCommentRequest request) {
@@ -56,9 +56,7 @@ public class CommentService {
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         Comment comment = findByIdAndValidate(commentId);
 
-        if (!canEditComment(username, comment, postDetail)) {
-            throw new AuthException.NotAuthorizedException();
-        }
+        commentPolicy.validateCanEdit(username, comment, postDetail);
 
         comment.update(request.content());
     }
@@ -68,11 +66,10 @@ public class CommentService {
         JobPostDetail postDetail = jobPostDetailRepository.findById(postId)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
         Comment comment = findByIdAndValidate(commentId);
-        Member member = findUserByUserNameValidate(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(MemberException.MemberNotFoundException::new);
 
-        if (!isAdminOrNot(comment, member)) {
-            throw new AuthException.NotAuthorizedException();
-        }
+        commentPolicy.validateCanDelete(comment, member);
 
         commentRepository.deleteById(commentId);
 
@@ -90,23 +87,6 @@ public class CommentService {
     public Comment findByIdAndValidate(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(CommentException.CommentNotExistsException::new);
-    }
-
-    private boolean canEditComment(String username, Comment comment, JobPostDetail post) {
-        if (!post.getComments().contains(comment)) {
-            throw new CommentException.CommentNotExistsException();
-        }
-
-        return username.equals(comment.getMember().getUsername());
-    }
-
-    private Member findUserByUserNameValidate(String username) {
-        return memberRepository.findByUsername(username)
-                .orElseThrow(MemberException.MemberNotFoundException::new);
-    }
-
-    private boolean isAdminOrNot(Comment comment, Member member) {
-        return member.getRole() == Role.ADMIN || comment.getMember().equals(member);
     }
 
     public List<MyCommentResponse> findByUsername(String username) {
