@@ -1,9 +1,9 @@
 package com.ll.goohaeyou.chat.message.application;
 
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
 import com.ll.goohaeyou.chat.message.application.dto.WriteMessageRequest;
 import com.ll.goohaeyou.chat.message.domain.Message;
+import com.ll.goohaeyou.chat.message.domain.policy.MessagePolicy;
 import com.ll.goohaeyou.chat.message.domain.repository.MessageRepository;
 import com.ll.goohaeyou.chat.room.domain.Room;
 import com.ll.goohaeyou.chat.room.domain.repository.RoomRepository;
@@ -21,15 +21,14 @@ import java.util.List;
 public class MessageService {
     private final RoomRepository roomRepository;
     private final MessageRepository messageRepository;
+    private final MessagePolicy messagePolicy;
 
     @Transactional
     public Message write(String username, Long roomId, WriteMessageRequest request) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(EntityNotFoundException.ChatroomNotExistsException::new);
 
-        if (!username.equals(room.getUsername1())&&!username.equals(room.getUsername2())) {
-            throw new AuthException.NotAuthorizedException();
-        }
+        messagePolicy.verifyWritePermission(username, room);
 
         Message newMessage = Message.create(room, username, request.content());
 

@@ -1,12 +1,11 @@
 package com.ll.goohaeyou.chat.room.application;
 
-import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.chat.exception.ChatException;
 import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
 import com.ll.goohaeyou.chat.message.domain.Message;
 import com.ll.goohaeyou.chat.room.application.dto.RoomDto;
 import com.ll.goohaeyou.chat.room.application.dto.RoomListDto;
 import com.ll.goohaeyou.chat.room.domain.Room;
+import com.ll.goohaeyou.chat.room.domain.policy.RoomPolicy;
 import com.ll.goohaeyou.chat.room.domain.repository.RoomRepository;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.member.member.domain.Member;
@@ -26,6 +25,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final MemberRepository memberRepository;
     private final SimpMessagingTemplate messagingTemplate;
+    private final RoomPolicy roomPolicy;
 
     @Transactional
     public void createRoom(Long memberId1, Long memberId2) {
@@ -55,15 +55,7 @@ public class RoomService {
     public RoomDto findById(Long roomId, String username) {
         Room room = findByIdAndValidate(roomId);
 
-        if (!username.equals(room.getUsername1())&&!username.equals(room.getUsername2())) {
-            throw new AuthException.NotAuthorizedException();
-        }
-
-        if (username.equals(room.getUsername1()) && room.isUser1HasExit()) {
-            throw new AuthException.NotAuthorizedException();
-        } else if (username.equals(room.getUsername2()) && room.isUser2HasExit()) {
-            throw new AuthException.NotAuthorizedException();
-        }
+        roomPolicy.verifyRoomAccess(username, room);
 
         return RoomDto.from(room);
     }
