@@ -1,9 +1,9 @@
 package com.ll.goohaeyou.member.member.application;
 
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.standard.base.util.Util;
 import com.ll.goohaeyou.member.member.application.dto.*;
 import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.policy.MemberPolicy;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;
 import com.ll.goohaeyou.member.member.exception.MemberException;
@@ -19,6 +19,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final MemberPolicy memberPolicy;
 
     @Transactional
     public void join(JoinRequest request) {
@@ -63,9 +64,7 @@ public class MemberService {
     public void login(LoginRequest request) {
         Member member = getMember(request.username());
 
-        if (!bCryptPasswordEncoder.matches(request.password(), member.getPassword())) {
-            throw new AuthException.InvalidPasswordException();
-        }
+        memberPolicy.verifyPassword(member.getPassword(), request.password());
     }
 
     public Member getMember(String username) {

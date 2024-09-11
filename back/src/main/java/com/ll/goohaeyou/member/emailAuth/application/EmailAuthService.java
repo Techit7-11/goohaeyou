@@ -3,6 +3,7 @@ package com.ll.goohaeyou.member.emailAuth.application;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.member.emailAuth.domain.AuthCodeStorage;
 import com.ll.goohaeyou.member.emailAuth.exception.EmailAuthException;
+import com.ll.goohaeyou.member.member.domain.policy.EmailAuthPolicy;
 import com.ll.goohaeyou.member.member.domain.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import jakarta.mail.MessagingException;
@@ -28,10 +29,14 @@ public class EmailAuthService {
     private final TemplateEngine templateEngine;
     private final JavaMailSender javaMailSender;
     private final AuthCodeStorage authCodeStorage;
+    private final EmailAuthPolicy emailAuthPolicy;
 
     @Transactional
     public void sendEmail(String username, String email) {
-        verifyAlreadyAuthenticated(username);
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+
+        emailAuthPolicy.verifyAlreadyAuthenticated(member);
 
         String authCode = manageMail(username);
 
@@ -40,15 +45,6 @@ public class EmailAuthService {
         String htmlContent = templateEngine.process(EMAIL_TEMPLATE, context);
 
         sendEmailToUser(email, htmlContent);
-    }
-
-    private void verifyAlreadyAuthenticated(String username) {
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
-
-        if (member.isAuthenticated()) {
-            throw new EmailAuthException.EmailAlreadyAuthenticatedException();
-        }
     }
 
     @Transactional
@@ -87,18 +83,12 @@ public class EmailAuthService {
             throw new EmailAuthException.InitiateEmailRequestException();
         }
 
-        verifyCode(inputCode, authCode);
+        emailAuthPolicy.verifyAuthCode(inputCode, authCode);
 
         authCodeStorage.deleteData(username);
 
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         member.authenticate();
-    }
-
-    private void verifyCode(String inputCode, String authCode) {
-        if (!inputCode.equals(authCode)) {
-            throw new EmailAuthException.InvalidAuthCodeException();
-        }
     }
 }
