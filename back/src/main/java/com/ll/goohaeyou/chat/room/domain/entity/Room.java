@@ -1,7 +1,7 @@
-package com.ll.goohaeyou.chat.room.domain;
+package com.ll.goohaeyou.chat.room.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ll.goohaeyou.chat.message.domain.Message;
+import com.ll.goohaeyou.chat.message.domain.entity.Message;
 import jakarta.persistence.*;
 import lombok.*;
 

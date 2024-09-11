@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.jobPost.jobPost.domain.Essential;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Essential;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.EssentialRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.member.member.domain.type.Gender;

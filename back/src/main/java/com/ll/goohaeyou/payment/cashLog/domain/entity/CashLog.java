@@ -1,7 +1,7 @@
-package com.ll.goohaeyou.payment.cashLog.domain;
+package com.ll.goohaeyou.payment.cashLog.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.payment.cashLog.domain.type.EventType;
 import com.ll.goohaeyou.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;

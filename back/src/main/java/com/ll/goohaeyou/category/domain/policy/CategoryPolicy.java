@@ -1,12 +1,8 @@
 package com.ll.goohaeyou.category.domain.policy;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.category.domain.Category;
-import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
+import com.ll.goohaeyou.category.domain.entity.Category;
 import com.ll.goohaeyou.category.exception.CategoryException;
-import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.global.standard.base.RegionType;
-import com.ll.goohaeyou.global.standard.base.util.Util;
 import com.ll.goohaeyou.member.member.domain.type.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

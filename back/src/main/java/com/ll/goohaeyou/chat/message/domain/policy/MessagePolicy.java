@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.chat.message.domain.policy;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.chat.room.domain.Room;
+import com.ll.goohaeyou.chat.room.domain.entity.Room;
 import org.springframework.stereotype.Component;
 
 @Component

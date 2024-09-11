@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.category.domain;
+package com.ll.goohaeyou.category.domain.entity;
 
 import com.ll.goohaeyou.category.domain.type.CategoryType;
 import jakarta.persistence.*;

@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.payment.payment.domain.repository;
 
-import com.ll.goohaeyou.payment.payment.domain.Payment;
+import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

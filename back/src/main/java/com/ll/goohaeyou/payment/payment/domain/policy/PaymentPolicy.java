@@ -2,7 +2,7 @@ package com.ll.goohaeyou.payment.payment.domain.policy;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.exception.GoohaeyouException;
-import com.ll.goohaeyou.payment.payment.domain.Payment;
+import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import org.springframework.stereotype.Component;
 

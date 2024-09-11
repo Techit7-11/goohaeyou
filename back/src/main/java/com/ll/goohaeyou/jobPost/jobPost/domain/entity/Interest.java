@@ -1,7 +1,7 @@
-package com.ll.goohaeyou.jobPost.jobPost.domain;
+package com.ll.goohaeyou.jobPost.jobPost.domain.entity;
 
 import jakarta.persistence.*;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

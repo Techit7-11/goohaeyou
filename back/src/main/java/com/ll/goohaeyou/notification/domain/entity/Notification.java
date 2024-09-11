@@ -1,6 +1,6 @@
-package com.ll.goohaeyou.notification.domain;
+package com.ll.goohaeyou.notification.domain.entity;
 
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.notification.domain.type.CauseTypeCode;
 import com.ll.goohaeyou.notification.domain.type.ResultTypeCode;
 import jakarta.persistence.*;

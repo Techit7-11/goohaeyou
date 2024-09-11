@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobPost.jobPost.domain.repository;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import org.springframework.data.jpa.domain.Specification;
 
 public class JobPostSpecifications {

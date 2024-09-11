@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.image.domain.policy;
 
 import com.ll.goohaeyou.image.exception.ImageException;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 

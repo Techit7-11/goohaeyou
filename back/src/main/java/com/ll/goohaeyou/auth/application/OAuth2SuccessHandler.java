@@ -2,7 +2,7 @@ package com.ll.goohaeyou.auth.application;
 
 import com.ll.goohaeyou.auth.infrastructure.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.auth.domain.RefreshToken;
 import com.ll.goohaeyou.auth.domain.RefreshTokenRepository;
 import com.ll.goohaeyou.global.infra.util.CookieUtil;

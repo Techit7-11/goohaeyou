@@ -2,7 +2,7 @@ package com.ll.goohaeyou.category.application;
 
 import com.ll.goohaeyou.category.application.dto.SubCategoryResponse;
 import com.ll.goohaeyou.category.application.dto.TopLevelCategoryResponse;
-import com.ll.goohaeyou.category.domain.Category;
+import com.ll.goohaeyou.category.domain.entity.Category;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.member.member.domain.policy;
 
 import com.ll.goohaeyou.member.emailAuth.exception.EmailAuthException;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import org.springframework.stereotype.Component;
 
 @Component

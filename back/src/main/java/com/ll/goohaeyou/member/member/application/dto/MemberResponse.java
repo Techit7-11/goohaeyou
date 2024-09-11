@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.member.member.application.dto;
 
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.type.Gender;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

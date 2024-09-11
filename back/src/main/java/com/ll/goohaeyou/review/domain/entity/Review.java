@@ -1,7 +1,7 @@
-package com.ll.goohaeyou.review.domain;
+package com.ll.goohaeyou.review.domain.entity;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 

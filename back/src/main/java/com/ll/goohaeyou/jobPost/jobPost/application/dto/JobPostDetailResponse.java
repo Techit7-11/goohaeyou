@@ -1,9 +1,9 @@
 package com.ll.goohaeyou.jobPost.jobPost.application.dto;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.Essential;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.jobPost.jobPost.domain.Wage;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Essential;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Wage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.type.PayBasis;
 import com.ll.goohaeyou.jobPost.jobPost.domain.type.WagePaymentMethod;
 import com.ll.goohaeyou.member.member.domain.type.Gender;

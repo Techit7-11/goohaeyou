@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.auth.domain;
 
 import com.ll.goohaeyou.member.member.domain.type.Role;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.type.Gender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,10 +1,10 @@
 package com.ll.goohaeyou.payment.payment.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.CancelPaymentResponse;
-import com.ll.goohaeyou.payment.payment.domain.Payment;
+import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.PaymentProcessor;
 import com.ll.goohaeyou.payment.payment.domain.policy.PaymentPolicy;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;

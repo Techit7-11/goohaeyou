@@ -4,7 +4,7 @@ import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.member.emailAuth.domain.AuthCodeStorage;
 import com.ll.goohaeyou.member.emailAuth.exception.EmailAuthException;
 import com.ll.goohaeyou.member.member.domain.policy.EmailAuthPolicy;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

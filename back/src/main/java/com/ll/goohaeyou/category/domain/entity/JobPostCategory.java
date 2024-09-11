@@ -1,6 +1,6 @@
-package com.ll.goohaeyou.category.domain;
+package com.ll.goohaeyou.category.domain.entity;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import jakarta.persistence.*;
 import lombok.*;
 

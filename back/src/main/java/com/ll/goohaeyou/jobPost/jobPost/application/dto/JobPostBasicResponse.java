@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.jobPost.jobPost.application.dto;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostImage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;

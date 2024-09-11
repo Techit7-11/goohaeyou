@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.jobPost.jobPost.domain.policy;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.member.member.domain.type.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

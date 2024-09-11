@@ -2,7 +2,7 @@ package com.ll.goohaeyou.image.domain.policy;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.image.exception.ImageException;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 

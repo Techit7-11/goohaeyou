@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.jobPost.jobPost.domain;
+package com.ll.goohaeyou.jobPost.jobPost.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

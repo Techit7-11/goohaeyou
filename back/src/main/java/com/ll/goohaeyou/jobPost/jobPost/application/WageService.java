@@ -2,8 +2,8 @@ package com.ll.goohaeyou.jobPost.jobPost.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.jobPost.jobPost.domain.Wage;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Wage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.WageRepository;
 import lombok.RequiredArgsConstructor;

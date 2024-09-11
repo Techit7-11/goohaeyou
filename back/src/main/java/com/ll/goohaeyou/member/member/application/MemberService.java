@@ -2,7 +2,7 @@ package com.ll.goohaeyou.member.member.application;
 
 import com.ll.goohaeyou.global.standard.base.util.Util;
 import com.ll.goohaeyou.member.member.application.dto.*;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.policy.MemberPolicy;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;

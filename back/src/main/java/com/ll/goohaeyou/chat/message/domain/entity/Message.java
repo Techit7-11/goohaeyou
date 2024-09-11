@@ -1,6 +1,6 @@
-package com.ll.goohaeyou.chat.message.domain;
+package com.ll.goohaeyou.chat.message.domain.entity;
 
-import com.ll.goohaeyou.chat.room.domain.Room;
+import com.ll.goohaeyou.chat.room.domain.entity.Room;
 import jakarta.persistence.*;
 import lombok.*;
 

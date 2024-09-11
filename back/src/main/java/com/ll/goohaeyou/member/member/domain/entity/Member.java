@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.member.member.domain;
+package com.ll.goohaeyou.member.member.domain.entity;
 
 import com.ll.goohaeyou.member.member.application.dto.UpdateSocialProfileRequest;
 import com.ll.goohaeyou.member.member.domain.type.Gender;

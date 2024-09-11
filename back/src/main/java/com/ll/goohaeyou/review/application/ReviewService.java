@@ -2,13 +2,13 @@ package com.ll.goohaeyou.review.application;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.exception.MemberException;
 import com.ll.goohaeyou.review.application.dto.ApplicantReviewDto;
-import com.ll.goohaeyou.review.domain.Review;
+import com.ll.goohaeyou.review.domain.entity.Review;
 import com.ll.goohaeyou.review.domain.mapper.ReviewMapper;
 import com.ll.goohaeyou.review.domain.policy.ReviewPolicy;
 import com.ll.goohaeyou.review.domain.repository.ReviewRepository;

@@ -1,14 +1,14 @@
 package com.ll.goohaeyou.chat.room.application;
 
 import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
-import com.ll.goohaeyou.chat.message.domain.Message;
+import com.ll.goohaeyou.chat.message.domain.entity.Message;
 import com.ll.goohaeyou.chat.room.application.dto.RoomDto;
 import com.ll.goohaeyou.chat.room.application.dto.RoomListDto;
-import com.ll.goohaeyou.chat.room.domain.Room;
+import com.ll.goohaeyou.chat.room.domain.entity.Room;
 import com.ll.goohaeyou.chat.room.domain.policy.RoomPolicy;
 import com.ll.goohaeyou.chat.room.domain.repository.RoomRepository;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

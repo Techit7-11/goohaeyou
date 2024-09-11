@@ -1,10 +1,10 @@
 package com.ll.goohaeyou.jobApplication.policy;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.exception.JobApplicationException;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import org.springframework.stereotype.Component;
 
 @Component

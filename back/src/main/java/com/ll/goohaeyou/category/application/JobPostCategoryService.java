@@ -1,16 +1,15 @@
 package com.ll.goohaeyou.category.application;
 
-import com.ll.goohaeyou.category.domain.Category;
-import com.ll.goohaeyou.category.domain.JobPostCategory;
+import com.ll.goohaeyou.category.domain.entity.Category;
+import com.ll.goohaeyou.category.domain.entity.JobPostCategory;
 import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
 import com.ll.goohaeyou.global.standard.base.util.Util;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

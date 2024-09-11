@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobApplication.domain;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostImage;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

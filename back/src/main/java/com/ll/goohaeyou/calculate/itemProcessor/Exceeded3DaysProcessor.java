@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.calculate.itemProcessor;
 
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import lombok.NonNull;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;

@@ -1,10 +1,10 @@
 package com.ll.goohaeyou.jobPost.jobPost.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.jobPost.jobPost.domain.Interest;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Interest;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.global.event.notification.PostGetInterestedEvent;
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;

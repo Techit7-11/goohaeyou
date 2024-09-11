@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.calculate.itemReader;
 
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.JpaPagingItemReader;

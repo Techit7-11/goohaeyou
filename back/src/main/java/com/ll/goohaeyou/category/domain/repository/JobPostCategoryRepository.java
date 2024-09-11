@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.category.domain.repository;
 
 import com.ll.goohaeyou.category.domain.type.CategoryType;
-import com.ll.goohaeyou.category.domain.JobPostCategory;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.category.domain.entity.JobPostCategory;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

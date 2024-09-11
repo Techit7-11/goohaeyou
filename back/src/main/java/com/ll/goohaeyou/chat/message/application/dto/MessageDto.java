@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.chat.message.application.dto;
 
-import com.ll.goohaeyou.chat.message.domain.Message;
+import com.ll.goohaeyou.chat.message.domain.entity.Message;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;

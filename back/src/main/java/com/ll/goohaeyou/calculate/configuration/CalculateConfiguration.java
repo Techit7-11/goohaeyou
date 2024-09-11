@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.calculate.configuration;
 
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.calculate.itemProcessor.JobApplicationProcessor;
 import com.ll.goohaeyou.calculate.itemReader.JobApplicationReader;
 import com.ll.goohaeyou.calculate.itemWriter.JobApplicationWriter;

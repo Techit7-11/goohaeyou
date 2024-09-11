@@ -4,7 +4,7 @@ import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.image.domain.policy.ProfileImagePolicy;
 import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

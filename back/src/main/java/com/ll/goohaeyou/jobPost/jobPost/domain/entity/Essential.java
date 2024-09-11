@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.jobPost.jobPost.domain;
+package com.ll.goohaeyou.jobPost.jobPost.domain.entity;
 
 import com.ll.goohaeyou.member.member.domain.type.Gender;
 import jakarta.persistence.*;

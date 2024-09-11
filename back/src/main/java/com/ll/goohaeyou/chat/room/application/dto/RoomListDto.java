@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.chat.room.application.dto;
 
-import com.ll.goohaeyou.chat.room.domain.Room;
+import com.ll.goohaeyou.chat.room.domain.entity.Room;
 import lombok.Builder;
 import lombok.Getter;
 
