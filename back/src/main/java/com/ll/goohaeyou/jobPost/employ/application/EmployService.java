@@ -1,6 +1,5 @@
 package com.ll.goohaeyou.jobPost.employ.application;
 
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;
 import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
@@ -8,6 +7,7 @@ import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.application.dto.JobPostApplicationResponse;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
+import com.ll.goohaeyou.jobPost.employ.domain.policy.EmployPolicy;
 import com.ll.goohaeyou.jobPost.employ.exception.EmployException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.ll.goohaeyou.notification.domain.type.CauseTypeCode.APPLICATION_APPROVED;
 import static com.ll.goohaeyou.notification.domain.type.CauseTypeCode.APPLICATION_UNAPPROVED;
@@ -34,11 +35,13 @@ public class EmployService {
     private final JobPostRepository jobPostRepository;
     private final JobPostDetailRepository jobPostDetailRepository;
     private final ApplicationEventPublisher publisher;
+    private final EmployPolicy employPolicy;
 
     public List<JobPostApplicationResponse> getList(String username, Long postId) {
         JobPostDetail postDetail = jobPostDetailRepository.findById(postId)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
-        checkPermissions(username,postDetail.getAuthor());
+
+        employPolicy.checkPermissions(username, postDetail.getAuthor());
 
         return JobPostApplicationResponse.convertToList(postDetail.getJobApplications());
     }
@@ -52,11 +55,7 @@ public class EmployService {
 
         WageStatus updateWageStatus = determineWageStatus(postDetail.getWage().getWagePaymentMethod());
 
-        if (!jobPost.isClosed()) {
-            throw new EmployException.NotPossibleToApproveItYetExceptionJob();
-        }
-
-        checkPermissions(username,postDetail.getAuthor());
+        employPolicy.validateApproval(username, postDetail, jobPost);
 
         List<JobApplication> jobApplicationList = new ArrayList<>();
 
@@ -89,12 +88,6 @@ public class EmployService {
         publisher.publishEvent(new PostEmployedEvent(this, jobPost));
     }
 
-    public void checkPermissions (String username, String author){
-        if (!username.equals(author)) {
-            throw new AuthException.NotAuthorizedException();
-        }
-    }
-
     private WageStatus determineWageStatus(WagePaymentMethod wagePaymentMethod) {
         return switch (wagePaymentMethod) {
             case SERVICE_PAYMENT -> WageStatus.PAYMENT_PENDING;
@@ -104,22 +97,14 @@ public class EmployService {
     }
 
     private void increaseApplicantTransactionCount(JobApplication jobApplication) {
-        if (isValidApplication(jobApplication)) {
+        if (!Objects.isNull(jobApplication)) {
             jobApplication.getMember().increaseTransactionCount();
         }
     }
 
     private void increaseAuthorTransactionCount(JobPost jobPost) {
-        if (isValidJobPost(jobPost)) {
+        if (!Objects.isNull(jobPost)) {
             jobPost.getMember().increaseTransactionCount();
         }
-    }
-
-    private boolean isValidApplication(JobApplication jobApplication) {
-        return jobApplication != null && jobApplication.getMember() != null;
-    }
-
-    private boolean isValidJobPost(JobPost jobPost) {
-        return jobPost != null && jobPost.getMember() != null;
     }
 }
