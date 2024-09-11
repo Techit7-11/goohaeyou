@@ -277,9 +277,9 @@ public class JobPostService {
         publisher.publishEvent(new PostDeadlineEvent(this, jobPost));
     }
 
-    @Cacheable(value = "jobPostsByCategory", key = "#categoryId + '_' + #page", condition = "#page <= 5")
-    public Page<JobPostBasicResponse> getPostsByCategory(Long categoryId, int page) {
-        Category category = categoryRepository.findById(categoryId)
+    @Cacheable(value = "jobPostsByCategory", key = "#categoryName + '_' + #page", condition = "#page <= 5")
+    public Page<JobPostBasicResponse> getPostsByCategory(String categoryName, int page) {
+        Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
 
         Pageable pageable = createPageableForCategory(page);

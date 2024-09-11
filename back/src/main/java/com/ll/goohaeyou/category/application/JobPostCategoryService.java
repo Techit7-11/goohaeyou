@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 @Transactional(readOnly = true)
 public class JobPostCategoryService {
     private final JobPostCategoryRepository jobPostCategoryRepository;
