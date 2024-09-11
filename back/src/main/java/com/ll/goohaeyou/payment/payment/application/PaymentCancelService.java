@@ -1,21 +1,18 @@
 package com.ll.goohaeyou.payment.payment.application;
 
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.jobApplication.domain.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.CancelPaymentResponse;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.PaymentProcessor;
+import com.ll.goohaeyou.payment.payment.domain.policy.PaymentPolicy;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
-import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ll.goohaeyou.global.exception.ErrorCode.BAD_REQUEST;
 import static com.ll.goohaeyou.jobApplication.domain.type.WageStatus.PAYMENT_CANCELLED;
 
 @Service
@@ -24,13 +21,14 @@ public class PaymentCancelService {
     private final PaymentRepository paymentRepository;
     private final PaymentProcessor paymentProcessor;
     private final JobApplicationRepository jobApplicationRepository;
+    private final PaymentPolicy paymentPolicy;
 
     @Transactional
     public CancelPaymentResponse tossPaymentCancel(String username, String paymentKey, String cancelReason) {
         Payment payment = paymentRepository.findByPaymentKeyAndMemberUsername(paymentKey, username)
                 .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
 
-        checkPaymentCancelable(username, payment);
+        paymentPolicy.verifyPaymentCancelable(payment, username);
 
         payment.cancelPayment(cancelReason);
 
@@ -45,20 +43,6 @@ public class PaymentCancelService {
         );
 
         return response;
-    }
-
-    private void checkPaymentCancelable(String username, Payment payment) {
-        if (payment.isCanceled()) {
-            throw new PaymentException.AlreadyCanceledException();
-        }
-
-        if (!payment.getMember().getUsername().equals(username)) {
-            throw new AuthException.NotAuthorizedException();
-        }
-
-        if (!payment.isPaid()) {
-            throw new GoohaeyouException(BAD_REQUEST);
-        }
     }
 
     private void UpdatePaymentAndApplication(Payment payment, String cancelReason) {

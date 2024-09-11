@@ -15,9 +15,9 @@ import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.Payment;
 import com.ll.goohaeyou.payment.payment.domain.PaymentProcessor;
+import com.ll.goohaeyou.payment.payment.domain.policy.PaymentPolicy;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
-import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -34,6 +34,7 @@ public class PaymentService {
     private final MemberRepository memberRepository;
     private final PaymentProcessor paymentProcessor;
     private final JobApplicationRepository jobApplicationRepository;
+    private final PaymentPolicy paymentPolicy;
 
     @Transactional
     @RetryOnOptimisticLock(attempts = 2, backoff = 500L)
@@ -64,7 +65,11 @@ public class PaymentService {
 
     @Transactional
     public PaymentSuccessResponse tossPaymentSuccess(String paymentKey, String orderId, Long amount) {
-        Payment payment = verifyPayment(orderId, amount);
+        Payment payment = paymentRepository.findByOrderId(orderId)
+                .orElseThrow(MemberException.MemberNotFoundException::new);
+
+        paymentPolicy.verifyPaymentAmount(payment, amount);
+
         PaymentSuccessResponse successDto = requestPaymentAccept(paymentKey, orderId, amount);
 
         updatePayment(payment, successDto);
@@ -76,17 +81,6 @@ public class PaymentService {
         jobApplication.updateEarn(Math.toIntExact(amount));
 
         return successDto;
-    }
-
-    public Payment verifyPayment(String orderId, Long amount) {
-        Payment payment = paymentRepository.findByOrderId(orderId)
-                .orElseThrow(MemberException.MemberNotFoundException::new);
-
-        if (!payment.getTotalAmount().equals(amount)) {
-            throw new PaymentException.PaymentAmountMismatchException();
-        }
-
-        return payment;
     }
 
     @Transactional

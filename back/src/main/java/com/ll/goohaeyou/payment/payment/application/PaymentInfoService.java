@@ -1,9 +1,8 @@
 package com.ll.goohaeyou.payment.payment.application;
 
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentInfoResponse;
-import com.ll.goohaeyou.payment.payment.domain.Payment;
+import com.ll.goohaeyou.payment.payment.domain.policy.PaymentPolicy;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,11 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class PaymentInfoService {
     private final PaymentRepository paymentRepository;
+    private final PaymentPolicy paymentPolicy;
 
     public PaymentInfoResponse getValidPaymentInfo(String username, Long applicationId) {
         return paymentRepository.findByJobApplicationIdAndPaid(applicationId, true)
                 .map(payment -> {
-                    validatePayer(payment, username);
+                    paymentPolicy.verifyPaymentUser(payment, username);
 
                     if (payment.isCanceled()) {
                         throw new PaymentException.AlreadyCanceledException();
@@ -27,11 +27,5 @@ public class PaymentInfoService {
                     return PaymentInfoResponse.from(payment);
                 })
                 .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
-    }
-
-    private void validatePayer(Payment payment, String username) {
-        if (!payment.getMember().getUsername().equals(username)) {
-            throw new AuthException.NotAuthorizedException();
-        }
     }
 }
