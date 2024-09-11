@@ -10,6 +10,7 @@ import com.ll.goohaeyou.member.member.exception.MemberException;
 import com.ll.goohaeyou.review.application.dto.ApplicantReviewDto;
 import com.ll.goohaeyou.review.domain.Review;
 import com.ll.goohaeyou.review.domain.mapper.ReviewMapper;
+import com.ll.goohaeyou.review.domain.policy.ReviewPolicy;
 import com.ll.goohaeyou.review.domain.repository.ReviewRepository;
 import com.ll.goohaeyou.review.exception.ReviewException;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final JobPostRepository jobPostRepository;
+    private final ReviewPolicy reviewPolicy;
 
     @Transactional
     public ApplicantReviewDto saveReview(ApplicantReviewDto applicantReviewDto) {
@@ -42,9 +44,7 @@ public class ReviewService {
         boolean exists = reviewRepository.existsByJobPostingId_IdAndApplicantId_Id(jobPostId.getId(),
                 applicantId.getId());
 
-        if (exists) {
-            throw new ReviewException.ReviewAlreadyExistsException();
-        }
+        reviewPolicy.verifyReviewNotExists(exists);
 
         Review review = reviewMapper.toReviewEntity(applicantReviewDto);
 
@@ -76,9 +76,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(ReviewException.ReviewNotExistsException::new);
 
-        if (!review.getApplicantId().getUsername().equals(getCurrentUsername())) {
-            throw new AuthException.NotAuthorizedException();
-        }
+        reviewPolicy.verifyReviewAuthor(review.getApplicantId(), getCurrentUsername());
 
         reviewRepository.deleteById(id);
     }
