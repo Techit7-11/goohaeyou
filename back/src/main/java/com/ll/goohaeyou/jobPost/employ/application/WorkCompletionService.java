@@ -1,11 +1,10 @@
 package com.ll.goohaeyou.jobPost.employ.application;
 
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
 import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
+import com.ll.goohaeyou.jobPost.employ.domain.policy.WorkCompletionPolicy;
 import com.ll.goohaeyou.jobPost.employ.exception.EmployException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
@@ -13,14 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ll.goohaeyou.global.exception.ErrorCode.BAD_REQUEST;
-import static com.ll.goohaeyou.jobApplication.domain.type.WageStatus.APPLICATION_APPROVED;
-
 @Service
 @RequiredArgsConstructor
 public class WorkCompletionService {
     private final JobApplicationRepository jobApplicationRepository;
     private final JobPostRepository jobPostRepository;
+    private final WorkCompletionPolicy workCompletionPolicy;
 
     @Transactional
     public void completeJobManually(String username, Long applicationId) {
@@ -35,15 +32,9 @@ public class WorkCompletionService {
         JobPost jobPost = jobPostRepository.findById(jobApplication.getJobPostDetail().getJobPost().getId())
                         .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
-        checkAuthorization(username, jobPost);
+        workCompletionPolicy.checkAuthorization(username, jobPost);
 
         return jobApplication;
-    }
-
-    private void checkAuthorization(String username, JobPost jobPost) {
-        if (!jobPost.getJobPostDetail().getAuthor().equals(username)) {
-            throw new AuthException.NotAuthorizedException();
-        }
     }
 
     private void updateApplicationByComplete(JobApplication jobApplication) {
@@ -64,9 +55,7 @@ public class WorkCompletionService {
     public void cancelByIndividualPayment(String username, Long applicationId) {
         JobApplication jobApplication = getApplicationWithAuthorizationCheck(username, applicationId);
 
-        if (!jobApplication.getWageStatus().equals(APPLICATION_APPROVED)) {
-            throw new GoohaeyouException(BAD_REQUEST);
-        }
+        workCompletionPolicy.validateWageStatusForCancel(jobApplication);
 
         updateApplicationByCancel(jobApplication);
     }
