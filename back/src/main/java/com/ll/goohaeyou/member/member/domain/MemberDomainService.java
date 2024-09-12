@@ -59,6 +59,15 @@ public class MemberDomainService {
         }
     }
 
+    @Transactional
+    public void saveOrUpdateMemberByEmail(String email) {
+        Member member = memberRepository.findByUsername(email)
+                .map(entity -> entity.oauthUpdate(email))
+                .orElseGet(() -> Member.createSocialGoogle(email));
+
+        memberRepository.save(member);
+    }
+
     public void verifyPassword(String MemberPassword, String inputPassword) {
         if (!bCryptPasswordEncoder.matches(MemberPassword, inputPassword)) {
             throw new AuthException.InvalidPasswordException();

@@ -1,12 +1,10 @@
 package com.ll.goohaeyou.auth.application;
 
+import com.ll.goohaeyou.auth.domain.RefreshTokenDomainService;
 import com.ll.goohaeyou.auth.infrastructure.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.member.member.domain.entity.Member;
-import com.ll.goohaeyou.auth.domain.RefreshToken;
-import com.ll.goohaeyou.auth.domain.RefreshTokenRepository;
 import com.ll.goohaeyou.global.infra.util.CookieUtil;
-import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
+import com.ll.goohaeyou.member.member.domain.MemberDomainService;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +26,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(1);
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
-    private final MemberRepository memberRepository;
+    private final RefreshTokenDomainService refreshTokenDomainService;
+    private final MemberDomainService memberDomainService;
 
     @Value("${custom.site.frontUrl}/member/socialLoginCallback")
     private String redirectPath;
@@ -38,12 +36,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        Member member = memberRepository.findByUsername((String) oAuth2User.getAttributes().get("email"))
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+        Member member = memberDomainService.getByUsername((String) oAuth2User.getAttributes().get("email"));
 
         // 리프레쉬 토큰
         String refreshToken = jwtTokenProvider.generateToken(member, REFRESH_TOKEN_DURATION);
-        saveRefreshToken(member.getId(), refreshToken);
+        refreshTokenDomainService.save(member.getId(), refreshToken);
         addTokenToCookie(request, response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, REFRESH_TOKEN_DURATION);
 
         // 액세스 토큰
@@ -52,15 +49,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, redirectPath);
-    }
-
-    // 리프레쉬 토큰 DB 저장
-    private void saveRefreshToken(Long userId, String newRefreshToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
-                .map(entity -> entity.update(newRefreshToken))
-                .orElse(new RefreshToken(userId, newRefreshToken));
-
-        refreshTokenRepository.save(refreshToken);
     }
 
     // 토큰 쿠키 저장
