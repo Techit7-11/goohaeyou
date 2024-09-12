@@ -1,14 +1,13 @@
 package com.ll.goohaeyou.global.config;
 
-import com.ll.goohaeyou.auth.domain.RefreshTokenRepository;
-import com.ll.goohaeyou.member.member.application.MemberService;
 import com.ll.goohaeyou.auth.application.CustomUserDetailsService;
-import com.ll.goohaeyou.auth.infrastructure.JwtFilter;
 import com.ll.goohaeyou.auth.application.JwtTokenProvider;
-import com.ll.goohaeyou.auth.infrastructure.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.ll.goohaeyou.auth.application.OAuth2SuccessHandler;
 import com.ll.goohaeyou.auth.application.OAuth2UserCustomService;
-import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
+import com.ll.goohaeyou.auth.domain.RefreshTokenDomainService;
+import com.ll.goohaeyou.auth.infrastructure.JwtFilter;
+import com.ll.goohaeyou.auth.infrastructure.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import com.ll.goohaeyou.member.member.domain.MemberDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,9 +29,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService customUserDetailsService;
-    private final MemberRepository memberRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final OAuth2UserCustomService oAuth2UserCustomService;
+    private final MemberDomainService memberDomainService;
+    private final RefreshTokenDomainService refreshTokenDomainService;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -90,9 +89,9 @@ public class SecurityConfig {
     @Bean
     public OAuth2SuccessHandler oAuth2SuccessHandler() {
         return new OAuth2SuccessHandler(jwtTokenProvider,
-                refreshTokenRepository,
                 oAuth2AuthorizationRequestBasedOnCookieRepository(),
-                memberRepository
+                refreshTokenDomainService,
+                memberDomainService
         );
     }
 
