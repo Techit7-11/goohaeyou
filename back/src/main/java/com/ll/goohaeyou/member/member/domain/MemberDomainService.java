@@ -68,6 +68,11 @@ public class MemberDomainService {
         memberRepository.save(member);
     }
 
+    @Transactional
+    public void save(Member member) {
+        memberRepository.save(member);
+    }
+
     public void verifyPassword(String MemberPassword, String inputPassword) {
         if (!bCryptPasswordEncoder.matches(MemberPassword, inputPassword)) {
             throw new AuthException.InvalidPasswordException();

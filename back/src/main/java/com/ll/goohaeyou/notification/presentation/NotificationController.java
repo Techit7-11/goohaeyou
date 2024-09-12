@@ -60,5 +60,4 @@ public class NotificationController {
         notificationService.register(memberDetails.getId(), token);
         return ResponseEntity.noContent().build();
     }
-
 }

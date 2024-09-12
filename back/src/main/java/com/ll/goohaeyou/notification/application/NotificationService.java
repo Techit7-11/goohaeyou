@@ -1,21 +1,18 @@
 package com.ll.goohaeyou.notification.application;
 
-import com.ll.goohaeyou.chat.room.domain.repository.RoomRepository;
+import com.ll.goohaeyou.chat.room.domain.RoomDomainService;
 import com.ll.goohaeyou.global.event.notification.*;
-import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.global.standard.base.util.FcmTokenUtil;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
-import com.ll.goohaeyou.jobPost.comment.domain.Comment;
+import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDomainService;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
+import com.ll.goohaeyou.member.member.domain.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
-import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.notification.application.dto.NotificationResponse;
+import com.ll.goohaeyou.notification.domain.NotificationEventDomainService;
+import com.ll.goohaeyou.notification.domain.NotificationManagementDomainService;
 import com.ll.goohaeyou.notification.domain.entity.Notification;
-import com.ll.goohaeyou.notification.domain.NotificationSender;
 import com.ll.goohaeyou.notification.domain.repository.NotificationRepository;
-import com.ll.goohaeyou.notification.domain.type.CauseTypeCode;
-import com.ll.goohaeyou.notification.domain.type.ResultTypeCode;
-import com.ll.goohaeyou.notification.exception.NotificationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,152 +20,86 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.ll.goohaeyou.notification.domain.type.CauseTypeCode.*;
-import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.*;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
 public class NotificationService {
     private final NotificationRepository notificationRepository;
-    private final JobPostRepository jobPostRepository;
-    private final NotificationSender notificationSender;
-    private final MemberRepository memberRepository;
-    private final RoomRepository roomRepository;
+    private final MemberDomainService memberDomainService;
+    private final JobPostDomainService jobPostDomainService;
+    private final RoomDomainService roomDomainService;
+    private final NotificationEventDomainService notificationEventDomainService;
+    private final NotificationManagementDomainService notificationManagementDomainService;
 
     @Transactional
     public void notifyApplicantsAboutPost(ChangeOfPostEvent event) {
-        JobPost jobPost = event.getJobPost();
-        JobApplication jobApplication = event.getJobApplication();
-        String url = "/job-post/" + jobPost.getId();
-
-        makeNotification(jobApplication.getMember(), jobPost.getMember(),
-                jobPost.getTitle(), event.getCauseTypeCode(), NOTICE, url);
+        notificationEventDomainService.notifyApplicantsAboutPost(event);
     }
 
     @Transactional
     public void deleteApplicationNotification(ChangeOfPostEvent event) {
-        JobPost jobPost = event.getJobPost();
-        JobApplication jobApplication = event.getJobApplication();
-        String url = "/job-post/" + jobPost.getId();
-
-        makeNotification(jobApplication.getMember(), jobPost.getMember(), jobPost.getTitle(),
-                event.getCauseTypeCode(), DELETE,url);
+        notificationEventDomainService.deleteApplicationNotification(event);
     }
 
     @Transactional
     public void postDeletedNotification(PostDeletedEvent event) {
-        JobPost jobPost = event.getJobPost();
-        Member fromMember = event.getMember();
-        String url = "/";
-
-        List<JobApplication> jobApplicationList = jobPost.getJobPostDetail().getJobApplications();
-
-        for (JobApplication jobApplication : jobApplicationList) {
-            makeNotification(jobApplication.getMember(), fromMember, jobPost.getTitle(),
-                    POST_DELETED,DELETE, url);
-        }
+        notificationEventDomainService.postDeletedNotification(event);
     }
 
     @Transactional
     public void commentCreatedNotification(CommentCreatedEvent event) {
-        JobPost jobPost = event.getJobPostDetail().getJobPost();
-        Comment comment = event.getComment();
-        String url = "/job-post/" + jobPost.getId();
-
-        makeNotification(jobPost.getMember(), comment.getMember(), jobPost.getTitle(),
-                COMMENT_CREATED, NOTICE, url);
+        notificationEventDomainService.commentCreatedNotification(event);
     }
 
     @Transactional
     public void postGetInterestedNotification(PostGetInterestedEvent event) {
-        JobPost jobPost = event.getJobPostDetail().getJobPost();
-        Member member = event.getMember();
-        String url = "/job-post/" + jobPost.getId();
-
-        makeNotification(jobPost.getMember() ,member, jobPost.getTitle(),
-                POST_INTERESTED, NOTICE, url);
+        notificationEventDomainService.postGetInterestedNotification(event);
     }
 
     @Transactional
     public void applicationCreatedAndChangedNotification(JobApplicationCreateAndChangedEvent event) {
-        JobPost jobPost = event.getJobPostDetail().getJobPost();
-        JobApplication jobApplication = event.getJobApplication();
-        String url = "/applications/detail/" + jobApplication.getId();
-        makeNotification(jobPost.getMember(), jobApplication.getMember(), jobPost.getTitle(),
-                event.getCauseTypeCode(), NOTICE, url);
+        notificationEventDomainService.applicationCreatedAndChangedNotification(event);
     }
 
     @Transactional
     public void jobPostClosedNotificationEventListen(PostDeadlineEvent event) {
-        JobPost jobPost = event.getJobPost();
-        String url = "/job-post/" + jobPost.getId();
-        makeNotification(jobPost.getMember(), jobPost.getMember(), jobPost.getTitle(),
-                POST_DEADLINE, APPROVE, url);
+        notificationEventDomainService.jobPostClosedNotificationEventListen(event);
     }
 
     @Transactional
     public void calculateNotificationEventListen(JobApplication jobApplication) {
-        JobPost jobPost = jobPostRepository.findById(jobApplication.getJobPostDetail().getId())
-                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
-        String url = "/applications/detail/" + jobApplication.getId();
+        JobPost jobPost = jobPostDomainService.findById(jobApplication.getJobPostDetail().getId());
 
-        makeNotification(jobApplication.getMember(), jobPost.getMember(), jobPost.getTitle(),
-                CALCULATE_PAYMENT, NOTICE, url);
+        notificationEventDomainService.calculateNotificationEventListen(jobApplication, jobPost);
     }
 
     @Transactional
     public void notifyAboutChatRoom(CreateChatRoomEvent event) {
         log.info("알림 생성 중");
 
-        Member member1 = memberRepository.findById(event.getMemberId1())
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
-        Member member2 = memberRepository.findById(event.getMemberId2())
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+        Member member1 = memberDomainService.getById(event.getMemberId1());
+        Member member2 = memberDomainService.getById(event.getMemberId2());
         String title = event.getPostTitle();
-        Long roomId = roomRepository.findByUsername1AndUsername2(member1.getUsername(), member2.getUsername())
-                .orElseGet(() -> roomRepository.findByUsername1AndUsername2(member2.getUsername(), member1.getUsername())
-                        .orElseThrow(EntityNotFoundException.ChatroomNotExistsException::new))
-                .getId();
+        Long roomId = roomDomainService.getByUsername1AndUsername2(member1.getUsername(), member2.getUsername()).getId();
 
-        String url = "/chat/" + roomId;
-        makeNotification(member1, member2, title, CHATROOM_CREATED, NOTICE, url);
-        makeNotification(member2, member1, title, CHATROOM_CREATED, NOTICE, url);
+        notificationEventDomainService.notifyAboutChatRoom(member1, member2, title, roomId);
 
         log.info("알림 생성 완료");
     }
 
-    private void makeNotification(Member toMember, Member fromMember, String jobPostTitle,
-                                                  CauseTypeCode causeTypeCode, ResultTypeCode resultTypeCode, String url) {
-        Notification newNotification = Notification.create(
-                toMember,
-                fromMember,
-                jobPostTitle,
-                causeTypeCode,
-                resultTypeCode,
-                url
-        );
-
-        notificationRepository.save(newNotification);
-
-        if (toMember.getFCMToken() != null) {
-            notificationSender.send(toMember.getFCMToken(), jobPostTitle, causeTypeCode);
-        }
-    }
-
     public List<NotificationResponse> getList(String username) {
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
-        List<Notification> notificationList = notificationRepository.findByToMemberOrderByCreateAtDesc(member);
+        Member member = memberDomainService.getByUsername(username);
+
+        List<Notification> notificationList =
+                notificationManagementDomainService.getByToMemberOrderByCreateAtDesc(member);
 
         return NotificationResponse.convertToDtoList(notificationList);
     }
 
     @Transactional
     public void deleteReadAllNotification(String username) {
-        Member toMember = memberRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+        Member toMember = memberDomainService.getByUsername(username);
         List<Notification> readNotification = notificationRepository.findByToMemberAndSeenIsTrue(toMember);
 
         notificationRepository.deleteAll(readNotification);
@@ -176,52 +107,44 @@ public class NotificationService {
 
     @Transactional
     public void deleteAllNotification(String username) {
-        Member toMember = memberRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
-        List<Notification> removeNotification = notificationRepository.findByToMember(toMember);
-        notificationRepository.deleteAll(removeNotification);
+        Member toMember = memberDomainService.getByUsername(username);
+
+        List<Notification> removeNotification = notificationManagementDomainService.getByToMember(toMember);
+
+        notificationManagementDomainService.deleteAll(removeNotification);
     }
 
     @Transactional
     public void readNotification(String username, Long notificationId) {
-        memberRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
-        Notification notification = findByIdAndValidate(notificationId);
+        memberDomainService.getByUsername(username);
+
+        Notification notification = notificationManagementDomainService.getById(notificationId);
+
         notification.update();
     }
 
-    private Notification findByIdAndValidate (Long notificationId) {
-        return notificationRepository.findById(notificationId)
-                .orElseThrow(NotificationException.NotificationNotExistsException::new);
-    }
-
     public Boolean unreadNotification(String username) {
-        Member toMember = memberRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+        Member toMember = memberDomainService.getByUsername(username);
 
-        return notificationRepository.existsByToMemberAndSeenIsFalse(toMember);
+        return notificationManagementDomainService.existsByToMemberAndSeenIsFalse(toMember);
     }
 
     @Transactional
     public void register(Long userId, String token) {
-        int startIndex = token.indexOf("\"token\":\"") + "\"token\":\"".length();
-        int endIndex = token.lastIndexOf("\"");
+        String extractedToken = FcmTokenUtil.parseFcmToken(token);
 
-        String extractedToken = token.substring(startIndex, endIndex);
-
-        Member member = memberRepository.findById(userId)
-                        .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+        Member member = memberDomainService.getById(userId);
         member.registerFCMToken(extractedToken);
 
-        memberRepository.save(member);
+        memberDomainService.save(member);
     }
 
     @Transactional
     public void deleteToken(Long userId) {
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+        Member member = memberDomainService.getById(userId);
+
         member.removeFCMToken();
 
-        memberRepository.save(member);
+        memberDomainService.save(member);
     }
 }
