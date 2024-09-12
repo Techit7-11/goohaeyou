@@ -42,7 +42,7 @@ public class S3ImageService implements ImageStorage {
     @Transactional
     @Override
     public String upload(MultipartFile image) {
-        if (image == null || image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
+        if (Objects.isNull(image) || image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
             throw new ImageException.FileIsEmptyException();
         }
         return uploadImage(image);

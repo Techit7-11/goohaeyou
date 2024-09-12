@@ -7,6 +7,8 @@ import com.ll.goohaeyou.member.member.domain.type.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class CategoryPolicy {
@@ -25,7 +27,7 @@ public class CategoryPolicy {
 
     // 카테고리 계층의 유효성 검증
     private void validateCategoryHierarchy(Category parent, int level) {
-        if (parent == null && level > 1) {
+        if (Objects.isNull(parent) && level > 1) {
             throw new CategoryException.InvalidCategoryFormatException();
         }
     }

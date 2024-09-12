@@ -4,6 +4,8 @@ import com.ll.goohaeyou.member.emailAuth.exception.EmailAuthException;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 public class EmailAuthPolicy {
 
@@ -14,7 +16,7 @@ public class EmailAuthPolicy {
     }
 
     public void verifyAuthCode(String inputCode, String storedAuthCode) {
-        if (storedAuthCode == null) {
+        if (Objects.isNull(storedAuthCode)) {
             throw new EmailAuthException.InitiateEmailRequestException();
         }
 

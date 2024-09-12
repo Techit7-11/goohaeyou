@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -79,7 +81,7 @@ public class EmailAuthService {
     public void confirmVerification(String username, String inputCode) {
         String authCode = authCodeStorage.getData(username);
 
-        if (authCode == null) {
+        if (Objects.isNull(authCode)) {
             throw new EmailAuthException.InitiateEmailRequestException();
         }
 
