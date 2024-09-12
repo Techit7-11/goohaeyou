@@ -1,96 +1,43 @@
 package com.ll.goohaeyou.member.emailAuth.application;
 
-import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.member.emailAuth.domain.AuthCodeStorage;
-import com.ll.goohaeyou.member.emailAuth.exception.EmailAuthException;
-import com.ll.goohaeyou.member.member.domain.policy.EmailAuthPolicy;
+import com.ll.goohaeyou.member.emailAuth.domain.AuthCodeDomainService;
+import com.ll.goohaeyou.member.emailAuth.domain.EmailSenderDomainService;
+import com.ll.goohaeyou.member.member.domain.MemberReader;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
-import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import com.ll.goohaeyou.member.member.domain.policy.EmailAuthPolicy;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EmailAuthService {
-    private static final String EMAIL_SUBJECT = "[From 구해유] 이메일 인증을 위한 인증코드가 발급되었습니다.";
-    private static final String EMAIL_TEMPLATE = "emailTemplate";
-    private static final long EXPIRATION_IN_SECONDS = 1800;   // 30 minutes
-
-    private final MemberRepository memberRepository;
-    private final TemplateEngine templateEngine;
-    private final JavaMailSender javaMailSender;
-    private final AuthCodeStorage authCodeStorage;
+    private final MemberReader memberReader;
     private final EmailAuthPolicy emailAuthPolicy;
+    private final AuthCodeDomainService authCodeDomainService;
+    private final EmailSenderDomainService emailSenderDomainService;
 
     @Transactional
     public void sendEmail(String username, String email) {
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+        Member member = memberReader.getMemberByUsername(username);
 
         emailAuthPolicy.verifyAlreadyAuthenticated(member);
 
-        String authCode = manageMail(username);
+        String authCode = authCodeDomainService.generateAndStoreAuthCode(username);
 
-        Context context = new Context();
-        context.setVariable("authCode", authCode);
-        String htmlContent = templateEngine.process(EMAIL_TEMPLATE, context);
-
-        sendEmailToUser(email, htmlContent);
-    }
-
-    @Transactional
-    public String manageMail(String username) {
-        String randomKey = RandomStringUtils.randomAlphanumeric(5);
-
-        if (authCodeStorage.getData(username) != null) {
-            authCodeStorage.deleteData(username);
-        }
-
-        authCodeStorage.setDataExpire(username, randomKey, EXPIRATION_IN_SECONDS);
-
-
-        return randomKey;
-    }
-
-    private void sendEmailToUser(String email, String htmlContent) {
-        try {
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-            helper.setTo(email);
-            helper.setSubject(EMAIL_SUBJECT);
-            helper.setText(htmlContent, true);
-
-            javaMailSender.send(mimeMessage);
-        } catch (MessagingException e) {
-            throw new RuntimeException("이메일 전송 실패", e);
-        }
+        emailSenderDomainService.sendAuthCodeEmail(email, authCode);
     }
 
     @Transactional
     public void confirmVerification(String username, String inputCode) {
-        String authCode = authCodeStorage.getData(username);
+        String storedAuthCode = authCodeDomainService.getAuthCode(username);
 
-        if (Objects.isNull(authCode)) {
-            throw new EmailAuthException.InitiateEmailRequestException();
-        }
+        emailAuthPolicy.verifyAuthCode(inputCode, storedAuthCode);
+        authCodeDomainService.deleteAuthCode(username);
 
-        emailAuthPolicy.verifyAuthCode(inputCode, authCode);
+        Member member = memberReader.getMemberByUsername(username);
 
-        authCodeStorage.deleteData(username);
-
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
         member.authenticate();
     }
 }
