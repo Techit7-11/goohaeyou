@@ -4,9 +4,11 @@ import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
 import com.ll.goohaeyou.global.event.notification.PostDeadlineEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
+import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.ModifyJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostSpecifications;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
@@ -46,6 +48,12 @@ public class JobPostDomainService {
     @Transactional
     public void delete(Long postId) {
         jobPostRepository.deleteById(postId);
+    }
+
+    @Transactional
+    public void addCommentToPost(JobPostDetail postDetail, Comment comment) {
+        postDetail.getComments().add(comment);
+        postDetail.getJobPost().increaseCommentsCount();
     }
 
     public JobPost findById(Long id) {
