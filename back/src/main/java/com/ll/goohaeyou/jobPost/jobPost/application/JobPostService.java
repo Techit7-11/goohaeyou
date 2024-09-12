@@ -15,7 +15,7 @@ import com.ll.goohaeyou.jobPost.jobPost.domain.*;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.policy.JobPostPolicy;
-import com.ll.goohaeyou.member.member.domain.MemberReader;
+import com.ll.goohaeyou.member.member.domain.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,7 +43,7 @@ public class JobPostService {
     private final JobPostCategoryDomainService jobPostCategoryDomainService;
     private final WageDomainService wageDomainService;
     private final EssentialDomainService essentialDomainService;
-    private final MemberReader memberReader;
+    private final MemberDomainService memberDomainService;
     private final JobPostDomainService jobPostDomainService;
     private final JobPostDetailDomainService jobPostDetailDomainService;
     private final JobApplicationDomainService jobApplicationDomainService;
@@ -52,7 +52,7 @@ public class JobPostService {
 
     @Transactional
     public void writePost(String username, WriteJobPostRequest request) {
-        Member member = memberReader.getMemberByUsername(username);
+        Member member = memberDomainService.getMemberByUsername(username);
         int regionCode = Util.Region.getRegionCodeFromAddress(request.location());
         JobPost newPost = jobPostDomainService.create(member, request, regionCode);
 
@@ -68,14 +68,14 @@ public class JobPostService {
     public JobPostDetailResponse getJobPostDetail(Long id, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         userActivityService.handleJobPostView(id, httpRequest, httpResponse);
 
-        JobPostDetail postDetail = jobPostDetailDomainService.findById(id);
+        JobPostDetail postDetail = jobPostDetailDomainService.getById(id);
 
         return JobPostDetailResponse.from(postDetail.getJobPost(), postDetail, postDetail.getEssential(), postDetail.getWage());
     }
 
     @Transactional
     public void modifyPost(String username, Long id, ModifyJobPostRequest request) {
-        JobPostDetail postDetail = jobPostDetailDomainService.findById(id);
+        JobPostDetail postDetail = jobPostDetailDomainService.getById(id);
         JobPost jobPost = postDetail.getJobPost();
 
         jobPostPolicy.validateCanModify(username, jobPost);
@@ -94,7 +94,7 @@ public class JobPostService {
     @Transactional
     public void deleteJobPost(String username, Long postId) {
         JobPost post = jobPostDomainService.findById(postId);
-        Member member = memberReader.getMemberByUsername(username);
+        Member member = memberDomainService.getMemberByUsername(username);
 
         publisher.publishEvent(new PostDeletedEvent(this, post, member, DELETE));
 
@@ -109,7 +109,7 @@ public class JobPostService {
 
     public List<MyPostResponse> getMyJobPosts(String username) {
 
-        Member member = memberReader.getMemberByUsername(username);
+        Member member = memberDomainService.getMemberByUsername(username);
 
         return MyPostResponse.convertToList(jobPostDomainService.getMyJobPosts(member.getId()));
     }

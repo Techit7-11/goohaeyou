@@ -64,4 +64,9 @@ public class MemberDomainService {
             throw new AuthException.InvalidPasswordException();
         }
     }
+
+    public Member getMemberByUsername(String username) {
+        return memberRepository.findByUsername(username)
+                .orElseThrow(MemberException.MemberNotFoundException::new);
+    }
 }

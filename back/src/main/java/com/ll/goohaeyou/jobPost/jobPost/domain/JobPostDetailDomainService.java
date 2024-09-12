@@ -2,6 +2,7 @@ package com.ll.goohaeyou.jobPost.jobPost.domain;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.ModifyJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Essential;
@@ -40,7 +41,13 @@ public class JobPostDetailDomainService {
         existingEssential.update(request.minAge(), request.gender());
     }
 
-    public JobPostDetail findById(Long id) {
+    @Transactional
+    public void addJobApplication(JobPostDetail postDetail, JobApplication jobApplication) {
+        postDetail.getJobApplications().add(jobApplication);
+        postDetail.getJobPost().increaseApplicationsCount();
+    }
+
+    public JobPostDetail getById(Long id) {
         return jobPostDetailRepository.findById(id)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
     }

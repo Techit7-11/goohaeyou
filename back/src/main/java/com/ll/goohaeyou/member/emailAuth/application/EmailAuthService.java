@@ -2,7 +2,7 @@ package com.ll.goohaeyou.member.emailAuth.application;
 
 import com.ll.goohaeyou.member.emailAuth.domain.AuthCodeDomainService;
 import com.ll.goohaeyou.member.emailAuth.domain.EmailSenderDomainService;
-import com.ll.goohaeyou.member.member.domain.MemberReader;
+import com.ll.goohaeyou.member.member.domain.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.policy.EmailAuthPolicy;
 import lombok.RequiredArgsConstructor;
@@ -13,14 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EmailAuthService {
-    private final MemberReader memberReader;
+    private final MemberDomainService memberDomainService;
     private final EmailAuthPolicy emailAuthPolicy;
     private final AuthCodeDomainService authCodeDomainService;
     private final EmailSenderDomainService emailSenderDomainService;
 
     @Transactional
     public void sendEmail(String username, String email) {
-        Member member = memberReader.getMemberByUsername(username);
+        Member member = memberDomainService.getMemberByUsername(username);
 
         emailAuthPolicy.verifyAlreadyAuthenticated(member);
 
@@ -36,7 +36,7 @@ public class EmailAuthService {
         emailAuthPolicy.verifyAuthCode(inputCode, storedAuthCode);
         authCodeDomainService.deleteAuthCode(username);
 
-        Member member = memberReader.getMemberByUsername(username);
+        Member member = memberDomainService.getMemberByUsername(username);
 
         member.authenticate();
     }
