@@ -9,6 +9,7 @@ import com.ll.goohaeyou.global.event.notification.PostDeletedEvent;
 import com.ll.goohaeyou.global.standard.base.util.PaginationUtils;
 import com.ll.goohaeyou.global.standard.base.util.Util;
 import com.ll.goohaeyou.global.standard.dto.PageDto;
+import com.ll.goohaeyou.image.domain.JobPostImageDomainService;
 import com.ll.goohaeyou.jobApplication.domain.JobApplicationDomainService;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.*;
 import com.ll.goohaeyou.jobPost.jobPost.domain.*;
@@ -100,7 +101,7 @@ public class JobPostService {
 
         jobPostPolicy.validateCanDelete(member.getUsername(), post);
 
-        jobPostImageDomainService.deleteImages(post);
+        jobPostImageDomainService.deleteByJobPost(post);
 
         jobPostCategoryDomainService.deleteAll(post);
 
