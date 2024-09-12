@@ -1,19 +1,18 @@
-package com.ll.goohaeyou.jobPost.jobPost.application;
+package com.ll.goohaeyou.jobPost.jobPost.domain;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Wage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.WageRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@DomainService
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class WageService {
+public class WageDomainService {
     private final WageRepository wageRepository;
     private final JobPostDetailRepository jobPostDetailRepository;
 

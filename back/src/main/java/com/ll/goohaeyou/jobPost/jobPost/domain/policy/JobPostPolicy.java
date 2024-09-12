@@ -21,4 +21,10 @@ public class JobPostPolicy {
             throw new AuthException.NotAuthorizedException();
         }
     }
+
+    public void validateCanClose(String username, JobPost jobPost) {
+        if (!username.equals(jobPost.getMember().getUsername())) {
+            throw new AuthException.NotAuthorizedException();
+        }
+    }
 }

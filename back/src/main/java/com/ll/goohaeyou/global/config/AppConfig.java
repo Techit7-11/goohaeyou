@@ -69,5 +69,5 @@ public class AppConfig {
     }
 
     @Getter
-    public static int basePageSize = 10;   // 조정 필요
+    public static int basePageSize = 10;
 }

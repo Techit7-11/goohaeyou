@@ -69,6 +69,6 @@ public class MypageController {
     @GetMapping("/myinterest")
     @Operation(summary = "내 관심 공고 조회")
     public ApiResponse<List<InterestedJobPostResponse>> detailMyInterestingPosts(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return ApiResponse.ok(jobPostService.findByInterestAndUsername(memberDetails.getId()));
+        return ApiResponse.ok(jobPostService.findMyInterestedPosts(memberDetails.getId()));
     }
 }

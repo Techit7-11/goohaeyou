@@ -1,12 +1,9 @@
 package com.ll.goohaeyou.jobPost.jobPost.presentation;
 
 import com.ll.goohaeyou.auth.domain.MemberDetails;
-import com.ll.goohaeyou.category.application.JobPostCategoryService;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.standard.base.Empty;
-import com.ll.goohaeyou.jobPost.jobPost.application.EssentialService;
 import com.ll.goohaeyou.jobPost.jobPost.application.JobPostService;
-import com.ll.goohaeyou.jobPost.jobPost.application.WageService;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -28,22 +24,16 @@ import java.util.List;
 @Tag(name = "JobPost", description = "구인공고 API")
 public class JobPostController {
     private final JobPostService jobPostService;
-    private final JobPostCategoryService jobPostCategoryService;
-    private final WageService wageService;
-    private final EssentialService essentialService;
 
     @PostMapping
     @Operation(summary = "구인공고 작성")
     public ApiResponse<Empty> writePost(@AuthenticationPrincipal MemberDetails memberDetails,
                                         @Valid @RequestBody WriteJobPostRequest request) {
-        Long jobPostId = jobPostService.writePost(memberDetails.getUsername(), request);
-
-        jobPostCategoryService.create(jobPostId, request.location(), request.categoryId());
-        wageService.create(jobPostId, request);
-        essentialService.create(jobPostId, request.minAge(), request.gender());
+        jobPostService.writePost(memberDetails.getUsername(), request);
 
         return ApiResponse.created();
     }
+
     @PutMapping("/{id}")
     @Operation(summary = "구인공고 수정")
     public ApiResponse<Empty> modifyPost(@AuthenticationPrincipal MemberDetails memberDetails,
@@ -105,9 +95,8 @@ public class JobPostController {
             @RequestParam(name = "sortBy", defaultValue = "createdAt") List<String> sortBys,
             @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders
     ) {
-        Pageable pageable = jobPostService.createPageableForSorting(page, sortBys, sortOrders);
 
-        return ApiResponse.ok(jobPostService.findBySort(pageable));
+        return ApiResponse.ok(jobPostService.findBySort(page, sortBys, sortOrders));
     }
 
     @PutMapping("/{id}/closing")
