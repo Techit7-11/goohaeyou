@@ -1,12 +1,15 @@
 package com.ll.goohaeyou.jobApplication.domain;
 
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
+import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.jobApplication.application.dto.WriteJobApplicationRequest;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
+import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.ModifyJobPostRequest;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ll.goohaeyou.notification.domain.type.CauseTypeCode.POST_MODIFICATION;
+import static com.ll.goohaeyou.notification.domain.type.CauseTypeCode.*;
 import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.DELETE;
 import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.NOTICE;
 
@@ -61,5 +64,48 @@ public class JobApplicationDomainService {
 
     public List<JobApplication> getByMemberId(Long memberId) {
         return jobApplicationRepository.findByMemberId(memberId);
+    }
+
+    public List<JobApplication> approveOrRejectApplications(JobPostDetail postDetail, JobPost jobPost, List<Long> applicationIds, WageStatus updateWageStatus) {
+        List<JobApplication> jobApplicationList = new ArrayList<>();
+        Long postWriterId = jobPost.getMember().getId();
+
+        for (JobApplication jobApplication : postDetail.getJobApplications()) {
+            if(applicationIds.contains(jobApplication.getId())) {
+                jobApplication.approve();
+                jobApplication.updateWageStatus(updateWageStatus);
+                jobApplication.updateJobEndDate(jobPost.getJobStartDate()
+                        .plusDays(postDetail.getWage().getWorkDays() - 1));
+
+                increaseApplicantTransactionCount(jobApplication);
+                increaseAuthorTransactionCount(jobPost);
+
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, jobApplication, APPLICATION_APPROVED, NOTICE));
+                publisher.publishEvent(new CreateChatRoomEvent(this, postWriterId, jobApplication.getMember().getId(), jobPost.getTitle()));
+            } else {
+                jobApplication.reject();
+                jobApplicationList.add(jobApplication);
+                publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, jobApplication, APPLICATION_UNAPPROVED, DELETE));
+            }
+        }
+        return jobApplicationList;
+    }
+
+    public void removeUnapprovedApplications(JobPostDetail postDetail, List<JobApplication> jobApplicationList) {
+        for (JobApplication jobApplication : jobApplicationList) {
+            postDetail.getJobApplications().remove(jobApplication);
+        }
+    }
+
+    private void increaseApplicantTransactionCount(JobApplication jobApplication) {
+        if (jobApplication != null) {
+            jobApplication.getMember().increaseTransactionCount();
+        }
+    }
+
+    private void increaseAuthorTransactionCount(JobPost jobPost) {
+        if (jobPost != null) {
+            jobPost.getMember().increaseTransactionCount();
+        }
     }
 }
