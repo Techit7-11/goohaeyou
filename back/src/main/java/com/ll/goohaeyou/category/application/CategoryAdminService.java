@@ -1,9 +1,9 @@
 package com.ll.goohaeyou.category.application;
 
-import com.ll.goohaeyou.category.domain.entity.Category;
 import com.ll.goohaeyou.category.application.dto.CreateCategoryRequest;
+import com.ll.goohaeyou.category.domain.CategoryDomainService;
+import com.ll.goohaeyou.category.domain.entity.Category;
 import com.ll.goohaeyou.category.domain.policy.CategoryPolicy;
-import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,22 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CategoryAdminService {
-    private final CategoryRepository categoryRepository;
     private final CategoryPolicy categoryPolicy;
+    private final CategoryDomainService categoryDomainService;
 
     @Transactional
     public void addCategory(Role role, CreateCategoryRequest request) {
-        Category parent = getParent(request.parentName());
+        Category parent = categoryDomainService.getParentByName(request.parentName());
 
         categoryPolicy.validateCategoryCreation(role, parent, request.level());
 
-        Category newCategory = Category.create(request.name(), request.level(), request.enabled(), request.type(), parent);
-
-        categoryRepository.save(newCategory);
-    }
-
-    public Category getParent(String name) {
-        return categoryRepository.findByName(name)
-                .orElse(null);
+        categoryDomainService.create(request, parent);
     }
 }
