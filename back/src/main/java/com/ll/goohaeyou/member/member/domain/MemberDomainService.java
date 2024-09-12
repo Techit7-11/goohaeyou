@@ -9,8 +9,10 @@ import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
 import com.ll.goohaeyou.member.member.domain.type.Role;
 import com.ll.goohaeyou.member.member.exception.MemberException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.Authentication;
 
 @DomainService
 @RequiredArgsConstructor
@@ -87,5 +89,11 @@ public class MemberDomainService {
     public Member getById(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(MemberException.MemberNotFoundException::new);
+    }
+
+    public String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return authentication.getName();
     }
 }
