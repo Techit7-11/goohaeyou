@@ -31,7 +31,7 @@ public class CommentService {
     @Transactional
     public CreateCommentResponse writeComment(Long postId, String username, CreateCommentRequest request) {
         JobPostDetail postDetail = jobPostDetailDomainService.getById(postId);
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         Comment newComment = commentDomainService.create(postDetail, member, request.content());
 
@@ -58,7 +58,7 @@ public class CommentService {
     public void deleteComment(String username, Long postId, Long commentId) {
         JobPostDetail postDetail = jobPostDetailDomainService.getById(postId);
         Comment comment = commentDomainService.getById(commentId);
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         commentPolicy.validateCanDelete(comment, member);
 
@@ -72,7 +72,7 @@ public class CommentService {
     }
 
     public List<MyCommentResponse> findByUsername(String username) {
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         return MyCommentResponse.convertToList(commentDomainService.getByMemberId(member.getId()));
     }

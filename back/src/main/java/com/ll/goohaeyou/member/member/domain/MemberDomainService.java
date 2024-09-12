@@ -65,8 +65,13 @@ public class MemberDomainService {
         }
     }
 
-    public Member getMemberByUsername(String username) {
+    public Member getByUsername(String username) {
         return memberRepository.findByUsername(username)
+                .orElseThrow(MemberException.MemberNotFoundException::new);
+    }
+
+    public Member getById(Long id) {
+        return memberRepository.findById(id)
                 .orElseThrow(MemberException.MemberNotFoundException::new);
     }
 }

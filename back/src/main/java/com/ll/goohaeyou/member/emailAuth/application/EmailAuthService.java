@@ -20,7 +20,7 @@ public class EmailAuthService {
 
     @Transactional
     public void sendEmail(String username, String email) {
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         emailAuthPolicy.verifyAlreadyAuthenticated(member);
 
@@ -36,7 +36,7 @@ public class EmailAuthService {
         emailAuthPolicy.verifyAuthCode(inputCode, storedAuthCode);
         authCodeDomainService.deleteAuthCode(username);
 
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         member.authenticate();
     }

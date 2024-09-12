@@ -19,27 +19,27 @@ public class MemberService {
     }
 
     public void login(LoginRequest request) {
-        Member member = memberDomainService.getMemberByUsername(request.username());
+        Member member = memberDomainService.getByUsername(request.username());
 
         memberDomainService.verifyPassword(member.getPassword(), request.password());
     }
 
     public MemberResponse findByUsername(String username) {
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         return MemberResponse.from(member);
     }
 
     @Transactional
     public void modifyMember(String username, ModifyMemberRequest request) {
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         member.update(request.password(), request.gender(), request.location(), request.birth());
     }
 
     @Transactional
     public MemberResponse updateSocialMemberProfile(String username, UpdateSocialProfileRequest request) {
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         member.oauthDetailUpdate(request);
 

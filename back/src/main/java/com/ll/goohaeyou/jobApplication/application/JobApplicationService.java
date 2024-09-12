@@ -35,7 +35,7 @@ public class JobApplicationService {
     @Transactional
     public void writeApplication(String username, Long jobPostId, WriteJobApplicationRequest request) {
         JobPostDetail postDetail = jobPostDetailDomainService.getById(jobPostId);
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         jobApplicationPolicy.validateCanWrite(postDetail, member);
 
@@ -75,7 +75,7 @@ public class JobApplicationService {
 
     public List<MyJobApplicationResponse> findByUsername(String username) {
 
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         return MyJobApplicationResponse.convertToList(jobApplicationDomainService.getByMemberId(member.getId()));
     }

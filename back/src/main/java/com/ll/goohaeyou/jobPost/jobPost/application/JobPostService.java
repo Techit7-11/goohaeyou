@@ -52,7 +52,7 @@ public class JobPostService {
 
     @Transactional
     public void writePost(String username, WriteJobPostRequest request) {
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
         int regionCode = Util.Region.getRegionCodeFromAddress(request.location());
         JobPost newPost = jobPostDomainService.create(member, request, regionCode);
 
@@ -94,7 +94,7 @@ public class JobPostService {
     @Transactional
     public void deleteJobPost(String username, Long postId) {
         JobPost post = jobPostDomainService.findById(postId);
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         publisher.publishEvent(new PostDeletedEvent(this, post, member, DELETE));
 
@@ -109,7 +109,7 @@ public class JobPostService {
 
     public List<MyPostResponse> getMyJobPosts(String username) {
 
-        Member member = memberDomainService.getMemberByUsername(username);
+        Member member = memberDomainService.getByUsername(username);
 
         return MyPostResponse.convertToList(jobPostDomainService.getMyJobPosts(member.getId()));
     }

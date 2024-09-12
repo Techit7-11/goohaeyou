@@ -64,7 +64,7 @@
 //                .build();
 //        memberService.join(joinForm);
 //        memberService.login(new LoginForm(joinForm.getUsername(), joinForm.getPassword()));
-//        Member member = memberService.getMemberByUsername(joinForm.getUsername());
+//        Member member = memberService.getByUsername(joinForm.getUsername());
 //        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 //
 //        // When
@@ -95,7 +95,7 @@
 //                "recruiter", new JobPostWriteFormBuilder().setTitle("공고 제목1").build());
 //        jobPostService.writePost(
 //                "recruiter", new JobPostWriteFormBuilder().setTitle("공고 제목2").build());
-//        Member member = memberService.getMemberByUsername("recruiter");
+//        Member member = memberService.getByUsername("recruiter");
 //        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 //        // When
 //        ResultActions resultActions = mockMvc.perform(get("/api/member/myposts")
@@ -118,7 +118,7 @@
 //    void putMemberDetailsSuccess() throws Exception {
 //        // Given
 //        memberService.join(new JoinFormBuilder().setUsername("user12").build());
-//        Member member = memberService.getMemberByUsername("user12");
+//        Member member = memberService.getByUsername("user12");
 //        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 //
 //        // 수정할 정보를 담은 폼 생성
