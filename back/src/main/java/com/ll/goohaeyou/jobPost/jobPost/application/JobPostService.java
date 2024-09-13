@@ -134,7 +134,7 @@ public class JobPostService {
         );
     }
 
-    @Cacheable(value = "jobPostsBySort", key = "#sortName + '_' + #pageable.pageNumber", condition = "#pageable.pageNumber < 5")
+    @Cacheable(value = "jobPostsBySort", key = "#sortBys + '_' + #sortOrders + '_' + #page", condition = "#page <= 5")
     public JobPostSortPageResponse findBySort(int page, List<String> sortBys, List<String> sortOrders) {
 
         Pageable pageable = PaginationUtils.buildPageableWithSorts(sortBys, sortOrders, page);
