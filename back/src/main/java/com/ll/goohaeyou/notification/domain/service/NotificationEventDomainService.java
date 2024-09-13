@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.notification.domain;
+package com.ll.goohaeyou.notification.domain.service;
 
 import com.ll.goohaeyou.global.event.notification.*;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
@@ -6,6 +6,7 @@ import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
+import com.ll.goohaeyou.notification.domain.NotificationSender;
 import com.ll.goohaeyou.notification.domain.entity.Notification;
 import com.ll.goohaeyou.notification.domain.repository.NotificationRepository;
 import com.ll.goohaeyou.notification.domain.type.CauseTypeCode;

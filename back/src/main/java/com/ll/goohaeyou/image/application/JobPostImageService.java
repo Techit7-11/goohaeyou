@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.image.application;
 
-import com.ll.goohaeyou.image.domain.JobPostImageDomainService;
+import com.ll.goohaeyou.image.domain.service.JobPostImageDomainService;
 import com.ll.goohaeyou.image.domain.policy.JobPostImagePolicy;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetailDomainService;
+import com.ll.goohaeyou.jobPost.jobPost.domain.service.JobPostDetailDomainService;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostImage;
 import lombok.RequiredArgsConstructor;

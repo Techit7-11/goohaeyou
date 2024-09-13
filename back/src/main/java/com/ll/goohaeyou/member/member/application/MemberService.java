@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.member.member.application;
 
 import com.ll.goohaeyou.member.member.application.dto.*;
-import com.ll.goohaeyou.member.member.domain.MemberDomainService;
+import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

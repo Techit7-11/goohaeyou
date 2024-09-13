@@ -5,12 +5,12 @@ import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDetailRespo
 import com.ll.goohaeyou.jobApplication.application.dto.ModifyJobApplicationRequest;
 import com.ll.goohaeyou.jobApplication.application.dto.MyJobApplicationResponse;
 import com.ll.goohaeyou.jobApplication.application.dto.WriteJobApplicationRequest;
-import com.ll.goohaeyou.jobApplication.domain.JobApplicationDomainService;
+import com.ll.goohaeyou.jobApplication.domain.service.JobApplicationDomainService;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.policy.JobApplicationPolicy;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetailDomainService;
+import com.ll.goohaeyou.jobPost.jobPost.domain.service.JobPostDetailDomainService;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
-import com.ll.goohaeyou.member.member.domain.MemberDomainService;
+import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

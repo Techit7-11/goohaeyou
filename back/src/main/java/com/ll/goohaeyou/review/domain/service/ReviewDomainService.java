@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.review.domain;
+package com.ll.goohaeyou.review.domain.service;
 
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;

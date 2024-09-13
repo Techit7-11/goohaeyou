@@ -1,9 +1,9 @@
 package com.ll.goohaeyou.image.application;
 
-import com.ll.goohaeyou.image.domain.ProfileImageDomainService;
+import com.ll.goohaeyou.image.domain.service.ProfileImageDomainService;
 import com.ll.goohaeyou.image.domain.policy.ProfileImagePolicy;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDomainService;
-import com.ll.goohaeyou.member.member.domain.MemberDomainService;
+import com.ll.goohaeyou.jobPost.jobPost.domain.service.JobPostDomainService;
+import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

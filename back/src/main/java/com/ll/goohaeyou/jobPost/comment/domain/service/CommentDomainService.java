@@ -1,6 +1,7 @@
-package com.ll.goohaeyou.jobPost.comment.domain;
+package com.ll.goohaeyou.jobPost.comment.domain.service;
 
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
+import com.ll.goohaeyou.jobPost.comment.domain.Comment;
 import com.ll.goohaeyou.jobPost.comment.domain.repository.CommentRepository;
 import com.ll.goohaeyou.jobPost.comment.exception.CommentException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;

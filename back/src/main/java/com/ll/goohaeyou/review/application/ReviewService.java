@@ -1,11 +1,11 @@
 package com.ll.goohaeyou.review.application;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDomainService;
+import com.ll.goohaeyou.jobPost.jobPost.domain.service.JobPostDomainService;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
-import com.ll.goohaeyou.member.member.domain.MemberDomainService;
+import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.review.application.dto.ApplicantReviewDto;
-import com.ll.goohaeyou.review.domain.ReviewDomainService;
+import com.ll.goohaeyou.review.domain.service.ReviewDomainService;
 import com.ll.goohaeyou.review.domain.entity.Review;
 import com.ll.goohaeyou.review.domain.mapper.ReviewMapper;
 import com.ll.goohaeyou.review.domain.policy.ReviewPolicy;

@@ -1,6 +1,7 @@
-package com.ll.goohaeyou.member.emailAuth.domain;
+package com.ll.goohaeyou.member.emailAuth.domain.service;
 
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
+import com.ll.goohaeyou.member.emailAuth.domain.AuthCodeStorage;
 import com.ll.goohaeyou.member.emailAuth.exception.EmailAuthException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;

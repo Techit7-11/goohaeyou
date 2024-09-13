@@ -1,5 +1,7 @@
-package com.ll.goohaeyou.auth.domain;
+package com.ll.goohaeyou.auth.domain.service;
 
+import com.ll.goohaeyou.auth.domain.RefreshToken;
+import com.ll.goohaeyou.auth.domain.RefreshTokenRepository;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

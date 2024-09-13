@@ -1,9 +1,9 @@
 package com.ll.goohaeyou.auth.application;
 
-import com.ll.goohaeyou.auth.domain.RefreshTokenDomainService;
+import com.ll.goohaeyou.auth.domain.service.RefreshTokenDomainService;
 import com.ll.goohaeyou.global.infra.util.CookieUtil;
 import com.ll.goohaeyou.member.member.application.dto.MemberResponse;
-import com.ll.goohaeyou.member.member.domain.MemberDomainService;
+import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

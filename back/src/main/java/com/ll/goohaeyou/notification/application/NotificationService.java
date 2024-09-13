@@ -1,16 +1,16 @@
 package com.ll.goohaeyou.notification.application;
 
-import com.ll.goohaeyou.chat.room.domain.RoomDomainService;
+import com.ll.goohaeyou.chat.room.domain.service.RoomDomainService;
 import com.ll.goohaeyou.global.event.notification.*;
 import com.ll.goohaeyou.global.standard.base.util.FcmTokenUtil;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDomainService;
+import com.ll.goohaeyou.jobPost.jobPost.domain.service.JobPostDomainService;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
-import com.ll.goohaeyou.member.member.domain.MemberDomainService;
+import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.notification.application.dto.NotificationResponse;
-import com.ll.goohaeyou.notification.domain.NotificationEventDomainService;
-import com.ll.goohaeyou.notification.domain.NotificationManagementDomainService;
+import com.ll.goohaeyou.notification.domain.service.NotificationEventDomainService;
+import com.ll.goohaeyou.notification.domain.service.NotificationManagementDomainService;
 import com.ll.goohaeyou.notification.domain.entity.Notification;
 import com.ll.goohaeyou.notification.domain.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;

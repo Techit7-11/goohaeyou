@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.jobApplication.domain;
+package com.ll.goohaeyou.jobApplication.domain.service;
 
 import com.ll.goohaeyou.global.event.notification.ChangeOfPostEvent;
 import com.ll.goohaeyou.global.event.notification.CreateChatRoomEvent;

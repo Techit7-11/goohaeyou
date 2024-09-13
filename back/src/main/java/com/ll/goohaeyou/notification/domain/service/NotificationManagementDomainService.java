@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.notification.domain;
+package com.ll.goohaeyou.notification.domain.service;
 
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;

@@ -1,17 +1,17 @@
-package com.ll.goohaeyou.auth.domain;
+package com.ll.goohaeyou.auth.domain.service;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.infra.util.CookieUtil;
+import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@DomainService
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserActivityService {

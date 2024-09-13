@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.member.emailAuth.application;
 
-import com.ll.goohaeyou.member.emailAuth.domain.AuthCodeDomainService;
-import com.ll.goohaeyou.member.emailAuth.domain.EmailSenderDomainService;
-import com.ll.goohaeyou.member.member.domain.MemberDomainService;
+import com.ll.goohaeyou.member.emailAuth.domain.service.AuthCodeDomainService;
+import com.ll.goohaeyou.member.emailAuth.domain.service.EmailSenderDomainService;
+import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.policy.EmailAuthPolicy;
 import lombok.RequiredArgsConstructor;

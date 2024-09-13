@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.category.application;
 
 import com.ll.goohaeyou.category.application.dto.CreateCategoryRequest;
-import com.ll.goohaeyou.category.domain.CategoryDomainService;
+import com.ll.goohaeyou.category.domain.service.CategoryDomainService;
 import com.ll.goohaeyou.category.domain.entity.Category;
 import com.ll.goohaeyou.category.domain.policy.CategoryPolicy;
 import com.ll.goohaeyou.member.member.domain.type.Role;

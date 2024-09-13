@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.member.member.domain;
+package com.ll.goohaeyou.member.member.domain.service;
 
 import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;

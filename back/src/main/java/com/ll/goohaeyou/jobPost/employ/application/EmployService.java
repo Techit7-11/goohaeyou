@@ -2,13 +2,13 @@ package com.ll.goohaeyou.jobPost.employ.application;
 
 import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
 import com.ll.goohaeyou.jobApplication.application.dto.JobPostApplicationResponse;
-import com.ll.goohaeyou.jobApplication.domain.JobApplicationDomainService;
+import com.ll.goohaeyou.jobApplication.domain.service.JobApplicationDomainService;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
-import com.ll.goohaeyou.jobPost.employ.domain.EmployDomainService;
+import com.ll.goohaeyou.jobPost.employ.domain.service.EmployDomainService;
 import com.ll.goohaeyou.jobPost.employ.domain.policy.EmployPolicy;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetailDomainService;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDomainService;
+import com.ll.goohaeyou.jobPost.jobPost.domain.service.JobPostDetailDomainService;
+import com.ll.goohaeyou.jobPost.jobPost.domain.service.JobPostDomainService;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
 import lombok.RequiredArgsConstructor;

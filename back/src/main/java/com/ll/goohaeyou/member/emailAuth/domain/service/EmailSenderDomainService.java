@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.member.emailAuth.domain;
+package com.ll.goohaeyou.member.emailAuth.domain.service;
 
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import jakarta.mail.MessagingException;

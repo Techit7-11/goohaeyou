@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.auth.application;
 
 import com.ll.goohaeyou.auth.domain.MemberDetails;
-import com.ll.goohaeyou.member.member.domain.MemberDomainService;
+import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

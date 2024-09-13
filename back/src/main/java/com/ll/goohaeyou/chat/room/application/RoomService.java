@@ -1,12 +1,12 @@
 package com.ll.goohaeyou.chat.room.application;
 
-import com.ll.goohaeyou.chat.message.domain.MessageDomainService;
+import com.ll.goohaeyou.chat.message.domain.service.MessageDomainService;
 import com.ll.goohaeyou.chat.room.application.dto.RoomDto;
 import com.ll.goohaeyou.chat.room.application.dto.RoomListDto;
-import com.ll.goohaeyou.chat.room.domain.RoomDomainService;
+import com.ll.goohaeyou.chat.room.domain.service.RoomDomainService;
 import com.ll.goohaeyou.chat.room.domain.entity.Room;
 import com.ll.goohaeyou.chat.room.domain.policy.RoomPolicy;
-import com.ll.goohaeyou.member.member.domain.MemberDomainService;
+import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

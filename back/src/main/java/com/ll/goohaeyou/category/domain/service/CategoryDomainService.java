@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.category.domain;
+package com.ll.goohaeyou.category.domain.service;
 
 import com.ll.goohaeyou.category.application.dto.CreateCategoryRequest;
 import com.ll.goohaeyou.category.domain.entity.Category;

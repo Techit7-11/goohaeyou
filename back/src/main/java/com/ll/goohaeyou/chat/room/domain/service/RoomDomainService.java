@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.chat.room.domain;
+package com.ll.goohaeyou.chat.room.domain.service;
 
 import com.ll.goohaeyou.chat.room.domain.entity.Room;
 import com.ll.goohaeyou.chat.room.domain.repository.RoomRepository;

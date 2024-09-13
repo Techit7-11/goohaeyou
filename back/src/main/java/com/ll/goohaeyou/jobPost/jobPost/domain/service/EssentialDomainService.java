@@ -1,29 +1,28 @@
-package com.ll.goohaeyou.jobPost.jobPost.domain;
+package com.ll.goohaeyou.jobPost.jobPost.domain.service;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
-import com.ll.goohaeyou.jobPost.jobPost.application.dto.WriteJobPostRequest;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Essential;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
-import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Wage;
+import com.ll.goohaeyou.jobPost.jobPost.domain.repository.EssentialRepository;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.WageRepository;
+import com.ll.goohaeyou.member.member.domain.type.Gender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 @DomainService
 @RequiredArgsConstructor
-public class WageDomainService {
-    private final WageRepository wageRepository;
+public class EssentialDomainService {
+    private final EssentialRepository essentialRepository;
     private final JobPostDetailRepository jobPostDetailRepository;
 
     @Transactional
-    public void create(Long jobPostId, WriteJobPostRequest request) {
+    public void create(Long jobPostId, int minAge, Gender gender) {
         JobPostDetail jobPostDetail = jobPostDetailRepository.findById(jobPostId)
                 .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
 
-        Wage newWage = Wage.create(request.cost(), request.workTime(), request.workDays(), request.payBasis(),
-                request.wagePaymentMethod(), jobPostDetail);
+        Essential newEssential = Essential.create(minAge, gender, jobPostDetail);
 
-        wageRepository.save(newWage);
+        essentialRepository.save(newEssential);
     }
 }

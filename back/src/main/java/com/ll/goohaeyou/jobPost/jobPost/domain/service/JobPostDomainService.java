@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.jobPost.jobPost.domain;
+package com.ll.goohaeyou.jobPost.jobPost.domain.service;
 
 import com.ll.goohaeyou.category.domain.repository.JobPostCategoryRepository;
 import com.ll.goohaeyou.global.event.notification.PostDeadlineEvent;

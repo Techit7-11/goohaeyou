@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.chat.message.domain;
+package com.ll.goohaeyou.chat.message.domain.service;
 
 import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
 import com.ll.goohaeyou.chat.message.domain.entity.Message;

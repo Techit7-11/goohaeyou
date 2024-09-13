@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.jobPost.employ.domain;
+package com.ll.goohaeyou.jobPost.employ.domain.service;
 
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;

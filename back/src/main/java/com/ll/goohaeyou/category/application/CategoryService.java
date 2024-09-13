@@ -2,7 +2,7 @@ package com.ll.goohaeyou.category.application;
 
 import com.ll.goohaeyou.category.application.dto.SubCategoryResponse;
 import com.ll.goohaeyou.category.application.dto.TopLevelCategoryResponse;
-import com.ll.goohaeyou.category.domain.CategoryDomainService;
+import com.ll.goohaeyou.category.domain.service.CategoryDomainService;
 import com.ll.goohaeyou.category.domain.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
