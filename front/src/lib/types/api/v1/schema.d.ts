@@ -1135,12 +1135,12 @@ export interface components {
         };
         PaymentResponse: {
             /** Format: int64 */
-            amount?: number;
-            orderId?: string;
-            orderName?: string;
-            payer?: string;
-            successUrl?: string;
-            failUrl?: string;
+            amount: number;
+            orderId: string;
+            orderName: string;
+            payer: string;
+            successUrl: string;
+            failUrl: string;
         };
         ApiResponseCancelPaymentResponse: {
             /** Format: int32 */

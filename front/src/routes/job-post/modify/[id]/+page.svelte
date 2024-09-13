@@ -29,11 +29,9 @@
 		}
 
 		// 하위 카테고리 로드
-		const params = new URLSearchParams({
-			category_name: '업무'
-		}).toString();
+		const categoryId = 1;
 
-		const response = await rq.apiEndPoints().GET(`/api/categories/sub-categories?${params}`);
+		const response = await rq.apiEndPoints().GET(`/api/categories/${categoryId}/sub-categories`);
 		subCategories = response.data.data;
 	});
 
