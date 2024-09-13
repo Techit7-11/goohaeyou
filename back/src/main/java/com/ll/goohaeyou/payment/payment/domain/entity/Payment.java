@@ -2,7 +2,6 @@ package com.ll.goohaeyou.payment.payment.domain.entity;
 
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
-import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -84,19 +83,6 @@ public class Payment {
     public void cancelPayment(String cancelReason) {
         this.canceled = true;
         this.cancelReason = cancelReason;
-    }
-
-    public PaymentResponse toPaymentRespDto() {
-        PayStatus payStatusEnum = PayStatus.findPayTypeByDescription(payStatus);
-
-        return PaymentResponse.builder()
-                .payStatus(payStatusEnum)
-                .amount(totalAmount)
-                .orderId(orderId)
-                .orderName(orderName)
-                .payer(member.getUsername())
-                .canceled(canceled)
-                .build();
     }
 }
 

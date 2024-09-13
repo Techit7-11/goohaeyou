@@ -13,11 +13,12 @@ import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
-import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.PaymentProcessor;
+import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.policy.PaymentPolicy;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
+import com.ll.goohaeyou.payment.payment.infrastructure.PaymentProcessorResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -42,10 +43,8 @@ public class PaymentService {
         Payment payment = createPaymentEntity(request, username);
 
         Payment savedPayment = paymentRepository.save(payment);
-        PaymentResponse response = savedPayment.toPaymentRespDto();
-        setRedirectUrls(response);
 
-        return response;
+        return PaymentResponse.from(savedPayment, tossPaymentsConfig.getSuccessUrl(), tossPaymentsConfig.getFailUrl());
     }
 
     private Payment createPaymentEntity(PaymentRequest request, String username) {
@@ -56,11 +55,6 @@ public class PaymentService {
         payment.updatePayer(member);
 
         return payment;
-    }
-
-    private void setRedirectUrls(PaymentResponse response) {
-        response.setSuccessUrl(tossPaymentsConfig.getSuccessUrl());
-        response.setFailUrl(tossPaymentsConfig.getFailUrl());
     }
 
     @Transactional
@@ -87,12 +81,22 @@ public class PaymentService {
     public PaymentSuccessResponse requestPaymentAccept(String paymentKey, String orderId, Long amount) {
         JSONObject params = createPaymentRequestParams(orderId, amount);
 
-        PaymentSuccessResponse paymentSuccessResponse = paymentProcessor.sendPaymentRequest(
-                paymentKey, params, PaymentSuccessResponse.class);
+        PaymentProcessorResponse paymentProcessorResponse = paymentProcessor.sendPaymentRequest(
+                paymentKey, params, PaymentProcessorResponse.class);
 
-        paymentSuccessResponse.setJobApplicationId(findPaymentByOrderId(orderId).getJobApplicationId());
+        Long jobApplicationId = findPaymentByOrderId(orderId).getJobApplicationId();
 
-        return paymentSuccessResponse;
+        return PaymentSuccessResponse.from(
+                paymentProcessorResponse.getPaymentKey(),
+                paymentProcessorResponse.getOrderId(),
+                jobApplicationId,
+                paymentProcessorResponse.getOrderName(),
+                paymentProcessorResponse.getMethod(),
+                paymentProcessorResponse.getTotalAmount(),
+                paymentProcessorResponse.getApprovedAt(),
+                paymentProcessorResponse.getCard(),
+                paymentProcessorResponse.getEasyPay()
+        );
     }
 
     private JSONObject createPaymentRequestParams(String orderId, Long amount) {
@@ -104,9 +108,9 @@ public class PaymentService {
     }
 
     private void updatePayment(Payment payment, PaymentSuccessResponse successDto) {
-        payment.updatePaymentKey(successDto.getPaymentKey());
+        payment.updatePaymentKey(successDto.paymentKey());
         payment.markAsPaid();
-        updatePayStatusByPayment(payment, successDto.getMethod());
+        updatePayStatusByPayment(payment, successDto.method());
     }
 
     private void updatePayStatusByPayment(Payment payment, String method) {

@@ -50,12 +50,12 @@ public class CashLogService {
 
     @Transactional
     public void createCashLogOnPaid(PaymentSuccessResponse successDto) {
-        PayStatus payStatus = PayStatus.findByMethod(successDto.getMethod());
-        Payment payment = paymentRepository.findByPaymentKey(successDto.getPaymentKey())
+        PayStatus payStatus = PayStatus.findByMethod(successDto.method());
+        Payment payment = paymentRepository.findByPaymentKey(successDto.paymentKey())
                 .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
 
         CashLog newCashLog = CashLog.createOnPaymentSuccess(
-                successDto.getTotalAmount(),
+                successDto.totalAmount(),
                 getVat(payment.getTotalAmount()),
                 getPaymentFee(payStatus, payment.getTotalAmount()),
                 getNetAmount(payStatus, payment.getTotalAmount()),

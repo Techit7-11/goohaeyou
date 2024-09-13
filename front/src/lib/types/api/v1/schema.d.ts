@@ -880,7 +880,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/job-posts/categories/{categoryId}": {
+    "/api/job-posts/categories/{categoryName}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1120,9 +1120,9 @@ export interface components {
             payStatus: "REQUEST" | "CARD" | "EASY_PAY";
             /** Format: int64 */
             amount: number;
-            orderName?: string;
+            orderName: string;
             /** Format: int64 */
-            jobApplicationId?: number;
+            jobApplicationId: number;
         };
         ApiResponsePaymentResponse: {
             /** Format: int32 */
@@ -1134,18 +1134,13 @@ export interface components {
             data: components["schemas"]["PaymentResponse"];
         };
         PaymentResponse: {
-            /** @enum {string} */
-            payStatus: "REQUEST" | "CARD" | "EASY_PAY";
             /** Format: int64 */
-            amount: number;
-            orderId: string;
-            orderName: string;
-            payer: string;
+            amount?: number;
+            orderId?: string;
+            orderName?: string;
+            payer?: string;
             successUrl?: string;
             failUrl?: string;
-            failReason?: string;
-            canceled?: boolean;
-            cancelReason?: string;
         };
         ApiResponseCancelPaymentResponse: {
             /** Format: int32 */
@@ -1571,17 +1566,17 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
-            unpaged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
+            paged?: boolean;
+            unpaged?: boolean;
         };
         SortObject: {
             empty?: boolean;
-            unsorted?: boolean;
             sorted?: boolean;
+            unsorted?: boolean;
         };
         ApiResponseListJobPostApplicationResponse: {
             /** Format: int32 */
@@ -3155,7 +3150,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                categoryId: number;
+                categoryName: string;
             };
             cookie?: never;
         };

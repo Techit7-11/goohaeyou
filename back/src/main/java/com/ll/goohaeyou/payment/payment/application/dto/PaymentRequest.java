@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotNull;
 public record PaymentRequest(
         @NotNull
         PayStatus payStatus,
-
         @NotNull
         Long amount,
-
+        @NotNull
         String orderName,
+        @NotNull
         Long jobApplicationId
 ) {}
