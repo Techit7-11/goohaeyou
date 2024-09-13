@@ -21,7 +21,7 @@ public class MemberService {
     public void login(LoginRequest request) {
         Member member = memberDomainService.getByUsername(request.username());
 
-        memberDomainService.verifyPassword(member.getPassword(), request.password());
+        memberDomainService.verifyPassword(request.password(), member.getPassword());
     }
 
     public MemberResponse findByUsername(String username) {

@@ -75,8 +75,8 @@ public class MemberDomainService {
         memberRepository.save(member);
     }
 
-    public void verifyPassword(String MemberPassword, String inputPassword) {
-        if (!bCryptPasswordEncoder.matches(MemberPassword, inputPassword)) {
+    public void verifyPassword(String inputPassword, String memberPassword) {
+        if (!bCryptPasswordEncoder.matches(inputPassword, memberPassword)) {
             throw new AuthException.InvalidPasswordException();
         }
     }
