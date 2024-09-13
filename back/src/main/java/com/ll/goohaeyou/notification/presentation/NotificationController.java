@@ -23,20 +23,20 @@ public class NotificationController {
     @GetMapping
     @Operation(summary = "유저 별 알림리스트")
     public ApiResponse<List<NotificationResponse>> getList(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return ApiResponse.ok(notificationService.getList(memberDetails.getName()));
+        return ApiResponse.ok(notificationService.getList(memberDetails.getUsername()));
     }
 
     @DeleteMapping("/all")
     @Operation(summary = "알림 전부 삭제")
     public ResponseEntity<Void> deleteAll(@AuthenticationPrincipal MemberDetails memberDetails) {
-        notificationService.deleteAllNotification(memberDetails.getName());
+        notificationService.deleteAllNotification(memberDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/read")
     @Operation(summary = "읽은 알림 전부 삭제")
     public ResponseEntity<Void> deleteReadAll(@AuthenticationPrincipal MemberDetails memberDetails) {
-        notificationService.deleteReadAllNotification(memberDetails.getName());
+        notificationService.deleteReadAllNotification(memberDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 
@@ -44,14 +44,14 @@ public class NotificationController {
     @Operation(summary = "알림 읽음 처리")
     public ResponseEntity<Void> read(@AuthenticationPrincipal MemberDetails memberDetails,
                                      @PathVariable(name = "id") Long id) {
-        notificationService.readNotification(memberDetails.getName(),id);
+        notificationService.readNotification(memberDetails.getUsername(),id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/new")
     @Operation(summary = "읽지 않은 알림 유무 확인")
     public ApiResponse<Boolean> unreadNotification(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return ApiResponse.ok(notificationService.unreadNotification(memberDetails.getName()));
+        return ApiResponse.ok(notificationService.unreadNotification(memberDetails.getUsername()));
     }
 
     @PostMapping("/register")
