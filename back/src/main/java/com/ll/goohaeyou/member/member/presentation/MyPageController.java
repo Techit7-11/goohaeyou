@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Mypage", description = "회원 관련 API")
+@Tag(name = "MyPage", description = "회원 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
-public class MypageController {
+public class MyPageController {
     private final MemberService memberService;
     private final JobPostService jobPostService;
     private final JobApplicationService jobApplicationService;
