@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ll.goohaeyou.jobApplication.domain.type.WageStatus.PAYMENT_CANCELLED;
 import static com.ll.goohaeyou.notification.domain.type.CauseTypeCode.*;
 import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.DELETE;
 import static com.ll.goohaeyou.notification.domain.type.ResultTypeCode.NOTICE;
@@ -103,5 +104,12 @@ public class JobApplicationDomainService {
     public void updateStatusByPaymentSuccess(JobApplication jobApplication, Long amount) {
         jobApplication.updateWageStatus(WageStatus.PAYMENT_COMPLETED);
         jobApplication.updateEarn(Math.toIntExact(amount));
+    }
+
+    @Transactional
+    public void updateOnPaymentCancel(JobApplication jobApplication) {
+        jobApplication.updateWageStatus(PAYMENT_CANCELLED);
+        jobApplication.updateEarn(0);
+        jobApplication.changeToNotCompleted();
     }
 }

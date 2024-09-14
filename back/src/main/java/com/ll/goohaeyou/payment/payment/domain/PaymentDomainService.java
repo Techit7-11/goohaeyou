@@ -6,6 +6,7 @@ import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
+import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
@@ -86,5 +87,23 @@ public class PaymentDomainService {
     @Transactional
     public void delete(Payment payment) {
         paymentRepository.delete(payment);
+    }
+
+    @Transactional
+    public void cancel(Payment payment, String cancelReason) {
+        payment.cancelPayment(cancelReason);
+        payment.markAsUnpaid();
+    }
+
+    public PaymentCancelResponse sendPaymentCancelRequest(String paymentKey, String cancelReason) {
+        JSONObject params = new JSONObject();
+        params.put("cancelReason", cancelReason);
+
+        return paymentProcessor.sendPaymentCancelRequest(paymentKey, params, PaymentCancelResponse.class);
+    }
+
+    public Payment getByPaymentKeyAndUsername(String paymentKey, String username) {
+        return paymentRepository.findByPaymentKeyAndMemberUsername(paymentKey, username)
+                .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
     }
 }
