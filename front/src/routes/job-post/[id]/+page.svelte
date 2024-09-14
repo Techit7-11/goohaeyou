@@ -108,7 +108,8 @@
 			console.error('관심 취소에 실패하였습니다.');
 		}
 	}
-	// 댓글
+
+	// 댓글 불러오기
 	async function loadComments() {
 		try {
 			const response = await rq.apiEndPoints().GET(`/api/post-comment/${postId}`);
@@ -129,6 +130,8 @@
 			console.error('댓글을 로드하는 중 오류가 발생했습니다.', error);
 		}
 	}
+
+	// 댓글 작성
 	async function addComment() {
 		try {
 			if (rq.isLogout()) {
@@ -150,6 +153,7 @@
 			console.error('댓글 추가 중 오류가 발생했습니다.', error);
 		}
 	}
+
 	// 댓글 수정 시작
 	function startEdit(commentId) {
 		comments = comments.map((comment) => ({
@@ -159,6 +163,7 @@
 		const currentComment = comments.find((comment) => comment.id === commentId);
 		editingContent = currentComment ? currentComment.content : '';
 	}
+
 	// 댓글 수정 제출
 	async function submitEdit(commentId) {
 		try {
@@ -181,6 +186,7 @@
 	function formatDateTime(dateTimeString) {
 		return format(new Date(dateTimeString), 'yyyy-MM-dd HH:mm');
 	}
+
 	// 공고 조기 마감
 	async function postEarlyClosing() {
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
@@ -194,10 +200,12 @@
 			console.error('조기 마감에 실패하였습니다.');
 		}
 	}
+
 	// 지원서 목록으로 이동
 	function goToApplicationsList(postId) {
 		window.location.href = `/applications/list/${postId}`;
 	}
+
 	// 공고에 이미지 업로드
 	async function handleImageUpload(event) {
 		const files = event.target.files;
