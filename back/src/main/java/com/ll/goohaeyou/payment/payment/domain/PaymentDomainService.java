@@ -4,6 +4,7 @@ import com.ll.goohaeyou.global.config.TossPaymentsConfig;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentInfoResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResponse;
@@ -11,6 +12,7 @@ import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessRe
 import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
+import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import com.ll.goohaeyou.payment.payment.infrastructure.PaymentProcessorResponse;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
@@ -100,6 +102,11 @@ public class PaymentDomainService {
         params.put("cancelReason", cancelReason);
 
         return paymentProcessor.sendPaymentCancelRequest(paymentKey, params, PaymentCancelResponse.class);
+    }
+
+    public Payment getPaymentInfo(Long jobApplicationId) {
+        return paymentRepository.findByJobApplicationIdAndPaid(jobApplicationId, true)
+                .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
     }
 
     public Payment getByPaymentKeyAndUsername(String paymentKey, String username) {

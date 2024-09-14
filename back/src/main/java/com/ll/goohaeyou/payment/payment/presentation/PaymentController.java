@@ -76,6 +76,6 @@ public class PaymentController {
     public ApiResponse<PaymentInfoResponse> getPaymentInfo(@AuthenticationPrincipal MemberDetails memberDetails,
                                                            @PathVariable Long applicationId) {
 
-        return ApiResponse.ok(paymentInfoService.getValidPaymentInfo(memberDetails.getUsername(), applicationId));
+        return ApiResponse.ok(paymentInfoService.getPaymentInfo(memberDetails.getUsername(), applicationId));
     }
 }
