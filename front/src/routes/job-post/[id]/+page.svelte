@@ -305,16 +305,18 @@
 				</div>
 				<div class="divider my-1"></div>
 				<div class="flex justify-between items-center">
-					<div class="avatar placeholder">
-						<div class="bg-neutral text-neutral-content rounded-full w-8">
-							{#if jobPostProfileImageUrl != null}
-								<img src={jobPostProfileImageUrl} alt="프로필 사진" />
-							{:else}
-								<span class="text-xs">{jobPostDetailDto?.author.slice(0, 3)}</span>
-							{/if}
+					<div class="flex items-center">
+						<div class="avatar placeholder">
+							<div class="bg-neutral text-neutral-content rounded-full w-8">
+								{#if jobPostProfileImageUrl != null}
+									<img src={jobPostProfileImageUrl} alt="프로필 사진" />
+								{:else}
+									<span class="text-xs">{jobPostDetailDto?.author.slice(0, 3)}</span>
+								{/if}
+							</div>
 						</div>
+						<div class="text-md flex ml-2">{jobPostDetailDto?.author}</div>
 					</div>
-					<div class="text-md flex items-center mr-20">{jobPostDetailDto?.author}</div>
 					<div class="flex">
 						<div class="flex-shrink">
 							<div class="text-xs mx-2 flex justify-center items-center">
@@ -406,7 +408,7 @@
 								{/each}
 							</div>
 						{/if}
-						<div class="bg-white p-5 rounded-lg shadow-lg">
+						<div class="bg-white p-5 rounded-lg shadow-lg mt-5">
 							<h3 class="text-md font-medium text-green5 mb-3">근무 조건</h3>
 							<ul class="list-disc space-y-2 text-sm">
 								<li class="flex items-center text-gray-700">
