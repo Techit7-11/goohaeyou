@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.jobApplication.application.dto;
 
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 
 import java.time.LocalDateTime;
 import java.util.List;

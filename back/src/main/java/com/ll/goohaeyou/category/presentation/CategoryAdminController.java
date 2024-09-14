@@ -26,7 +26,7 @@ public class CategoryAdminController {
     @Operation(summary = "카테고리 추가")
     public ApiResponse<Empty> addCategory(@AuthenticationPrincipal MemberDetails memberDetail,
                                           @Valid @RequestBody CreateCategoryRequest request) {
-        categoryAdminService.addCategory(memberDetail.getUsername(), request);
+        categoryAdminService.addCategory(memberDetail.getRole(), request);
 
         return ApiResponse.created();
     }

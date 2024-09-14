@@ -1,11 +1,11 @@
 package com.ll.goohaeyou.payment.cashLog.application;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
-import com.ll.goohaeyou.payment.cashLog.domain.CashLog;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
+import com.ll.goohaeyou.payment.cashLog.domain.entity.CashLog;
 import com.ll.goohaeyou.payment.cashLog.domain.repository.CashLogRepository;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
-import com.ll.goohaeyou.payment.payment.domain.Payment;
+import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import com.ll.goohaeyou.payment.payment.domain.type.PayTypeFee;
@@ -50,12 +50,12 @@ public class CashLogService {
 
     @Transactional
     public void createCashLogOnPaid(PaymentSuccessResponse successDto) {
-        PayStatus payStatus = PayStatus.findByMethod(successDto.getMethod());
-        Payment payment = paymentRepository.findByPaymentKey(successDto.getPaymentKey())
+        PayStatus payStatus = PayStatus.findByMethod(successDto.method());
+        Payment payment = paymentRepository.findByPaymentKey(successDto.paymentKey())
                 .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
 
         CashLog newCashLog = CashLog.createOnPaymentSuccess(
-                successDto.getTotalAmount(),
+                successDto.totalAmount(),
                 getVat(payment.getTotalAmount()),
                 getPaymentFee(payStatus, payment.getTotalAmount()),
                 getNetAmount(payStatus, payment.getTotalAmount()),

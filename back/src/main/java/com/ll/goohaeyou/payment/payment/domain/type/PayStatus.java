@@ -15,13 +15,6 @@ public enum PayStatus {
 
     private final String description;    // 결제타입 설명
 
-    public static PayStatus findPayTypeByDescription(String description) {
-        return Arrays.stream(PayStatus.values())
-                .filter(type -> type.getDescription().equals(description))
-                .findFirst()
-                .orElseThrow(PaymentException.NoEnumConstantFoundException::new);
-    }
-
     public static PayStatus findByMethod(String method) {
         return switch (method) {
             case "카드" -> CARD;

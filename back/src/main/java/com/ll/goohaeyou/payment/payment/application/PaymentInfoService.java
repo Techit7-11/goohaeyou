@@ -1,10 +1,9 @@
 package com.ll.goohaeyou.payment.payment.application;
 
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentInfoResponse;
-import com.ll.goohaeyou.payment.payment.domain.Payment;
-import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
-import com.ll.goohaeyou.auth.exception.AuthException;
-import com.ll.goohaeyou.payment.payment.exception.PaymentException;
+import com.ll.goohaeyou.payment.payment.domain.PaymentDomainService;
+import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
+import com.ll.goohaeyou.payment.payment.domain.policy.PaymentPolicy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,25 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PaymentInfoService {
-    private final PaymentRepository paymentRepository;
+    private final PaymentDomainService paymentDomainService;
+    private final PaymentPolicy paymentPolicy;
 
-    public PaymentInfoResponse getValidPaymentInfo(String username, Long applicationId) {
-        return paymentRepository.findByJobApplicationIdAndPaid(applicationId, true)
-                .map(payment -> {
-                    validatePayer(payment, username);
+    public PaymentInfoResponse getPaymentInfo(String username, Long JobApplicationId) {
+        Payment payment = paymentDomainService.getPaymentInfo(JobApplicationId);
 
-                    if (payment.isCanceled()) {
-                        throw new PaymentException.AlreadyCanceledException();
-                    }
+        paymentPolicy.verifyPaymentUser(payment, username);
 
-                    return PaymentInfoResponse.from(payment);
-                })
-                .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
-    }
-
-    private void validatePayer(Payment payment, String username) {
-        if (!payment.getMember().getUsername().equals(username)) {
-            throw new AuthException.NotAuthorizedException();
-        }
+        return PaymentInfoResponse.from(payment);
     }
 }

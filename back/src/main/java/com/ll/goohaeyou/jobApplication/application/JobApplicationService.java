@@ -1,19 +1,17 @@
 package com.ll.goohaeyou.jobApplication.application;
 
-import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.global.event.notification.JobApplicationCreateAndChangedEvent;
-import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.application.dto.JobApplicationDetailResponse;
 import com.ll.goohaeyou.jobApplication.application.dto.ModifyJobApplicationRequest;
 import com.ll.goohaeyou.jobApplication.application.dto.MyJobApplicationResponse;
 import com.ll.goohaeyou.jobApplication.application.dto.WriteJobApplicationRequest;
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
-import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
-import com.ll.goohaeyou.jobApplication.exception.JobApplicationException;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostDetailRepository;
-import com.ll.goohaeyou.member.member.domain.Member;
-import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
+import com.ll.goohaeyou.jobApplication.domain.service.JobApplicationDomainService;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
+import com.ll.goohaeyou.jobApplication.policy.JobApplicationPolicy;
+import com.ll.goohaeyou.jobPost.jobPost.domain.service.JobPostDetailDomainService;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
+import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -28,101 +26,57 @@ import static com.ll.goohaeyou.notification.domain.type.CauseTypeCode.APPLICATIO
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class JobApplicationService {
-    private final MemberRepository memberRepository;
-    private final JobApplicationRepository jobApplicationRepository;
     private final ApplicationEventPublisher publisher;
-    private final JobPostDetailRepository jobPostDetailRepository;
+    private final JobApplicationPolicy jobApplicationPolicy;
+    private final MemberDomainService memberDomainService;
+    private final JobPostDetailDomainService jobPostDetailDomainService;
+    private final JobApplicationDomainService jobApplicationDomainService;
 
     @Transactional
     public void writeApplication(String username, Long jobPostId, WriteJobApplicationRequest request) {
-        JobPostDetail postDetail = jobPostDetailRepository.findById(jobPostId)
-                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
-        canWrite(postDetail, member);
+        JobPostDetail postDetail = jobPostDetailDomainService.getById(jobPostId);
+        Member member = memberDomainService.getByUsername(username);
 
-        JobApplication newJobApplication = createNewApplication(member, postDetail, request);
+        jobApplicationPolicy.validateCanWrite(postDetail, member);
 
-        postDetail.getJobApplications().add(newJobApplication);
-        postDetail.getJobPost().increaseApplicationsCount();
-        jobApplicationRepository.save(newJobApplication);
+        JobApplication newJobApplication = jobApplicationDomainService.create(member, postDetail, request);
+
+        jobPostDetailDomainService.addJobApplication(postDetail, newJobApplication);
 
         publisher.publishEvent(new JobApplicationCreateAndChangedEvent(this, postDetail, newJobApplication, APPLICATION_CREATED));
     }
 
-    private JobApplication createNewApplication(Member member, JobPostDetail postDetail, WriteJobApplicationRequest request) {
-        return JobApplication.create(member, postDetail, request.body());
-    }
-
     public JobApplicationDetailResponse getDetailById(Long id) {
-        JobApplication jobApplication = findByIdAndValidate(id);
+        JobApplication jobApplication = jobApplicationDomainService.getById(id);
 
         return JobApplicationDetailResponse.from(jobApplication);
     }
 
-    public JobApplication findByIdAndValidate(Long id) {
-        return jobApplicationRepository.findById(id)
-                .orElseThrow(EntityNotFoundException.JobApplicationNotExistsException::new);
-    }
-
     @Transactional
     public void modifyJobApplication(String username, Long id, ModifyJobApplicationRequest request) {
-        JobApplication jobApplication = findByIdAndValidate(id);
+        JobApplication jobApplication = jobApplicationDomainService.getById(id);
 
-        if (!isJobApplicationAuthor(username, jobApplication.getMember().getUsername())) {
-            throw new AuthException.NotAuthorizedException();
-        }
+        jobApplicationPolicy.validateCanModify(username, jobApplication);
 
         jobApplication.updateBody(request.body());
         publisher.publishEvent(new JobApplicationCreateAndChangedEvent(this, jobApplication, APPLICATION_MODIFICATION));
     }
 
-    public boolean isJobApplicationAuthor(String username, String author) {
-        return username.equals(author);
-    }
-
     @Transactional
     public void deleteJobApplication(String username, Long id) {
-        JobApplication jobApplication = findByIdAndValidate(id);
+        JobApplication jobApplication = jobApplicationDomainService.getById(id);
 
-        canDelete(username, jobApplication);
+        jobApplicationPolicy.validateCanDelete(username, jobApplication);
 
         jobApplication.getJobPostDetail().getJobPost().decreaseApplicationsCount();
-        jobApplicationRepository.deleteById(id);
-    }
 
-    public boolean canDelete(String username, JobApplication jobApplication) {
-        if (jobApplication.getApprove()) {
-            throw new AuthException.NotAuthorizedException();
-        }
-
-        if (!isJobApplicationAuthor(username, jobApplication.getMember().getUsername()))
-            throw new AuthException.NotAuthorizedException();
-
-        return true;
+        jobApplicationDomainService.deleteById(id);
     }
 
     public List<MyJobApplicationResponse> findByUsername(String username) {
 
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException.MemberNotFoundException::new);
+        Member member = memberDomainService.getByUsername(username);
 
-        return MyJobApplicationResponse.convertToList(jobApplicationRepository.findByMemberId(member.getId()));
-    }
-
-    private void canWrite(JobPostDetail postDetail, Member member) {
-        if (postDetail.getJobPost().isClosed()){ // 공고 지원 마감
-            throw new JobApplicationException.ClosedPostExceptionJob();
-        }
-
-        if (postDetail.getAuthor().equals(member.getUsername())) { // 자신의 공고에 지원 불가능
-            throw new JobApplicationException.NotEligibleForOwnJobExceptionJob();
-        }
-
-        for (JobApplication jobApplication : postDetail.getJobApplications()) { // 지원서 중복 불가능
-            if (jobApplication.getMember().equals(member)) {
-                throw new JobApplicationException.DuplicateSubmissionExceptionJob();
-            }
-        }
+        return MyJobApplicationResponse.convertToList(jobApplicationDomainService.getByMemberId(member.getId()));
     }
 }

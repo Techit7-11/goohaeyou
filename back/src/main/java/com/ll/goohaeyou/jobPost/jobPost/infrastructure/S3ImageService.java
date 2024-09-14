@@ -10,7 +10,7 @@ import com.amazonaws.util.IOUtils;
 import com.ll.goohaeyou.global.standard.base.util.MimeTypeUtil;
 import com.ll.goohaeyou.image.exception.ImageException;
 import com.ll.goohaeyou.jobApplication.domain.ImageStorage;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class S3ImageService implements ImageStorage {
     @Transactional
     @Override
     public String upload(MultipartFile image) {
-        if (image == null || image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
+        if (Objects.isNull(image) || image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
             throw new ImageException.FileIsEmptyException();
         }
         return uploadImage(image);

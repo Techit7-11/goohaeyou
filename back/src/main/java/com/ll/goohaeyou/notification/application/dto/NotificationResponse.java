@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.notification.application.dto;
 
-import com.ll.goohaeyou.notification.domain.Notification;
+import com.ll.goohaeyou.notification.domain.entity.Notification;
 import com.ll.goohaeyou.notification.domain.type.CauseTypeCode;
 import com.ll.goohaeyou.notification.domain.type.ResultTypeCode;
 

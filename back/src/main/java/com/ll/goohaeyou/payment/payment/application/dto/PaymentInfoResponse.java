@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.payment.payment.application.dto;
 
-import com.ll.goohaeyou.payment.payment.domain.Payment;
+import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 
 public record PaymentInfoResponse(
         String paymentKey,

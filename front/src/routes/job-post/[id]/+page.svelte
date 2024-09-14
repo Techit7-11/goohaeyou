@@ -108,7 +108,8 @@
 			console.error('관심 취소에 실패하였습니다.');
 		}
 	}
-	// 댓글
+
+	// 댓글 불러오기
 	async function loadComments() {
 		try {
 			const response = await rq.apiEndPoints().GET(`/api/post-comment/${postId}`);
@@ -129,6 +130,8 @@
 			console.error('댓글을 로드하는 중 오류가 발생했습니다.', error);
 		}
 	}
+
+	// 댓글 작성
 	async function addComment() {
 		try {
 			if (rq.isLogout()) {
@@ -150,6 +153,7 @@
 			console.error('댓글 추가 중 오류가 발생했습니다.', error);
 		}
 	}
+
 	// 댓글 수정 시작
 	function startEdit(commentId) {
 		comments = comments.map((comment) => ({
@@ -159,6 +163,7 @@
 		const currentComment = comments.find((comment) => comment.id === commentId);
 		editingContent = currentComment ? currentComment.content : '';
 	}
+
 	// 댓글 수정 제출
 	async function submitEdit(commentId) {
 		try {
@@ -181,6 +186,7 @@
 	function formatDateTime(dateTimeString) {
 		return format(new Date(dateTimeString), 'yyyy-MM-dd HH:mm');
 	}
+
 	// 공고 조기 마감
 	async function postEarlyClosing() {
 		const response = await rq.apiEndPoints().PUT(`/api/job-posts/${postId}/closing`);
@@ -194,10 +200,12 @@
 			console.error('조기 마감에 실패하였습니다.');
 		}
 	}
+
 	// 지원서 목록으로 이동
 	function goToApplicationsList(postId) {
 		window.location.href = `/applications/list/${postId}`;
 	}
+
 	// 공고에 이미지 업로드
 	async function handleImageUpload(event) {
 		const files = event.target.files;
@@ -261,24 +269,13 @@
 		<div class="container mx-auto px-4">
 			<div class="p-6 max-w-4xl mx-auto my-5 bg-white rounded-box shadow-lg">
 				<div class="flex">
-					<div class="avatar placeholder">
-						<div class="bg-neutral text-neutral-content rounded-full w-8">
-							{#if jobPostProfileImageUrl != null}
-								<img src={jobPostProfileImageUrl} alt="프로필 사진" />
-							{:else}
-								<span class="text-xs">{jobPostDetailDto?.author.slice(0, 3)}</span>
-							{/if}
-						</div>
+					<div class="text-2xl font-bold break-words max-w-[95%] my-4">
+						{jobPostDetailDto?.title}
 					</div>
-					<div class="text-md flex items-center mx-2">{jobPostDetailDto?.author}</div>
 				</div>
 				<div class="flex mt-1">
 					<div class="text-xs text-gray-500">등록 :</div>
 					<div class="text-xs mx-2">{jobPostDetailDto?.createdAt}</div>
-					<!-- {#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifiedAt}
-					<div class="text-xs text-gray-500">수정 : </div>
-					<div class="text-xs mx-2">{jobPostDetailDto?.modifiedAt}</div>
-					{/if} -->
 				</div>
 				<div class="flex justify-center">
 					{#if jobPostDetailDto?.author === rq.member.username}
@@ -306,10 +303,19 @@
 						</div>
 					{/if}
 				</div>
-				<div class="divider"></div>
+				<div class="divider my-1"></div>
 				<div class="flex justify-between items-center">
-					<div class="text-2xl font-bold break-words max-w-[55%] my-4">
-						{jobPostDetailDto?.title}
+					<div class="flex items-center">
+						<div class="avatar placeholder">
+							<div class="bg-neutral text-neutral-content rounded-full w-8">
+								{#if jobPostProfileImageUrl != null}
+									<img src={jobPostProfileImageUrl} alt="프로필 사진" />
+								{:else}
+									<span class="text-xs">{jobPostDetailDto?.author.slice(0, 3)}</span>
+								{/if}
+							</div>
+						</div>
+						<div class="text-md flex ml-2">{jobPostDetailDto?.author}</div>
 					</div>
 					<div class="flex">
 						<div class="flex-shrink">
@@ -402,7 +408,7 @@
 								{/each}
 							</div>
 						{/if}
-						<div class="bg-white p-5 rounded-lg shadow-lg">
+						<div class="bg-white p-5 rounded-lg shadow-lg mt-5">
 							<h3 class="text-md font-medium text-green5 mb-3">근무 조건</h3>
 							<ul class="list-disc space-y-2 text-sm">
 								<li class="flex items-center text-gray-700">

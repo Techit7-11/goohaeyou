@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.auth.application;
 
 import com.ll.goohaeyou.auth.infrastructure.JwtProperties;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

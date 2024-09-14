@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.jobPost.jobPost.application.dto;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
 
 import java.util.List;
 

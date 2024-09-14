@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobApplication.application.dto;
 
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 
 import java.util.List;
 

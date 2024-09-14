@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.chat.room.domain.repository;
 
-import com.ll.goohaeyou.chat.room.domain.Room;
+import com.ll.goohaeyou.chat.room.domain.entity.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,9 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    @Query("SELECT r FROM Room r WHERE " +
-            "(r.username1 = :username AND r.user1HasExit = false) " +
-            "OR (r.username2 = :username AND r.user2HasExit = false)")
+    @Query(
+        "SELECT r FROM Room r " +
+        "WHERE (r.username1 = :username AND r.user1HasExit = false) " +
+        "OR (r.username2 = :username AND r.user2HasExit = false)"
+    )
     List<Room> findActiveRoomsByUsername(@Param("username") String username);
 
 

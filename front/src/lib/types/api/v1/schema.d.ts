@@ -573,7 +573,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/payments/{applicationId}": {
+    "/api/payments/{jobApplicationId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -880,7 +880,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/job-posts/categories/{categoryId}": {
+    "/api/job-posts/categories/{categoryName}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1120,9 +1120,9 @@ export interface components {
             payStatus: "REQUEST" | "CARD" | "EASY_PAY";
             /** Format: int64 */
             amount: number;
-            orderName?: string;
+            orderName: string;
             /** Format: int64 */
-            jobApplicationId?: number;
+            jobApplicationId: number;
         };
         ApiResponsePaymentResponse: {
             /** Format: int32 */
@@ -1134,29 +1134,24 @@ export interface components {
             data: components["schemas"]["PaymentResponse"];
         };
         PaymentResponse: {
-            /** @enum {string} */
-            payStatus: "REQUEST" | "CARD" | "EASY_PAY";
             /** Format: int64 */
             amount: number;
             orderId: string;
             orderName: string;
             payer: string;
-            successUrl?: string;
-            failUrl?: string;
-            failReason?: string;
-            canceled?: boolean;
-            cancelReason?: string;
+            successUrl: string;
+            failUrl: string;
         };
-        ApiResponseCancelPaymentResponse: {
+        ApiResponsePaymentCancelResponse: {
             /** Format: int32 */
             statusCode?: number;
             message: string;
             /** @enum {string} */
             resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
             errorCode?: string;
-            data: components["schemas"]["CancelPaymentResponse"];
+            data: components["schemas"]["PaymentCancelResponse"];
         };
-        CancelPaymentResponse: {
+        PaymentCancelResponse: {
             /** Format: int32 */
             cancelAmount?: number;
             transactionKey?: string;
@@ -1550,10 +1545,10 @@ export interface components {
             data: components["schemas"]["PageJobPostBasicResponse"];
         };
         PageJobPostBasicResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -1562,26 +1557,26 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
-            unpaged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
+            paged?: boolean;
+            unpaged?: boolean;
         };
         SortObject: {
             empty?: boolean;
-            unsorted?: boolean;
             sorted?: boolean;
+            unsorted?: boolean;
         };
         ApiResponseListJobPostApplicationResponse: {
             /** Format: int32 */
@@ -2218,7 +2213,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseCancelPaymentResponse"];
+                    "*/*": components["schemas"]["ApiResponsePaymentCancelResponse"];
                 };
             };
         };
@@ -2735,7 +2730,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                applicationId: number;
+                jobApplicationId: number;
             };
             cookie?: never;
         };
@@ -3155,7 +3150,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                categoryId: number;
+                categoryName: string;
             };
             cookie?: never;
         };

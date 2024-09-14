@@ -62,7 +62,7 @@
 //
 //        JobApplicationForm.Register form = writeApplicationForm();
 //
-//        Member member = memberService.getMember("applicant");
+//        Member member = memberService.getByUsername("applicant");
 //
 //        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 //
@@ -87,7 +87,7 @@
 //
 //        JobApplicationForm.Register form = writeApplicationForm();
 //
-//        Member member = memberService.getMember("applicant");
+//        Member member = memberService.getByUsername("applicant");
 //
 //        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 //

@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.category.application.dto;
 
-import com.ll.goohaeyou.category.domain.Category;
+import com.ll.goohaeyou.category.domain.entity.Category;
 
 import java.util.List;
 

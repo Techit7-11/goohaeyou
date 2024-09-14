@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.calculate.configuration;
 
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.calculate.itemReader.JobApplicationReader;
 import com.ll.goohaeyou.calculate.JobListener;
 import com.ll.goohaeyou.calculate.itemProcessor.Exceeded3DaysProcessor;

@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.review.domain.repository;
 
-import com.ll.goohaeyou.review.domain.Review;
+import com.ll.goohaeyou.review.domain.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

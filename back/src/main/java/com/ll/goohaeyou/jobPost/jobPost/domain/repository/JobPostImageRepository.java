@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.jobPost.jobPost.domain.repository;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostImage;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

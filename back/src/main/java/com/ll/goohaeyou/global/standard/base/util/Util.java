@@ -6,12 +6,14 @@ import com.ll.goohaeyou.global.exception.GoohaeyouException;
 import com.ll.goohaeyou.global.standard.base.RegionType;
 import lombok.SneakyThrows;
 
+import java.util.Objects;
+
 public class Util {
 
     public static class Region {
 
         public static int getRegionCodeFromAddress(String roadAddress) {
-             if (roadAddress == null || roadAddress.isEmpty()) {
+             if (Objects.isNull(roadAddress) || roadAddress.isEmpty()) {
                  throw new GoohaeyouException(ErrorCode.INVALID_ADDRESS_FORMAT);
              }
 

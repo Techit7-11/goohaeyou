@@ -2,6 +2,7 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { onMount } from 'svelte';
 
+	let payStatus: String = 'REQUEST';
 	let tossPayments: TossPayments;
 	let jobApplicationId: string = '';
 	let totalAmount: number = 0;
@@ -37,7 +38,7 @@
 
 		// API 호출
 		const body = {
-			payStatus: 'REQUEST',
+			payStatus: payStatus,
 			amount: totalAmount,
 			jobApplicationId,
 			orderName
@@ -49,12 +50,12 @@
 
 			// 결제창 호출
 			tossPayments.requestPayment('CARD', {
-				amount: totalAmount,
-				orderId: paymentRespDto.orderId,
-				orderName: paymentRespDto.orderName,
-				successUrl: paymentRespDto.successUrl,
-				failUrl: paymentRespDto.failUrl,
-				payer: paymentRespDto.payer
+				amount: paymentRespDto?.amount,
+				orderId: paymentRespDto?.orderId,
+				orderName: paymentRespDto?.orderName,
+				successUrl: paymentRespDto?.successUrl,
+				failUrl: paymentRespDto?.failUrl,
+				payer: paymentRespDto?.payer
 			});
 		} catch (error) {
 			console.error('Error:', error);

@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.global.event.notification;
 
-import com.ll.goohaeyou.jobApplication.domain.JobApplication;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.notification.domain.type.CauseTypeCode;
 import com.ll.goohaeyou.notification.domain.type.ResultTypeCode;
 import lombok.Getter;

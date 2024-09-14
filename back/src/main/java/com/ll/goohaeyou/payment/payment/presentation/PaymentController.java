@@ -2,7 +2,7 @@ package com.ll.goohaeyou.payment.payment.presentation;
 
 import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentInfoResponse;
-import com.ll.goohaeyou.payment.payment.application.dto.cancel.CancelPaymentResponse;
+import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
@@ -61,21 +61,21 @@ public class PaymentController {
 
     @PostMapping("/cancel")
     @Operation(summary = "결제 취소")
-    public ApiResponse<CancelPaymentResponse> tossPaymentCancel(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                              @RequestParam String paymentKey,
-                                                              @RequestParam String cancelReason) {
+    public ApiResponse<PaymentCancelResponse> tossPaymentCancel(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                                @RequestParam String paymentKey,
+                                                                @RequestParam String cancelReason) {
 
-        CancelPaymentResponse resDto = paymentCancelService.tossPaymentCancel(memberDetails.getUsername(), paymentKey, cancelReason);
+        PaymentCancelResponse resDto = paymentCancelService.tossPaymentCancel(memberDetails.getUsername(), paymentKey, cancelReason);
         cashLogService.createCashLogOnCancel(paymentKey);
 
         return ApiResponse.ok(resDto);
     }
 
-    @GetMapping("/{applicationId}")
+    @GetMapping("/{jobApplicationId}")
     @Operation(summary = "결제정보 가져오기")
     public ApiResponse<PaymentInfoResponse> getPaymentInfo(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                           @PathVariable Long applicationId) {
+                                                           @PathVariable Long jobApplicationId) {
 
-        return ApiResponse.ok(paymentInfoService.getValidPaymentInfo(memberDetails.getUsername(), applicationId));
+        return ApiResponse.ok(paymentInfoService.getPaymentInfo(memberDetails.getUsername(), jobApplicationId));
     }
 }

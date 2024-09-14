@@ -2,9 +2,8 @@ package com.ll.goohaeyou.category.application;
 
 import com.ll.goohaeyou.category.application.dto.SubCategoryResponse;
 import com.ll.goohaeyou.category.application.dto.TopLevelCategoryResponse;
-import com.ll.goohaeyou.category.domain.Category;
-import com.ll.goohaeyou.category.domain.repository.CategoryRepository;
-import com.ll.goohaeyou.global.exception.EntityNotFoundException;
+import com.ll.goohaeyou.category.domain.service.CategoryDomainService;
+import com.ll.goohaeyou.category.domain.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +12,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-    private final CategoryRepository categoryRepository;
+    private final CategoryDomainService categoryDomainService;
 
     public List<SubCategoryResponse> getSubCategories(Long categoryId) {
-        Category currentCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(EntityNotFoundException.NotFoundCategoryException::new);
-
-        List<Category> categories = currentCategory.getSubCategories();
+        List<Category> categories = categoryDomainService.getSubCategoriesById(categoryId);
 
         if (categories.isEmpty()) {
             return null;
@@ -29,7 +25,7 @@ public class CategoryService {
     }
 
     public List<TopLevelCategoryResponse> getTopCategories() {
-        List<Category> categories = categoryRepository.findAllByLevel(1);
+        List<Category> categories = categoryDomainService.getTopCategories();
 
         return TopLevelCategoryResponse.convertToList(categories);
     }

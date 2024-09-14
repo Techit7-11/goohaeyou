@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.category.domain.repository;
 
-import com.ll.goohaeyou.category.domain.Category;
+import com.ll.goohaeyou.category.domain.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

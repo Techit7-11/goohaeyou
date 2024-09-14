@@ -2,7 +2,7 @@ package com.ll.goohaeyou.jobPost.jobPost.application;
 
 import com.ll.goohaeyou.global.event.notification.PostDeadlineEvent;
 import com.ll.goohaeyou.global.event.notification.PostEmployedEvent;
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPost;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.JobPostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;

@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.jobPost.comment.domain;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.JobPostDetail;
-import com.ll.goohaeyou.member.member.domain.Member;
+import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
+import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.global.jpa.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
