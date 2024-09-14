@@ -1,15 +1,15 @@
 package com.ll.goohaeyou.global.event.cashLog;
 
-import com.ll.goohaeyou.domain.application.entity.Application;
+import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
 public class CashLogEvent extends ApplicationEvent {
-    private final Application application;
+    private final JobApplication jobApplication;
 
-    public CashLogEvent(Object source, Application application) {
+    public CashLogEvent(Object source, JobApplication jobApplication) {
         super(source);
-        this.application = application;
+        this.jobApplication = jobApplication;
     }
 }

@@ -81,7 +81,7 @@
 						<span class="loading loading-dots loading-lg"></span>
 					</div>
 				{:then { data: posts }}
-					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 						{#each posts ?? [] as post, index}
 							<a href="/job-post/{post.id}" class="block">
 								<div class="card relative bg-base-100 shadow-xl my-4">
@@ -103,65 +103,99 @@
 											>
 										</div>
 									</div>
-									<!-- 메인 이미지가 존재하는 경우 -->
-									{#if post.mainImageUrl}
-										<div
-											class="relative bg-cover bg-center h-60"
-											style="background-image: url('{post.mainImageUrl}')"
-										>
-											<div
-												class="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center"
-											>
-												<div class="text-white text-2xl text-shadow p-4">{post.title}</div>
-											</div>
-										</div>
-									{/if}
-									<div class="card-body {post.mainImageUrl ? '' : 'pt-1'}">
-										<div class="flex items-center justify-between">
-											<div class="flex items-center">
-												<div class="flex flex-col mr-10">
-													<div
-														class="flex flex-col max-w-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
-													>
-														<div class="text-xl font-bold max-w-full line-clamp-2">
-															{post.title}
+									<div class="card-body pt-1">
+										<!-- 메인 이미지가 존재하는 경우 -->
+										{#if post.mainImageUrl}
+											<div class="flex">
+												<div class="flex flex-col">
+													<img
+														src={post.mainImageUrl}
+														alt={post.title}
+														class="w-20 h-20 object-cover mb-1"
+													/>
+													<div class="flex mb-2">
+														<div class="flex flex-col items-center mr-2">
+															<div class="text-xs mx-2 flex justify-center items-center">
+																{post.incrementViewCount}
+															</div>
+															<div class="text-xs text-gray-500">봤어유</div>
 														</div>
-														<div class="flex mt-2">
-															<div class="flex-shrink">
-																<div class="text-xs mx-2 flex justify-center items-center">
-																	{post.incrementViewCount}
-																</div>
-																<div class="text-xs text-gray-500">봤어유</div>
+														<div class="flex flex-col items-center mr-2">
+															<div class="text-xs mx-2 flex justify-center items-center">
+																{post.commentsCount}
 															</div>
-															<div class="flex-shrink ml-3">
-																<div class="text-xs mx-2 flex justify-center items-center">
-																	{post.commentsCount}
-																</div>
-																<div class="text-xs text-gray-500">쑥덕쑥덕</div>
+															<div class="text-xs text-gray-500">쑥덕쑥덕</div>
+														</div>
+														<div class="flex flex-col items-center">
+															<div class="text-xs mx-2 flex justify-center items-center">
+																{post.interestsCount}
 															</div>
-															<div class="flex-shrink ml-3">
-																<div class="text-xs mx-2 flex justify-center items-center">
-																	{post.interestsCount}
+															<div class="text-xs text-gray-500">관심있슈</div>
+														</div>
+													</div>
+												</div>
+												<div class="flex flex-col flex-1">
+													<div class="text-xl font-bold line-clamp-2">
+														{post.title}
+													</div>
+													<div class="flex items-center justify-between mt-2">
+														<div class="flex flex-col items-center flex-nowrap ml-auto">
+															{#if post.closed}
+																<div class="badge badge-neutral whitespace-nowrap">구했어유</div>
+															{:else}
+																<div class="badge badge-primary my-1 whitespace-nowrap">구해유</div>
+																<div class="text-xs text-gray-500 whitespace-nowrap">
+																	~ {post.deadLine}
 																</div>
-																<div class="text-xs text-gray-500">관심있슈</div>
-															</div>
+															{/if}
 														</div>
 													</div>
 												</div>
 											</div>
-											<div class="flex items-center justify-between min-w-[77px] ml-4">
-												<div class="flex flex-col items-center flex-nowrap">
-													{#if post.closed}
-														<div class="badge badge-neutral whitespace-nowrap">구했어유</div>
-													{:else}
-														<div class="badge badge-primary my-1 whitespace-nowrap">구해유</div>
-														<div class="text-xs text-gray-500 whitespace-nowrap">
-															~ {post.deadLine}
+										{:else}
+											<!-- 메인 이미지가 존재하지 않는 경우 -->
+											<div class="flex items-center justify-between">
+												<div
+													class="flex flex-col max-40 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl overflow-hidden"
+												>
+													<div class="text-xl font-bold max-w-full line-clamp-2">
+														{post.title}
+													</div>
+													<div class="flex mt-2">
+														<div class="flex-shrink">
+															<div class="text-xs mx-2 flex justify-center items-center">
+																{post.incrementViewCount}
+															</div>
+															<div class="text-xs text-gray-500">봤어유</div>
 														</div>
-													{/if}
+														<div class="flex-shrink ml-3">
+															<div class="text-xs mx-2 flex justify-center items-center">
+																{post.commentsCount}
+															</div>
+															<div class="text-xs text-gray-500">쑥덕쑥덕</div>
+														</div>
+														<div class="flex-shrink ml-3">
+															<div class="text-xs mx-2 flex justify-center items-center">
+																{post.interestsCount}
+															</div>
+															<div class="text-xs text-gray-500">관심있슈</div>
+														</div>
+													</div>
+												</div>
+												<div class="flex items-center justify-between min-w-[77px] ml-4">
+													<div class="flex flex-col items-center flex-nowrap">
+														{#if post.closed}
+															<div class="badge badge-neutral whitespace-nowrap">구했어유</div>
+														{:else}
+															<div class="badge badge-primary my-1 whitespace-nowrap">구해유</div>
+															<div class="text-xs text-gray-500 whitespace-nowrap">
+																~ {post.deadLine}
+															</div>
+														{/if}
+													</div>
 												</div>
 											</div>
-										</div>
+										{/if}
 									</div>
 								</div>
 							</a>

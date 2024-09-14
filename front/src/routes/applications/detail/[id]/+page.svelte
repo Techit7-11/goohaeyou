@@ -100,6 +100,9 @@
 	function goToReviewPage() {
 		rq.goTo(`/member/review/${$page.params.id}`);
 	}
+	function goToPaymentInfo(jobApplicationId: number) {
+		rq.goTo(`/payment/info/${jobApplicationId}`);
+	}
 </script>
 
 {#await loadApplication() then application}
@@ -159,6 +162,11 @@
 							</p>
 						</div>
 					</div>
+					{#if application.wageStatus == '급여 결제 완료' || application.wageStatus == '급여 정산 신청' || application.wageStatus == '급여 정산 완료'}
+						<button class="mt-6 btn btn-sm" on:click={() => goToPaymentInfo(application.id)}
+							>급여 결제 정보</button
+						>
+					{/if}
 					<div class="mx-2 my-6 mt-12">
 						<div class="px-1 py-2 border-b border-gray-300">
 							<p class="text-lg font-semibold">작성 내용</p>
@@ -211,7 +219,7 @@
 
 			{#if application.jobPostAuthorUsername == rq.member.username && application.approve == true}
 				<div class="flex justify-center">
-					{#if application.wageStatus != '급여 결제 전'}
+					{#if application.wageStatus == '급여 결제 전'}
 						<button
 							class="btn btn-btn btn-sm mx-12 mt-6"
 							on:click={() => goToPaymentPage(application.wages)}>급여 결제하기</button
@@ -227,7 +235,7 @@
 					{/if}
 				</div>
 			{/if}
-			{#if application.wageStatus == '급여 결제 완료'}
+			{#if application.wageStatus == '급여 정산 신청' || application.wageStatus == '급여 지급 완료'}
 				<div class="text-center mt-4">
 					<button class="btn btn-sm" on:click={goToReviewPage}>리뷰 작성하기</button>
 				</div>

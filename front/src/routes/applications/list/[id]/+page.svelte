@@ -146,10 +146,9 @@
 										{#if canApprove}
 											<input
 												type="checkbox"
+												class="checkbox checkbox-primary"
 												id={`application-${application.id}`}
-												class="checkbox"
 												on:change={(event) => {
-													event.stopPropagation();
 													toggleApplicationId(application.id, event.target.checked);
 												}}
 											/>
