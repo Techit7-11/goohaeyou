@@ -1,8 +1,8 @@
 package com.ll.goohaeyou.global.event.notification;
 
-import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
-import com.ll.goohaeyou.member.member.domain.entity.Member;
-import com.ll.goohaeyou.notification.domain.type.ResultTypeCode;
+import com.ll.goohaeyou.domain.jobPost.jobPost.entity.JobPost;
+import com.ll.goohaeyou.domain.member.member.entity.Member;
+import com.ll.goohaeyou.domain.notification.entity.type.ResultTypeCode;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

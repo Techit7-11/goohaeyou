@@ -45,9 +45,11 @@
 			rq.goTo('/member/login');
 		}
 
-		const categoryId = 1;
+		const params = new URLSearchParams({
+			category_name: '업무'
+		}).toString();
 
-		const response = await rq.apiEndPoints().GET(`/api/categories/${categoryId}/sub-categories`);
+		const response = await rq.apiEndPoints().GET(`/api/categories/sub-categories?${params}`);
 		subCategories = response.data.data;
 	});
 

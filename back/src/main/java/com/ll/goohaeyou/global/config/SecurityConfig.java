@@ -1,13 +1,13 @@
 package com.ll.goohaeyou.global.config;
 
-import com.ll.goohaeyou.auth.application.CustomUserDetailsService;
-import com.ll.goohaeyou.auth.application.JwtTokenProvider;
-import com.ll.goohaeyou.auth.application.OAuth2SuccessHandler;
-import com.ll.goohaeyou.auth.application.OAuth2UserCustomService;
-import com.ll.goohaeyou.auth.domain.service.RefreshTokenDomainService;
-import com.ll.goohaeyou.auth.infrastructure.JwtFilter;
-import com.ll.goohaeyou.auth.infrastructure.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
+import com.ll.goohaeyou.domain.member.member.entity.repository.RefreshTokenRepository;
+import com.ll.goohaeyou.domain.member.member.service.MemberService;
+import com.ll.goohaeyou.global.security.CustomUserDetailsService;
+import com.ll.goohaeyou.global.security.JwtFilter;
+import com.ll.goohaeyou.global.security.JwtTokenProvider;
+import com.ll.goohaeyou.global.security.OAuth.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import com.ll.goohaeyou.global.security.OAuth.OAuth2SuccessHandler;
+import com.ll.goohaeyou.global.security.OAuth.OAuth2UserCustomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,9 +29,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService customUserDetailsService;
+    private final MemberService memberService;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final OAuth2UserCustomService oAuth2UserCustomService;
-    private final MemberDomainService memberDomainService;
-    private final RefreshTokenDomainService refreshTokenDomainService;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -51,10 +51,10 @@ public class SecurityConfig {
                             .requestMatchers("/h2-console/**").permitAll()
                             .requestMatchers("/api/member/socialLogin/**").permitAll()
                             .requestMatchers("/oauth2/authorization/**").permitAll() // OAuth 2.0 인증 엔드포인트에 대한 접근 허용
-                            .requestMatchers("/login", "/api/member/join", "/api/member/login").permitAll()
+                            .requestMatchers("/login", "/api/member/join", "api/member/login").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/job-posts/**",
                                     "/api/post-comment/{postId}", "/api/members/image/**",
-                                    "/api/job-post/images/**", "/api/categories/**").permitAll()
+                                    "api/job-post/images/**", "api/categories/**").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                             .requestMatchers("/ready").permitAll()
                             .anyRequest()
@@ -89,9 +89,9 @@ public class SecurityConfig {
     @Bean
     public OAuth2SuccessHandler oAuth2SuccessHandler() {
         return new OAuth2SuccessHandler(jwtTokenProvider,
+                refreshTokenRepository,
                 oAuth2AuthorizationRequestBasedOnCookieRepository(),
-                refreshTokenDomainService,
-                memberDomainService
+                memberService
         );
     }
 

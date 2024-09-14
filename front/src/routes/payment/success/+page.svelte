@@ -93,7 +93,7 @@
 		<div class="mt-6">
 			<button
 				class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-				on:click={() => rq.goTo('/applications/detail/' + data.jobApplicationId)}
+				on:click={() => rq.goTo('/applications/detail/' + data.applicationId)}
 				>확인
 			</button>
 		</div>

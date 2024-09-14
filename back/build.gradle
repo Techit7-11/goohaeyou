@@ -38,6 +38,7 @@ dependencies {
 
 	// JPA & DataBase
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'com.h2database:h2'
@@ -88,12 +89,9 @@ dependencies {
 	// Actuator
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-	// MapStruct
+	//MapStruct
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
-
-	// Redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	// Mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -101,9 +99,6 @@ dependencies {
 
 	// S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-
-	// Cache
-	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.1'
 }
 
 // 테스트를 실행할때마다 jacoco 리포트 생성

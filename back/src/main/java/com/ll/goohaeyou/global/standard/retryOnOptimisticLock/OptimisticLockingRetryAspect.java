@@ -1,6 +1,6 @@
 package com.ll.goohaeyou.global.standard.retryOnOptimisticLock;
 
-import com.ll.goohaeyou.payment.payment.exception.PaymentException;
+import com.ll.goohaeyou.global.exception.payment.PaymentException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
