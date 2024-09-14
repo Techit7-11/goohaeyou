@@ -100,3 +100,17 @@
 ## 📝 ERD
 
 ![erd_0904](https://github.com/user-attachments/assets/458dbb20-0ef0-465f-9da9-064c307bfdf2)
+
+<br/><br/>
+
+### 프로젝트에서의 레이어드 아키텍처 의존성 흐름
+
+```
+Presentation (Controller)
+           ↓
+Application (Business Service)
+           ↓
+Domain (Domain Service) -> Domain (Repository-Interface)
+                                      ↓
+                        Infrastructure (Repository-Impl) 
+```
