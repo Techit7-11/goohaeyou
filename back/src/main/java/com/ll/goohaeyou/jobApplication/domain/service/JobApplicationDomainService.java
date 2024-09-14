@@ -66,6 +66,7 @@ public class JobApplicationDomainService {
         return jobApplicationRepository.findByMemberId(memberId);
     }
 
+    @Transactional
     public List<JobApplication> approveOrRejectApplications(JobPostDetail postDetail, JobPost jobPost, List<Long> applicationIds, WageStatus updateWageStatus) {
         List<JobApplication> jobApplicationList = new ArrayList<>();
         Long postWriterId = jobPost.getMember().getId();
@@ -77,8 +78,8 @@ public class JobApplicationDomainService {
                 jobApplication.updateJobEndDate(jobPost.getJobStartDate()
                         .plusDays(postDetail.getWage().getWorkDays() - 1));
 
-                increaseApplicantTransactionCount(jobApplication);
-                increaseAuthorTransactionCount(jobPost);
+                jobApplication.getMember().increaseTransactionCount();
+                jobPost.getMember().increaseTransactionCount();
 
                 publisher.publishEvent(new ChangeOfPostEvent(this, jobPost, jobApplication, APPLICATION_APPROVED, NOTICE));
                 publisher.publishEvent(new CreateChatRoomEvent(this, postWriterId, jobApplication.getMember().getId(), jobPost.getTitle()));
@@ -91,21 +92,16 @@ public class JobApplicationDomainService {
         return jobApplicationList;
     }
 
+    @Transactional
     public void removeUnapprovedApplications(JobPostDetail postDetail, List<JobApplication> jobApplicationList) {
         for (JobApplication jobApplication : jobApplicationList) {
             postDetail.getJobApplications().remove(jobApplication);
         }
     }
 
-    private void increaseApplicantTransactionCount(JobApplication jobApplication) {
-        if (jobApplication != null) {
-            jobApplication.getMember().increaseTransactionCount();
-        }
-    }
-
-    private void increaseAuthorTransactionCount(JobPost jobPost) {
-        if (jobPost != null) {
-            jobPost.getMember().increaseTransactionCount();
-        }
+    @Transactional
+    public void updateStatusByPaymentSuccess(JobApplication jobApplication, Long amount) {
+        jobApplication.updateWageStatus(WageStatus.PAYMENT_COMPLETED);
+        jobApplication.updateEarn(Math.toIntExact(amount));
     }
 }

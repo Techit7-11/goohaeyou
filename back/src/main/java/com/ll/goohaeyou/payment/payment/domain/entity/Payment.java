@@ -1,13 +1,10 @@
 package com.ll.goohaeyou.payment.payment.domain.entity;
 
 import com.ll.goohaeyou.member.member.domain.entity.Member;
-import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -50,13 +47,14 @@ public class Payment {
         this.jobApplicationId = jobApplicationId;
     }
 
-    public static Payment create(PaymentRequest request) {
+    public static Payment create(Long totalAmount, String payStatus, String orderId, String orderName,
+                                 Long jobApplicationId) {
         return new Payment(
-                request.amount(),
-                request.payStatus().getDescription(),
-                UUID.randomUUID().toString(),
-                request.orderName(),
-                request.jobApplicationId()
+                totalAmount,
+                payStatus,
+                orderId,
+                orderName,
+                jobApplicationId
         );
     }
 
