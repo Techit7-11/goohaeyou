@@ -49,7 +49,7 @@
 			case 'NOTICE':
 				return '';
 			case 'DELETE':
-				return '';
+				return '삭제 되었습니다.';
 			case 'APPROVE':
 				return '지원서를 승인 해 주세요.';
 		}
@@ -66,8 +66,9 @@
 	async function deleteReadNotifications() {
 		try {
 			await rq.apiEndPoints().DELETE('/api/notification/read');
-			location.reload(); // 페이지 새로 고침
 			alert('읽은 알림이 삭제 되었습니다.');
+			location.reload(); // 페이지 새로 고침
+			await loadMyNotification();
 		} catch (error) {
 			console.error('읽은 알림 삭제 중 오류가 발생했습니다.', error);
 			alert('읽은 알림을 삭제 하는 데 실패했습니다.');
@@ -77,8 +78,9 @@
 	async function deleteAllNotifications() {
 		try {
 			await rq.apiEndPoints().DELETE('/api/notification/all');
-			location.reload(); // 페이지 새로 고침
 			alert('모든 알림이 삭제 되었습니다.');
+			location.reload(); // 페이지 새로 고침
+			await loadMyNotification();
 		} catch (error) {
 			console.error('모든 알림 삭제 중 오류가 발생했습니다.', error);
 			alert('모든 알림을 삭제 하는 데 실패 했습니다.');

@@ -466,17 +466,17 @@
 								<div class="flex items-center justify-center min-h-screen">
 									<span class="loading loading-dots loading-lg"></span>
 								</div>
-							{:then { data: MyPosts }}
-								{#each MyPosts ?? [] as MyPost, index}
-									<a href="/job-post/{MyPost.id}" class="card-link">
+							{:then { data: posts }}
+								{#each posts ?? [] as post, index}
+									<a href="/job-post/{post.id}" class="card-link">
 										<div class="card">
 											<div class="text-sm text-gray-500">no.{index + 1}</div>
-											<div class="text-lg font-bold truncate">{MyPost.title}</div>
+											<div class="text-lg font-bold truncate">{post.title}</div>
 										</div>
 									</a>
 									<button
 										class="btn btn bg-green4 text-white hover:bg-green6 my-3 w-full"
-										on:click={() => goToApplicationsList(MyPost.id)}>지원서 확인</button
+										on:click={() => goToApplicationsList(post.id)}>지원서 확인</button
 									>
 									<div class="divider"></div>
 								{/each}

@@ -1,7 +1,7 @@
 package com.ll.utils;
 
-import com.ll.goohaeyou.member.member.application.dto.JoinRequest;
-import com.ll.goohaeyou.member.member.application.dto.LoginRequest;
+import com.ll.goohaeyou.domain.member.member.dto.JoinForm;
+import com.ll.goohaeyou.domain.member.member.dto.LoginForm;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,13 +25,13 @@ public class TestAuthenticationUtil {
         this.restTemplate = restTemplate;
     }
 
-    public void registerMember(JoinRequest joinForm) {
+    public void registerMember(JoinForm joinForm) {
         ResponseEntity<String> response = restTemplate.postForEntity(baseUrl + "/join", joinForm, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    public HttpHeaders loginAndGetCookies(LoginRequest request) {
-        ResponseEntity<String> loginResponse = restTemplate.postForEntity(baseUrl + "/login", request, String.class);
+    public HttpHeaders loginAndGetCookies(LoginForm loginForm) {
+        ResponseEntity<String> loginResponse = restTemplate.postForEntity(baseUrl + "/login", loginForm, String.class);
         assertThat(loginResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         List<String> setCookies = loginResponse.getHeaders().get(HttpHeaders.SET_COOKIE);
 

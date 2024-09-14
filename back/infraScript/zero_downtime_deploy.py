@@ -58,7 +58,7 @@ class ServiceManager:
             f"--pull always "
             f"-d ghcr.io/techit7-11/goohaeyou"
         )
-    # Socat을 사용해 트래픽을 새로운 컨테이너로 전환하는 함수
+    # Socat 포트를 전환하는 함수
     def _switch_port(self) -> None:
         cmd: str = f"ps aux | grep 'socat -t0 TCP-LISTEN:{self.socat_port}' | grep -v grep | awk '{{print $2}}'"
         pid: str = subprocess.getoutput(cmd)

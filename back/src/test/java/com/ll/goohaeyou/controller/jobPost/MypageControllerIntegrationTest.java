@@ -7,7 +7,7 @@
 //import com.ll.goohaeyou.domain.member.member.entity.Member;
 //import com.ll.goohaeyou.domain.member.member.entity.type.Gender;
 //import com.ll.goohaeyou.domain.member.member.service.MemberService;
-//import com.ll.goohaeyou.auth.application.JwtTokenProvider;
+//import com.ll.goohaeyou.global.security.JwtTokenProvider;
 //import com.ll.utils.builder.JobPostWriteFormBuilder;
 //import com.ll.utils.builder.JoinFormBuilder;
 //import jakarta.servlet.http.Cookie;
@@ -64,7 +64,7 @@
 //                .build();
 //        memberService.join(joinForm);
 //        memberService.login(new LoginForm(joinForm.getUsername(), joinForm.getPassword()));
-//        Member member = memberService.getByUsername(joinForm.getUsername());
+//        Member member = memberService.getMember(joinForm.getUsername());
 //        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 //
 //        // When
@@ -95,7 +95,7 @@
 //                "recruiter", new JobPostWriteFormBuilder().setTitle("공고 제목1").build());
 //        jobPostService.writePost(
 //                "recruiter", new JobPostWriteFormBuilder().setTitle("공고 제목2").build());
-//        Member member = memberService.getByUsername("recruiter");
+//        Member member = memberService.getMember("recruiter");
 //        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 //        // When
 //        ResultActions resultActions = mockMvc.perform(get("/api/member/myposts")
@@ -118,7 +118,7 @@
 //    void putMemberDetailsSuccess() throws Exception {
 //        // Given
 //        memberService.join(new JoinFormBuilder().setUsername("user12").build());
-//        Member member = memberService.getByUsername("user12");
+//        Member member = memberService.getMember("user12");
 //        String accessToken = jwtTokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 //
 //        // 수정할 정보를 담은 폼 생성
