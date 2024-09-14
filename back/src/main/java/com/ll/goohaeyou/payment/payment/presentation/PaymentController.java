@@ -71,11 +71,11 @@ public class PaymentController {
         return ApiResponse.ok(resDto);
     }
 
-    @GetMapping("/{applicationId}")
+    @GetMapping("/{jobApplicationId}")
     @Operation(summary = "결제정보 가져오기")
     public ApiResponse<PaymentInfoResponse> getPaymentInfo(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                           @PathVariable Long applicationId) {
+                                                           @PathVariable Long jobApplicationId) {
 
-        return ApiResponse.ok(paymentInfoService.getPaymentInfo(memberDetails.getUsername(), applicationId));
+        return ApiResponse.ok(paymentInfoService.getPaymentInfo(memberDetails.getUsername(), jobApplicationId));
     }
 }
