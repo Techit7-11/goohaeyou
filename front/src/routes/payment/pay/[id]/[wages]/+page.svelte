@@ -2,8 +2,9 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { onMount } from 'svelte';
 
+	let payStatus: String = 'REQUEST';
 	let tossPayments: TossPayments;
-	let applicationId: string = '';
+	let jobApplicationId: string = '';
 	let totalAmount: number = 0;
 	let orderName: string = '';
 
@@ -17,13 +18,13 @@
 
 		// URL 파싱하여 값 가져오기
 		const urlParams = window.location.pathname.split('/');
-		applicationId = urlParams[urlParams.length - 2] || '';
+		jobApplicationId = urlParams[urlParams.length - 2] || '';
 		totalAmount = parseInt(urlParams[urlParams.length - 1] || '0', 10);
 
-		orderName = `지원서_${applicationId}_급여_결제`;
+		orderName = `지원서_${jobApplicationId}_급여_결제`;
 
 		console.log(
-			`Application ID: ${applicationId}, Total Amount: ${totalAmount}, Order Name: ${orderName}`
+			`Application ID: ${jobApplicationId}, Total Amount: ${totalAmount}, Order Name: ${orderName}`
 		);
 	});
 
@@ -37,9 +38,9 @@
 
 		// API 호출
 		const body = {
-			payStatus: 'REQUEST',
+			payStatus: payStatus,
 			amount: totalAmount,
-			applicationId,
+			jobApplicationId,
 			orderName
 		};
 
@@ -49,12 +50,12 @@
 
 			// 결제창 호출
 			tossPayments.requestPayment('CARD', {
-				amount: totalAmount,
-				orderId: paymentRespDto.orderId,
-				orderName: paymentRespDto.orderName,
-				successUrl: paymentRespDto.successUrl,
-				failUrl: paymentRespDto.failUrl,
-				payer: paymentRespDto.payer
+				amount: paymentRespDto?.amount,
+				orderId: paymentRespDto?.orderId,
+				orderName: paymentRespDto?.orderName,
+				successUrl: paymentRespDto?.successUrl,
+				failUrl: paymentRespDto?.failUrl,
+				payer: paymentRespDto?.payer
 			});
 		} catch (error) {
 			console.error('Error:', error);

@@ -33,7 +33,7 @@
 	<div class="join">
 		{#each calculatePaginationRange(page.number, page.totalPagesCount, pageDelta) as pageNumber}
 			<button
-				class={`join-item btn ${pageNumber.no == page.number ? 'text-red-300' : ''}`}
+				class={`join-item btn ${pageNumber.no == page.number ? 'text-green5' : ''}`}
 				on:click={() => rq.goToCurrentPageWithNewParam('page', `${pageNumber.no}`)}
 			>
 				{pageNumber.text}

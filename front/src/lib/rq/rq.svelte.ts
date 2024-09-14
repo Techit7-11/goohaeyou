@@ -5,7 +5,7 @@ import createClient from 'openapi-fetch';
 import type { components } from '$lib/types/api/v1/schema';
 
 class Rq {
-	public member: components['schemas']['MemberDto'];
+	public member: components['schemas']['MemberResponse'];
 
 	constructor() {
 		this.member = this.makeReactivityMember();
