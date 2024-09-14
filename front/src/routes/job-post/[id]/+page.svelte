@@ -261,24 +261,13 @@
 		<div class="container mx-auto px-4">
 			<div class="p-6 max-w-4xl mx-auto my-5 bg-white rounded-box shadow-lg">
 				<div class="flex">
-					<div class="avatar placeholder">
-						<div class="bg-neutral text-neutral-content rounded-full w-8">
-							{#if jobPostProfileImageUrl != null}
-								<img src={jobPostProfileImageUrl} alt="프로필 사진" />
-							{:else}
-								<span class="text-xs">{jobPostDetailDto?.author.slice(0, 3)}</span>
-							{/if}
-						</div>
+					<div class="text-2xl font-bold break-words max-w-[95%] my-4">
+						{jobPostDetailDto?.title}
 					</div>
-					<div class="text-md flex items-center mx-2">{jobPostDetailDto?.author}</div>
 				</div>
 				<div class="flex mt-1">
 					<div class="text-xs text-gray-500">등록 :</div>
 					<div class="text-xs mx-2">{jobPostDetailDto?.createdAt}</div>
-					<!-- {#if jobPostDetailDto?.createdAt !== jobPostDetailDto?.modifiedAt}
-					<div class="text-xs text-gray-500">수정 : </div>
-					<div class="text-xs mx-2">{jobPostDetailDto?.modifiedAt}</div>
-					{/if} -->
 				</div>
 				<div class="flex justify-center">
 					{#if jobPostDetailDto?.author === rq.member.username}
@@ -306,11 +295,18 @@
 						</div>
 					{/if}
 				</div>
-				<div class="divider"></div>
+				<div class="divider my-1"></div>
 				<div class="flex justify-between items-center">
-					<div class="text-2xl font-bold break-words max-w-[55%] my-4">
-						{jobPostDetailDto?.title}
+					<div class="avatar placeholder">
+						<div class="bg-neutral text-neutral-content rounded-full w-8">
+							{#if jobPostProfileImageUrl != null}
+								<img src={jobPostProfileImageUrl} alt="프로필 사진" />
+							{:else}
+								<span class="text-xs">{jobPostDetailDto?.author.slice(0, 3)}</span>
+							{/if}
+						</div>
 					</div>
+					<div class="text-md flex items-center mr-20">{jobPostDetailDto?.author}</div>
 					<div class="flex">
 						<div class="flex-shrink">
 							<div class="text-xs mx-2 flex justify-center items-center">
