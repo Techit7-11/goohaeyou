@@ -73,7 +73,7 @@
 
 ### 백엔드
 
-<img src="https://github.com/user-attachments/assets/b4111338-4cc6-41be-9874-8c21955c0de3" width=650px alt="백엔드">
+<img src="https://github.com/user-attachments/assets/a6ff76b2-40cc-444d-85f3-d4999c6442ab" width=655px alt="백엔드">
 
 ### 인프라 
 
