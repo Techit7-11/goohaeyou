@@ -53,13 +53,22 @@ public class PaymentService {
 
         return successResponse;
     }
+
     @Transactional
     public PaymentFailResponse tossPaymentFail(String code, String message, String orderId) {
         Payment payment = paymentDomainService.getByOrderId(orderId);
-        payment.markAsUnpaid();
 
         paymentDomainService.delete(payment);
 
         return new PaymentFailResponse(code, message, orderId);
+    }
+
+    @Transactional
+    public void cancelPendingPayment(String username, Long jobApplicationId) {
+        Payment payment = paymentDomainService.getUnpaidByJobApplicationId(jobApplicationId);
+
+        paymentPolicy.validatePendingPaymentCancelable(username, payment);
+
+        paymentDomainService.delete(payment);
     }
 }

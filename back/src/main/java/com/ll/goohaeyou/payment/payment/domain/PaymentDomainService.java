@@ -29,6 +29,10 @@ public class PaymentDomainService {
 
     @Transactional
     public Payment create(PaymentRequest request, Member member) {
+        if (paymentRepository.existsByOrderName(request.orderName())){
+            throw new PaymentException.PaymentRequestConflictException();
+        }
+
         Payment payment = Payment.create(
                 request.amount(),
                 request.payStatus().getDescription(),
@@ -91,8 +95,13 @@ public class PaymentDomainService {
         return paymentProcessor.sendPaymentCancelRequest(paymentKey, params, PaymentCancelResponse.class);
     }
 
-    public Payment getPaymentInfo(Long jobApplicationId) {
+    public Payment getPaidByJobApplicationId(Long jobApplicationId) {
         return paymentRepository.findByJobApplicationIdAndPaid(jobApplicationId, true)
+                .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
+    }
+
+    public Payment getUnpaidByJobApplicationId(Long jobApplicationId) {
+        return paymentRepository.findByJobApplicationIdAndPaid(jobApplicationId, false)
                 .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
     }
 
