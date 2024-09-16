@@ -28,7 +28,6 @@ public class PaymentService {
     private final PaymentDomainService paymentDomainService;
 
     @Transactional
-    @RetryOnOptimisticLock(attempts = 2, backoff = 500L)
     public PaymentResponse requestTossPayment(PaymentRequest request, String username) {
         Member member = memberDomainService.getByUsername(username);
 
@@ -37,6 +36,7 @@ public class PaymentService {
         return paymentDomainService.preparePaymentResponse(payment);
     }
 
+    @RetryOnOptimisticLock
     @Transactional
     public PaymentSuccessResponse tossPaymentSuccess(String paymentKey, String orderId, Long amount) {
         Payment payment = paymentDomainService.getByOrderId(orderId);
