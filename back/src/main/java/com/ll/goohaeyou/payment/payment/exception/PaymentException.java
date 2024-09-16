@@ -39,17 +39,17 @@ public class PaymentException extends GoohaeyouException {
         }
     }
 
-    public static class InsufficientBalance extends PaymentException {
-
-        public InsufficientBalance() {
-            super(INSUFFICIENT_BALANCE);
-        }
-    }
-
     public static class PaymentRequestConflictException extends PaymentException {
 
         public PaymentRequestConflictException() {
             super(PAYMENT_REQUEST_CONFLICT);
+        }
+    }
+
+    public static class NoPendingPaymentException extends PaymentException {
+
+        public NoPendingPaymentException() {
+            super(NO_PENDING_PAYMENT);
         }
     }
 }

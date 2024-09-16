@@ -16,7 +16,7 @@ public class PaymentInfoService {
     private final PaymentPolicy paymentPolicy;
 
     public PaymentInfoResponse getPaymentInfo(String username, Long JobApplicationId) {
-        Payment payment = paymentDomainService.getPaymentInfo(JobApplicationId);
+        Payment payment = paymentDomainService.getPaidByJobApplicationId(JobApplicationId);
 
         paymentPolicy.verifyPaymentUser(payment, username);
 

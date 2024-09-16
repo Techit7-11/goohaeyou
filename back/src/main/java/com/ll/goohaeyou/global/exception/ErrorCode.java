@@ -61,7 +61,8 @@ public enum ErrorCode {
     ALREADY_CANCELED(HttpStatus.BAD_REQUEST, "이미 취소된 결제건 입니다."),
     INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "잔액이 부족합니다."),
     PAYMENT_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "결제 정보가 없습니다."),
-    PAYMENT_REQUEST_CONFLICT(HttpStatus.CONFLICT, "현재 다른 결제 요청을 처리 중입니다. 잠시 후 다시 시도해 주세요."),
+    PAYMENT_REQUEST_CONFLICT(HttpStatus.CONFLICT, "결제가 이미 진행 중입니다. 진행 중인 결제를 취소하고 다시 시도해주세요."),
+    NO_PENDING_PAYMENT(HttpStatus.BAD_REQUEST, "진행 중인 결제 건이 없습니다."),
 
     // review
     REVIEW_NOT_EXISTS(HttpStatus.NOT_FOUND, "해당 리뷰는 존재하지 않습니다."),
