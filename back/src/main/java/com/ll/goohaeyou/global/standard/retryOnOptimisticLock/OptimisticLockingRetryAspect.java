@@ -19,11 +19,12 @@ public class OptimisticLockingRetryAspect {
     // @Around를 통해 @RetryOnOptimisticLock 이 적용된 모든 메서드의 실행 전후, 예외 발생 시에 추가적인 로직을 수행
     @Around("@annotation(retryOnOptimisticLock)")
     public Object around(ProceedingJoinPoint joinPoint, RetryOnOptimisticLock retryOnOptimisticLock) throws Throwable {
+        // 최대 시도 횟수와 대기 시간을 @RetryOnOptimisticLock 어노테이션에서 가져온다.
         int maxAttempts = retryOnOptimisticLock.attempts();
         long backoff = retryOnOptimisticLock.backoff();
         Exception lastException = null;
 
-        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+        for (int attempt = 1; attempt <= maxAttempts; attempt++) {    // 설정된 최대 시도 횟수까지 반복
             try {
                 return joinPoint.proceed();  // 낙관적 락 재시도를 적용할 메서드 실행
             } catch (OptimisticLockingFailureException e) {
@@ -31,8 +32,7 @@ public class OptimisticLockingRetryAspect {
                 log.info("Optimistic locking failure in attempt {} of {}", attempt, maxAttempts, e);
                 // 설정된 최대 시도 횟수에 도달하지 않았다면, 지정된 대기 시간만큼 대기 후 재시도
                 if (attempt < maxAttempts) {
-                    // 점진적인 backoff 적용
-                    Thread.sleep(backoff * (long)Math.pow(2, attempt - 1));
+                    Thread.sleep(backoff);
                 }
             }
         }

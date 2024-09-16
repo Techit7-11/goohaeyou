@@ -1,7 +1,6 @@
 package com.ll.goohaeyou.chat.message.application.dto;
 
 import com.ll.goohaeyou.chat.message.domain.entity.Message;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +17,6 @@ public class MessageDto {
     @NotNull
     private String text;
     private String createdAt;
-    private String profileImageUrl;
 
     public static MessageDto from(Message message) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
@@ -27,7 +25,6 @@ public class MessageDto {
                 .sender(message.getSender())
                 .text(message.getContent())
                 .createdAt(message.getCreatedAt().format(formatter))
-                .profileImageUrl(message.getProfileImageUrl())
                 .build();
     }
 

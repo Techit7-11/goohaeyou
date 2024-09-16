@@ -1,6 +1,5 @@
 package com.ll.goohaeyou.payment.payment.application.dto.success;
 
-import com.ll.goohaeyou.payment.payment.infrastructure.PaymentProcessorResponse;
 import jakarta.annotation.Nullable;
 
 public record PaymentSuccessResponse(
@@ -16,17 +15,19 @@ public record PaymentSuccessResponse(
         @Nullable
         SuccessEasyPayResponse easyPay
 ) {
-    public static PaymentSuccessResponse from(PaymentProcessorResponse response, Long jobApplicationId) {
+    public static PaymentSuccessResponse from(String paymentKey, String orderId, Long jobApplicationId, String orderName,
+                                              String method, int totalAmount, String approvedAt,
+                                              SuccessCardResponse card, SuccessEasyPayResponse easyPay) {
         return new PaymentSuccessResponse(
-                response.getPaymentKey(),
-                response.getOrderId(),
+                paymentKey,
+                orderId,
                 jobApplicationId,
-                response.getOrderName(),
-                response.getMethod(),
-                response.getTotalAmount(),
-                response.getApprovedAt(),
-                response.getCard(),
-                response.getEasyPay()
+                orderName,
+                method,
+                totalAmount,
+                approvedAt,
+                card,
+                easyPay
         );
     }
 }

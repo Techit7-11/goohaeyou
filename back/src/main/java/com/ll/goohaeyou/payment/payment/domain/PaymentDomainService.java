@@ -4,6 +4,7 @@ import com.ll.goohaeyou.global.config.TossPaymentsConfig;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentInfoResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResponse;
@@ -29,10 +30,6 @@ public class PaymentDomainService {
 
     @Transactional
     public Payment create(PaymentRequest request, Member member) {
-        if (paymentRepository.existsByOrderName(request.orderName())){
-            throw new PaymentException.PaymentRequestConflictException();
-        }
-
         Payment payment = Payment.create(
                 request.amount(),
                 request.payStatus().getDescription(),
@@ -60,7 +57,19 @@ public class PaymentDomainService {
         JSONObject params = createPaymentRequestParams(orderId, amount);
         PaymentProcessorResponse response = paymentProcessor.sendPaymentRequest(paymentKey, params, PaymentProcessorResponse.class);
 
-        return PaymentSuccessResponse.from(response, getByOrderId(orderId).getJobApplicationId());
+        Long jobApplicationId = getByOrderId(orderId).getJobApplicationId();
+
+        return PaymentSuccessResponse.from(
+                response.getPaymentKey(),
+                response.getOrderId(),
+                jobApplicationId,
+                response.getOrderName(),
+                response.getMethod(),
+                response.getTotalAmount(),
+                response.getApprovedAt(),
+                response.getCard(),
+                response.getEasyPay()
+        );
     }
 
     private JSONObject createPaymentRequestParams(String orderId, Long amount) {
@@ -95,13 +104,8 @@ public class PaymentDomainService {
         return paymentProcessor.sendPaymentCancelRequest(paymentKey, params, PaymentCancelResponse.class);
     }
 
-    public Payment getPaidByJobApplicationId(Long jobApplicationId) {
+    public Payment getPaymentInfo(Long jobApplicationId) {
         return paymentRepository.findByJobApplicationIdAndPaid(jobApplicationId, true)
-                .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
-    }
-
-    public Payment getUnpaidByJobApplicationId(Long jobApplicationId) {
-        return paymentRepository.findByJobApplicationIdAndPaid(jobApplicationId, false)
                 .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
     }
 

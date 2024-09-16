@@ -173,14 +173,8 @@
 							<div class="chat chat-start my-5">
 								<div class="chat-image avatar">
 									<div class="avatar online placeholder">
-										<div
-											class="bg-neutral text-neutral-content rounded-full w-12 border-2 border-gray"
-										>
-											{#if message.profileImageUrl != null}
-												<img src={message.profileImageUrl} alt="프로필 사진" />
-											{:else}
-												<span class="text-xs">{message.sender.slice(0, 4)}</span>
-											{/if}
+										<div class="bg-black text-neutral-content rounded-full w-12">
+											<span class="text-xs">{message.sender.slice(0, 4)}</span>
 										</div>
 									</div>
 								</div>
