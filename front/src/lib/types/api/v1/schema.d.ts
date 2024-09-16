@@ -232,6 +232,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/payments/cancel-pending/{jobApplicationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 진행 중인 결제 취소 */
+        post: operations["cancelPendingPayment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/notification/register": {
         parameters: {
             query?: never;
@@ -580,7 +597,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** 결제정보 가져오기 */
+        /** 결제 정보 가져오기 */
         get: operations["getPaymentInfo"];
         put?: never;
         post?: never;
@@ -1545,10 +1562,10 @@ export interface components {
             data: components["schemas"]["PageJobPostBasicResponse"];
         };
         PageJobPostBasicResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -1557,26 +1574,26 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
+            paged?: boolean;
+            unpaged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
-            paged?: boolean;
-            unpaged?: boolean;
         };
         SortObject: {
             empty?: boolean;
-            sorted?: boolean;
             unsorted?: boolean;
+            sorted?: boolean;
         };
         ApiResponseListJobPostApplicationResponse: {
             /** Format: int32 */
@@ -1636,6 +1653,7 @@ export interface components {
             content?: string;
             /** Format: date-time */
             createdAt?: string;
+            profileImageUrl?: string;
         };
         Room: {
             /** Format: int64 */
@@ -1669,6 +1687,7 @@ export interface components {
             sender: string;
             text: string;
             createdAt?: string;
+            profileImageUrl?: string;
         };
         ApiResponseListSubCategoryResponse: {
             /** Format: int32 */
@@ -2214,6 +2233,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponsePaymentCancelResponse"];
+                };
+            };
+        };
+    };
+    cancelPendingPayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                jobApplicationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEmpty"];
                 };
             };
         };

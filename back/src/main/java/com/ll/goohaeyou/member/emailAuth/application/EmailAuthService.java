@@ -4,7 +4,7 @@ import com.ll.goohaeyou.member.emailAuth.domain.service.AuthCodeDomainService;
 import com.ll.goohaeyou.member.emailAuth.domain.service.EmailSenderDomainService;
 import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
-import com.ll.goohaeyou.member.member.domain.policy.EmailAuthPolicy;
+import com.ll.goohaeyou.member.emailAuth.domain.policy.EmailAuthPolicy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

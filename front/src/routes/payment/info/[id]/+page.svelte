@@ -10,9 +10,13 @@
 		if (response.data?.resultType === 'SUCCESS') {
 			return response.data!;
 		} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
-			rq.msgAndRedirect(response.data?.message, undefined, '/');
+			rq.msgAndRedirect(response.data?.message, undefined, `/applications/detail/${id}`);
 		} else {
-			rq.msgAndRedirect({ msg: '결제 정보를 불러오는 중 오류가 발생했습니다.' }, undefined, '/');
+			rq.msgAndRedirect(
+				{ msg: '결제 정보를 불러오는 중 오류가 발생했습니다.' },
+				undefined,
+				`/applications/detail/${id}`
+			);
 		}
 	}
 

@@ -10,7 +10,6 @@ on:
       - back/infraScript/**
     branches:
       - main
-
 permissions:
   contents: write
   packages: write
