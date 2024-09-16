@@ -1636,6 +1636,7 @@ export interface components {
             content?: string;
             /** Format: date-time */
             createdAt?: string;
+            profileImageUrl?: string;
         };
         Room: {
             /** Format: int64 */
@@ -1669,6 +1670,7 @@ export interface components {
             sender: string;
             text: string;
             createdAt?: string;
+            profileImageUrl?: string;
         };
         ApiResponseListSubCategoryResponse: {
             /** Format: int32 */

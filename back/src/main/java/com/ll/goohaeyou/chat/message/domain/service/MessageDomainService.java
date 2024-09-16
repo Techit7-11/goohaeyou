@@ -21,8 +21,8 @@ public class MessageDomainService {
     private final MessageRepository messageRepository;
 
     @Transactional
-    public Message create(Room room, String username, String content) {
-        Message newMessage = Message.create(room, username, content);
+    public Message create(Room room, String username, String content, String profileImageUrl) {
+        Message newMessage = Message.createBasic(room, username, content, profileImageUrl);
         room.getMessages().add(newMessage);
 
         return messageRepository.save(newMessage);
@@ -30,7 +30,7 @@ public class MessageDomainService {
 
     @Transactional
     public void createInfoMessage(Room room, String username, String content) {
-        Message newMessage = Message.create(room, username, content);
+        Message newMessage = Message.createInfo(room, username, content);
         room.getMessages().add(newMessage);
         messagingTemplate.convertAndSend("/queue/api/chat/" + room.getId() + "/newMessage", MessageDto.from(newMessage));
     }
