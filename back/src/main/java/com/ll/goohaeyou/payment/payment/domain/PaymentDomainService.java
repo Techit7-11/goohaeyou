@@ -4,7 +4,6 @@ import com.ll.goohaeyou.global.config.TossPaymentsConfig;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
-import com.ll.goohaeyou.payment.payment.application.dto.PaymentInfoResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResponse;
@@ -57,19 +56,7 @@ public class PaymentDomainService {
         JSONObject params = createPaymentRequestParams(orderId, amount);
         PaymentProcessorResponse response = paymentProcessor.sendPaymentRequest(paymentKey, params, PaymentProcessorResponse.class);
 
-        Long jobApplicationId = getByOrderId(orderId).getJobApplicationId();
-
-        return PaymentSuccessResponse.from(
-                response.getPaymentKey(),
-                response.getOrderId(),
-                jobApplicationId,
-                response.getOrderName(),
-                response.getMethod(),
-                response.getTotalAmount(),
-                response.getApprovedAt(),
-                response.getCard(),
-                response.getEasyPay()
-        );
+        return PaymentSuccessResponse.from(response, getByOrderId(orderId).getJobApplicationId());
     }
 
     private JSONObject createPaymentRequestParams(String orderId, Long amount) {
