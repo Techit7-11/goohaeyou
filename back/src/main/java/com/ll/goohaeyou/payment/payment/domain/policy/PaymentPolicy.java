@@ -37,17 +37,4 @@ public class PaymentPolicy {
             throw new AuthException.NotAuthorizedException();
         }
     }
-
-    // 진행 중인 결제 취소 가능 여부 검증
-    public void validatePendingPaymentCancelable(String username, Payment payment) {
-        if (!payment.getMember().getUsername().equals(username)) {
-            throw new AuthException.NotAuthorizedException();
-        }
-        if (!"결제요청".equals(payment.getPayStatus())) {
-            throw new PaymentException.NoPendingPaymentException();
-        }
-        if (payment.isPaid()) {
-            throw new GoohaeyouException(BAD_REQUEST);
-        }
-    }
 }

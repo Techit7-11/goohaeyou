@@ -46,38 +46,19 @@
 
 		try {
 			const response = await rq.apiEndPoints().POST(`/api/payments`, { body });
+			const paymentRespDto = response.data?.data;
 
-			if (response.data?.resultType === 'SUCCESS') {
-				const paymentRespDto = response.data?.data;
-
-				// 결제창 호출
-				tossPayments.requestPayment('CARD', {
-					amount: paymentRespDto?.amount,
-					orderId: paymentRespDto?.orderId,
-					orderName: paymentRespDto?.orderName,
-					successUrl: paymentRespDto?.successUrl,
-					failUrl: paymentRespDto?.failUrl,
-					payer: paymentRespDto?.payer
-				});
-			} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
-				rq.msgAndRedirect(
-					{ msg: response.data?.message },
-					undefined,
-					`/applications/detail/${jobApplicationId}`
-				);
-			} else {
-				rq.msgAndRedirect(
-					undefined,
-					{ msg: '결제 시도를 하는 중 오류가 발생했습니다.' },
-					`/applications/detail/${jobApplicationId}`
-				);
-			}
+			// 결제창 호출
+			tossPayments.requestPayment('CARD', {
+				amount: paymentRespDto?.amount,
+				orderId: paymentRespDto?.orderId,
+				orderName: paymentRespDto?.orderName,
+				successUrl: paymentRespDto?.successUrl,
+				failUrl: paymentRespDto?.failUrl,
+				payer: paymentRespDto?.payer
+			});
 		} catch (error) {
-			rq.msgAndRedirect(
-				undefined,
-				{ msg: '서버와 통신 중 오류가 발생했습니다.' },
-				`/applications/detail/${jobApplicationId}`
-			);
+			console.error('Error:', error);
 		}
 	}
 

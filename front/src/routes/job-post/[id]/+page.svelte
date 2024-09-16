@@ -589,7 +589,7 @@
 					<!-- 댓글 입력 폼 -->
 					<div class="flex justify-between items-center mb-4">
 						<textarea
-							class="textarea w-full border border-gray-500 focus:border-gray-300 focus:ring focus:ring-gray-100 focus:ring-opacity-50"
+							class="textarea textarea-bordered border-gray-300 focus:border-green4 focus:ring focus:ring-green3 focus:ring-opacity-50 w-full"
 							placeholder="댓글을 입력하세요."
 							bind:value={newComment}
 						></textarea>

@@ -2,13 +2,11 @@ package com.ll.goohaeyou.chat.message.application;
 
 import com.ll.goohaeyou.chat.message.application.dto.MessageDto;
 import com.ll.goohaeyou.chat.message.application.dto.WriteMessageRequest;
+import com.ll.goohaeyou.chat.message.domain.service.MessageDomainService;
 import com.ll.goohaeyou.chat.message.domain.entity.Message;
 import com.ll.goohaeyou.chat.message.domain.policy.MessagePolicy;
-import com.ll.goohaeyou.chat.message.domain.service.MessageDomainService;
-import com.ll.goohaeyou.chat.room.domain.entity.Room;
 import com.ll.goohaeyou.chat.room.domain.service.RoomDomainService;
-import com.ll.goohaeyou.member.member.domain.entity.Member;
-import com.ll.goohaeyou.member.member.domain.service.MemberDomainService;
+import com.ll.goohaeyou.chat.room.domain.entity.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,16 +20,14 @@ public class MessageService {
     private final MessagePolicy messagePolicy;
     private final MessageDomainService messageDomainService;
     private final RoomDomainService roomDomainService;
-    private final MemberDomainService memberDomainService;
 
     @Transactional
     public Message write(String username, Long roomId, WriteMessageRequest request) {
         Room room = roomDomainService.getById(roomId);
-        Member sender = memberDomainService.getByUsername(username);
 
         messagePolicy.verifyWritePermission(username, room);
 
-        return messageDomainService.create(room, username, request.content(), sender.getProfileImageUrl());
+        return messageDomainService.create(room, username, request.content());
     }
 
     public List<MessageDto> findByPostId(String username, Long roomId) {
