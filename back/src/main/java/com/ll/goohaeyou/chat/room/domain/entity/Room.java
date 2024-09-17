@@ -75,4 +75,8 @@ public class Room {
             this.user2Enter = LocalDateTime.now();
         }
     }
+
+    public String getOtherUsername(String username) {
+        return getUsername1().equals(username) ? getUsername2() : getUsername1();
+    }
 }

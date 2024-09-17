@@ -1670,7 +1670,7 @@ export interface components {
             username1?: string;
             username2?: string;
             messages?: components["schemas"]["Message"][];
-            user1ImageUrl?: string;
+            otherUserImageUrl?: string;
         };
         ApiResponseListMessageDto: {
             /** Format: int32 */
