@@ -16,6 +16,7 @@
 	let chatMessagesEl;
 	const member = rq.member;
 	let messages = [];
+	let user1ProfileImageUrl = '';
 
 	onMount(async () => {
 		await rq.initAuth();
@@ -46,6 +47,8 @@
 	async function load() {
 		const { data } = await rq.apiEndPoints().GET(`/api/chat/${roomId}`);
 		lastMessageId = data?.data?.messages[0]?.id;
+		user1ProfileImageUrl = data?.data?.user1ImageUrl;
+
 		return data!;
 	}
 
@@ -176,8 +179,8 @@
 										<div
 											class="bg-neutral text-neutral-content rounded-full w-12 border-2 border-gray"
 										>
-											{#if message.profileImageUrl != null}
-												<img src={message.profileImageUrl} alt="프로필 사진" />
+											{#if user1ProfileImageUrl != null}
+												<img src={user1ProfileImageUrl} alt="프로필 사진" />
 											{:else}
 												<span class="text-xs">{message.sender.slice(0, 4)}</span>
 											{/if}
