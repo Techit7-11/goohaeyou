@@ -39,10 +39,11 @@ public class RoomService {
 
     public RoomDto findById(Long roomId, String username) {
         Room room = roomDomainService.getById(roomId);
+        Member member1 = memberDomainService.getByUsername(username);
 
         roomPolicy.verifyRoomAccess(username, room);
 
-        return RoomDto.from(room);
+        return RoomDto.from(room, member1.getProfileImageUrl());
     }
 
     public List<RoomListDto> getRoomList(String username) {

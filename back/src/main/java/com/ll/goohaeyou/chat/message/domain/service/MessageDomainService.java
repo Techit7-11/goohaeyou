@@ -22,7 +22,7 @@ public class MessageDomainService {
 
     @Transactional
     public Message create(Room room, String username, String content, String profileImageUrl) {
-        Message newMessage = Message.createBasic(room, username, content, profileImageUrl);
+        Message newMessage = Message.createBasic(room, username, content);
         room.getMessages().add(newMessage);
 
         return messageRepository.save(newMessage);
