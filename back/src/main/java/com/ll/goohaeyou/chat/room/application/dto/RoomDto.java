@@ -9,14 +9,14 @@ public record RoomDto(
         String username1,
         String username2,
         List<Message> messages,
-        String user1ImageUrl
+        String otherUserImageUrl
 ) {
-    public static RoomDto from(Room room, String user1ImageUrl) {
+    public static RoomDto from(Room room, String otherUserImageUrl) {
         return new RoomDto(
                 room.getUsername1(),
                 room.getUsername2(),
                 room.getMessages(),
-                user1ImageUrl
+                otherUserImageUrl
         );
     }
 }
