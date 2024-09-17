@@ -26,32 +26,26 @@ public class Message {
 
     private LocalDateTime createdAt;
 
-    private String profileImageUrl;
-
     private Message(
             Room room,
             String sender,
-            String content,
-            String profileImageUrl
+            String content
     ) {
         this.room = room;
         this.sender = sender;
         this.content = content;
         this.createdAt = LocalDateTime.now();
-        this.profileImageUrl = profileImageUrl;
     }
 
     public static Message createBasic(
             Room room,
             String sender,
-            String content,
-            String profileImageUrl
+            String content
     ) {
         return new Message(
                 room,
                 sender,
-                content,
-                profileImageUrl
+                content
         );
     }
 
@@ -63,8 +57,7 @@ public class Message {
         return new Message(
                 room,
                 sender,
-                content,
-                null
+                content
         );
     }
 

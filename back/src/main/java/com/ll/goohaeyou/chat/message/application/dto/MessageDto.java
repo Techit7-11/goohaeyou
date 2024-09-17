@@ -18,7 +18,6 @@ public class MessageDto {
     @NotNull
     private String text;
     private String createdAt;
-    private String profileImageUrl;
 
     public static MessageDto from(Message message) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
@@ -27,7 +26,6 @@ public class MessageDto {
                 .sender(message.getSender())
                 .text(message.getContent())
                 .createdAt(message.getCreatedAt().format(formatter))
-                .profileImageUrl(message.getProfileImageUrl())
                 .build();
     }
 
