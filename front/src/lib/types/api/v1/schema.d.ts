@@ -1583,17 +1583,17 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
-            unpaged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
+            paged?: boolean;
+            unpaged?: boolean;
         };
         SortObject: {
             empty?: boolean;
-            unsorted?: boolean;
             sorted?: boolean;
+            unsorted?: boolean;
         };
         ApiResponseListJobPostApplicationResponse: {
             /** Format: int32 */
@@ -1653,7 +1653,6 @@ export interface components {
             content?: string;
             /** Format: date-time */
             createdAt?: string;
-            profileImageUrl?: string;
         };
         Room: {
             /** Format: int64 */
@@ -1671,6 +1670,7 @@ export interface components {
             username1?: string;
             username2?: string;
             messages?: components["schemas"]["Message"][];
+            user1ImageUrl?: string;
         };
         ApiResponseListMessageDto: {
             /** Format: int32 */
@@ -1687,7 +1687,6 @@ export interface components {
             sender: string;
             text: string;
             createdAt?: string;
-            profileImageUrl?: string;
         };
         ApiResponseListSubCategoryResponse: {
             /** Format: int32 */
