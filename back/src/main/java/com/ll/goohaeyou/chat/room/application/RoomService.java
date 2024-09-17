@@ -39,7 +39,7 @@ public class RoomService {
 
     public RoomDto findById(Long roomId, String username) {
         Room room = roomDomainService.getById(roomId);
-        Member member1 = memberDomainService.getByUsername(username);
+        Member member1 = memberDomainService.getByUsername(room.getUsername1());
 
         roomPolicy.verifyRoomAccess(username, room);
 
