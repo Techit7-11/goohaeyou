@@ -9,7 +9,7 @@ on:
       - README.md
       - back/infraScript/**
     branches:
-      - release/v2.1.1
+      - main
 
 permissions:
   contents: write
@@ -97,6 +97,6 @@ jobs:
           comment: AWS Zero Downtime Deployment
           command: |
             mkdir -p /docker_projects/goohaeyou
-            curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/goohaeyou/release/v2.1.1/back/infraScript/zero_downtime_deploy.py
+            curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/goohaeyou/main/back/infraScript/zero_downtime_deploy.py
             chmod +x /docker_projects/goohaeyou/zero_downtime_deploy.py
             /docker_projects/goohaeyou/zero_downtime_deploy.py
