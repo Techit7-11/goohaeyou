@@ -13,11 +13,11 @@ import org.thymeleaf.context.Context;
 @DomainService
 @RequiredArgsConstructor
 public class EmailSenderDomainService {
-    private final JavaMailSender javaMailSender;
-    private final TemplateEngine templateEngine;
-
     private static final String EMAIL_SUBJECT = "[From 구해유] 이메일 인증을 위한 인증코드가 발급되었습니다.";
     private static final String EMAIL_TEMPLATE = "emailTemplate";
+
+    private final JavaMailSender javaMailSender;
+    private final TemplateEngine templateEngine;
 
     @Transactional
     public void sendAuthCodeEmail(String email, String authCode) {

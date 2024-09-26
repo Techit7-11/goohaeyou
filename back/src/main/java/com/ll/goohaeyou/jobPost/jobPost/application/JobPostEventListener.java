@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class JobPostEventListener {
-
     private final JobPostRepository jobPostRepository;
 
     @EventListener

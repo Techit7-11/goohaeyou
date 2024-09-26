@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @DomainService
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class ProfileImageDomainService {
     private final ImageStorage imageStorage;
 

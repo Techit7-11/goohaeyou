@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.payment.payment.domain;
+package com.ll.goohaeyou.payment.payment.domain.service;
 
 import com.ll.goohaeyou.global.config.TossPaymentsConfig;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
@@ -8,6 +8,7 @@ import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
+import com.ll.goohaeyou.payment.payment.domain.PaymentProcessor;
 import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
 import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
@@ -107,6 +108,11 @@ public class PaymentDomainService {
 
     public Payment getByPaymentKeyAndUsername(String paymentKey, String username) {
         return paymentRepository.findByPaymentKeyAndMemberUsername(paymentKey, username)
+                .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
+    }
+
+    public Payment getByPaymentKey(String paymentKey) {
+        return paymentRepository.findByPaymentKey(paymentKey)
                 .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
     }
 }
