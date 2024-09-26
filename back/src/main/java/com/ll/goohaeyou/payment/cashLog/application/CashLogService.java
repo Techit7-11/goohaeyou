@@ -1,114 +1,37 @@
 package com.ll.goohaeyou.payment.cashLog.application;
 
-import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
-import com.ll.goohaeyou.payment.cashLog.domain.entity.CashLog;
-import com.ll.goohaeyou.payment.cashLog.domain.repository.CashLogRepository;
+import com.ll.goohaeyou.payment.cashLog.domain.service.CashLogDomainService;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
-import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
-import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
-import com.ll.goohaeyou.payment.payment.domain.type.PayTypeFee;
-import com.ll.goohaeyou.payment.payment.exception.PaymentException;
+import com.ll.goohaeyou.payment.payment.domain.service.PaymentDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CashLogService {
-    private final CashLogRepository cashLogRepository;
-    private final PaymentRepository paymentRepository;
-
-    public CashLog findByApplicationIdAndValidate(Long id) {
-        return cashLogRepository.findByJobApplicationId(id)
-                .orElseThrow(EntityNotFoundException.PostNotExistsException::new);
-    }
-
-    private void addCashLog(CashLog cashLog) {
-        cashLogRepository.save(cashLog);
-    }
+    private final CashLogDomainService cashLogDomainService;
+    private final PaymentDomainService paymentDomainService;
 
     @Transactional
     public void createCashLogOnSettled(JobApplication jobApplication) {
-        long earn = jobApplication.getEarn();
-
-        CashLog newCashLog = CashLog.createOnSettlement(
-                earn,
-                getVat(earn),
-                getPaymentFee(PayStatus.EASY_PAY, earn),
-                getNetAmount(PayStatus.EASY_PAY, earn),
-                jobApplication.getMember(),
-                jobApplication.getId()
-        );
-
-        addCashLog(newCashLog);
+        cashLogDomainService.createSettlementLog(jobApplication);
     }
 
     @Transactional
     public void createCashLogOnPaid(PaymentSuccessResponse successDto) {
-        PayStatus payStatus = PayStatus.findByMethod(successDto.method());
-        Payment payment = paymentRepository.findByPaymentKey(successDto.paymentKey())
-                .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
+        Payment payment = paymentDomainService.getByPaymentKey(successDto.paymentKey());
 
-        CashLog newCashLog = CashLog.createOnPaymentSuccess(
-                successDto.totalAmount(),
-                getVat(payment.getTotalAmount()),
-                getPaymentFee(payStatus, payment.getTotalAmount()),
-                getNetAmount(payStatus, payment.getTotalAmount()),
-                payment.getMember(),
-                payment.getJobApplicationId()
-                );
-
-        addCashLog(newCashLog);
+        cashLogDomainService.createPaymentLog(payment, successDto);
     }
 
     @Transactional
     public void createCashLogOnCancel(String paymentKey) {
-        Payment payment = paymentRepository.findByPaymentKey(paymentKey)
-                .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
+        Payment payment = paymentDomainService.getByPaymentKey(paymentKey);
 
-        CashLog newCashLog = CashLog.createOnCancel(
-                payment.getTotalAmount(),
-                payment.getMember(),
-                payment.getJobApplicationId()
-        );
-
-        addCashLog(newCashLog);
-    }
-
-    // 토스페이먼츠 결제 부과세 10% 반환
-    public long getVat(long totalAmount) {
-        return (int) (totalAmount * 0.1);
-    }
-
-    // 결제 수수료 반환
-    public long getPaymentFee(PayStatus payStatus, long totalAmount) {
-        PayTypeFee payTypeFee = matchPayTypeFee(payStatus);
-
-        double feePercentage = payTypeFee.getFeePercentage();
-        int transactionFee = payTypeFee.getTransactionFee();
-
-        return (int) ((totalAmount * feePercentage / 100.0) + transactionFee);
-    }
-
-    private PayTypeFee matchPayTypeFee(PayStatus payStatus) {
-        return Arrays.stream(PayTypeFee.values())
-                .filter(payTypeFee -> payTypeFee.getTypeName().equals(payStatus.getDescription()))
-                .findFirst()
-                .orElseThrow(PaymentException.NoEnumConstantFoundException::new);
-    }
-
-    // 부가세와 결제 수수료의 합 반환
-    public long getTotalTaxAndFees(PayStatus payStatus, long totalAmount) {
-        return getVat(totalAmount) + getPaymentFee(payStatus, totalAmount);
-    }
-
-    // 순금액 반환
-    public long getNetAmount(PayStatus payStatus, long totalAmount) {
-        return totalAmount - getTotalTaxAndFees(payStatus, totalAmount);
+        cashLogDomainService.createCancelLog(payment);
     }
 }

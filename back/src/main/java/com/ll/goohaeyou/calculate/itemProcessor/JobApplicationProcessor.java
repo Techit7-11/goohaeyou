@@ -1,14 +1,14 @@
 package com.ll.goohaeyou.calculate.itemProcessor;
 
+import com.ll.goohaeyou.global.event.cashLog.CashLogEvent;
+import com.ll.goohaeyou.global.event.notification.CalculateNotificationEvent;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Wage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.WageRepository;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
+import com.ll.goohaeyou.payment.cashLog.domain.service.CashLogDomainService;
 import com.ll.goohaeyou.payment.cashLog.domain.entity.CashLog;
-import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
-import com.ll.goohaeyou.global.event.cashLog.CashLogEvent;
-import com.ll.goohaeyou.global.event.notification.CalculateNotificationEvent;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 public class JobApplicationProcessor implements ItemProcessor<JobApplication, JobApplication> {
     private final WageRepository wageRepository;
     private final MemberRepository memberRepository;
-    private final CashLogService cashLogService;
     private final ApplicationEventPublisher publisher;
+    private final CashLogDomainService cashLogDomainService;
 
     @Override
     public JobApplication process(JobApplication jobApplication) throws Exception {
@@ -32,7 +32,7 @@ public class JobApplicationProcessor implements ItemProcessor<JobApplication, Jo
         }
 
         Member member = jobApplication.getMember();
-        CashLog cashLog = cashLogService.findByApplicationIdAndValidate(jobApplication.getId());
+        CashLog cashLog = cashLogDomainService.getByApplicationId(jobApplication.getId());
         int cost = (int)cashLog.getNetAmount();
 
         if (wage.getCost() == jobApplication.getEarn()) {

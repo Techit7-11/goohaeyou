@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Readiness", description = "무중단 배포 관련 API")
+@Tag(name = "Readiness", description = "배포 관련 API")
 @RestController
 @RequiredArgsConstructor
 public class ReadinessController {

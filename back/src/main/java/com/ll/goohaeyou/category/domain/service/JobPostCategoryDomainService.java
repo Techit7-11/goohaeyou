@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DomainService
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class JobPostCategoryDomainService {
     private final JobPostCategoryRepository jobPostCategoryRepository;
     private final CategoryRepository categoryRepository;
