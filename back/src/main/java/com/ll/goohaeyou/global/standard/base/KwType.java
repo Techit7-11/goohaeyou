@@ -1,8 +1,6 @@
 package com.ll.goohaeyou.global.standard.base;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 public enum KwType {
