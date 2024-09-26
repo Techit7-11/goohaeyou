@@ -8,6 +8,7 @@ import com.ll.goohaeyou.jobApplication.application.dto.WriteJobApplicationReques
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.repository.JobApplicationRepository;
 import com.ll.goohaeyou.jobApplication.domain.type.WageStatus;
+import com.ll.goohaeyou.jobPost.employ.exception.EmployException;
 import com.ll.goohaeyou.jobPost.jobPost.application.dto.ModifyJobPostRequest;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPostDetail;
@@ -111,5 +112,25 @@ public class JobApplicationDomainService {
         jobApplication.updateWageStatus(PAYMENT_CANCELLED);
         jobApplication.updateEarn(0);
         jobApplication.changeToNotCompleted();
+    }
+
+    @Transactional
+    public void updateByWorkComplete(JobApplication jobApplication) {
+        jobApplication.changeToCompleted();
+
+        switch (jobApplication.getWageStatus()) {
+            case PAYMENT_COMPLETED -> jobApplication.updateWageStatus(WageStatus.SETTLEMENT_REQUESTED);
+            case APPLICATION_APPROVED -> {
+                jobApplication.updateWageStatus(WageStatus.WAGE_PAID);
+                jobApplication.markAsReceived(true);
+            }
+            default -> throw new EmployException.CompletionNotPossibleException();
+        }
+    }
+
+    @Transactional
+    public void updateByWorkCancel(JobApplication jobApplication) {
+        jobApplication.changeToNotCompleted();
+        jobApplication.updateWageStatus(WageStatus.WORK_INCOMPLETE_NO_PAYMENT);
     }
 }
