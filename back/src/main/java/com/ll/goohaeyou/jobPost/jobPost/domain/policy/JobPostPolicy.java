@@ -4,9 +4,9 @@ import com.ll.goohaeyou.auth.exception.AuthException;
 import com.ll.goohaeyou.jobPost.jobPost.domain.entity.JobPost;
 import com.ll.goohaeyou.member.member.domain.type.Role;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class JobPostPolicy {
 
