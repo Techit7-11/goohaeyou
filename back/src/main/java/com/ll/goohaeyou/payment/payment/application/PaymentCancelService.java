@@ -3,7 +3,7 @@ package com.ll.goohaeyou.payment.payment.application;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.service.JobApplicationDomainService;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResponse;
-import com.ll.goohaeyou.payment.payment.domain.PaymentDomainService;
+import com.ll.goohaeyou.payment.payment.domain.service.PaymentDomainService;
 import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.policy.PaymentPolicy;
 import lombok.RequiredArgsConstructor;

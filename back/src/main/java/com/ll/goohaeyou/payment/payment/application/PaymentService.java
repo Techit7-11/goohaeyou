@@ -9,7 +9,7 @@ import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
-import com.ll.goohaeyou.payment.payment.domain.PaymentDomainService;
+import com.ll.goohaeyou.payment.payment.domain.service.PaymentDomainService;
 import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.policy.PaymentPolicy;
 import lombok.RequiredArgsConstructor;
