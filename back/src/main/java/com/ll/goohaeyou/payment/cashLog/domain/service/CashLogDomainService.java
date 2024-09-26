@@ -1,4 +1,4 @@
-package com.ll.goohaeyou.payment.cashLog.domain;
+package com.ll.goohaeyou.payment.cashLog.domain.service;
 
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;

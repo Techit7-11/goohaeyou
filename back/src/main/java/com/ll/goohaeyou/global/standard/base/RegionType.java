@@ -1,6 +1,5 @@
 package com.ll.goohaeyou.global.standard.base;
 
-import com.ll.goohaeyou.category.exception.CategoryException;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +27,6 @@ public enum RegionType {
 
     private final String name;
     private final int code;
-
-    public static int getCodeByName(String name) {
-        for (RegionType region : RegionType.values()) {
-            if (region.getName().equals(name)) {
-                return region.getCode();
-            }
-        }
-        throw new EntityNotFoundException.NotFoundCategoryException();
-    }
 
     public static String getNameByCode(int code) {
         for (RegionType region : RegionType.values()) {

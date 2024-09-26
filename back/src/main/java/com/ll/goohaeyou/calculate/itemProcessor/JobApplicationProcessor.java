@@ -7,7 +7,7 @@ import com.ll.goohaeyou.jobPost.jobPost.domain.entity.Wage;
 import com.ll.goohaeyou.jobPost.jobPost.domain.repository.WageRepository;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
 import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
-import com.ll.goohaeyou.payment.cashLog.domain.CashLogDomainService;
+import com.ll.goohaeyou.payment.cashLog.domain.service.CashLogDomainService;
 import com.ll.goohaeyou.payment.cashLog.domain.entity.CashLog;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;

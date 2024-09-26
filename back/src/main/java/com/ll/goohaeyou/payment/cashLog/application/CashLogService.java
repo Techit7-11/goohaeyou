@@ -1,7 +1,7 @@
 package com.ll.goohaeyou.payment.cashLog.application;
 
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
-import com.ll.goohaeyou.payment.cashLog.domain.CashLogDomainService;
+import com.ll.goohaeyou.payment.cashLog.domain.service.CashLogDomainService;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.service.PaymentDomainService;
