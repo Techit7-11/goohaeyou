@@ -1,6 +1,5 @@
 package com.ll.goohaeyou.payment.payment.application;
 
-import com.ll.goohaeyou.global.standard.retryOnOptimisticLock.RetryOnOptimisticLock;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.service.JobApplicationDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
@@ -34,7 +33,6 @@ public class PaymentService {
         return paymentDomainService.preparePaymentResponse(payment);
     }
 
-    @RetryOnOptimisticLock
     @Transactional
     public PaymentSuccessResponse tossPaymentSuccess(String paymentKey, String orderId, Long amount) {
         Payment payment = paymentDomainService.getByOrderId(orderId);

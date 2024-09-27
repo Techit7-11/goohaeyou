@@ -11,6 +11,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @NoArgsConstructor(access = PROTECTED)
 @Getter
+@Table(name = "payment")
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +30,6 @@ public class Payment {
     private boolean canceled;
     private String cancelReason;
     private Long jobApplicationId;
-
-    @Version
-    private Long version;
 
     private Payment(
             Long totalAmount,
