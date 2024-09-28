@@ -24,13 +24,6 @@ public class PaymentPolicy {
         }
     }
 
-    // 결제 금액 일치 여부 검증
-    public void verifyPaymentAmount(Payment payment, Long amount) {
-        if (!payment.getTotalAmount().equals(amount)) {
-            throw new PaymentException.PaymentAmountMismatchException();
-        }
-    }
-
     // 결제 사용자 검증
     public void verifyPaymentUser(Payment payment, String username) {
         if (!payment.getMember().getUsername().equals(username)) {
@@ -43,7 +36,7 @@ public class PaymentPolicy {
         if (!payment.getMember().getUsername().equals(username)) {
             throw new AuthException.NotAuthorizedException();
         }
-        if (!"결제요청".equals(payment.getPayStatus())) {
+        if (!"결제요청".equals(payment.getPayMethod())) {
             throw new PaymentException.NoPendingPaymentException();
         }
         if (payment.isPaid()) {

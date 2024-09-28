@@ -4,21 +4,20 @@ import com.ll.goohaeyou.global.config.TossPaymentsConfig;
 import com.ll.goohaeyou.global.exception.EntityNotFoundException;
 import com.ll.goohaeyou.global.standard.anotations.DomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
+import com.ll.goohaeyou.member.member.domain.repository.MemberRepository;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentInitiationResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
-import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResponse;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.PaymentProcessor;
 import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 import com.ll.goohaeyou.payment.payment.domain.repository.PaymentRepository;
-import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
+import com.ll.goohaeyou.payment.payment.domain.util.OrderIdUtil;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import com.ll.goohaeyou.payment.payment.infrastructure.PaymentProcessorResponse;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @DomainService
 @RequiredArgsConstructor
@@ -27,41 +26,43 @@ public class PaymentDomainService {
     private final PaymentRepository paymentRepository;
     private final PaymentProcessor paymentProcessor;
     private final TossPaymentsConfig tossPaymentsConfig;
+    private final MemberRepository memberRepository;
 
     @Transactional
-    public Payment create(PaymentRequest request, Member member) {
-        if (paymentRepository.existsByOrderName(request.orderName())){
+    public Payment create(PaymentSuccessResponse successResponse) {
+        Member payer = memberRepository.getReferenceById(OrderIdUtil.parseUserIdFromOrderId(successResponse.orderId()));
+
+        if (paymentRepository.existsByOrderName(successResponse.orderName())){
             throw new PaymentException.PaymentRequestConflictException();
         }
 
         Payment payment = Payment.create(
-                request.amount(),
-                request.payStatus().getDescription(),
-                UUID.randomUUID().toString(),
-                request.orderName(),
-                request.jobApplicationId()
+                successResponse.paymentKey(),
+                successResponse.totalAmount(),
+                successResponse.method(),
+                successResponse.orderId(),
+                successResponse.orderName(),
+                successResponse.jobApplicationId(),
+                payer
         );
-
-        payment.updatePayer(member);
 
         return paymentRepository.save(payment);
     }
 
-    public PaymentResponse preparePaymentResponse(Payment payment) {
-        return PaymentResponse.from(payment, tossPaymentsConfig.getSuccessUrl(), tossPaymentsConfig.getFailUrl());
-    }
-
-    public Payment getByOrderId(String orderId) {
-        return paymentRepository.findByOrderId(orderId)
-                .orElseThrow(EntityNotFoundException.PaymentNotFoundException::new);
+    public PaymentInitiationResponse preparePaymentResponse(PaymentRequest request, String username, Long userId) {
+        return PaymentInitiationResponse.of(
+                request, tossPaymentsConfig.getSuccessUrl(), tossPaymentsConfig.getFailUrl(), username, userId
+        );
     }
 
     @Transactional
     public PaymentSuccessResponse requestPaymentAccept(String paymentKey, String orderId, Long amount) {
         JSONObject params = createPaymentRequestParams(orderId, amount);
-        PaymentProcessorResponse response = paymentProcessor.sendPaymentRequest(paymentKey, params, PaymentProcessorResponse.class);
+        PaymentProcessorResponse response = paymentProcessor.sendPaymentRequest(
+                paymentKey, params, PaymentProcessorResponse.class
+        );
 
-        return PaymentSuccessResponse.from(response, getByOrderId(orderId).getJobApplicationId());
+        return PaymentSuccessResponse.from(response, OrderIdUtil.parseJobApplicationIdFromOrderId(orderId));
     }
 
     private JSONObject createPaymentRequestParams(String orderId, Long amount) {
@@ -69,13 +70,6 @@ public class PaymentDomainService {
         params.put("orderId", orderId);
         params.put("amount", amount);
         return params;
-    }
-
-    @Transactional
-    public void update(Payment payment, PaymentSuccessResponse successResponse) {
-        payment.updatePaymentKey(successResponse.paymentKey());
-        payment.markAsPaid();
-        payment.updatePayStatus(PayStatus.findByMethod(successResponse.method()));
     }
 
     @Transactional

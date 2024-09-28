@@ -1,18 +1,17 @@
 package com.ll.goohaeyou.payment.payment.presentation;
 
+import com.ll.goohaeyou.auth.domain.MemberDetails;
+import com.ll.goohaeyou.global.apiResponse.ApiResponse;
 import com.ll.goohaeyou.global.standard.base.Empty;
 import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
-import com.ll.goohaeyou.payment.payment.application.dto.PaymentInfoResponse;
-import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResponse;
-import com.ll.goohaeyou.payment.payment.application.dto.fail.PaymentFailResponse;
-import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
-import com.ll.goohaeyou.payment.payment.application.dto.PaymentResponse;
-import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.application.PaymentCancelService;
 import com.ll.goohaeyou.payment.payment.application.PaymentInfoService;
 import com.ll.goohaeyou.payment.payment.application.PaymentService;
-import com.ll.goohaeyou.global.apiResponse.ApiResponse;
-import com.ll.goohaeyou.auth.domain.MemberDetails;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentInfoResponse;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentInitiationResponse;
+import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
+import com.ll.goohaeyou.payment.payment.application.dto.cancel.PaymentCancelResponse;
+import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,12 +31,12 @@ public class PaymentController {
 
     @PostMapping()
     @Operation(summary = "결제 요청")
-    public ApiResponse<PaymentResponse> requestTossPayments(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                            @Valid @RequestBody PaymentRequest request) {
+    public ApiResponse<PaymentInitiationResponse> requestTossPayments(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                                      @Valid @RequestBody PaymentRequest request) {
 
-        PaymentResponse paymentResponse = paymentService.requestTossPayment(request, memberDetails.getUsername());
+        PaymentInitiationResponse paymentInitiationResponse = paymentService.requestTossPayment(request, memberDetails.getUsername());
 
-        return ApiResponse.ok(paymentResponse);
+        return ApiResponse.ok(paymentInitiationResponse);
     }
 
     @GetMapping("/success")
@@ -49,15 +48,6 @@ public class PaymentController {
         cashLogService.createCashLogOnPaid(successDto);
 
         return ApiResponse.ok(successDto);
-    }
-
-    @GetMapping("/fail")
-    @Operation(summary = "결제 실패")
-    public ApiResponse<PaymentFailResponse> tossPaymentFail(@RequestParam String code,
-                                                            @RequestParam String message,
-                                                            @RequestParam String orderId) {
-
-        return ApiResponse.ok(paymentService.tossPaymentFail(code, message, orderId));
     }
 
     @PostMapping("/cancel")

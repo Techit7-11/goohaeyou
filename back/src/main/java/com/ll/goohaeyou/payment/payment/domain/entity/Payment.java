@@ -1,7 +1,6 @@
 package com.ll.goohaeyou.payment.payment.domain.entity;
 
 import com.ll.goohaeyou.member.member.domain.entity.Member;
-import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +21,8 @@ public class Payment {
     private Member member;
 
     private String paymentKey;
-    private Long totalAmount;
-    private String payStatus;
+    private int totalAmount;
+    private String payMethod;
     private String orderId;
     private String orderName;
     private boolean paid;
@@ -32,44 +31,37 @@ public class Payment {
     private Long jobApplicationId;
 
     private Payment(
-            Long totalAmount,
-            String payStatus,
+            String paymentKey,
+            int totalAmount,
+            String payMethod,
             String orderId,
             String orderName,
-            Long jobApplicationId
+            boolean paid,
+            Long jobApplicationId,
+            Member member
     ) {
+        this.paymentKey = paymentKey;
         this.totalAmount = totalAmount;
-        this.payStatus = payStatus;
+        this.payMethod = payMethod;
         this.orderId = orderId;
         this.orderName = orderName;
+        this.paid = paid;
         this.jobApplicationId = jobApplicationId;
-    }
-
-    public static Payment create(Long totalAmount, String payStatus, String orderId, String orderName,
-                                 Long jobApplicationId) {
-        return new Payment(
-                totalAmount,
-                payStatus,
-                orderId,
-                orderName,
-                jobApplicationId
-        );
-    }
-
-    public void updatePayer(Member member) {
         this.member = member;
     }
 
-    public void updatePayStatus(PayStatus payStatus) {
-        this.payStatus = payStatus.getDescription();
-    }
-
-    public void updatePaymentKey(String paymentKey) {
-        this.paymentKey = paymentKey;
-    }
-
-    public void markAsPaid() {
-        this.paid = true;
+    public static Payment create(String paymentKey, int totalAmount, String payMethod, String orderId, String orderName,
+                                 Long jobApplicationId, Member payer) {
+        return new Payment(
+                paymentKey,
+                totalAmount,
+                payMethod,
+                orderId,
+                orderName,
+                true,
+                jobApplicationId,
+                payer
+        );
     }
 
     public void markAsUnpaid() {

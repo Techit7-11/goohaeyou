@@ -4,7 +4,7 @@ import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
 
 public record PaymentInfoResponse(
         String paymentKey,
-        Long totalAmount,
+        int totalAmount,
         String orderName,
         boolean paid,
         boolean canceled,
@@ -19,7 +19,7 @@ public record PaymentInfoResponse(
                 payment.isPaid(),
                 payment.isCanceled(),
                 payment.getJobApplicationId(),
-                payment.getPayStatus()
+                payment.getPayMethod()
         );
     }
 }

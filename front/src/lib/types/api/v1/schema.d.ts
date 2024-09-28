@@ -624,23 +624,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/payments/fail": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 결제 실패 */
-        get: operations["tossPaymentFail"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/notification": {
         parameters: {
             query?: never;
@@ -1078,16 +1061,16 @@ export interface components {
         };
         MemberResponse: {
             /** Format: int64 */
-            id: number;
-            username: string;
+            id?: number;
+            username?: string;
             /** @enum {string} */
             gender?: "MALE" | "FEMALE" | "UNDEFINED";
-            location: string;
+            location?: string;
             /** Format: date */
             birth?: string;
-            name: string;
-            phoneNumber: string;
-            email: string;
+            name?: string;
+            phoneNumber?: string;
+            email?: string;
             authenticated?: boolean;
             profileImageUrl?: string;
         };
@@ -1133,28 +1116,25 @@ export interface components {
             content?: string;
         };
         PaymentRequest: {
-            /** @enum {string} */
-            payStatus: "REQUEST" | "CARD" | "EASY_PAY";
             /** Format: int64 */
             amount: number;
             orderName: string;
             /** Format: int64 */
             jobApplicationId: number;
         };
-        ApiResponsePaymentResponse: {
+        ApiResponsePaymentInitiationResponse: {
             /** Format: int32 */
             statusCode?: number;
             message: string;
             /** @enum {string} */
             resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
             errorCode?: string;
-            data: components["schemas"]["PaymentResponse"];
+            data: components["schemas"]["PaymentInitiationResponse"];
         };
-        PaymentResponse: {
+        PaymentInitiationResponse: {
             /** Format: int64 */
             amount: number;
             orderId: string;
-            orderName: string;
             payer: string;
             successUrl: string;
             failUrl: string;
@@ -1283,7 +1263,7 @@ export interface components {
         };
         PaymentInfoResponse: {
             paymentKey?: string;
-            /** Format: int64 */
+            /** Format: int32 */
             totalAmount?: number;
             orderName?: string;
             paid?: boolean;
@@ -1330,20 +1310,6 @@ export interface components {
             amount?: number;
             /** Format: int32 */
             discountAmount?: number;
-        };
-        ApiResponsePaymentFailResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message: string;
-            /** @enum {string} */
-            resultType: "SUCCESS" | "VALIDATION_EXCEPTION" | "CUSTOM_EXCEPTION";
-            errorCode?: string;
-            data: components["schemas"]["PaymentFailResponse"];
-        };
-        PaymentFailResponse: {
-            errorCode?: string;
-            errorMessage?: string;
-            orderId?: string;
         };
         ApiResponseListNotificationResponse: {
             /** Format: int32 */
@@ -1562,10 +1528,10 @@ export interface components {
             data: components["schemas"]["PageJobPostBasicResponse"];
         };
         PageJobPostBasicResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -1574,9 +1540,9 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
@@ -2208,7 +2174,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponsePaymentResponse"];
+                    "*/*": components["schemas"]["ApiResponsePaymentInitiationResponse"];
                 };
             };
         };
@@ -2807,30 +2773,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponsePaymentSuccessResponse"];
-                };
-            };
-        };
-    };
-    tossPaymentFail: {
-        parameters: {
-            query: {
-                code: string;
-                message: string;
-                orderId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ApiResponsePaymentFailResponse"];
                 };
             };
         };
