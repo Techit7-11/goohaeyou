@@ -1,6 +1,5 @@
 package com.ll.goohaeyou.payment.payment.application.dto;
 
-import com.ll.goohaeyou.payment.payment.domain.util.OrderIdUtil;
 import jakarta.validation.constraints.NotNull;
 
 public record PaymentInitiationResponse(
@@ -15,11 +14,11 @@ public record PaymentInitiationResponse(
         @NotNull
         String failUrl
 ) {
-    public static PaymentInitiationResponse of(PaymentRequest request, String successUrl, String failUrl,
-                                               String username, Long userId) {
+    public static PaymentInitiationResponse of(PaymentRequest request, String orderId, String successUrl, String failUrl,
+                                               String username) {
         return new PaymentInitiationResponse(
                 request.amount(),
-                OrderIdUtil.generateJobApplicationPaymentId(userId, request.jobApplicationId()),
+                orderId,
                 username,
                 successUrl,
                 failUrl

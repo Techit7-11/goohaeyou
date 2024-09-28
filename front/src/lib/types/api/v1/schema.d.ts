@@ -232,23 +232,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/payments/cancel-pending/{jobApplicationId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** 진행 중인 결제 취소 */
-        post: operations["cancelPendingPayment"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/notification/register": {
         parameters: {
             query?: never;
@@ -1549,12 +1532,12 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
+            paged?: boolean;
+            unpaged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
-            paged?: boolean;
-            unpaged?: boolean;
         };
         SortObject: {
             empty?: boolean;
@@ -2198,28 +2181,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponsePaymentCancelResponse"];
-                };
-            };
-        };
-    };
-    cancelPendingPayment: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                jobApplicationId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ApiResponseEmpty"];
                 };
             };
         };

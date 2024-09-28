@@ -86,25 +86,6 @@
 		return age;
 	}
 
-	async function cancelPendingPayment(applicationId: number) {
-		try {
-			const response = await rq
-				.apiEndPoints()
-				.POST(`/api/payments/cancel-pending/${applicationId}`, {});
-
-			if (response.data?.resultType === 'SUCCESS') {
-				rq.msgInfo('진행 중인 결제가 취소되었습니다.');
-				location.reload();
-			} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
-				rq.msgError(response.data?.message);
-			} else {
-				rq.msgError('진행 중인 결제 취소 중 오류가 발생했습니다.');
-			}
-		} catch (error) {
-			rq.msgError('결제 취소 요청에 실패했습니다. 다시 시도해주세요.');
-		}
-	}
-
 	function goToEditPage() {
 		rq.goTo(`/applications/modify/${$page.params.id}`);
 	}
@@ -243,9 +224,6 @@
 							class="btn btn-btn btn-sm mx-12 mt-6"
 							on:click={() => goToPaymentPage(application.wages)}>대금 결제하기</button
 						>
-						<button class="btn btn-sm mt-6" on:click={() => cancelPendingPayment(application.id)}>
-							진행 중인 결제 취소
-						</button>
 					{:else}
 						<button
 							class="btn btn-sm mx-12 mt-6 cursor-not-allowed"

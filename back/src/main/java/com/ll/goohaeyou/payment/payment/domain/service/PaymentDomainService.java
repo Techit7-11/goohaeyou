@@ -50,8 +50,10 @@ public class PaymentDomainService {
     }
 
     public PaymentInitiationResponse preparePaymentResponse(PaymentRequest request, String username, Long userId) {
+        String orderId = OrderIdUtil.generateJobApplicationPaymentId(userId, request.jobApplicationId());
+
         return PaymentInitiationResponse.of(
-                request, tossPaymentsConfig.getSuccessUrl(), tossPaymentsConfig.getFailUrl(), username, userId
+                request, orderId, tossPaymentsConfig.getSuccessUrl(), tossPaymentsConfig.getFailUrl(), username
         );
     }
 
@@ -92,11 +94,6 @@ public class PaymentDomainService {
 
     public Payment getPaidByJobApplicationId(Long jobApplicationId) {
         return paymentRepository.findByJobApplicationIdAndPaid(jobApplicationId, true)
-                .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
-    }
-
-    public Payment getUnpaidByJobApplicationId(Long jobApplicationId) {
-        return paymentRepository.findByJobApplicationIdAndPaid(jobApplicationId, false)
                 .orElseThrow(PaymentException.PaymentInfoNotFoundException::new);
     }
 

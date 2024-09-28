@@ -2,7 +2,6 @@ package com.ll.goohaeyou.payment.payment.presentation;
 
 import com.ll.goohaeyou.auth.domain.MemberDetails;
 import com.ll.goohaeyou.global.apiResponse.ApiResponse;
-import com.ll.goohaeyou.global.standard.base.Empty;
 import com.ll.goohaeyou.payment.cashLog.application.CashLogService;
 import com.ll.goohaeyou.payment.payment.application.PaymentCancelService;
 import com.ll.goohaeyou.payment.payment.application.PaymentInfoService;
@@ -68,14 +67,5 @@ public class PaymentController {
                                                            @PathVariable Long jobApplicationId) {
 
         return ApiResponse.ok(paymentInfoService.getPaymentInfo(memberDetails.getUsername(), jobApplicationId));
-    }
-
-    @PostMapping("/cancel-pending/{jobApplicationId}")
-    @Operation(summary = "진행 중인 결제 취소")
-    public ApiResponse<Empty> cancelPendingPayment(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                   @PathVariable Long jobApplicationId) {
-
-        paymentService.cancelPendingPayment(memberDetails.getUsername(), jobApplicationId);
-        return ApiResponse.noContent();
     }
 }

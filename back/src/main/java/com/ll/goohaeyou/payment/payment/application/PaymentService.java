@@ -9,7 +9,6 @@ import com.ll.goohaeyou.payment.payment.application.dto.PaymentInitiationRespons
 import com.ll.goohaeyou.payment.payment.application.dto.PaymentRequest;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
-import com.ll.goohaeyou.payment.payment.domain.policy.PaymentPolicy;
 import com.ll.goohaeyou.payment.payment.domain.service.PaymentDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PaymentService {
-    private final PaymentPolicy paymentPolicy;
     private final MemberDomainService memberDomainService;
     private final JobApplicationDomainService jobApplicationDomainService;
     private final PaymentDomainService paymentDomainService;
@@ -45,14 +43,5 @@ public class PaymentService {
         jobApplicationDomainService.updateStatusByPaymentSuccess(jobApplication, amount);
 
         return successResponse;
-    }
-
-    @Transactional
-    public void cancelPendingPayment(String username, Long jobApplicationId) {
-        Payment payment = paymentDomainService.getUnpaidByJobApplicationId(jobApplicationId);
-
-        paymentPolicy.validatePendingPaymentCancelable(username, payment);
-
-        paymentDomainService.delete(payment);
     }
 }
