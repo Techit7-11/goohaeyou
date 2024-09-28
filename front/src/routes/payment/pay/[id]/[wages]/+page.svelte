@@ -20,7 +20,7 @@
 		jobApplicationId = urlParams[urlParams.length - 2] || '';
 		totalAmount = parseInt(urlParams[urlParams.length - 1] || '0', 10);
 
-		orderName = `지원서_${jobApplicationId}_급여_결제`;
+		orderName = `지원서_${jobApplicationId}_대금_결제`;
 	});
 
 	async function handlePayment(event) {

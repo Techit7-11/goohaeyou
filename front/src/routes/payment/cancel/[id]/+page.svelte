@@ -12,7 +12,7 @@
 		paid: boolean;
 		canceled: boolean;
 		jobApplicationId: number;
-		payStatus: string;
+		payMethod: string;
 	}
 
 	onMount(async () => {
@@ -71,7 +71,7 @@
 	{#if paymentDto}
 		<div class="mb-6">
 			<p>결제 항목: {paymentDto.orderName}</p>
-			<p>결제 수단: {paymentDto.payStatus}</p>
+			<p>결제 수단: {paymentDto.payMethod}</p>
 		</div>
 
 		<hr class="border-t-2 border-gray-300 w-full max-w-md my-4" />

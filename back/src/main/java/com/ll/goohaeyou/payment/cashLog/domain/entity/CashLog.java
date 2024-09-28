@@ -68,7 +68,7 @@ public class CashLog extends BaseTimeEntity {
     ) {
         return new CashLog(
                 "지원서_" + jobApplicationId + "_대금_결제",
-                EventType.정산_급여,
+                EventType.정산_대금,
                 totalAmount,
                 vat,
                 paymentFee,
@@ -104,7 +104,7 @@ public class CashLog extends BaseTimeEntity {
             Long jobApplicationId
     ) {
         return new CashLog(
-                "지원서_" + jobApplicationId + "_급여_결제취소",
+                "지원서_" + jobApplicationId + "_대금_결제취소",
                 EventType.취소_토스페이먼츠,
                 totalAmount,
                 0,

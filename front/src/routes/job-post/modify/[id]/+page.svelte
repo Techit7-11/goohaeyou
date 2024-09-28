@@ -188,7 +188,7 @@
 				</div>
 
 				<div class="form-group">
-					<span class="label">* 급여 지급 기준</span>
+					<span class="label">* 대금 지급 기준</span>
 					<div class="flex items-center justify-start space-x-4">
 						<div class="form-control">
 							<label class="label cursor-pointer flex items-center space-x-2">
@@ -247,7 +247,7 @@
 				{/if}
 
 				<div class="form-group">
-					<label class="label" for="cost">* 급여</label>
+					<label class="label" for="cost">* 대금</label>
 					<input
 						type="number"
 						id="cost"

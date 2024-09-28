@@ -40,7 +40,7 @@ public record ModifyJobPostRequest(
 
         PayBasis payBasis,
 
-        @NotNull(message = "급여 입력은 필수 입니다.")
-        @Min(value = 0, message = "급여는 0원 이상 이여야 합니다.")
+        @NotNull(message = "대금 입력은 필수 입니다.")
+        @Min(value = 0, message = "대금은 0원 이상 이여야 합니다.")
         int cost
     ) {}

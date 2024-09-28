@@ -9,7 +9,7 @@ public record PaymentInfoResponse(
         boolean paid,
         boolean canceled,
         Long jobApplicationId,
-        String payStatus
+        String payMethod
 ) {
     public static PaymentInfoResponse from(Payment payment) {
         return new PaymentInfoResponse(
