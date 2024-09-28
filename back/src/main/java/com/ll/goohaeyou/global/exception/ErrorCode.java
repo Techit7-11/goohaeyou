@@ -63,6 +63,7 @@ public enum ErrorCode {
     PAYMENT_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "결제 정보가 없습니다."),
     PAYMENT_REQUEST_CONFLICT(HttpStatus.CONFLICT, "결제가 이미 진행 중입니다. 진행 중인 결제를 취소하고 다시 시도해주세요."),
     NO_PENDING_PAYMENT(HttpStatus.BAD_REQUEST, "진행 중인 결제 건이 없습니다."),
+    TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "요청이 너무 많습니다. 잠시 후 다시 시도해 주세요."),
 
     // review
     REVIEW_NOT_EXISTS(HttpStatus.NOT_FOUND, "해당 리뷰는 존재하지 않습니다."),

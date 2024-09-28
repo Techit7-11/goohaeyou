@@ -86,25 +86,6 @@
 		return age;
 	}
 
-	async function cancelPendingPayment(applicationId: number) {
-		try {
-			const response = await rq
-				.apiEndPoints()
-				.POST(`/api/payments/cancel-pending/${applicationId}`, {});
-
-			if (response.data?.resultType === 'SUCCESS') {
-				rq.msgInfo('진행 중인 결제가 취소되었습니다.');
-				location.reload();
-			} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
-				rq.msgError(response.data?.message);
-			} else {
-				rq.msgError('진행 중인 결제 취소 중 오류가 발생했습니다.');
-			}
-		} catch (error) {
-			rq.msgError('결제 취소 요청에 실패했습니다. 다시 시도해주세요.');
-		}
-	}
-
 	function goToEditPage() {
 		rq.goTo(`/applications/modify/${$page.params.id}`);
 	}
@@ -181,9 +162,9 @@
 							</p>
 						</div>
 					</div>
-					{#if application.wageStatus == '급여 결제 완료' || application.wageStatus == '급여 정산 신청' || application.wageStatus == '급여 정산 완료'}
+					{#if application.wageStatus == '대금 결제 완료' || application.wageStatus == '대금 정산 신청' || application.wageStatus == '대금 정산 완료'}
 						<button class="mt-6 btn btn-sm" on:click={() => goToPaymentInfo(application.id)}
-							>급여 결제 정보</button
+							>대금 결제 정보</button
 						>
 					{/if}
 					<div class="mx-2 my-6 mt-12">
@@ -215,15 +196,15 @@
 							{/if}
 						</div>
 					{/if}
-					{#if application.jobPostAuthorUsername == rq.member.username && (application.wageStatus == '급여 결제 완료' || application.wageStatus == '지원서 승인')}
+					{#if application.jobPostAuthorUsername == rq.member.username && (application.wageStatus == '대금 결제 완료' || application.wageStatus == '지원서 승인')}
 						<div class="text-center mt-2 flex justify-center items-center space-x-8">
 							<button
 								class="btn btn-active btn-primary btn-sm"
 								on:click={() => completeJobManually(application.id)}>알바 완료</button
 							>
-							{#if application.wageStatus == '급여 결제 완료'}
+							{#if application.wageStatus == '대금 결제 완료'}
 								<button class="btn btn-sm" on:click={() => goToPayCancelPage()}
-									>급여 결제 취소</button
+									>대금 결제 취소</button
 								>
 							{/if}
 							{#if application.wageStatus == '지원서 승인'}
@@ -238,14 +219,11 @@
 
 			{#if application.jobPostAuthorUsername == rq.member.username && application.approve == true}
 				<div class="flex justify-center">
-					{#if application.wageStatus == '급여 결제 전'}
+					{#if application.wageStatus == '대금 결제 전'}
 						<button
 							class="btn btn-btn btn-sm mx-12 mt-6"
-							on:click={() => goToPaymentPage(application.wages)}>급여 결제하기</button
+							on:click={() => goToPaymentPage(application.wages)}>대금 결제하기</button
 						>
-						<button class="btn btn-sm mt-6" on:click={() => cancelPendingPayment(application.id)}>
-							진행 중인 결제 취소
-						</button>
 					{:else}
 						<button
 							class="btn btn-sm mx-12 mt-6 cursor-not-allowed"
@@ -257,7 +235,7 @@
 					{/if}
 				</div>
 			{/if}
-			{#if application.wageStatus == '급여 정산 신청' || application.wageStatus == '급여 지급 완료'}
+			{#if application.wageStatus == '대금 정산 신청' || application.wageStatus == '대금 지급 완료'}
 				<div class="text-center mt-4">
 					<button class="btn btn-sm" on:click={goToReviewPage}>리뷰 작성하기</button>
 				</div>

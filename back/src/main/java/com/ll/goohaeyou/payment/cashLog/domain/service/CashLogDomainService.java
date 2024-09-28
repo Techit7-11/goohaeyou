@@ -7,7 +7,7 @@ import com.ll.goohaeyou.payment.cashLog.domain.entity.CashLog;
 import com.ll.goohaeyou.payment.cashLog.domain.repository.CashLogRepository;
 import com.ll.goohaeyou.payment.payment.application.dto.success.PaymentSuccessResponse;
 import com.ll.goohaeyou.payment.payment.domain.entity.Payment;
-import com.ll.goohaeyou.payment.payment.domain.type.PayStatus;
+import com.ll.goohaeyou.payment.payment.domain.type.PayMethod;
 import com.ll.goohaeyou.payment.payment.domain.type.PayTypeFee;
 import com.ll.goohaeyou.payment.payment.exception.PaymentException;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,8 @@ public class CashLogDomainService {
         CashLog newCashLog = CashLog.createOnSettlement(
                 earn,
                 getVat(earn),
-                getPaymentFee(PayStatus.EASY_PAY, earn),
-                getNetAmount(PayStatus.EASY_PAY, earn),
+                getPaymentFee(PayMethod.EASY_PAY, earn),
+                getNetAmount(PayMethod.EASY_PAY, earn),
                 jobApplication.getMember(),
                 jobApplication.getId()
         );
@@ -39,13 +39,13 @@ public class CashLogDomainService {
 
     @Transactional
     public void createPaymentLog(Payment payment, PaymentSuccessResponse successDto) {
-        PayStatus payStatus = PayStatus.findByMethod(successDto.method());
+        PayMethod payMethod = PayMethod.findByMethod(successDto.method());
 
         CashLog newCashLog = CashLog.createOnPaymentSuccess(
                 successDto.totalAmount(),
                 getVat(payment.getTotalAmount()),
-                getPaymentFee(payStatus, payment.getTotalAmount()),
-                getNetAmount(payStatus, payment.getTotalAmount()),
+                getPaymentFee(payMethod, payment.getTotalAmount()),
+                getNetAmount(payMethod, payment.getTotalAmount()),
                 payment.getMember(),
                 payment.getJobApplicationId()
         );
@@ -75,8 +75,8 @@ public class CashLogDomainService {
     }
 
     // 결제 수수료 반환
-    public long getPaymentFee(PayStatus payStatus, long totalAmount) {
-        PayTypeFee payTypeFee = matchPayTypeFee(payStatus);
+    public long getPaymentFee(PayMethod payMethod, long totalAmount) {
+        PayTypeFee payTypeFee = matchPayTypeFee(payMethod);
 
         double feePercentage = payTypeFee.getFeePercentage();
         int transactionFee = payTypeFee.getTransactionFee();
@@ -84,20 +84,20 @@ public class CashLogDomainService {
         return (int) ((totalAmount * feePercentage / 100.0) + transactionFee);
     }
 
-    private PayTypeFee matchPayTypeFee(PayStatus payStatus) {
+    private PayTypeFee matchPayTypeFee(PayMethod payMethod) {
         return Arrays.stream(PayTypeFee.values())
-                .filter(payTypeFee -> payTypeFee.getTypeName().equals(payStatus.getDescription()))
+                .filter(payTypeFee -> payTypeFee.getTypeName().equals(payMethod.getDescription()))
                 .findFirst()
                 .orElseThrow(PaymentException.NoEnumConstantFoundException::new);
     }
 
     // 부가세와 결제 수수료의 합 반환
-    public long getTotalTaxAndFees(PayStatus payStatus, long totalAmount) {
-        return getVat(totalAmount) + getPaymentFee(payStatus, totalAmount);
+    public long getTotalTaxAndFees(PayMethod payMethod, long totalAmount) {
+        return getVat(totalAmount) + getPaymentFee(payMethod, totalAmount);
     }
 
     // 순금액 반환
-    public long getNetAmount(PayStatus payStatus, long totalAmount) {
-        return totalAmount - getTotalTaxAndFees(payStatus, totalAmount);
+    public long getNetAmount(PayMethod payMethod, long totalAmount) {
+        return totalAmount - getTotalTaxAndFees(payMethod, totalAmount);
     }
 }
