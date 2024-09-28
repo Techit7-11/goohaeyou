@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EmailAuthService {
+    private static final String AUTH_CODE_PREFIX = "authCode:";
+
     private final MemberDomainService memberDomainService;
     private final EmailAuthPolicy emailAuthPolicy;
     private final AuthCodeDomainService authCodeDomainService;
@@ -34,7 +36,7 @@ public class EmailAuthService {
         String storedAuthCode = authCodeDomainService.getAuthCode(username);
 
         emailAuthPolicy.verifyAuthCode(inputCode, storedAuthCode);
-        authCodeDomainService.deleteAuthCode(username);
+        authCodeDomainService.deleteAuthCode(AUTH_CODE_PREFIX + username);
 
         Member member = memberDomainService.getByUsername(username);
 

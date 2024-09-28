@@ -1,5 +1,6 @@
 package com.ll.goohaeyou.payment.payment.application;
 
+import com.ll.goohaeyou.global.policy.ThrottlePolicy;
 import com.ll.goohaeyou.jobApplication.domain.entity.JobApplication;
 import com.ll.goohaeyou.jobApplication.domain.service.JobApplicationDomainService;
 import com.ll.goohaeyou.member.member.domain.entity.Member;
@@ -23,9 +24,12 @@ public class PaymentService {
     private final MemberDomainService memberDomainService;
     private final JobApplicationDomainService jobApplicationDomainService;
     private final PaymentDomainService paymentDomainService;
+    private final ThrottlePolicy throttlePolicy;
 
     @Transactional
     public PaymentResponse requestTossPayment(PaymentRequest request, String username) {
+        throttlePolicy.checkThrottle(username, System.currentTimeMillis());
+
         Member member = memberDomainService.getByUsername(username);
 
         Payment payment = paymentDomainService.create(request, member);
