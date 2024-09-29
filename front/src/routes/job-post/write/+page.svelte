@@ -54,7 +54,7 @@
 	// 글 작성 버튼을 클릭하면 실행될 함수
 	async function writeJobPost() {
 		if (newJobPostData.wagePaymentMethod === '') {
-			rq.msgError('급여 지금 방법 선택은 필수입니다.');
+			rq.msgError('대금 지금 방법 선택은 필수입니다.');
 			return;
 		}
 		if (newJobPostData.payBasis === 'TOTAL_DAYS' && newJobPostData.workDays === '') {
@@ -71,7 +71,7 @@
 		} else if (newJobPostData.payBasis === 'TOTAL_DAYS') {
 			newJobPostData.workTime = '0'; // 총 일수 선택 시, 시간 기본값 0으로 설정
 		} else {
-			rq.msgError('급여 지급 기준을 선택해주세요.');
+			rq.msgError('대금 지급 기준을 선택해주세요.');
 			return;
 		}
 
@@ -210,7 +210,7 @@
 				<div class="divider mt-10"></div>
 
 				<div class="form-group">
-					<span class="label">* 급여 지급 기준</span>
+					<span class="label">* 대금 지급 기준</span>
 					<div class="flex items-center justify-start space-x-4">
 						<div class="form-control">
 							<label class="label cursor-pointer flex items-center space-x-2">
@@ -268,7 +268,7 @@
 					</div>
 				{/if}
 				<div class="form-group">
-					<label class="label" for="cost">* 급여</label>
+					<label class="label" for="cost">* 대금</label>
 					<input
 						type="number"
 						id="cost"
@@ -279,7 +279,7 @@
 					/>
 				</div>
 				<div class="form-group">
-					<label class="label" for="wagePaymentMethod">* 급여 지급 방법</label>
+					<label class="label" for="wagePaymentMethod">* 대금 지급 방법</label>
 					<select
 						class="input input-bordered w-full"
 						id="wagePaymentMethod"

@@ -43,12 +43,12 @@
 		<div class="space-y-4 max-w-md w-full mt-1 px-8">
 			<div class="text-gray-700 font-basic">
 				<span class="text-black">결제 내역: </span>
-				지원서_13_급여_결제
+				{data.orderName}
 			</div>
 
 			<div class="text-gray-700 font-basic">
 				<span class="text-black">결제수단: </span>
-				{data.payStatus}
+				{data.payMethod}
 			</div>
 
 			<hr class="my-3" />

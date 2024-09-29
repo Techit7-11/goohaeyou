@@ -2,7 +2,6 @@
 	import rq from '$lib/rq/rq.svelte';
 	import { onMount } from 'svelte';
 
-	let payStatus: String = 'REQUEST';
 	let tossPayments: TossPayments;
 	let jobApplicationId: string = '';
 	let totalAmount: number = 0;
@@ -21,11 +20,7 @@
 		jobApplicationId = urlParams[urlParams.length - 2] || '';
 		totalAmount = parseInt(urlParams[urlParams.length - 1] || '0', 10);
 
-		orderName = `지원서_${jobApplicationId}_급여_결제`;
-
-		console.log(
-			`Application ID: ${jobApplicationId}, Total Amount: ${totalAmount}, Order Name: ${orderName}`
-		);
+		orderName = `지원서_${jobApplicationId}_대금_결제`;
 	});
 
 	async function handlePayment(event) {
@@ -38,7 +33,6 @@
 
 		// API 호출
 		const body = {
-			payStatus: payStatus,
 			amount: totalAmount,
 			jobApplicationId,
 			orderName
@@ -48,16 +42,16 @@
 			const response = await rq.apiEndPoints().POST(`/api/payments`, { body });
 
 			if (response.data?.resultType === 'SUCCESS') {
-				const paymentRespDto = response.data?.data;
+				const PaymentInitiationResponse = response.data?.data;
 
 				// 결제창 호출
 				tossPayments.requestPayment('CARD', {
-					amount: paymentRespDto?.amount,
-					orderId: paymentRespDto?.orderId,
-					orderName: paymentRespDto?.orderName,
-					successUrl: paymentRespDto?.successUrl,
-					failUrl: paymentRespDto?.failUrl,
-					payer: paymentRespDto?.payer
+					amount: PaymentInitiationResponse?.amount,
+					orderId: PaymentInitiationResponse?.orderId,
+					orderName: orderName,
+					successUrl: PaymentInitiationResponse?.successUrl,
+					failUrl: PaymentInitiationResponse?.failUrl,
+					payer: PaymentInitiationResponse?.payer
 				});
 			} else if (response.data?.resultType === 'CUSTOM_EXCEPTION') {
 				rq.msgAndRedirect(

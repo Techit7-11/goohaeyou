@@ -46,10 +46,10 @@ public class PaymentException extends GoohaeyouException {
         }
     }
 
-    public static class NoPendingPaymentException extends PaymentException {
+    public static class ThrottleLimitExceededException extends PaymentException {
 
-        public NoPendingPaymentException() {
-            super(NO_PENDING_PAYMENT);
+        public ThrottleLimitExceededException() {
+            super((TOO_MANY_REQUESTS));
         }
     }
 }

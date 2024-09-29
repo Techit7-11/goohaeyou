@@ -99,7 +99,7 @@
 														{#if application.wagePaymentMethod === '개인 지급'}
 															진행 상태
 														{:else if application.wagePaymentMethod === '서비스 결제'}
-															급여 현황
+															대금 현황
 														{/if}
 													</p>
 												{/if}
