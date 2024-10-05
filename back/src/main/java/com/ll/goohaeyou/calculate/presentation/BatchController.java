@@ -1,5 +1,6 @@
 package com.ll.goohaeyou.calculate.presentation;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -17,6 +18,7 @@ public class BatchController {
     private final Job exceeded3DaysJob;
     private final JobLauncher jobLauncher;
 
+    @Hidden
     @PostMapping("/batch")
     // 개발과정에서 확인을 위해 작성
     public ResponseEntity<String> runBatch() {

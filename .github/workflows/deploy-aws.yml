@@ -6,7 +6,6 @@ on:
       - back/src/**
       - back/build.gradle
       - back/docker/Dockerfile
-      - README.md
       - back/infraScript/**
     branches:
       - main

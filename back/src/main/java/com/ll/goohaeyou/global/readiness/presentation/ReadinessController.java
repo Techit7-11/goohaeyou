@@ -1,21 +1,19 @@
 package com.ll.goohaeyou.global.readiness.presentation;
 
 import com.ll.goohaeyou.global.readiness.application.ReadinessService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Readiness", description = "배포 관련 API")
 @RestController
 @RequiredArgsConstructor
 public class ReadinessController {
     private final ReadinessService readinessService;
 
     @GetMapping("/ready")
-    @Operation(summary = "배포한 애플리케이션의 준비 상태를 확인")
+    @Hidden
     public ResponseEntity<String> isReady() {
         boolean ready = readinessService.checkApplicationReadiness();
 

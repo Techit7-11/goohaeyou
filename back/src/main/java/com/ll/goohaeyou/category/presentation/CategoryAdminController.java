@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/category")
-@Tag(name = "Category", description = "카테고리 관리 API")
+@Tag(name = "Category Admin", description = "카테고리 관리 API")
 public class CategoryAdminController {
     private final CategoryAdminService categoryAdminService;
 
