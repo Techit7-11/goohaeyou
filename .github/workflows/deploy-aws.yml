@@ -66,11 +66,11 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          instance-ids: "i-04750d527ac3ba112"
+          instance-ids: "i-0f9931580b6c80739"
           working-directory: /
           comment: AWS Zero Downtime Deployment
           command: |
             mkdir -p /docker_projects/goohaeyou
-            curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/goohaeyou/main/back/infraScript/zero_downtime_deploy.py
+            curl -o /docker_projects/goohaeyou/zero_downtime_deploy.py https://raw.githubusercontent.com/Techit7-11/goohaeyou/dev/back/infraScript/zero_downtime_deploy.py
             chmod +x /docker_projects/goohaeyou/zero_downtime_deploy.py
             /docker_projects/goohaeyou/zero_downtime_deploy.py
